@@ -1,0 +1,12 @@
+version: '3'
+services:
+  postgres:
+    image: postgres:15.3-alpine
+    ports:
+      - "5433:5432"
+    environment:
+      - POSTGRES_DB=testingworkshop
+      - POSTGRES_USER=testingworkshop
+      - POSTGRES_PASSWORD=testingworkshop
+    volumes:
+      - "~/.postgresVolume:/var/lib/postgresql/data"
