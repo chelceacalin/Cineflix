@@ -1,10 +1,10 @@
-package com.example.demoInternship;
+package ro.esolutions.cineflix;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class DemoInternshipApplicationTests {
+class CineflixApplicationTests {
 
 	@Test
 	void contextLoads() {
