@@ -1,5 +1,5 @@
 import React from "react";
-function UserCineflix({ name, job, date, index, classes }) {
+function UserCineflix({ name, surname, role, isActive, date, classes }) {
   return (
     <tr key={name}>
       <td className={classes}>
@@ -9,7 +9,25 @@ function UserCineflix({ name, job, date, index, classes }) {
       </td>
       <td className={classes}>
         <div variant="small" color="blue-gray" className="font-normal">
-          {job}
+          {surname}
+        </div>
+      </td>
+      <td className={classes}>
+        <div variant="small" color="blue-gray" className="font-normal">
+            {/* TODO make default value in dropdown to be variable
+            the value should be from database */}
+            {/* TODO make the dropdown pretty Opional*/}
+          <form>
+            <select name="roles">
+              <option value="User">User</option>
+              <option value="Admin">Admin</option>
+            </select>
+          </form>
+        </div>
+      </td>
+      <td className={classes}>
+        <div variant="small" color="blue-gray" className="font-normal">
+          {isActive}
         </div>
       </td>
       <td className={classes}>
@@ -19,8 +37,16 @@ function UserCineflix({ name, job, date, index, classes }) {
       </td>
       <td className={classes}>
         <div>
-        <button className="bg-basic-red text-white font-bold py-2 px-4 rounded-full">test</button>
-          
+          <button className="font-normal bg-white hover:border-hover-cream hover:text-hover-cream text-blue-marine border border-blue-marine py-2 px-6">
+            Edit
+          </button>
+        </div>
+      </td>
+      <td className={classes}>
+        <div>
+          <button className="font-normal bg-blue-marine hover:border-hover-cream hover:bg-hover-cream text-white border border-blue-marine py-2 px-6">
+            Update
+          </button>
         </div>
       </td>
     </tr>
