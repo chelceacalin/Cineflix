@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-route
 import MyProfile from './components/MyProfile/MyProfile'
 import Movies from './components/Movies/Movies'
 import CategoryManagement from "./components/CategoryManagement/CategoryManagement";
+import RoleManagement from "./components/RoleManagement/RoleManagement";
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
           <Route index path="/" element={<Movies />} />
           <Route path="/myprofile/:id" element={<MyProfile />} />
           <Route path="/categoryManagement" element={<CategoryManagement />} />
+          <Route path="/roleManagement" element={<RoleManagement />} />
         </Routes>
       </Router>
     </div>
