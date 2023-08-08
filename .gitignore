@@ -31,3 +31,9 @@ build/
 
 ### VS Code ###
 .vscode/
+
+
+
+# FRONT END
+**/front_end/CineFflix_front/**
+front_end/CIneFlix_front/node_modules
