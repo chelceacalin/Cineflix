@@ -8,7 +8,6 @@ import lombok.Data;
 @Table
 public class UserCineflix {
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
 
     @Column
