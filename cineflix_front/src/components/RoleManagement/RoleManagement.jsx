@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import UserCineflix from "./UserCineflix";
+
 const TABLE_HEAD = [
   "Name",
   "Surname",
@@ -26,6 +27,7 @@ const TABLE_ROWS = [
     date: "23/04/18",
   },
 ];
+
 function RoleManagement() {
   useEffect(() => {
     console.log("mesaj");
@@ -60,13 +62,6 @@ function RoleManagement() {
             <th className="border-b-white p-4">
               <div>Actions</div>
             </th>
-            <th>
-              <div>
-                <button className="bg-basic-red hover:border-hover-cream hover:text-hover-cream text-white font-semibold py-2 px-4 border border-gray-400 rounded shadow">
-                  Add New
-                </button>
-              </div>
-            </th>
           </tr>
         </thead>
         <tbody className="text-blue-marine">
@@ -98,7 +93,6 @@ function RoleManagement() {
           </tr>
         </tbody>
       </table>
-      Test
     </div>
   );
 }
