@@ -5,8 +5,8 @@ services:
     ports:
       - "5433:5432"
     environment:
-      - POSTGRES_DB=testingworkshop
-      - POSTGRES_USER=testingworkshop
-      - POSTGRES_PASSWORD=testingworkshop
+      - POSTGRES_DB=cineflix
+      - POSTGRES_USER=cineflix
+      - POSTGRES_PASSWORD=cineflix
     volumes:
-      - "~/.postgresVolume:/var/lib/postgresql/data"
+      - "~/cineflix/.postgresVolume:/var/lib/postgresql/data"
