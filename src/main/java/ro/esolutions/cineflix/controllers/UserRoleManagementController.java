@@ -21,7 +21,9 @@ public class UserRoleManagementController {
                                      @RequestParam(required = false)  String lastName,
                                      @RequestParam(required = false)  String email) {
 
-        if(firstName==null&&lastName==null&&email==null) return userCineflixService.findAll();
+        if(firstName == null && lastName == null && email == null) {
+            return userCineflixService.findAll();
+        }
 
         return userCineflixService.getUsers(firstName, lastName, email);
     }

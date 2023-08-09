@@ -2,10 +2,9 @@ package ro.esolutions.cineflix.services;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import ro.esolutions.cineflix.entities.UserCineflix;
-import ro.esolutions.cineflix.repository.UserCineflixRepository;
+import ro.esolutions.cineflix.repositories.UserCineflixRepository;
 
 import java.util.List;
 
