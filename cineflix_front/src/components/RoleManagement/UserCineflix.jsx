@@ -1,5 +1,13 @@
 import React from "react";
+import Button from '@mui/material/Button';
+
+import EditRoleModalWindow from "./EditRoleModalWindow";
+
 function UserCineflix({ name, surname, role, isActive, date, classes }) {
+  const [open, setOpen] = React.useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+
   return (
     <tr key={name}>
       <td className={classes}>
@@ -14,9 +22,9 @@ function UserCineflix({ name, surname, role, isActive, date, classes }) {
       </td>
       <td className={classes}>
         <div variant="small" color="blue-gray" className="font-normal">
-            {/* TODO make default value in dropdown to be variable
+          {/* TODO make default value in dropdown to be variable
             the value should be from database */}
-            {/* TODO make the dropdown pretty Opional*/}
+          {/* TODO make the dropdown pretty Opional*/}
           <form>
             <select name="roles">
               <option value="User">User</option>
@@ -37,16 +45,13 @@ function UserCineflix({ name, surname, role, isActive, date, classes }) {
       </td>
       <td className={classes}>
         <div>
-          <button className="font-normal bg-white hover:border-hover-cream hover:text-hover-cream text-blue-marine border border-blue-marine py-2 px-6">
+          <Button onClick={handleOpen} className="font-normal bg-white hover:border-hover-cream hover:text-hover-cream text-blue-marine border border-blue-marine py-2 px-6">
             Edit
-          </button>
-        </div>
-      </td>
-      <td className={classes}>
-        <div>
-          <button className="font-normal bg-blue-marine hover:border-hover-cream hover:bg-hover-cream text-white border border-blue-marine py-2 px-6">
-            Update
-          </button>
+          </Button>
+          <EditRoleModalWindow
+            isModalOpen={open}
+            closeModal={handleClose}
+          />
         </div>
       </td>
     </tr>

@@ -1,4 +1,4 @@
-package  ro.esolutions.cineflix.config;
+package ro.esolutions.cineflix.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;

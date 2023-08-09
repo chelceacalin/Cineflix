@@ -23,10 +23,10 @@ public class UserCineflix {
     private Boolean isActive;
 
     @Column
-    @Enumerated(value=EnumType.STRING)
+    @Enumerated(value = EnumType.STRING)
     private Role role;
 
-    public enum Role{
+    public enum Role {
         ADMIN,
         USER
     }
