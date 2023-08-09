@@ -251,7 +251,8 @@ function Navbar() {
                       ? "aBackgroundClick"
                       : "aBackgroundRelease"
                   }`}
-                  onClick={() => {
+                  onClick={(e) => {
+                    e.preventDefault()
                     handleItemClick("Movies", "red");
                     navigate("/");
                   }}
@@ -287,7 +288,8 @@ function Navbar() {
                       ? "aBackgroundClick"
                       : "aBackgroundRelease"
                   }`}
-                  onClick={() => {
+                  onClick={(e) => {
+                    e.preventDefault()
                     handleItemClick("profile", "red");
                     navigate("/myprofile/1");
                   }}
@@ -328,7 +330,8 @@ function Navbar() {
                       ? "aBackgroundClick"
                       : "aBackgroundRelease"
                   }`}
-                  onClick={() => {
+                  onClick={(e) => {
+                    e.preventDefault()
                     handleItemClick("roleManagement", "red");
                     navigate("/roleManagement");
                   }}
@@ -395,8 +398,9 @@ function Navbar() {
                       ? "aBackgroundClick"
                       : "aBackgroundRelease"
                   }`}
-                  onClick={() => {
+                  onClick={(e) => {
                     {
+                      e.preventDefault()
                       handleItemClick("categoryManagement", "red");
                       navigate("/categoryManagement");
                     }
@@ -460,7 +464,9 @@ function Navbar() {
                       ? "aBackgroundClick"
                       : "aBackgroundRelease"
                   }`}
-                  onClick={() => handleItemClick("logout", "red")}
+                  onClick={(e) => {
+                    e.preventDefault()
+                    handleItemClick("logout", "red")}}
                 >
                   <svg
                     width="25"
