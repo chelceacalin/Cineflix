@@ -1,61 +1,61 @@
-image: maven:3-openjdk-17-slim
+#image: maven:3-openjdk-17-slim
 
-default:
-  tags:
-    - esol-runner
+# default:
+#   tags:
+#     - esol-runner
 
-variables:
-  MAVEN_CLI_OPTS: "-s .m2/settings.xml --batch-mode"
-  MAVEN_OPTS: "-Dmaven.repo.local=${CI_PROJECT_DIR}/.m2/repository"
+# variables:
+#   MAVEN_CLI_OPTS: "-s .m2/settings.xml --batch-mode"
+#   MAVEN_OPTS: "-Dmaven.repo.local=${CI_PROJECT_DIR}/.m2/repository"
 
-cache:
-  paths:
-    - .m2/repository
+# cache:
+#   paths:
+#     - .m2/repository
 
-stages:
-  - build
-  - test
-  - build-docker-image
-  - release
+# stages:
+#   - build
+#   - test
+#   - build-docker-image
+#   - release
 
-build:
-  stage: build
-  script:
-    - mvn $MAVEN_CLI_OPTS -DskipTests=true package
-  artifacts:
-    paths:
-      - target/*.jar
+# build:
+#   stage: build
+#   script:
+#     - mvn $MAVEN_CLI_OPTS -DskipTests=true package
+#   artifacts:
+#     paths:
+#       - target/*.jar
 
-test:
-  stage: test
-  services:
-    - postgres:15-alpine
-  variables:
-    POSTGRES_DB: testingworkshop
-    POSTGRES_USER: testingworkshop
-    POSTGRES_PASSWORD: testingworkshop
-    SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/testingworkshop
-  dependencies:
-    - build
-  script:
-    - mvn $MAVEN_CLI_OPTS test
+# test:
+#   stage: test
+#   services:
+#     - postgres:15-alpine
+#   variables:
+#     POSTGRES_DB: testingworkshop
+#     POSTGRES_USER: testingworkshop
+#     POSTGRES_PASSWORD: testingworkshop
+#     SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/testingworkshop
+#   dependencies:
+#     - build
+#   script:
+#     - mvn $MAVEN_CLI_OPTS test
 
-build-docker-image:
-  image: docker:24.0.2
-  stage: build-docker-image
-  services:
-    - docker:dind
-  dependencies:
-    - build
-  script:
-    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
-    - docker build -t $CI_REGISTRY_IMAGE:$CI_COMMIT_SHORT_SHA .
-    - docker push $CI_REGISTRY_IMAGE:$CI_COMMIT_SHORT_SHA
+# build-docker-image:
+#   image: docker:24.0.2
+#   stage: build-docker-image
+#   services:
+#     - docker:dind
+#   dependencies:
+#     - build
+#   script:
+#     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+#     - docker build -t $CI_REGISTRY_IMAGE:$CI_COMMIT_SHORT_SHA .
+#     - docker push $CI_REGISTRY_IMAGE:$CI_COMMIT_SHORT_SHA
 
-release:
-  stage: release
-  dependencies:
-    - build-docker-image
-  script:
-    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
-    - docker push $CI_REGISTRY_IMAGE:$CI_COMMIT_SHORT_SHA
+# release:
+#   stage: release
+#   dependencies:
+#     - build-docker-image
+#   script:
+#     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+#     - docker push $CI_REGISTRY_IMAGE:$CI_COMMIT_SHORT_SHA
