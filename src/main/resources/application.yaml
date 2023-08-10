@@ -1,11 +1,10 @@
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5433/testingworkshop
-    username: testingworkshop
-    password: testingworkshop
+    url: jdbc:postgresql://localhost:5433/cineflix
+    username: cineflix
+    password: cineflix
 
   jpa:
     hibernate:
       ddl-auto: none
-
     show-sql: true
