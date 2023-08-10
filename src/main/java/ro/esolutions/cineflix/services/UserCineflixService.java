@@ -19,6 +19,7 @@ import java.util.Optional;
 @Transactional
 @RequiredArgsConstructor
 public class UserCineflixService {
+
     @NonNull
     private final UserCineflixRepository userCineflixRepository;
 
@@ -59,7 +60,7 @@ public class UserCineflixService {
 
     }
 
-    public void addUserCineflix(UserCineflix userCineflix){
+    public void addUserCineflix(UserCineflix userCineflix) {
         Optional<UserCineflix> userCineflixNew = userCineflixRepository.findById(userCineflix.getId());
         if (userCineflixNew.isEmpty()) {
             userCineflixRepository.save(userCineflix);
