@@ -6,22 +6,36 @@ import {
 } from "@mui/material";
 import React from "react";
 import "./css/FilterComponent.css";
+import { useEffect, useState } from "react";
 
-function FilterComponent() {
+function FilterComponent({filterInput}) {
+
+    let [firstName, setFirstName] = useState("");
+    let [lastName, setLastName] = useState("");
+    let [email, setEmail] = useState("");
+    let [isAdmin, setIsAdmin] = useState(false);
+   
+    useEffect(() => {
+        let array = [];
+        array.push(firstName, lastName, email);
+        filterInput(array);
+    },
+    [firstName,lastName,email]);
+
   return (
     <div className="filterContainer space-y-4 ml-6">
 
       <div className="mt-10 mr-6">
         <label>First Name:</label>
-        <TextField id="outlined-search" label="Search first name" type="search" />
+        <TextField id="outlined-search" name="firstName" label="Search first name" type="search" onChange={e => setFirstName(e.target.value)} />
       </div>
       <div className="mt-10 mr-6">
       <label>Last Name:</label>
-        <TextField id="outlined-search" label="Search last name" type="search" />
+        <TextField id="outlined-search" label="Search last name" type="search" onChange={e => setLastName(e.target.value)} />
       </div>
       <div className="mt-4 mr-6">
       <label>Email:</label>
-        <TextField id="outlined-search" label="Search email" type="search" />
+        <TextField id="outlined-search" label="Search email" type="search" onChange={e => setEmail(e.target.value)} />
       </div>
       <div className="p-4">
         <FormGroup>
