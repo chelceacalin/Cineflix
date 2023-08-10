@@ -1,29 +1,53 @@
 import React from 'react'
-import Typography from '@mui/material/Typography';
-import Modal from '@mui/material/Modal';
-import Box from '@mui/material/Box';
-import { Dialog, DialogContent, DialogTitle } from '@mui/material';
+import { Button, Dialog, DialogContent, FormControl, InputLabel, MenuItem, Select, TextField } from '@mui/material';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faTimes } from '@fortawesome/free-solid-svg-icons';
+import "./css/EditRoleModalWindow.css";
 
+function EditRoleModalWindow({ isModalOpen, closeModal, name, surname, role, email }) {
+    const fullName = `${name} ${surname}`;
 
-const style = {
-    position: 'absolute',
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
-    width: 400,
-    bgcolor: 'background.paper',
-    border: '2px solid #000',
-    boxShadow: 24,
-    p: 4,
-};
-
-
-function EditRoleModalWindow({ isModalOpen, closeModal }) {
     return (
         <Dialog open={isModalOpen} onClose={closeModal}>
-            <DialogTitle>Modal Title</DialogTitle>
+            <FontAwesomeIcon className="closeModalWindowButton" icon={faTimes} onClick={closeModal} />
             <DialogContent>
-                <p>This is the modal content.</p>
+                <div className='mt-6'>
+                    <TextField
+                        id="outlined-read-only-input"
+                        label="Name"
+                        defaultValue={fullName}
+                        InputProps={{
+                            readOnly: true,
+                        }}
+                    />
+                </div>
+                <div className='mt-4'>
+                    <TextField
+                        id="outlined-read-only-input"
+                        label="Email"
+                        defaultValue={email}
+                        InputProps={{
+                            readOnly: true,
+                        }}
+                    />
+                </div>
+                <div className='mt-4'>
+                    <FormControl fullWidth>
+                        <InputLabel id="demo-simple-select-label">Role</InputLabel>
+                        <Select
+                            labelId="demo-simple-select-label"
+                            id="demo-simple-select"
+                            value={role}
+                            label="Age"
+                        // onChange={handleChange}
+                        >
+                            <MenuItem value="User">User</MenuItem>
+                            <MenuItem value="Admin">Admin</MenuItem>
+                        </Select>
+                        <Button class="save" variant="contained">Save</Button>
+                        <Button class="cancel" variant="outlined">Cancel</Button>
+                    </FormControl>
+                </div>
             </DialogContent>
         </Dialog>
     );

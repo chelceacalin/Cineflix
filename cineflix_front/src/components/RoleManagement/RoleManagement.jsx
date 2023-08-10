@@ -1,11 +1,12 @@
 import React, { useEffect } from "react";
 import UserCineflix from "./UserCineflix";
+import FilterComponent from "./FilterComponent";
 
 const TABLE_HEAD = [
   "Name",
   "Surname",
   "Role",
-  "Status",
+  "Email",
   "Last Active",
   "Actions",
   "",
@@ -16,14 +17,14 @@ const TABLE_ROWS = [
     name: "John",
     surname: "Michael",
     role: "Admin",
-    isActive: "Active",
+    email: "john.michael@mail.com",
     date: "23/04/18",
   },
   {
     name: "John",
     surname: "Michael",
     role: "Admin",
-    isActive: "Active",
+    email: "john.michael@mail.com",
     date: "23/04/18",
   },
 ];
@@ -34,6 +35,8 @@ function RoleManagement() {
   }, []);
 
   return (
+    <>
+    <FilterComponent/>
     <div className="w-full h-full overflow-scroll">
       <table className="w-full min-w-max table-auto text-left">
         <thead className="bg-basic-red text-white">
@@ -65,7 +68,7 @@ function RoleManagement() {
           </tr>
         </thead>
         <tbody className="text-blue-marine">
-          {TABLE_ROWS.map(({ name, surname, role, isActive, date }, index) => {
+          {TABLE_ROWS.map(({ name, surname, role, email, date }, index) => {
             const isLast = index === TABLE_ROWS.length - 1;
             const classes = isLast ? "p-4" : "p-4 border-b border-blue-gray-50";
 
@@ -74,7 +77,7 @@ function RoleManagement() {
                 name={name}
                 surname={surname}
                 role={role}
-                isActive={isActive}
+                email={email}
                 date={date}
                 key={index}
                 classes={classes}
@@ -94,6 +97,7 @@ function RoleManagement() {
         </tbody>
       </table>
     </div>
+    </>
   );
 }
 
