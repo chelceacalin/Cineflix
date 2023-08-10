@@ -13,6 +13,8 @@ import ro.esolutions.cineflix.entities.UserCineflix;
 import ro.esolutions.cineflix.repositories.UserCineflixRepository;
 import ro.esolutions.cineflix.specification.UserCineflixSpecification;
 
+import java.util.Optional;
+
 @Service
 @Transactional
 @RequiredArgsConstructor
@@ -55,6 +57,13 @@ public class UserCineflixService {
 
         return userCineflixRepository.findAll(specification, pageable);
 
+    }
+
+    public void addUserCineflix(UserCineflix userCineflix){
+        Optional<UserCineflix> userCineflixNew = userCineflixRepository.findById(userCineflix.getId());
+        if (userCineflixNew.isEmpty()) {
+            userCineflixRepository.save(userCineflix);
+        }
     }
 
 }
