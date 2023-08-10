@@ -1,5 +1,6 @@
 package ro.esolutions.cineflix.services;
 
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -15,7 +16,7 @@ import ro.esolutions.cineflix.entities.UserCineflix;
 import ro.esolutions.cineflix.mapper.UserMapper;
 import ro.esolutions.cineflix.repositories.UserCineflixRepository;
 import ro.esolutions.cineflix.specification.UserCineflixSpecification;
-
+import java.util.Optional;
 import static java.util.Objects.nonNull;
 
 @Service
@@ -63,5 +64,17 @@ public class UserCineflixService {
             specification = specification.and(UserCineflixSpecification.hasRole(dto.getRole().toString()));
         }
         return specification;
+    }
+
+    public Optional<UserCineflix> findById(String id) {
+        return userCineflixRepository.findById(id);
+    }
+
+    public UserCineflix updateUserRole(String id, UserCineflix.Role role) {
+        UserCineflix userCineflix = findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Could not update a user that does not exist. Id: %s".formatted(id)));
+        userCineflix.setRole(role);
+        return userCineflixRepository.save(userCineflix);
+
     }
 }
