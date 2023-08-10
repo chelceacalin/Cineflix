@@ -9,52 +9,59 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import ro.esolutions.cineflix.DTO.UserFilterDTO;
+import ro.esolutions.cineflix.DTO.UserDTO;
 import ro.esolutions.cineflix.entities.UserCineflix;
+import ro.esolutions.cineflix.mapper.UserMapper;
 import ro.esolutions.cineflix.repositories.UserCineflixRepository;
 import ro.esolutions.cineflix.specification.UserCineflixSpecification;
+
+import static java.util.Objects.nonNull;
 
 @Service
 @Transactional
 @RequiredArgsConstructor
 public class UserCineflixService {
+
+
     @NonNull
     private final UserCineflixRepository userCineflixRepository;
 
-    public Page<UserCineflix> getUsers(String firstName, String lastName, String email, Boolean isActive, String role, int pageNo, int pageSize, String sortField, String direction) {
-
-        Specification<UserCineflix> specification = Specification.where(null);
-
-        if (firstName != null) {
-            specification = specification.and(UserCineflixSpecification.firstNameLike(firstName));
+    public Page<UserDTO> getUsers(UserFilterDTO dto, int pageNo, int pageSize) {
+        if (dto.getUsername() == null && dto.getEmail() == null && dto.getRole() == null&&dto.getFirstName()==null&&dto.getLastName()==null) {
+            return userCineflixRepository.findAll(PageRequest.of(pageNo, pageSize)).map(UserMapper::toDTO);
         }
 
-        if (lastName != null) {
-            specification = specification.and(UserCineflixSpecification.lastNameLike(lastName));
-        }
-
-        if (email != null) {
-            specification = specification.and(UserCineflixSpecification.emailLike(email));
-        }
-
-        if (isActive != null) {
-            specification = specification.and(UserCineflixSpecification.isActive(isActive));
-        }
-
-        if (role != null) {
-            specification = specification.and(UserCineflixSpecification.hasRole(role));
-        }
-
+        Specification<UserCineflix> specification = getSpecification(dto);
         Pageable pageable;
-        Sort.Direction sortDirection = Sort.Direction.fromString(direction);
+        Sort.Direction sortDirection = Sort.Direction.fromString(dto.getDirection());
 
-        if (sortField.equals("defaultSort")) {
-            pageable = PageRequest.of(pageNo, pageSize, Sort.by(sortDirection, "firstName", "lastName"));
+        if (dto.getSortField().equals("defaultSort")) {
+            pageable = PageRequest.of(pageNo, pageSize, Sort.by(sortDirection, "firstName","lastName"));
         } else {
-            pageable = PageRequest.of(pageNo, pageSize, Sort.by(sortDirection, sortField));
+            pageable = PageRequest.of(pageNo, pageSize, Sort.by(sortDirection, dto.getSortField()));
         }
-
-        return userCineflixRepository.findAll(specification, pageable);
-
+        return userCineflixRepository.findAll(specification, pageable).map(UserMapper::toDTO);
     }
 
+    public static Specification<UserCineflix> getSpecification(UserFilterDTO dto) {
+        Specification<UserCineflix> specification = Specification.where(null);
+
+        if (nonNull(dto.getFirstName())) {
+            specification = specification.and(UserCineflixSpecification.fieldNameLike(dto.getFirstName(),"firstName"));
+        }
+
+        if (nonNull(dto.getLastName())) {
+            specification = specification.and(UserCineflixSpecification.fieldNameLike(dto.getLastName(),"lastName"));
+        }
+
+        if (nonNull(dto.getEmail())) {
+            specification = specification.and(UserCineflixSpecification.fieldNameLike(dto.getEmail(),"email"));
+        }
+
+        if (nonNull(dto.getRole())) {
+            specification = specification.and(UserCineflixSpecification.hasRole(dto.getRole().toString()));
+        }
+        return specification;
+    }
 }

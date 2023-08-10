@@ -11,6 +11,9 @@ public class UserCineflix {
     private String id;
 
     @Column
+    private String username;
+
+    @Column
     private String firstName;
 
     @Column
@@ -18,9 +21,6 @@ public class UserCineflix {
 
     @Column
     private String email;
-
-    @Column
-    private Boolean isActive;
 
     @Column
     @Enumerated(value = EnumType.STRING)
