@@ -21,7 +21,7 @@ public class UserFilterDTO {
 
     public UserFilterDTO() {
         direction = "ASC";
-        sortField = "defaultSort";
+        sortField = "defaultsort";
     }
 
 

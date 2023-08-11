@@ -28,7 +28,6 @@ public class SecurityConfig {
                         .authenticated()
                 )
                 .oauth2Login(oauth2Login -> oauth2Login
-                        //.loginPage("/login")
                         .successHandler((request, response, authentication) -> {
                             response.sendRedirect("http://localhost:3000");
                         })
