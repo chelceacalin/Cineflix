@@ -20,7 +20,7 @@ spring:
             scope: openid
         provider:
           keycloak:
-            issuer-uri: http://localhost:8080/realms/CineflixKeycloak
+            issuer-uri: https://keycloak-internship.kdev2.esolutions.ro/auth/realms/esolutions
       resourceserver:
         jwt:
-          issuer-uri: http://localhost:8080/realms/CineflixKeycloak
+          issuer-uri: https://keycloak-internship.kdev2.esolutions.ro/auth/realms/esolutions
