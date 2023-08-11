@@ -4,9 +4,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ro.esolutions.cineflix.entities.UserCineflix;
-import ro.esolutions.cineflix.DTO.UserFilterDTO;
 import ro.esolutions.cineflix.DTO.UserDTO;
+import ro.esolutions.cineflix.DTO.UserFilterDTO;
+import ro.esolutions.cineflix.entities.UserCineflix;
 import ro.esolutions.cineflix.services.UserCineflixService;
 
 @RestController
@@ -24,8 +24,8 @@ public class UserRoleManagementController {
     }
 
 
-    @PostMapping("/{id}/update/{role}")
-    public ResponseEntity<UserCineflix> updateUserRole(@PathVariable("id") String id, @PathVariable("role")UserCineflix.Role role) {
-        return ResponseEntity.ok(userCineflixService.updateUserRole(id,role));
+    @PostMapping("/update/{role}")
+    public ResponseEntity<UserCineflix> updateUserRole(@RequestBody UserDTO userDTO, @PathVariable("role") UserCineflix.Role role) {
+        return ResponseEntity.ok(userCineflixService.updateUserRole(userDTO, role));
     }
 }

@@ -1,3 +1,5 @@
+server:
+  port: 8081
 spring:
   datasource:
     url: jdbc:postgresql://localhost:5433/cineflix
@@ -8,3 +10,17 @@ spring:
     hibernate:
       ddl-auto: none
     show-sql: true
+  security:
+    oauth2:
+      client:
+        registration:
+          keycloak:
+            client-id: cineflix
+            authorization-grant-type: authorization_code
+            scope: openid
+        provider:
+          keycloak:
+            issuer-uri: https://keycloak-internship.kdev2.esolutions.ro/auth/realms/esolutions
+      resourceserver:
+        jwt:
+          issuer-uri: https://keycloak-internship.kdev2.esolutions.ro/auth/realms/esolutions

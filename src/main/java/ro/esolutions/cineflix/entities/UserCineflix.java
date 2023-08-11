@@ -1,16 +1,22 @@
 package ro.esolutions.cineflix.entities;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Data
 @Table
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class UserCineflix {
     @Id
     private String id;
 
-    @Column
+    @Column(unique = true)
     private String username;
 
     @Column
@@ -19,7 +25,7 @@ public class UserCineflix {
     @Column
     private String lastName;
 
-    @Column
+    @Column(unique = true)
     private String email;
 
     @Column

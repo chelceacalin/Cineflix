@@ -2,8 +2,6 @@ package ro.esolutions.cineflix.config;
 
 import org.testcontainers.containers.PostgreSQLContainer;
 
-//testcontainers config to generate only one
-//docker container with postgres db for all integration tests
 public class CommonPostgresqlContainer extends PostgreSQLContainer<CommonPostgresqlContainer> {
     private static final String IMAGE_VERSION = "postgres:15.3";
     private static CommonPostgresqlContainer container;
@@ -15,10 +13,9 @@ public class CommonPostgresqlContainer extends PostgreSQLContainer<CommonPostgre
     public static CommonPostgresqlContainer getInstance() {
         if (container == null) {
             container = new CommonPostgresqlContainer()
-                    .withDatabaseName("cineflix")
-                    .withUsername("cineflix")
-                    .withPassword("cineflix")
-                    .withExposedPorts(5433);
+                    .withDatabaseName("testcineflixdb")
+                    .withUsername("testcineflixdb")
+                    .withPassword("testcineflixdb");
         }
         return container;
     }
@@ -30,6 +27,6 @@ public class CommonPostgresqlContainer extends PostgreSQLContainer<CommonPostgre
 
     @Override
     public void stop() {
-        container.stop();
+
     }
 }
