@@ -45,7 +45,7 @@ public class UserCineflixService {
         return userCineflixRepository.findAll(specification, pageable).map(UserMapper::toDTO);
     }
 
-    public static Specification<UserCineflix> getSpecification(UserFilterDTO dto) {
+    public Specification<UserCineflix> getSpecification(UserFilterDTO dto) {
         Specification<UserCineflix> specification = Specification.where(null);
 
         if (nonNull(dto.getFirstName())) {

@@ -10,7 +10,6 @@ import ro.esolutions.cineflix.entities.UserCineflix;
 @AllArgsConstructor
 public class UserFilterDTO {
 
-    private String id;
     private String username;
     private String firstName;
     private String lastName;
@@ -23,6 +22,30 @@ public class UserFilterDTO {
         direction = "ASC";
         sortField = "defaultSort";
     }
-
-
+    @Override
+    public String toString() {
+        String queryString = "?";
+        if(username != null){
+            queryString = queryString + "username" + "=" + username + "&";
+        }
+        if(firstName != null){
+            queryString = queryString + "firstName" + "=" + firstName + "&";
+        }
+        if(lastName != null){
+            queryString = queryString + "lastName" + "=" + lastName + "&";
+        }
+        if(email != null){
+            queryString = queryString + "email" + "=" + email + "&";
+        }
+        if(direction != null){
+            queryString = queryString + "direction" + "=" + direction + "&";
+        }
+        if(sortField != null){
+            queryString = queryString + "sortField" + "=" + sortField + "&";
+        }
+        if(role != null){
+            queryString = queryString + "role" + "=" + role + "&";
+        }
+        return queryString;
+    }
 }
