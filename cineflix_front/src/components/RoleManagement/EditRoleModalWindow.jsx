@@ -4,8 +4,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import "./css/EditRoleModalWindow.css";
 
-function EditRoleModalWindow({ isModalOpen, closeModal, name, surname, role, email }) {
-    const fullName = `${name} ${surname}`;
+function EditRoleModalWindow({ isModalOpen, closeModal, name, role, email }) {
+    const fullName = `${name}`;
 
     return (
         <Dialog open={isModalOpen} onClose={closeModal}>
@@ -44,8 +44,8 @@ function EditRoleModalWindow({ isModalOpen, closeModal, name, surname, role, ema
                             <MenuItem value="User">User</MenuItem>
                             <MenuItem value="Admin">Admin</MenuItem>
                         </Select>
-                        <Button class="save" variant="contained">Save</Button>
-                        <Button class="cancel" variant="outlined">Cancel</Button>
+                        <Button className="save" variant="contained">Save</Button>
+                        <Button className="cancel" variant="outlined">Cancel</Button>
                     </FormControl>
                 </div>
             </DialogContent>

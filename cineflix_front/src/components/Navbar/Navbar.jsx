@@ -11,7 +11,7 @@ function Navbar() {
   const location = useLocation();
 
   useEffect(() => {
-    console.log(location.pathname.substring(1,location.pathname.length))
+   // console.log(location.pathname.substring(1,location.pathname.length))
 
     if (location.pathname === "/") {
       setSelectedItem("Movies");
