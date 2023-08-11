@@ -25,7 +25,7 @@ public class UserRoleManagementController {
 
 
     @PostMapping("/update/{role}")
-    public ResponseEntity<?> updateUserRole(@RequestBody UserDTO userDTO, @PathVariable("role") UserCineflix.Role role) {
+    public ResponseEntity<UserCineflix> updateUserRole(@RequestBody UserDTO userDTO, @PathVariable("role") UserCineflix.Role role) {
         return ResponseEntity.ok(userCineflixService.updateUserRole(userDTO, role));
     }
 }
