@@ -9,6 +9,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.security.oauth2.core.oidc.OidcUserInfo;
 import org.springframework.stereotype.Service;
 import ro.esolutions.cineflix.DTO.UserFilterDTO;
 import ro.esolutions.cineflix.DTO.UserDTO;
@@ -23,7 +24,6 @@ import static java.util.Objects.nonNull;
 @Transactional
 @RequiredArgsConstructor
 public class UserCineflixService {
-
 
     @NonNull
     private final UserCineflixRepository userCineflixRepository;
@@ -67,6 +67,23 @@ public class UserCineflixService {
 
     public Optional<UserCineflix> findById(String id) {
         return userCineflixRepository.findById(id);
+    }
+
+    public void addUserCineflix(OidcUserInfo userInfo) {
+
+        UserCineflix userCineflix = new UserCineflix(
+                userInfo.getClaim("sub"),
+                userInfo.getClaim("preferred_username"),
+                userInfo.getClaim("given_name"),
+                userInfo.getClaim("family_name"),
+                userInfo.getClaim("email"),
+                UserCineflix.Role.USER
+        );
+
+        Optional<UserCineflix> userCineflixNew = userCineflixRepository.findById(userCineflix.getId());
+        if (userCineflixNew.isEmpty()) {
+            userCineflixRepository.save(userCineflix);
+        }
     }
 
     public UserCineflix updateUserRole(String id, UserCineflix.Role role) {
