@@ -20,8 +20,6 @@ import ro.esolutions.cineflix.specification.UserCineflixSpecification;
 import java.util.Optional;
 import static java.util.Objects.nonNull;
 
-import java.util.Optional;
-
 @Service
 @Transactional
 @RequiredArgsConstructor
