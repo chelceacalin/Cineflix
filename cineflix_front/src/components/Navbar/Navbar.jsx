@@ -1,11 +1,30 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { useNavigate,useLocation } from "react-router-dom";
 import "./css/Navbar.css";
 
 function Navbar() {
   let navigate = useNavigate();
-  const [selectedItem, setSelectedItem] = useState(null);
-  const [selectedColor, setSelectedColor] = useState("blue");
+  const [selectedItem, setSelectedItem] = useState("");
+  const [selectedColor, setSelectedColor] = useState("");
+
+
+  const location = useLocation();
+
+  useEffect(() => {
+    console.log(location.pathname.substring(1,location.pathname.length))
+
+    if (location.pathname === "/") {
+      setSelectedItem("Movies");
+      setSelectedColor("Red");
+    } else if (location.pathname.includes("profile")) {
+      setSelectedItem("profile");
+      setSelectedColor("red");
+    } else {
+      setSelectedItem(location.pathname.substring(1,location.pathname.length))
+      setSelectedColor("red");
+    }
+  }, [location.pathname]);
+
 
   const handleItemClick = (item, color) => {
     if (selectedItem === item) {
@@ -16,6 +35,7 @@ function Navbar() {
     }
   };
 
+ 
   return (
     <div className="flex h-screen w-auto">
       <div className="flex flex-col h-full p-3 bg-white shadow w-60">
