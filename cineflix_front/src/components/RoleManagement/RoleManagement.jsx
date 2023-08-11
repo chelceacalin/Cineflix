@@ -2,8 +2,9 @@ import React, { useState, useEffect } from "react";
 import UserCineflix from "./UserCineflix";
 import FilterComponent from "./FilterComponent";
 import axios from "axios";
-
+import { Button, IconButton } from "@material-tailwind/react";
 import "./css/RoleManagement.css";
+import Pagination from "./Pagination";
 
 function RoleManagement() {
   const TABLE_HEAD = ["Name", "Role", "Email", "Actions", ""];
@@ -14,7 +15,12 @@ function RoleManagement() {
   const [email, setEmail] = useState("");
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
+  const [role,setRole] = useState("");
+
   let [newUrl, setNewUrl] = useState("");
+  let [pageNo,setPageNo]=useState(1);
+  let [pageSize,setPageSize]=useState(15);
+  let [totalPages,setTotalPages]=useState('')
 
   let handleClick = (fieldName) => {
     if (lastClicked === fieldName) {
@@ -27,20 +33,35 @@ function RoleManagement() {
     const normalizedSortField = sortField || "defaultsort";
     console.log("Sort Direction: " + direction ? "ASC" : "DESC");
     newUrl = `http://localhost:8080/users?sortField=${normalizedSortField}&direction=${
-      direction ? "ASC" : "DESC"
-    }&firstName=${firstName}&lastName=${lastName}&email=${email}`;
+      direction ? "ASC" : "DESC"}&firstName=${firstName}&lastName=${lastName}&email=${email}&pageNo=${parseInt(pageNo)-1}&pageSize=${pageSize}`;
     console.log("Fetching users with URL: " + newUrl);
+
 
     axios.get(newUrl).then((elems) => {
       setUsers(elems.data.content);
+      setTotalPages(elems.data.totalPages)
+     // console.log(elems.data.totalPages)
     });
-  }, [sortField, direction, firstName, lastName, email]);
+  }, [sortField, direction, firstName, lastName, email,pageSize,pageNo]);
 
   let getFilterInput = (params) => {
     setFirstName(params[0]);
     setLastName(params[1]);
     setEmail(params[2]);
+    setRole(params[3]== "BOTH" ? "" : params[3]);
   };
+
+  const handleSelectChange = (event) => {
+    const value = event.target.value;
+    console.log(value)
+    setPageSize(value);
+  };
+
+  const updateParentState = (pgNo) => {
+    console.log("pgno ",pgNo)
+    setPageNo(pgNo);
+  };
+
 
   return (
     <>
@@ -79,7 +100,7 @@ function RoleManagement() {
                     <div className="">
                       {elem}
                       <svg
-                        data-column={elem} 
+                        data-column={elem}
                         style={{ display: "inline-block" }}
                         width="16"
                         height="16"
@@ -125,18 +146,25 @@ function RoleManagement() {
                 />
               );
             })}
-            {/* TODO fill row with color */}
-            <tr className="bg-basic-red">
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
           </tbody>
         </table>
+        <span className="w-full bg-basic-red flex flex-wrap py-3">
+          <span className="ml-10 ">
+            <span className="text-white ml-5 font-normal">
+              Results per page:{" "}
+            </span>
+            <span className="ml-5">
+            <select name="cars" id="cars" form="carform" onChange={handleSelectChange}>
+        <option value="15">15</option>
+        <option value="10">10</option>
+        <option value="5">5</option>
+      </select>
+            </span>
+          </span>
+          <span className="block  justify-center ml-52 flex-wrap">
+            <Pagination pageNo={pageNo} pageSize={pageSize} totalPages={totalPages} updateParentState={updateParentState}/>
+         </span> 
+        </span>
       </div>
     </>
   );
