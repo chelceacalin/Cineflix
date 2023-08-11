@@ -32,7 +32,7 @@ function RoleManagement() {
   useEffect(() => {
     const normalizedSortField = sortField || "defaultsort";
     console.log("Sort Direction: " + direction ? "ASC" : "DESC");
-    newUrl = `http://localhost:8080/users?sortField=${normalizedSortField}&direction=${
+    newUrl = `http://localhost:8081/users?sortField=${normalizedSortField}&direction=${
       direction ? "ASC" : "DESC"}&firstName=${firstName}&lastName=${lastName}&email=${email}&pageNo=${parseInt(pageNo)-1}&pageSize=${pageSize}`;
     console.log("Fetching users with URL: " + newUrl);
 
