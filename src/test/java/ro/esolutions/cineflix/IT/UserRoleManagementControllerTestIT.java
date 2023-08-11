@@ -11,12 +11,6 @@ import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
-import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.boot.test.web.client.TestRestTemplate;
-
-import org.springframework.data.domain.Page;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.jdbc.SqlGroup;
@@ -76,10 +70,10 @@ public class UserRoleManagementControllerTestIT {
     @Test
     @DisplayName("Test filter data all users")
     @SqlGroup({
-            @Sql(value = "/sql/clean_up_users.sql", executionPhase = BEFORE_TEST_METHOD),
-            @Sql(value = "/sql/insert_users.sql", executionPhase = BEFORE_TEST_METHOD)
+            @Sql(value = "/sql/clean_up_user.sql", executionPhase = BEFORE_TEST_METHOD),
+            @Sql(value = "/sql/insert_user.sql", executionPhase = BEFORE_TEST_METHOD)
     })
-    public void getFilteredUsers(){
+    public void getAllUsers(){
         UserFilterDTO dtoFilter = UserFilterDTO.builder()
                 .build();
         String url="/users" + dtoFilter.toString();
@@ -91,15 +85,15 @@ public class UserRoleManagementControllerTestIT {
     @Test
     @DisplayName("Test filter data get specific user")
     @SqlGroup({
-            @Sql(value = "/sql/clean_up_users.sql", executionPhase = BEFORE_TEST_METHOD),
-            @Sql(value = "/sql/insert_users.sql", executionPhase = BEFORE_TEST_METHOD)
+            @Sql(value = "/sql/clean_up_user.sql", executionPhase = BEFORE_TEST_METHOD),
+            @Sql(value = "/sql/insert_user.sql", executionPhase = BEFORE_TEST_METHOD)
     })
     public void getFilteredSpecificUser(){
         UserFilterDTO dtoFilterSpecificUser = UserFilterDTO.builder()
-                .firstName("anca")
-                .lastName("lautarescu")
-                .email("anca.lautarescu@esolutions.ro")
-                .role(UserCineflix.Role.ADMIN)
+                .firstName("test")
+                .lastName("test")
+                .email("test@gmail.com")
+                .role(UserCineflix.Role.USER)
                 .build();
         String url="/users" + dtoFilterSpecificUser .toString();
         ResponseEntity<UserPageWrapper> result = restTemplate.exchange(url, HttpMethod.GET, null, new ParameterizedTypeReference<UserPageWrapper>() {});
