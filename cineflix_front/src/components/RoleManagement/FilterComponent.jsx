@@ -19,8 +19,7 @@ function FilterComponent({filterInput}) {
         let array = [];
         array.push(firstName, lastName, email);
         filterInput(array);
-    },
-    [firstName,lastName,email]);
+    },[firstName, lastName, email]);
 
   return (
     <div className="filterContainer space-y-4 ml-6">
@@ -31,11 +30,11 @@ function FilterComponent({filterInput}) {
       </div>
       <div className="mt-10 mr-6">
       <label>Last Name:</label>
-        <TextField id="outlined-search" label="Search last name" type="search" onChange={e => setLastName(e.target.value)} />
+        <TextField id="outlined-search" name="lastName" label="Search last name" type="search" onChange={e => setLastName(e.target.value)} />
       </div>
       <div className="mt-4 mr-6">
       <label>Email:</label>
-        <TextField id="outlined-search" label="Search email" type="search" onChange={e => setEmail(e.target.value)} />
+        <TextField id="outlined-search" name="email" slabel="Search email" type="search" onChange={e => setEmail(e.target.value)} />
       </div>
       <div className="p-4">
         <FormGroup>
