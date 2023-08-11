@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import UserCineflix from "./UserCineflix";
 import FilterComponent from "./FilterComponent";
 import axios from "axios";
-import { Button, IconButton } from "@material-tailwind/react";
 import "./css/RoleManagement.css";
 import Pagination from "./Pagination";
 
@@ -15,12 +14,21 @@ function RoleManagement() {
   const [email, setEmail] = useState("");
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
-  const [role,setRole] = useState("");
-
+  let [userRole,setUserRole]=useState("")
+  const [filterRole,setfilterRole] = useState("");
   let [newUrl, setNewUrl] = useState("");
   let [pageNo,setPageNo]=useState(1);
   let [pageSize,setPageSize]=useState(15);
   let [totalPages,setTotalPages]=useState('')
+
+  let [totalUsers,setTotalUsers]=useState(0);
+
+  useEffect(()=>{
+      axios.get(`http://localhost:8081/users`).then((data)=>{
+        setTotalUsers(data.data.content.length)
+      })
+
+  },[totalUsers])
 
   let handleClick = (fieldName) => {
     if (lastClicked === fieldName) {
@@ -33,22 +41,24 @@ function RoleManagement() {
     const normalizedSortField = sortField || "defaultsort";
     console.log("Sort Direction: " + direction ? "ASC" : "DESC");
     newUrl = `http://localhost:8081/users?sortField=${normalizedSortField}&direction=${
-      direction ? "ASC" : "DESC"}&firstName=${firstName}&lastName=${lastName}&email=${email}&pageNo=${parseInt(pageNo)-1}&pageSize=${pageSize}`;
+      direction ? "ASC" : "DESC"}&firstName=${firstName}&lastName=${lastName}&email=${email}&pageNo=${parseInt(pageNo)-1}&pageSize=${pageSize}&role=${filterRole}`;
     console.log("Fetching users with URL: " + newUrl);
 
-
     axios.get(newUrl).then((elems) => {
-      setUsers(elems.data.content);
-      setTotalPages(elems.data.totalPages)
-     // console.log(elems.data.totalPages)
+      if (elems.data.content.length === 0 && pageNo > 1) {
+        updatePageNumber(pageNo - 1);
+      } else {
+        setUsers(elems.data.content);
+        setTotalPages(elems.data.totalPages);
+      }
     });
-  }, [sortField, direction, firstName, lastName, email,pageSize,pageNo]);
+  }, [sortField, direction, firstName, lastName, email,pageSize,pageNo,filterRole]);
 
   let getFilterInput = (params) => {
     setFirstName(params[0]);
     setLastName(params[1]);
     setEmail(params[2]);
-    setRole(params[3]== "BOTH" ? "" : params[3]);
+    setfilterRole(params[3]== "BOTH" ? "" : params[3]);
   };
 
   const handleSelectChange = (event) => {
@@ -57,7 +67,7 @@ function RoleManagement() {
     setPageSize(value);
   };
 
-  const updateParentState = (pgNo) => {
+  const updatePageNumber = (pgNo) => {
     console.log("pgno ",pgNo)
     setPageNo(pgNo);
   };
@@ -70,7 +80,6 @@ function RoleManagement() {
         <table className="w-full min-w-max table-auto text-left">
           <thead className="bg-basic-red text-white">
             <tr>
-              {/* TODO change font */}
               {TABLE_HEAD.slice(0, TABLE_HEAD.length - 2).map((elem) => {
                 return (
                   <th
@@ -130,7 +139,9 @@ function RoleManagement() {
             </tr>
           </thead>
           <tbody className="text-blue-marine">
-            {users.map(({ firstName, lastName, role, email }, index) => {
+            {
+            
+            users.map(({ firstName, lastName, role, email }, index) => {
               const isLast = index === users.length - 1;
               const classes = isLast
                 ? "p-4"
@@ -162,7 +173,7 @@ function RoleManagement() {
             </span>
           </span>
           <span className="block  justify-center ml-52 flex-wrap">
-            <Pagination pageNo={pageNo} pageSize={pageSize} totalPages={totalPages} updateParentState={updateParentState}/>
+            <Pagination pageNo={pageNo} pageSize={pageSize} totalPages={totalPages} updatePageNumber={updatePageNumber} responseLength={totalUsers} nrCurrentUsers={users.length}/>
          </span> 
         </span>
       </div>

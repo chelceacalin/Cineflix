@@ -17,15 +17,7 @@ function UserCineflix({ name, role, email, classes }) {
       </td>
       <td className={classes}>
         <div variant="small" color="blue-gray" className="font-normal">
-          {/* TODO make default value in dropdown to be variable
-            the value should be from database */}
-          {/* TODO make the dropdown pretty Opional*/}
-          <form>
-            <select name="roles">
-              <option value="User">User</option>
-              <option value="Admin">Admin</option>
-            </select>
-          </form>
+              <span value="User" className="font-bold">{role}</span>
         </div>
       </td>
       <td className={classes}>
