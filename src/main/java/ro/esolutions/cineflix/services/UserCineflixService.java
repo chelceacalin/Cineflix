@@ -66,9 +66,17 @@ public class UserCineflixService {
         return specification;
     }
 
-    public Optional<UserCineflix> findById(String id) {
-        return userCineflixRepository.findById(id);
+    public UserCineflix updateUserRole(UserDTO userDTO, UserCineflix.Role role) {
+        Optional<UserCineflix> userCineflixOptional = userCineflixRepository.findByUsername(userDTO.getUsername());
+        UserCineflix updatedUserCineflix = new UserCineflix();
+        if(userCineflixOptional.isPresent()){
+            UserCineflix userCineflix = userCineflixOptional.get();
+            userCineflix.setRole(role);
+            updatedUserCineflix = userCineflixRepository.save(userCineflix);
+        }
+        return updatedUserCineflix;
     }
+
 
     public void addUserCineflix(OidcUserInfo userInfo) {
 
@@ -87,11 +95,4 @@ public class UserCineflixService {
         }
     }
 
-    public UserCineflix updateUserRole(String id, UserCineflix.Role role) {
-        UserCineflix userCineflix = findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Could not update a user that does not exist. Id: %s".formatted(id)));
-        userCineflix.setRole(role);
-        return userCineflixRepository.save(userCineflix);
-
-    }
 }

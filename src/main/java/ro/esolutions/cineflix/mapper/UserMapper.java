@@ -7,7 +7,6 @@ public class UserMapper {
 
     public static UserDTO toDTO(UserCineflix user){
         return UserDTO.builder()
-                .id(user.getId())
                 .role(user.getRole())
                 .username(user.getUsername())
                 .firstName(user.getFirstName())
