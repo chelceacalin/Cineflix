@@ -1,0 +1,10 @@
+spring:
+  datasource:
+    driver-class-name: org.testcontainers.jdbc.ContainerDatabaseDriver
+    username: testcineflixdb
+    url: jdbc:tc:postgresql:15.3://localhost:5433/testcineflixdb
+    password: testcineflixdb
+  jpa:
+    open-in-view: 'true'
+    hibernate:
+      ddl-auto: create
