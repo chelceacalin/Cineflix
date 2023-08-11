@@ -31,7 +31,6 @@ const TABLE_ROWS = [
 
 function RoleManagement() {
   useEffect(() => {
-    console.log("mesaj");
   }, []);
 
   return (
