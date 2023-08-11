@@ -2,7 +2,6 @@ package ro.esolutions.cineflix.repositories;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
-import ro.esolutions.cineflix.DTO.UserDTO;
 import ro.esolutions.cineflix.entities.UserCineflix;
 
 import java.util.Optional;

@@ -1,6 +1,5 @@
 package ro.esolutions.cineflix.services;
 
-import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -64,10 +63,6 @@ public class UserCineflixService {
             specification = specification.and(UserCineflixSpecification.hasRole(dto.getRole().toString()));
         }
         return specification;
-    }
-
-    public Optional<UserCineflix> findById(String id) {
-        return userCineflixRepository.findById(id);
     }
 
     public UserCineflix updateUserRole(UserDTO userDTO, UserCineflix.Role role) {
