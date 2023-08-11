@@ -16,7 +16,7 @@ public class UserCineflix {
     @Id
     private String id;
 
-    @Column
+    @Column(unique = true)
     private String username;
 
     @Column
@@ -25,7 +25,7 @@ public class UserCineflix {
     @Column
     private String lastName;
 
-    @Column
+    @Column(unique = true)
     private String email;
 
     @Column

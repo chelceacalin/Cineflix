@@ -6,7 +6,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import ro.esolutions.cineflix.DTO.UserDTO;
 import ro.esolutions.cineflix.entities.UserCineflix;
+import ro.esolutions.cineflix.mapper.UserMapper;
 import ro.esolutions.cineflix.repositories.UserCineflixRepository;
 import ro.esolutions.cineflix.services.UserCineflixService;
 
@@ -35,15 +37,16 @@ public class UserCineflixServiceTest {
                 .email("mark.mark@mail.com")
                 .role(UserCineflix.Role.ADMIN)
                 .build();
+        UserDTO userDTO = UserMapper.toDTO(userCineflix);
 
-        when(userCineflixService.findById("1")).thenReturn(Optional.of(userCineflix));
+        when(userCineflixRepository.findByUsername("mark.mark")).thenReturn(Optional.of(userCineflix));
         when(userCineflixRepository.save(userCineflix)).thenReturn(userCineflix);
 
-        UserCineflix updatedUserCineflix = userCineflixService.updateUserRole("1", UserCineflix.Role.USER);
+        UserCineflix updatedUserCineflix = userCineflixService.updateUserRole(userDTO, UserCineflix.Role.USER);
 
         assertEquals(UserCineflix.Role.USER, updatedUserCineflix.getRole());
 
-        verify(userCineflixRepository, times(1)).findById("1");
+        verify(userCineflixRepository, times(1)).findByUsername("mark.mark");
         verify(userCineflixRepository, times(1)).save(userCineflix);
     }
 }

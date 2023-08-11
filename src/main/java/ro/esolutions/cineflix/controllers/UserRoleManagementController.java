@@ -1,7 +1,10 @@
 package ro.esolutions.cineflix.controllers;
 
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ro.esolutions.cineflix.entities.UserCineflix;
@@ -24,8 +27,8 @@ public class UserRoleManagementController {
     }
 
 
-    @PostMapping("/{id}/update/{role}")
-    public ResponseEntity<UserCineflix> updateUserRole(@PathVariable("id") String id, @PathVariable("role")UserCineflix.Role role) {
-        return ResponseEntity.ok(userCineflixService.updateUserRole(id,role));
+    @PostMapping("/update/{role}")
+    public ResponseEntity<?> updateUserRole(@RequestBody UserDTO userDTO, @PathVariable("role") UserCineflix.Role role) {
+        return ResponseEntity.ok(userCineflixService.updateUserRole(userDTO, role));
     }
 }

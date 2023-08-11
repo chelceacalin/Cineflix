@@ -70,11 +70,13 @@ public class UserCineflixService {
         return userCineflixRepository.findById(id);
     }
 
-    public UserCineflix updateUserRole(String id, UserCineflix.Role role) {
-        UserCineflix userCineflix = findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Could not update a user that does not exist. Id: %s".formatted(id)));
-        userCineflix.setRole(role);
-        return userCineflixRepository.save(userCineflix);
-
+    public UserCineflix updateUserRole(UserDTO userDTO, UserCineflix.Role role) {
+        Optional<UserCineflix> userCineflix = userCineflixRepository.findByUsername(userDTO.getUsername());
+        UserCineflix updatedUserCineflix = new UserCineflix();
+        if(userCineflix.isPresent()){
+            userCineflix.get().setRole(role);
+            updatedUserCineflix = userCineflixRepository.save(userCineflix.get());
+        }
+        return updatedUserCineflix;
     }
 }
