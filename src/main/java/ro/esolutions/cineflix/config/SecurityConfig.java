@@ -26,13 +26,21 @@ public class SecurityConfig {
                 .authorizeHttpRequests(registry -> registry
                         .anyRequest()
                         .authenticated()
-                ).oauth2Login(Customizer.withDefaults())
+                )
+                .oauth2Login(oauth2Login -> oauth2Login
+                        //.loginPage("/login")
+                        .successHandler((request, response, authentication) -> {
+                            response.sendRedirect("http://localhost:3000");
+                        })
+                        .permitAll()
+                )
                 .oauth2ResourceServer(oauth2 -> oauth2
                         .jwt(Customizer.withDefaults())
                 )
                 .logout((logout) -> logout.logoutSuccessHandler(oidcLogoutSuccessHandler()));
 
         return httpSecurity.build();
+
     }
 
     private LogoutSuccessHandler oidcLogoutSuccessHandler() {
