@@ -35,6 +35,19 @@ function RoleManagement() {
     setLastClicked(fieldName);
   };
 
+
+
+  const updateUser = (updatedUser) => {
+    const updatedUsers = users.map(user => {
+      if (user.username === updatedUser.username) {
+        return updatedUser;
+      }
+      return user;
+    });
+    setUsers(updatedUsers);
+  };
+
+
   useEffect(() => {
     const normalizedSortField = sortField || "defaultsort";
     newUrl = `http://localhost:8081/users?sortField=${normalizedSortField}&direction=${
@@ -42,6 +55,8 @@ function RoleManagement() {
     }&firstName=${firstName}&lastName=${lastName}&email=${email}&pageNo=${
       parseInt(pageNo) - 1
     }&pageSize=${pageSize}&role=${filterRole}`;
+    //console.log("Fetching users with URL: " + newUrl);
+
     axios.get(newUrl).then((elems) => {
       if (elems.data.content.length === 0 && pageNo > 1) {
         updatePageNumber(pageNo - 1);
@@ -149,6 +164,8 @@ function RoleManagement() {
                   email={email}
                   username={username}
                   key={index}
+                  updateUser={updateUser}
+ 
                   classes={classes}
                 />
               );

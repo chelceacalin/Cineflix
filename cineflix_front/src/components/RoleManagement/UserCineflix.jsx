@@ -1,12 +1,14 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Button from '@mui/material/Button';
 
 import EditRoleModalWindow from "./EditRoleModalWindow";
 
-function UserCineflix({ name, firstName, lastName, role, email, username, classes }) {
+function UserCineflix({ name, firstName, lastName, role, email, username, classes,updateUser }) {
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+
+
 
   return (
     <tr key={name}>
@@ -39,6 +41,7 @@ function UserCineflix({ name, firstName, lastName, role, email, username, classe
             role={role}
             email={email}
             username={username}
+            updateUser={updateUser}
           />
         </div>
       </td>
