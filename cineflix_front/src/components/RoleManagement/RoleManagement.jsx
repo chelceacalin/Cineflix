@@ -35,6 +35,19 @@ function RoleManagement() {
     setLastClicked(fieldName);
   };
 
+
+
+  const updateUser = (updatedUser) => {
+    const updatedUsers = users.map(user => {
+      if (user.username === updatedUser.username) {
+        return updatedUser;
+      }
+      return user;
+    });
+    setUsers(updatedUsers);
+  };
+
+
   useEffect(() => {
     const normalizedSortField = sortField || "defaultsort";
     newUrl = `http://localhost:8081/users?sortField=${normalizedSortField}&direction=${
@@ -149,6 +162,8 @@ function RoleManagement() {
                   email={email}
                   username={username}
                   key={index}
+                  updateUser={updateUser}
+ 
                   classes={classes}
                 />
               );
