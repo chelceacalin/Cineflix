@@ -3,7 +3,7 @@ import Button from '@mui/material/Button';
 
 import EditRoleModalWindow from "./EditRoleModalWindow";
 
-function UserCineflix({ name, role, email, classes }) {
+function UserCineflix({ name, firstName, lastName, role, email, username, classes }) {
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -44,6 +44,7 @@ function UserCineflix({ name, role, email, classes }) {
             name={name}
             role={role}
             email={email}
+            username={username}
           />
         </div>
       </td>
