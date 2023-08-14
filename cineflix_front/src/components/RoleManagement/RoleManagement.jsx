@@ -42,8 +42,6 @@ function RoleManagement() {
     }&firstName=${firstName}&lastName=${lastName}&email=${email}&pageNo=${
       parseInt(pageNo) - 1
     }&pageSize=${pageSize}&role=${filterRole}`;
-    //console.log("Fetching users with URL: " + newUrl);
-
     axios.get(newUrl).then((elems) => {
       if (elems.data.content.length === 0 && pageNo > 1) {
         updatePageNumber(pageNo - 1);
