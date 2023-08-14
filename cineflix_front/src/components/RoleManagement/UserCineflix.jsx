@@ -33,6 +33,8 @@ function UserCineflix({ name, firstName, lastName, role, email, username, classe
           <EditRoleModalWindow
             isModalOpen={open}
             closeModal={handleClose}
+            firstName={firstName}
+            lastName={lastName}
             name={name}
             role={role}
             email={email}
