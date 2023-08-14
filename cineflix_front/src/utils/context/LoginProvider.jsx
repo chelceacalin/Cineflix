@@ -10,7 +10,7 @@ function LoginProvider({ children }) {
     localStorage.setItem('isAdmin',value);
 }
 
-  return <UserLoginContext.Provider value={{isAdmin,setIsAdmin:setIsAdminHandler}}>{children}</UserLoginContext.Provider>;
+  return <UserLoginContext.Provider value={{ isAdmin, setIsAdmin: setIsAdminHandler }}>{ children }</UserLoginContext.Provider>;
 }
 
 export default LoginProvider;

@@ -30,9 +30,10 @@ function App() {
       <>
         <Navbar />
         <Routes>
-          <Route index path="/" element={<Movies />} />
-          <Route path="/myprofile/:id" element={<MyProfile />} />
 
+          <Route index path="/" element={<Movies />} />
+
+          <Route path="/myprofile/:id" element={<MyProfile />} />
           <Route element={<AdminRoute />}>
             <Route
               path="/categoryManagement"
