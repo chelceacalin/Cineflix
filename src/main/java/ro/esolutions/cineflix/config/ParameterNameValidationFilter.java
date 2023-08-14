@@ -4,6 +4,7 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.ServletRequest;
 import jakarta.servlet.ServletResponse;
+
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -13,17 +14,18 @@ import java.util.logging.LogRecord;
 
 public class ParameterNameValidationFilter implements Filter, jakarta.servlet.Filter {
 
-    private final Set<String> allowedParameterNames = new HashSet<>(Arrays.asList(
-            "email", "role","firstName","lastName",
-            "pageNo", "pageSize", "sortField", "direction"
-    ));
+    private final Set<String> allowedParameterNames;
+
+    public ParameterNameValidationFilter(Set<String> allowedParameterNames) {
+        this.allowedParameterNames = allowedParameterNames;
+    }
 
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
             throws IOException, ServletException {
         String[] parameterNames = request.getParameterMap().keySet().toArray(new String[0]);
         for (String paramName : parameterNames) {
             if (!allowedParameterNames.contains(paramName)) {
-              return;
+                return;
             }
         }
         chain.doFilter(request, response);

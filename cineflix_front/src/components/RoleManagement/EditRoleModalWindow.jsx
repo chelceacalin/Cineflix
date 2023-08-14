@@ -37,7 +37,6 @@ function EditRoleModalWindow({ isModalOpen, closeModal, name, firstName, lastNam
             }));
             const response = await axios.post(url, userDTO);
         } catch (error) {
-            console.error('Error:', error);
         }
     };
 
