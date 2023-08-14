@@ -1,11 +1,45 @@
-import React from 'react'
-import { Button, Dialog, DialogContent, FormControl, InputLabel, MenuItem, Select, TextField } from '@mui/material';
+import React,  { useState } from 'react'
+import { Button, Dialog, DialogContent, FormControl, InputLabel, MenuItem, NativeSelect, Select, TextField } from '@mui/material';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import "./css/EditRoleModalWindow.css";
+import axios from 'axios';
 
-function EditRoleModalWindow({ isModalOpen, closeModal, name, role, email }) {
+function EditRoleModalWindow({ isModalOpen, closeModal, name, firstName, lastName, role, email, username }) {
     const fullName = `${name}`;
+    const [roles, setRole] = useState(role);
+    const [selectedOption, setSelectedOption] = useState(role);
+
+    const [userDTO, setUserDTO] = useState({
+        username: '',
+        firstName: '',
+        lastName: '',
+        email: '',
+        role: ''
+    });
+
+    const setValueFromOption = (event) => {
+        const option = event.target.value;
+        setSelectedOption(option);
+    };
+
+    const editUserRole = async () => {
+        let url = 'http://localhost:8081/users/update/' + selectedOption;
+        const { role, value } = event.target;
+
+        try {
+            setUserDTO(() => ({
+                'username': username,
+                'firstName': firstName,
+                'lastName': lastName,
+                'email': email,
+                'role': selectedOption
+            }));
+            const response = await axios.post(url, userDTO);
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    };
 
     return (
         <Dialog open={isModalOpen} onClose={closeModal}>
@@ -33,19 +67,16 @@ function EditRoleModalWindow({ isModalOpen, closeModal, name, role, email }) {
                 </div>
                 <div className='mt-4'>
                     <FormControl fullWidth>
-                        <InputLabel id="demo-simple-select-label">Role</InputLabel>
-                        <Select
-                            labelId="demo-simple-select-label"
-                            id="demo-simple-select"
-                            value={role}
-                            label="Age"
-                        // onChange={handleChange}
+                        <InputLabel variant="standard" htmlFor="uncontrolled-native">Role</InputLabel>
+                        <NativeSelect defaultValue={role}
+                        onChange={setValueFromOption}
+                        placeholder=''
                         >
-                            <MenuItem value="User">User</MenuItem>
-                            <MenuItem value="Admin">Admin</MenuItem>
-                        </Select>
-                        <Button className="save" variant="contained">Save</Button>
-                        <Button className="cancel" variant="outlined">Cancel</Button>
+                            <option value="USER">User</option>
+                            <option value="ADMIN">Admin</option>
+                        </NativeSelect>
+                        <Button className="save" variant="contained" onClick={editUserRole}>Save</Button>
+                        <Button className="cancel" variant="outlined" onClick={closeModal} >Cancel</Button>
                     </FormControl>
                 </div>
             </DialogContent>
