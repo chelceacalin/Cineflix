@@ -1,17 +1,18 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState ,useContext} from "react";
 import { useNavigate,useLocation } from "react-router-dom";
 import "./css/Navbar.css";
 import CineflixIcon from "../../utils/icon/CineflixIcon";
+import {UserLoginContext} from "../../utils/context/LoginProvider";
+import { User } from "heroicons-react";
 function Navbar() {
   let navigate = useNavigate();
   const [selectedItem, setSelectedItem] = useState("");
   const [selectedColor, setSelectedColor] = useState("");
-
+  const {isAdmin,setIsAdmin}=useContext(UserLoginContext)
 
   const location = useLocation();
 
   useEffect(() => {
-   // console.log(location.pathname.substring(1,location.pathname.length))
 
     if (location.pathname === "/") {
       setSelectedItem("Movies");
@@ -126,7 +127,7 @@ function Navbar() {
                 </a>
               </li>
               <li className="rounded-sm">
-                <a
+                    {isAdmin&&  <a
                   href="#"
                   className={`flex items-center p-2 space-x-3 rounded-md ${
                     selectedItem === "roleManagement"
@@ -191,10 +192,10 @@ function Navbar() {
                     {" "}
                     Role Management
                   </span>
-                </a>
+                </a>}
               </li>
               <li className="rounded-sm">
-                <a
+               {isAdmin&& <a
                   href="#"
                   className={`flex items-center p-2 space-x-3 rounded-md ${
                     selectedItem === "categoryManagement"
@@ -253,7 +254,7 @@ function Navbar() {
                     {" "}
                     Category Management
                   </span>
-                </a>
+                </a>}
               </li>
             </ul>
           </div>

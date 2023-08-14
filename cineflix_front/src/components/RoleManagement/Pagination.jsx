@@ -106,12 +106,6 @@ function Pagination({
                     updatePageNumber(totalPages - 3 + parseInt(index) + 1);
                   }}
                 >
-                  {console.log(
-                    "TotalPages: " + totalPages,
-                    "PageNo: " + pageNo,
-                    "Index: " + index,
-                    "Calcul: " + (totalPages - 3 + index + 1)
-                  )}
                   <div
                     className={` ml-0.  5 mr-0.5 relative block rounded bg-transparent px-3 py-1 text-sm text-neutral-600 transition-all duration-300 hover:bg-neutral-100 dark:text-white dark:hover:bg-white dark:hover:text-blue-marine ${
                       totalPages - 3 + index + 1 === pageNo

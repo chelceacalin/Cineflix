@@ -37,13 +37,12 @@ function RoleManagement() {
 
   useEffect(() => {
     const normalizedSortField = sortField || "defaultsort";
-    console.log("Sort Direction: " + direction ? "ASC" : "DESC");
     newUrl = `http://localhost:8081/users?sortField=${normalizedSortField}&direction=${
       direction ? "ASC" : "DESC"
     }&firstName=${firstName}&lastName=${lastName}&email=${email}&pageNo=${
       parseInt(pageNo) - 1
     }&pageSize=${pageSize}&role=${filterRole}`;
-    console.log("Fetching users with URL: " + newUrl);
+    //console.log("Fetching users with URL: " + newUrl);
 
     axios.get(newUrl).then((elems) => {
       if (elems.data.content.length === 0 && pageNo > 1) {
@@ -64,7 +63,6 @@ function RoleManagement() {
 
   const handleSelectChange = (event) => {
     const value = event.target.value;
-    console.log(value);
     setPageSize(value);
   };
 
