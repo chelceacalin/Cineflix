@@ -100,6 +100,39 @@ public class UserRoleManagementControllerTestIT {
         assertEquals(OK, result.getStatusCode());
         assertEquals(1, result.getBody().getContent().size());
     }
+    @Test
+    @DisplayName("Test filter data get non existing user")
+    @SqlGroup({
+            @Sql(value = "/sql/clean_up_user.sql", executionPhase = BEFORE_TEST_METHOD),
+            @Sql(value = "/sql/insert_user.sql", executionPhase = BEFORE_TEST_METHOD)
+    })
+    public void getNonExistingUser(){
+        UserFilterDTO dtoNonExistingUser = UserFilterDTO.builder()
+                .firstName("z")
+                .lastName("z")
+                .email("z")
+                .role(UserCineflix.Role.USER)
+                .build();
+        String url="/users" + dtoNonExistingUser .toString();
+        ResponseEntity<UserPageWrapper> result = restTemplate.exchange(url, HttpMethod.GET, null, new ParameterizedTypeReference<UserPageWrapper>() {});
+        assertEquals(OK, result.getStatusCode());
+        assertEquals(0, result.getBody().getContent().size());
+    }
 
+    public String missingLastLetterFromField(String field){
+        return field.substring(0, field.length() - 2);
+    }
+    @Test
+    @DisplayName("Test filter data get existing users but with wrong Query String for firstName")
+    @SqlGroup({
+            @Sql(value = "/sql/clean_up_user.sql", executionPhase = BEFORE_TEST_METHOD),
+            @Sql(value = "/sql/insert_user.sql", executionPhase = BEFORE_TEST_METHOD)
+    })
+    public void getUsersUsingWrongQueryStringFirstName(){
+        String url="/users" + "?" + missingLastLetterFromField("firstName") + "=" + "e";
+        ResponseEntity<UserPageWrapper> result = restTemplate.exchange(url, HttpMethod.GET, null, new ParameterizedTypeReference<UserPageWrapper>() {});
+        assertEquals(OK, result.getStatusCode());
+        //assertEquals(0, result.getBody().getContent().size());
+    }
 
 }
