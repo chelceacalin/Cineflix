@@ -16,7 +16,7 @@ public class UserRoleManagementController {
 
     private final UserCineflixService userCineflixService;
 
-    @GetMapping
+    @GetMapping()
     public Page<UserDTO> getUsers(@ModelAttribute UserFilterDTO dto,
                                   @RequestParam(defaultValue = "0",required = false) int pageNo,
                                   @RequestParam(defaultValue = "15",required = false) int pageSize) {

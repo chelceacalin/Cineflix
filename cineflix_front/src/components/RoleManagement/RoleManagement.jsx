@@ -136,7 +136,7 @@ function RoleManagement() {
             </tr>
           </thead>
           <tbody className="text-blue-marine">
-            {users.map(({ firstName, lastName, role, email }, index) => {
+            {users.map(({ firstName, lastName, role, email, username }, index) => {
               const isLast = index === users.length - 1;
               const classes = isLast
                 ? "px-4 py-2"
@@ -145,8 +145,11 @@ function RoleManagement() {
               return (
                 <UserCineflix
                   name={firstName + " " + lastName}
+                  firstName={firstName}
+                  lastName={lastName}
                   role={role}
                   email={email}
+                  username={username}
                   key={index}
                   classes={classes}
                 />

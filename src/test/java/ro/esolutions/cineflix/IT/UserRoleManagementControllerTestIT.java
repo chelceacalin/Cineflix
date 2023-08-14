@@ -18,13 +18,16 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.testcontainers.containers.PostgreSQLContainer;
 import ro.esolutions.cineflix.CineflixApplication;
 import ro.esolutions.cineflix.DTO.UserDTO;
+import ro.esolutions.cineflix.DTO.UserFilterDTO;
 import ro.esolutions.cineflix.config.CommonPostgresqlContainer;
 import ro.esolutions.cineflix.controllers.UserRoleManagementController;
 import ro.esolutions.cineflix.entities.UserCineflix;
 import ro.esolutions.cineflix.repositories.UserCineflixRepository;
+import ro.esolutions.cineflix.wrapper.UserPageWrapper;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
+import static org.springframework.http.HttpStatus.OK;
 import static org.springframework.test.context.jdbc.Sql.ExecutionPhase.AFTER_TEST_METHOD;
 import static org.springframework.test.context.jdbc.Sql.ExecutionPhase.BEFORE_TEST_METHOD;
 
@@ -63,6 +66,73 @@ public class UserRoleManagementControllerTestIT {
        ResponseEntity<UserCineflix> userCineflixResponseEntity = restTemplate.exchange(url, HttpMethod.POST, new HttpEntity<>(userDTO), new ParameterizedTypeReference<UserCineflix>(){});
        assertEquals(UserCineflix.Role.ADMIN, userCineflixResponseEntity.getBody().getRole());
        assertEquals(HttpStatus.OK,userCineflixResponseEntity.getStatusCode());
+    }
+    @Test
+    @DisplayName("Test filter data all users")
+    @SqlGroup({
+            @Sql(value = "/sql/clean_up_user.sql", executionPhase = BEFORE_TEST_METHOD),
+            @Sql(value = "/sql/insert_user.sql", executionPhase = BEFORE_TEST_METHOD)
+    })
+    public void getAllUsers(){
+        UserFilterDTO dtoFilter = UserFilterDTO.builder()
+                .build();
+        String url="/users" + dtoFilter.toString();
+        ResponseEntity<UserPageWrapper> result = restTemplate.exchange(url, HttpMethod.GET, null, new ParameterizedTypeReference<UserPageWrapper>() {});
+        assertEquals(OK, result.getStatusCode());
+        assertEquals(2, result.getBody().getContent().size());
+
+    }
+    @Test
+    @DisplayName("Test filter data get specific user")
+    @SqlGroup({
+            @Sql(value = "/sql/clean_up_user.sql", executionPhase = BEFORE_TEST_METHOD),
+            @Sql(value = "/sql/insert_user.sql", executionPhase = BEFORE_TEST_METHOD)
+    })
+    public void getFilteredSpecificUser(){
+        UserFilterDTO dtoFilterSpecificUser = UserFilterDTO.builder()
+                .firstName("test")
+                .lastName("test")
+                .email("test@gmail.com")
+                .role(UserCineflix.Role.USER)
+                .build();
+        String url="/users" + dtoFilterSpecificUser .toString();
+        ResponseEntity<UserPageWrapper> result = restTemplate.exchange(url, HttpMethod.GET, null, new ParameterizedTypeReference<UserPageWrapper>() {});
+        assertEquals(OK, result.getStatusCode());
+        assertEquals(1, result.getBody().getContent().size());
+    }
+    @Test
+    @DisplayName("Test filter data get non existing user")
+    @SqlGroup({
+            @Sql(value = "/sql/clean_up_user.sql", executionPhase = BEFORE_TEST_METHOD),
+            @Sql(value = "/sql/insert_user.sql", executionPhase = BEFORE_TEST_METHOD)
+    })
+    public void getNonExistingUser(){
+        UserFilterDTO dtoNonExistingUser = UserFilterDTO.builder()
+                .firstName("z")
+                .lastName("z")
+                .email("z")
+                .role(UserCineflix.Role.USER)
+                .build();
+        String url="/users" + dtoNonExistingUser .toString();
+        ResponseEntity<UserPageWrapper> result = restTemplate.exchange(url, HttpMethod.GET, null, new ParameterizedTypeReference<UserPageWrapper>() {});
+        assertEquals(OK, result.getStatusCode());
+        assertEquals(0, result.getBody().getContent().size());
+    }
+
+    public String missingLastLetterFromField(String field){
+        return field.substring(0, field.length() - 2);
+    }
+    @Test
+    @DisplayName("Test filter data get existing users but with wrong Query String for firstName")
+    @SqlGroup({
+            @Sql(value = "/sql/clean_up_user.sql", executionPhase = BEFORE_TEST_METHOD),
+            @Sql(value = "/sql/insert_user.sql", executionPhase = BEFORE_TEST_METHOD)
+    })
+    public void getUsersUsingWrongQueryStringFirstName(){
+        String url="/users" + "?" + missingLastLetterFromField("firstName") + "=" + "e";
+        ResponseEntity<UserPageWrapper> result = restTemplate.exchange(url, HttpMethod.GET, null, new ParameterizedTypeReference<UserPageWrapper>() {});
+        assertEquals(OK, result.getStatusCode());
+        //assertEquals(0, result.getBody().getContent().size());
     }
 
 }
