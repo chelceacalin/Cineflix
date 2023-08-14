@@ -35,7 +35,9 @@ function EditRoleModalWindow({ isModalOpen, closeModal, name, firstName, lastNam
                 'email': email,
                 'role': selectedOption
             }));
-            const response = await axios.post(url, userDTO);
+            const response = await axios.post(url, userDTO, {
+                withCredentials: true
+            });
         } catch (error) {
         }
     };
