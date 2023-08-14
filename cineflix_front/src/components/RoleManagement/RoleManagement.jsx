@@ -14,21 +14,19 @@ function RoleManagement() {
   const [email, setEmail] = useState("");
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
-  let [userRole,setUserRole]=useState("")
-  const [filterRole,setfilterRole] = useState("");
+  let [userRole, setUserRole] = useState("");
+  const [filterRole, setfilterRole] = useState("");
   let [newUrl, setNewUrl] = useState("");
-  let [pageNo,setPageNo]=useState(1);
-  let [pageSize,setPageSize]=useState(15);
-  let [totalPages,setTotalPages]=useState('')
+  let [pageNo, setPageNo] = useState(1);
+  let [pageSize, setPageSize] = useState(15);
+  let [totalPages, setTotalPages] = useState("");
+  let [totalUsers, setTotalUsers] = useState(0);
 
-  let [totalUsers,setTotalUsers]=useState(0);
-
-  useEffect(()=>{
-      axios.get(`http://localhost:8081/users`).then((data)=>{
-        setTotalUsers(data.data.content.length)
-      })
-
-  },[totalUsers])
+  useEffect(() => {
+    axios.get(`http://localhost:8081/users`).then((data) => {
+      setTotalUsers(data.data.content.length);
+    });
+  }, [totalUsers]);
 
   let handleClick = (fieldName) => {
     if (lastClicked === fieldName) {
@@ -41,7 +39,10 @@ function RoleManagement() {
     const normalizedSortField = sortField || "defaultsort";
     console.log("Sort Direction: " + direction ? "ASC" : "DESC");
     newUrl = `http://localhost:8081/users?sortField=${normalizedSortField}&direction=${
-      direction ? "ASC" : "DESC"}&firstName=${firstName}&lastName=${lastName}&email=${email}&pageNo=${parseInt(pageNo)-1}&pageSize=${pageSize}&role=${filterRole}`;
+      direction ? "ASC" : "DESC"
+    }&firstName=${firstName}&lastName=${lastName}&email=${email}&pageNo=${
+      parseInt(pageNo) - 1
+    }&pageSize=${pageSize}&role=${filterRole}`;
     console.log("Fetching users with URL: " + newUrl);
 
     axios.get(newUrl).then((elems) => {
@@ -52,31 +53,29 @@ function RoleManagement() {
         setTotalPages(elems.data.totalPages);
       }
     });
-  }, [sortField, direction, firstName, lastName, email,pageSize,pageNo,filterRole]);
+  }, [ sortField,direction, firstName, lastName, email, pageSize, pageNo, filterRole ]);
 
   let getFilterInput = (params) => {
     setFirstName(params[0]);
     setLastName(params[1]);
     setEmail(params[2]);
-    setfilterRole(params[3]== "BOTH" ? "" : params[3]);
+    setfilterRole(params[3] == "BOTH" ? "" : params[3]);
   };
 
   const handleSelectChange = (event) => {
     const value = event.target.value;
-    console.log(value)
+    console.log(value);
     setPageSize(value);
   };
 
   const updatePageNumber = (pgNo) => {
-    console.log("pgno ",pgNo)
     setPageNo(pgNo);
   };
-
 
   return (
     <>
       <FilterComponent filterInput={getFilterInput} />
-      <div className="w-full h-full overflow-scroll ml-10 mr-10 mt-5">
+      <div className="w-full h-full ml-10 mr-10 mt-5">
         <table className="w-full min-w-max table-auto text-left">
           <thead className="bg-basic-red text-white">
             <tr>
@@ -139,13 +138,11 @@ function RoleManagement() {
             </tr>
           </thead>
           <tbody className="text-blue-marine">
-            {
-            
-            users.map(({ firstName, lastName, role, email }, index) => {
+            {users.map(({ firstName, lastName, role, email }, index) => {
               const isLast = index === users.length - 1;
               const classes = isLast
-                ? "p-4"
-                : "p-4 border-b border-blue-gray-50";
+                ? "px-4 py-2"
+                : "px-4 py-2 border-b border-blue-gray-50";
 
               return (
                 <UserCineflix
@@ -159,22 +156,34 @@ function RoleManagement() {
             })}
           </tbody>
         </table>
-        <span className="w-full bg-basic-red flex flex-wrap py-3">
-          <span className="ml-10 ">
-            <span className="text-white ml-5 font-normal">
+        <span className="w-full bg-basic-red flex flex-wrap py-3 mb-4">
+          <span className=" inline-flex marginResizable">
+            <p className="text-white font-normal">
               Results per page:{" "}
-            </span>
-            <span className="ml-5">
-            <select name="cars" id="cars" form="carform" onChange={handleSelectChange}>
-        <option value="15">15</option>
-        <option value="10">10</option>
-        <option value="5">5</option>
-      </select>
-            </span>
+            </p>
+            <p className="ml-5">
+              <select
+                name="cars"
+                id="cars"
+                form="carform"
+                onChange={handleSelectChange}
+              >
+                <option value="15">15</option>
+                <option value="10">10</option>
+                <option value="5">5</option>
+              </select>
+            </p>
           </span>
-          <span className="block  justify-center ml-52 flex-wrap">
-            <Pagination pageNo={pageNo} pageSize={pageSize} totalPages={totalPages} updatePageNumber={updatePageNumber} responseLength={totalUsers} nrCurrentUsers={users.length}/>
-         </span> 
+          <div className="ml-10 justify-center w-1/2 items-center">
+            <Pagination
+              pageNo={pageNo}
+              pageSize={pageSize}
+              totalPages={totalPages}
+              updatePageNumber={updatePageNumber}
+              responseLength={totalUsers}
+              nrCurrentUsers={users.length}
+            />
+          </div>
         </span>
       </div>
     </>
