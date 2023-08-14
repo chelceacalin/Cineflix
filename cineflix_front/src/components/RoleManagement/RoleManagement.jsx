@@ -37,7 +37,7 @@ function RoleManagement() {
     console.log("Fetching users with URL: " + newUrl);
 
 
-    axios.get(newUrl).then((elems) => {
+    axios.get(newUrl,{withCredentials:true}).then((elems) => {
       setUsers(elems.data.content);
       setTotalPages(elems.data.totalPages)
      // console.log(elems.data.totalPages)
