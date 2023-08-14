@@ -16,6 +16,11 @@ function Pagination({
     if (pageNo < totalPages) updatePageNumber(++pageNo);
   };
 
+  const handlePageClick = (pageNumber) => {
+    updatePageNumber(pageNumber);
+  };
+
+
   return (
     <>
       <ul className="list-style-none flex items-center justify-center mr-2">
@@ -33,14 +38,11 @@ function Pagination({
         {totalPages <= 7 &&
           Array(totalPages)
             .fill()
-            .map((page, index) => (
+            .map((_, index) => (
               <li
-                key={index}
-                onClick={(e) => {
-                  e.preventDefault();
-                  updatePageNumber(parseInt(index) + 1);
-                }}
-              >
+                  key={index}
+                  onClick={()=>handlePageClick(parseInt(index)+1)}
+                >
                 <div
                   className={` ml-0.5 mr-0.5 relative block rounded bg-transparent px-3 py-1 text-sm text-neutral-600 transition-all duration-300 hover:bg-neutral-100 dark:text-white dark:hover:bg-white dark:hover:text-blue-marine ${
                     index + 1 === pageNo ? "current-page" : ""
@@ -58,10 +60,7 @@ function Pagination({
               .map((_, index) => (
                 <li
                   key={index}
-                  onClick={(e) => {
-                    e.preventDefault();
-                    updatePageNumber(parseInt(index) + 1);
-                  }}
+                  onClick={()=>handlePageClick(parseInt(index)+1)}
                 >
                   <div
                     className={` ml-0.5 mr-0.5 relative block rounded bg-transparent px-3 py-1 text-sm text-neutral-600 transition-all duration-300 hover:bg-neutral-100 dark:text-white dark:hover:bg-white dark:hover:text-blue-marine ${
@@ -78,10 +77,8 @@ function Pagination({
               <>
                 <li
                   key={pageNo}
-                  onClick={(e) => {
-                    e.preventDefault();
-                    updatePageNumber(parseInt(pageNo));
-                  }}
+                  onClick={() => handlePageClick(parseInt(pageNo))
+                 }
                 >
                   <div
                     className={` ml-0.5 mr-0.5 relative block rounded bg-transparent px-3 py-1 text-sm text-neutral-600 transition-all duration-300 hover:bg-neutral-100 dark:text-white dark:hover:bg-white dark:hover:text-blue-marine ${
@@ -101,10 +98,7 @@ function Pagination({
               .map((_, index) => (
                 <li
                   key={totalPages - 3 + index}
-                  onClick={(e) => {
-                    e.preventDefault();
-                    updatePageNumber(totalPages - 3 + parseInt(index) + 1);
-                  }}
+                  onClick={(e) => handlePageClick(totalPages - 3 + parseInt(index) + 1)}
                 >
                   <div
                     className={` ml-0.  5 mr-0.5 relative block rounded bg-transparent px-3 py-1 text-sm text-neutral-600 transition-all duration-300 hover:bg-neutral-100 dark:text-white dark:hover:bg-white dark:hover:text-blue-marine ${
@@ -121,10 +115,7 @@ function Pagination({
         )}
 
         <li
-          onClick={(e) => {
-            e.preventDefault();
-            getNextPage();
-          }}
+          onClick={()=>getNextPage()}
         >
           <div className="relative block rounded bg-transparent px-3  text-sm text-neutral-600 transition-all duration-300 hover:bg-neutral-100 dark:text-white dark:hover:bg-white dark:hover:text-blue-marine">
             Next
