@@ -1,6 +1,5 @@
 package ro.esolutions.cineflix.services;
 
-import jakarta.persistence.EntityExistsException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -8,7 +7,6 @@ import ro.esolutions.cineflix.DTO.CategoryDTO;
 import ro.esolutions.cineflix.entities.Category;
 import ro.esolutions.cineflix.repositories.CategoryRepository;
 
-import java.util.Optional;
 
 @Service
 @Transactional
