@@ -17,13 +17,10 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Movie {
+
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
-
-    @ManyToOne
-    @JoinColumn(name = "category_id", referencedColumnName = "id")
-    private Category category;
 
     private String title;
 
@@ -31,9 +28,12 @@ public class Movie {
 
     private String description;
 
-    @OneToMany(mappedBy = "movie")
-    @JsonIgnore
-    public List<MovieHistory> history;
+    @Column(name = "is_available")
+    private boolean isAvailable;
+
+    @ManyToOne
+    @JoinColumn(name = "category_id", referencedColumnName = "id")
+    private Category category;
 
     @ManyToOne
     @JoinColumn(name = "owner_id", referencedColumnName = "id")
@@ -43,5 +43,7 @@ public class Movie {
     @JsonIgnore
     private MovieImageData photo;
 
-    private boolean isAvailable;
+    @OneToMany(mappedBy = "movie")
+    List<MovieHistory> movieHistories;
+
 }

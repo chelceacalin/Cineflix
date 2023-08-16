@@ -1,5 +1,6 @@
 package ro.esolutions.cineflix.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,7 +10,10 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDate;
 import java.util.UUID;
 
-@Table(name = "movieHistory")
+
+@Table(name = "movieHistory",uniqueConstraints = @UniqueConstraint(
+        columnNames = {"id","user_id","movie_id"}
+))
 @Data
 @Entity
 @Builder
@@ -35,6 +39,7 @@ public class MovieHistory {
 
     @ManyToOne
     @JoinColumn(name = "movie_id", referencedColumnName = "id")
+    @JsonIgnore
     private Movie movie;
 
 

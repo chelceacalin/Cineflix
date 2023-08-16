@@ -1,26 +1,25 @@
 package ro.esolutions.cineflix.controllers;
 
-import jakarta.servlet.http.PushBuilder;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import ro.esolutions.cineflix.DTO.MovieDTO;
-import ro.esolutions.cineflix.entities.Movie;
+import ro.esolutions.cineflix.DTO.MovieFilterDTO;
 import ro.esolutions.cineflix.services.MovieService;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/movies")
 @RequiredArgsConstructor
 public class MovieController {
+
     @NonNull
-    MovieService movieService;
-    public Page<MovieDTO> getMovies(){
+    private final MovieService movieService;
 
-        return movieService.getMovies(null,0,1);
-
+    @GetMapping
+    public Page<MovieDTO> findAll(@ModelAttribute MovieFilterDTO dto,
+                                  @RequestParam(name = "pageNo", defaultValue = "0") int pageNo,
+                                  @RequestParam(name = "pageSize", defaultValue = "15") int pageSize) {
+        return movieService.findAllMoviesFiltered(dto, pageNo, pageSize);
     }
 }

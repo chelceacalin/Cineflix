@@ -22,5 +22,6 @@ public class Category {
 
     private String name;
 
-    private Boolean isAvailable;
+    @Column(name = "is_available")
+    private boolean isAvailable;
 }

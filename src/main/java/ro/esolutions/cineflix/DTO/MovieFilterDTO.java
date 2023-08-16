@@ -1,18 +1,15 @@
 package ro.esolutions.cineflix.DTO;
 
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 
 @Data
 @Builder
-@NoArgsConstructor
 @AllArgsConstructor
-public class MovieDTO {
+public class MovieFilterDTO {
 
     private String owner_username;
 
@@ -29,4 +26,12 @@ public class MovieDTO {
     private LocalDate rentedDate;
 
     private LocalDate rentedUntil;
+
+    private String direction;
+    private String sortField;
+
+    public MovieFilterDTO(){
+        this.direction="ASC";
+        this.sortField="title";
+    }
 }

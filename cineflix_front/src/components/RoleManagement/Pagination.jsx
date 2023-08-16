@@ -51,7 +51,8 @@ function Pagination({
                   {index + 1}
                 </div>
               </li>
-            ))}
+            ))
+            }
 
 
 
