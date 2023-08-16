@@ -20,25 +20,28 @@ import java.util.UUID;
 public class CategoryService {
     private final CategoryRepository categoryRepository;
 
-
-    public Category updateCategory(CategoryDTO categoryDTO, UUID id) throws CategoryNotFoundException, CategoryAlreadyExistsException, EmptyCategoryNameField {
+    public Optional<String> validateUpdate(CategoryDTO categoryDTO, UUID id) throws EmptyCategoryNameField,
+            CategoryAlreadyExistsException {
         if (categoryDTO.getName().isEmpty()) {
             throw new EmptyCategoryNameField("You must add a name for the category, it cannot be empty");
         }
+        Category nameCategory = categoryRepository.findByNameIgnoreCase(categoryDTO.getName());
+        if (nameCategory != null) {
+            throw new CategoryAlreadyExistsException("This category already exists");
+        }
+        return Optional.empty();
+    }
+
+    public Category updateCategory(CategoryDTO categoryDTO, UUID id) throws CategoryNotFoundException {
         Category category;
         Optional<Category> existsCategory = categoryRepository.findById(id);
         if (existsCategory.isEmpty()) {
             throw new CategoryNotFoundException("Category to be edited does not exist");
         } else {
             Category toUpdateCategory = existsCategory.get();
-            Category nameCategory = categoryRepository.findByNameIgnoreCase(categoryDTO.getName());
-            if (nameCategory != null) {
-                throw new CategoryAlreadyExistsException("This category already exists");
-            } else {
-                toUpdateCategory.setName(categoryDTO.getName());
-                categoryRepository.save(toUpdateCategory);
-                category = toUpdateCategory;
-            }
+            toUpdateCategory.setName(categoryDTO.getName());
+            categoryRepository.save(toUpdateCategory);
+            category = toUpdateCategory;
         }
         return category;
     }

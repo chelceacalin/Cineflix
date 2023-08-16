@@ -11,6 +11,7 @@ import ro.esolutions.cineflix.exceptions.CategoryNotFoundException;
 import ro.esolutions.cineflix.exceptions.EmptyCategoryNameField;
 import ro.esolutions.cineflix.services.CategoryService;
 
+import java.util.Optional;
 import java.util.UUID;
 
 @RestController
@@ -26,13 +27,14 @@ public class CategoryController {
     public ResponseEntity<?> updateCategory(@RequestBody CategoryDTO categoryDTO,
                                             @PathVariable("id") @NotNull UUID id) {
         try {
+            categoryService.validateUpdate(categoryDTO, id);
             return new ResponseEntity<>(categoryService.updateCategory(categoryDTO, id), HttpStatus.OK);
-        } catch (CategoryNotFoundException e) {
-            return new ResponseEntity<>("Category to be edited doesnot exist", HttpStatus.NOT_FOUND);
         } catch (CategoryAlreadyExistsException e) {
             return new ResponseEntity<>("This category already exists", HttpStatus.CONFLICT);
         } catch (EmptyCategoryNameField e) {
             return new ResponseEntity<>("You must add a name for the category, it cannot be empty", HttpStatus.BAD_REQUEST);
+        } catch (CategoryNotFoundException e) {
+            return new ResponseEntity<>("Category to be edited does not exist", HttpStatus.NOT_FOUND);
         }
     }
 }
