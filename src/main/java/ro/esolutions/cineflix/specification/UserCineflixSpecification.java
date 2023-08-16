@@ -6,12 +6,7 @@ import ro.esolutions.cineflix.entities.UserCineflix;
 
 public class UserCineflixSpecification {
 
-
-    public static Specification<UserCineflix> fieldNameLike(String field,String fieldName) {
-        return (root, query, criteriaBuilder) -> criteriaBuilder.like(criteriaBuilder.lower(root.get(fieldName)), "%" + field.toLowerCase() + "%");
-    }
-
-    public static Specification<UserCineflix> hasRole(String role) {
+    public static <T> Specification<T> hasRole(String role) {
         return (root, query, criteriaBuilder) -> {
             UserCineflix.Role enumRole = UserCineflix.Role.valueOf(role.toUpperCase());
             return criteriaBuilder.equal(

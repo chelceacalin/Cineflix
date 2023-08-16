@@ -9,9 +9,8 @@ import java.util.HashSet;
 
 @Configuration
 public class FilterConfig {
-
     @Bean
-    public FilterRegistrationBean<ParameterNameValidationFilter> parameterNameValidationFilter() {
+    public FilterRegistrationBean<ParameterNameValidationFilter> usersFilter() {
         FilterRegistrationBean<ParameterNameValidationFilter> registrationBean = new FilterRegistrationBean<>();
         registrationBean.setFilter(new ParameterNameValidationFilter(new HashSet<>(Arrays.asList("email", "role", "firstName", "lastName",
                 "pageNo", "pageSize", "sortField", "direction"))));
@@ -19,9 +18,13 @@ public class FilterConfig {
         registrationBean.addUrlPatterns("/users");
         return registrationBean;
     }
-
-
-
-
+    @Bean
+    public FilterRegistrationBean<ParameterNameValidationFilter> moviesFilter() {
+        FilterRegistrationBean<ParameterNameValidationFilter> registrationBean = new FilterRegistrationBean<>();
+        registrationBean.setFilter(new ParameterNameValidationFilter(new HashSet<>(Arrays.asList("title", "director", "category", "isAvailable",
+                "rentedBy", "owner_username", "rentedDate", "rentedUntil", "direction", "sortField", "pageNo", "pageSize"))));
+        registrationBean.addUrlPatterns("/movies");
+        return registrationBean;
+    }
 
 }
