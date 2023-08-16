@@ -10,17 +10,11 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import ro.esolutions.cineflix.DTO.CategoryDTO;
 import ro.esolutions.cineflix.DTO.CategoryFilterDTO;
-import ro.esolutions.cineflix.DTO.UserDTO;
-import ro.esolutions.cineflix.DTO.UserFilterDTO;
 import ro.esolutions.cineflix.entities.Category;
 import ro.esolutions.cineflix.exceptions.CategoryNotFoundException;
-import ro.esolutions.cineflix.entities.UserCineflix;
 import ro.esolutions.cineflix.mapper.CategoryMapper;
-import ro.esolutions.cineflix.mapper.UserMapper;
 import ro.esolutions.cineflix.repositories.CategoryRepository;
 import ro.esolutions.cineflix.specification.CategorySpecification;
-import ro.esolutions.cineflix.specification.GenericSpecification;
-import ro.esolutions.cineflix.specification.UserCineflixSpecification;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -54,13 +48,7 @@ public class CategoryService {
         return categoryRepository.save(toUpdateCategory);
 
     }
-//    public Category updateCategory(CategoryDTO categoryDTO, String name){
-//        Category category=null;
-//        Optional<Category> existsCategory=categoryRepository.findByNameIgnoreCase()
-//    }
-    /*
-    TODO: cred ca trebuie sa le afisam doar pe cele available
-     */
+
     public Page<CategoryDTO> getCategories(CategoryFilterDTO dto, int pageNo, int pageSize) {
         if(dto.getName() == null && dto.getDirection() == null){
             return categoryRepository.findAll(PageRequest.of(pageNo, pageSize)).map(CategoryMapper::toDTO);
