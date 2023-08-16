@@ -25,7 +25,7 @@ public class Category {
     @NotBlank(message = "Category name is mandatory")
     private String name;
 
-    private Boolean isAvailable;
+    private boolean isAvailable;
 
 //    @OneToMany(mappedBy = "category",cascade = CascadeType.ALL,orphanRemoval = true)
 //    private List<Movie>g movieList;
