@@ -8,7 +8,7 @@ create table category
 create table movie
 (
     id          uuid    not null primary key,
-    category_id uuid,
+    category_id uuid constraint fk_category_id references category,
     description varchar(255),
     director    varchar(255),
     is_available boolean not null,
