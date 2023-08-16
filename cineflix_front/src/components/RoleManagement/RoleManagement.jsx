@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import UserCineflix from "./UserCineflix";
 import FilterComponent from "./FilterComponent";
 import axios from "axios";
+axios.defaults.withCredentials = true;
 import "./css/RoleManagement.css";
 import Pagination from "./Pagination";
 
@@ -164,7 +165,6 @@ function RoleManagement() {
                   username={username}
                   key={index}
                   updateUser={updateUser}
- 
                   classes={classes}
                 />
               );

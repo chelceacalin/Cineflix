@@ -51,7 +51,10 @@ function Pagination({
                   {index + 1}
                 </div>
               </li>
-            ))}
+            ))
+            }
+
+
 
         {totalPages >= 8 && (
           <>
