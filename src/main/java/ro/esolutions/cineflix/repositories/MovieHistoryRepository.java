@@ -9,11 +9,7 @@ import java.util.UUID;
 public interface MovieHistoryRepository  extends JpaRepository<MovieHistory, UUID> {
 
     @Query("SELECT mh FROM MovieHistory mh " +
-            "WHERE mh.movie.id = :id " +
-            "AND mh.rentedUntil = (" +
-            "    SELECT MAX(mhist.rentedUntil) FROM MovieHistory mhist " +
-            "    WHERE mhist.movie.id = mh.movie.id" +
-            ")")
+            "WHERE mh.movie.id = :id order by mh.rentedUntil desc limit 1")
     MovieHistory findMovieHistoryByRentedUntilMostRecent(UUID id);
 
 }

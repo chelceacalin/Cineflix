@@ -17,7 +17,6 @@ import ro.esolutions.cineflix.specification.GenericSpecification;
 import ro.esolutions.cineflix.specification.MovieSpecification;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 import static java.util.Objects.nonNull;
@@ -32,49 +31,53 @@ public class MovieService {
     @NonNull
     private final MovieHistoryRepository movieHistoryRepository;
 
-    public Page<MovieDTO> findAllMoviesFiltered(MovieFilterDTO dto, int pageNo, int pageSize){
-        if(dto.getOwner_username()==null)  return Page.empty();
-        Specification<Movie> specification=getSpecification(dto);
+    public Page<MovieDTO> findUserMovies(MovieFilterDTO movieFilter, int pageNo, int pageSize) {
+        if (movieFilter.getOwner_username() == null) {
+            return Page.empty();
+        }
 
-        Sort.Direction sortDirection=Sort.Direction.fromString(dto.getDirection());
-        Pageable pageable= PageRequest.of(pageNo,pageSize,Sort.by(sortDirection,dto.getSortField()));
+        Specification<Movie> specification = getSpecification(movieFilter);
+
+        Sort.Direction sortDirection = Sort.Direction.fromString(movieFilter.getDirection());
+        Pageable pageable = PageRequest.of(pageNo, pageSize, Sort.by(sortDirection, movieFilter.getSortField()));
 
         Page<Movie> moviesPage = movieRepository.findAll(specification, pageable);
 
-        List<MovieDTO> dtos = moviesPage.getContent().stream()
+        List<MovieDTO> movies = moviesPage.getContent().stream()
                 .map(movie -> {
                     MovieHistory history = movieHistoryRepository.findMovieHistoryByRentedUntilMostRecent(movie.getId());
-                    return MovieMapper.toDto(movie,history);
+                    return MovieMapper.toDto(movie, history);
                 })
                 .collect(Collectors.toList());
 
-        return new PageImpl<>(dtos,pageable,moviesPage.getTotalPages());
+        return new PageImpl<>(movies, pageable, moviesPage.getTotalPages());
     }
-    private Specification<Movie> getSpecification(MovieFilterDTO dto) {
+
+    private Specification<Movie> getSpecification(MovieFilterDTO movieFilter) {
         Specification<Movie> specification = Specification.where(null);
 
-        if (nonNull(dto.getOwner_username())) {
-            specification = specification.and(MovieSpecification.hasUsername(dto.getOwner_username()));
+        if (nonNull(movieFilter.getOwner_username())) {
+            specification = specification.and(MovieSpecification.hasUsername(movieFilter.getOwner_username()));
         }
 
-        if(nonNull(dto.getTitle())){
-            specification=specification.and(GenericSpecification.fieldNameLike(dto.getTitle(),"title"));
+        if (nonNull(movieFilter.getTitle())) {
+            specification = specification.and(GenericSpecification.fieldNameLike(movieFilter.getTitle(), "title"));
         }
 
-        if(nonNull(dto.getDirector())){
-            specification=specification.and(GenericSpecification.fieldNameLike(dto.getDirector(),"director"));
+        if (nonNull(movieFilter.getDirector())) {
+            specification = specification.and(GenericSpecification.fieldNameLike(movieFilter.getDirector(), "director"));
         }
 
-        if(nonNull(dto.getCategory())){
-            specification = specification.and(MovieSpecification.hasCategory(dto.getCategory()));
+        if (nonNull(movieFilter.getCategory())) {
+            specification = specification.and(MovieSpecification.hasCategory(movieFilter.getCategory()));
         }
 
-        if(nonNull(dto.getIsAvailable())){
-            specification=specification.and(GenericSpecification.isAvailable(dto.getIsAvailable()));
+        if (nonNull(movieFilter.getIsAvailable())) {
+            specification = specification.and(GenericSpecification.isAvailable(movieFilter.getIsAvailable()));
         }
 
-        if (nonNull(dto.getRentedBy())) {
-            specification=specification.and(MovieSpecification.getRentedBy(dto.getRentedBy()));
+        if (nonNull(movieFilter.getRentedBy())) {
+            specification = specification.and(MovieSpecification.getRentedBy(movieFilter.getRentedBy()));
         }
 
 
