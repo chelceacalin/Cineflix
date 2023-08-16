@@ -35,7 +35,6 @@ public class CategoryService {
                 .name(categoryDTO.getName())
                 .isAvailable(true)
                 .build();
-        Category categorySaved = categoryRepository.save(categoryToBeSaved);
-        return categorySaved;
+        return categoryRepository.save(categoryToBeSaved);
     }
 }
