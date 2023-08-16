@@ -1,6 +1,7 @@
 package ro.esolutions.cineflix.services;
 
 import jakarta.transaction.Transactional;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ro.esolutions.cineflix.DTO.CategoryDTO;
@@ -15,6 +16,7 @@ import java.util.UUID;
 @Transactional
 @RequiredArgsConstructor
 public class CategoryService {
+    @NonNull
     private final CategoryRepository categoryRepository;
 
     public Optional<String> validateUpdate(CategoryDTO categoryDTO) {
@@ -37,5 +39,13 @@ public class CategoryService {
         toUpdateCategory.setName(categoryDTO.getName());
         return categoryRepository.save(toUpdateCategory);
 
+    }
+
+    public Category createCategory(final CategoryDTO categoryDTO) {
+        Category categoryToBeSaved = Category.builder()
+                .name(categoryDTO.getName())
+                .isAvailable(true)
+                .build();
+        return categoryRepository.save(categoryToBeSaved);
     }
 }
