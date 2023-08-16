@@ -1,6 +1,7 @@
 package ro.esolutions.cineflix.services;
 
 import jakarta.transaction.Transactional;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -25,6 +26,7 @@ import static java.util.Objects.nonNull;
 @Transactional
 @RequiredArgsConstructor
 public class CategoryService {
+    @NonNull
     private final CategoryRepository categoryRepository;
 
     public Optional<String> validateUpdate(CategoryDTO categoryDTO) {
@@ -47,6 +49,14 @@ public class CategoryService {
         toUpdateCategory.setName(categoryDTO.getName());
         return categoryRepository.save(toUpdateCategory);
 
+    }
+
+    public Category createCategory(final CategoryDTO categoryDTO) {
+        Category categoryToBeSaved = Category.builder()
+                .name(categoryDTO.getName())
+                .isAvailable(true)
+                .build();
+        return categoryRepository.save(categoryToBeSaved);
     }
 
     public Page<CategoryDTO> getCategories(CategoryFilterDTO dto, int pageNo, int pageSize) {
