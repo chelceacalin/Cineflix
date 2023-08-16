@@ -5,12 +5,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ro.esolutions.cineflix.DTO.CategoryDTO;
 import ro.esolutions.cineflix.entities.Category;
-import ro.esolutions.cineflix.exceptions.CategoryAlreadyExistsException;
 import ro.esolutions.cineflix.exceptions.CategoryNotFoundException;
-import ro.esolutions.cineflix.exceptions.EmptyCategoryNameField;
 import ro.esolutions.cineflix.repositories.CategoryRepository;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -20,14 +17,13 @@ import java.util.UUID;
 public class CategoryService {
     private final CategoryRepository categoryRepository;
 
-    public Optional<String> validateUpdate(CategoryDTO categoryDTO, UUID id) throws EmptyCategoryNameField,
-            CategoryAlreadyExistsException {
+    public Optional<String> validateUpdate(CategoryDTO categoryDTO) {
         if (categoryDTO.getName().isEmpty()) {
-            throw new EmptyCategoryNameField("You must add a name for the category, it cannot be empty");
+            return Optional.of("You must add a name for the category, it cannot be empty");
         }
         Category nameCategory = categoryRepository.findByNameIgnoreCase(categoryDTO.getName());
         if (nameCategory != null) {
-            throw new CategoryAlreadyExistsException("This category already exists");
+            return Optional.of("This category already exists");
         }
         return Optional.empty();
     }
