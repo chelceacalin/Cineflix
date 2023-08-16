@@ -28,5 +28,5 @@ public class Category {
     private Boolean isAvailable;
 
 //    @OneToMany(mappedBy = "category",cascade = CascadeType.ALL,orphanRemoval = true)
-//    private List<Movie> movieList;
+//    private List<Movie>g movieList;
 }
