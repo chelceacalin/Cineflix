@@ -17,6 +17,8 @@ import ro.esolutions.cineflix.specification.GenericSpecification;
 import ro.esolutions.cineflix.specification.MovieSpecification;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 import static java.util.Objects.nonNull;
@@ -84,5 +86,14 @@ public class MovieService {
         return specification;
     }
 
+    public Optional<Movie> findById(UUID id){ return movieRepository.findById(id); }
+
+    public Movie updateMovie(UUID id, Movie employee) {
+        Optional<Movie> optionalEmployee = movieRepository.findById(id);
+        if (optionalEmployee.isPresent()) {
+            return movieRepository.save(employee);
+        }
+        return employee;
+    }
 
 }
