@@ -29,7 +29,7 @@ function UserCineflix({ name, firstName, lastName, role, email, username, classe
       </td>
       <td className={classes}>
         <div>
-          <Button onClick={handleOpen} className="font-normal bg-white hover:border-hover-cream hover:text-hover-cream text-blue-marine border border-blue-marine py-2 px-6">
+          <Button onClick={handleOpen} className="outlined-button font-normal py-2 px-6" variant="outlined">
             Edit
           </Button>
           <EditRoleModalWindow
