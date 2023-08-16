@@ -14,8 +14,11 @@ import ro.esolutions.cineflix.services.UserCineflixService;
 @RestController
 public class LoginController {
 
-    @Autowired
-    private UserCineflixService userCineflixService;
+    private final UserCineflixService userCineflixService;
+
+    public LoginController(UserCineflixService userCineflixService) {
+        this.userCineflixService = userCineflixService;
+    }
 
     @GetMapping("/userInfo")
     public UserInfoDTO getAdmin() {
@@ -25,6 +28,5 @@ public class LoginController {
         }
         return null;
     }
-
 
 }
