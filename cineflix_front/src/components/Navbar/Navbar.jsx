@@ -9,7 +9,6 @@ function Navbar() {
   const [selectedItem, setSelectedItem] = useState("");
   const [selectedColor, setSelectedColor] = useState("");
   const { isAdmin, setIsAdmin } = useContext(UserLoginContext);
-
   const location = useLocation();
 
   useEffect(() => {

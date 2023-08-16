@@ -1,5 +1,5 @@
-import React,  { useState } from 'react'
-import { Button, Dialog, DialogContent, FormControl, InputLabel, MenuItem, NativeSelect, Select, TextField } from '@mui/material';
+import React, { useState, useEffect } from 'react'
+import { Button, Dialog, DialogContent, FormControl, InputLabel, NativeSelect, TextField } from '@mui/material';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import "./css/EditRoleModalWindow.css";
@@ -7,7 +7,7 @@ import axios from 'axios';
 
 axios.defaults.withCredentials = true
 
-function EditRoleModalWindow({ isModalOpen, closeModal, name, firstName, lastName, role, email, username }) {
+function EditRoleModalWindow({ isModalOpen, closeModal, name, firstName, lastName, role, email, username, updateUser }) {
     const fullName = `${name}`;
     const [roles, setRole] = useState(role);
     const [selectedOption, setSelectedOption] = useState(role);
@@ -20,14 +20,18 @@ function EditRoleModalWindow({ isModalOpen, closeModal, name, firstName, lastNam
         role: ''
     });
 
-    const setValueFromOption = (event) => {
-        const option = event.target.value;
-        setSelectedOption(option);
-    };
+    useEffect(() => {
+        setUserDTO(() => ({
+            'username': username,
+            'firstName': firstName,
+            'lastName': lastName,
+            'email': email,
+            'role': selectedOption
+        }))
+    }, [role, selectedOption])
 
-    const editUserRole = async () => {
+    const editUserRole = () => {
         let url = 'http://localhost:8081/users/update/' + selectedOption;
-        const { role, value } = event.target;
 
         try {
             setUserDTO(() => ({
@@ -37,7 +41,11 @@ function EditRoleModalWindow({ isModalOpen, closeModal, name, firstName, lastNam
                 'email': email,
                 'role': selectedOption
             }));
+            const response = axios.post(url, userDTO).then(()=>{
 
+                updateUser(userDTO);
+                closeModal();
+            });
         } catch (error) {
         }
     };
@@ -70,8 +78,8 @@ function EditRoleModalWindow({ isModalOpen, closeModal, name, firstName, lastNam
                     <FormControl fullWidth>
                         <InputLabel variant="standard" htmlFor="uncontrolled-native">Role</InputLabel>
                         <NativeSelect defaultValue={role}
-                        onChange={setValueFromOption}
-                        placeholder=''
+                            onChange={(e) => setSelectedOption(e.target.value)}
+                            placeholder=''
                         >
                             <option value="USER">User</option>
                             <option value="ADMIN">Admin</option>
