@@ -5,7 +5,9 @@ import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import "./css/EditRoleModalWindow.css";
 import axios from 'axios';
 
-function EditRoleModalWindow({ isModalOpen, closeModal, name, firstName, lastName, role, email, username,updateUser }) {
+axios.defaults.withCredentials = true
+
+function EditRoleModalWindow({ isModalOpen, closeModal, name, firstName, lastName, role, email, username, updateUser }) {
     const fullName = `${name}`;
     const [roles, setRole] = useState(role);
     const [selectedOption, setSelectedOption] = useState(role);
@@ -39,7 +41,7 @@ function EditRoleModalWindow({ isModalOpen, closeModal, name, firstName, lastNam
                 'email': email,
                 'role': selectedOption
             }));
-            const response = axios.post(url, userDTO).then(()=>{ 
+            const response = axios.post(url, userDTO).then(()=>{
 
                 updateUser(userDTO);
                 closeModal();
