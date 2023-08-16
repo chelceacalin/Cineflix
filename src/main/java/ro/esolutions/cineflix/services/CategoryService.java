@@ -29,16 +29,13 @@ public class CategoryService {
     }
 
     public Category updateCategory(CategoryDTO categoryDTO, UUID id) throws CategoryNotFoundException {
-        Category category;
         Optional<Category> existsCategory = categoryRepository.findById(id);
         if (existsCategory.isEmpty()) {
             throw new CategoryNotFoundException("Category to be edited does not exist");
-        } else {
-            Category toUpdateCategory = existsCategory.get();
-            toUpdateCategory.setName(categoryDTO.getName());
-            categoryRepository.save(toUpdateCategory);
-            category = toUpdateCategory;
         }
-        return category;
+        Category toUpdateCategory = existsCategory.get();
+        toUpdateCategory.setName(categoryDTO.getName());
+        return categoryRepository.save(toUpdateCategory);
+
     }
 }
