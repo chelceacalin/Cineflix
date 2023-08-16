@@ -37,3 +37,4 @@ build/
 # FRONT END
 **/front_end/CineFflix_front/**
 cineflix_front/node_modules
+cineflix_front/.vite
