@@ -3,13 +3,17 @@ package ro.esolutions.cineflix.DTO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 @Data
 @Builder
 @AllArgsConstructor
-@NoArgsConstructor
-public class CategoryDTO {
+public class CategoryFilterDTO {
 
     private String name;
+
+    private String direction;
+
+    public CategoryFilterDTO() {
+        direction = "ASC";
+    }
 }

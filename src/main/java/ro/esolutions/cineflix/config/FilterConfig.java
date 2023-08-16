@@ -29,4 +29,12 @@ public class FilterConfig {
         return registrationBean;
     }
 
+    @Bean
+    public FilterRegistrationBean<ParameterNameValidationFilter> categoriesFilter() {
+        FilterRegistrationBean<ParameterNameValidationFilter> registrationBean = new FilterRegistrationBean<>();
+        registrationBean.setFilter(new ParameterNameValidationFilter(new HashSet<>(Arrays.asList("name", "pageNo", "pageSize", "direction"))));
+        registrationBean.addUrlPatterns("/categories");
+        return registrationBean;
+    }
+
 }
