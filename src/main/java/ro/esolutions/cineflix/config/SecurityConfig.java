@@ -9,10 +9,19 @@ import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.authority.mapping.GrantedAuthoritiesMapper;
 import org.springframework.security.oauth2.client.oidc.web.logout.OidcClientInitiatedLogoutSuccessHandler;
 import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
+import org.springframework.security.oauth2.core.user.OAuth2UserAuthority;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
+import ro.esolutions.cineflix.entities.UserCineflix;
+import ro.esolutions.cineflix.services.UserCineflixService;
+
+import java.util.HashSet;
+import java.util.Set;
 
 @Configuration
 @EnableWebSecurity
@@ -21,6 +30,7 @@ import org.springframework.security.web.authentication.logout.LogoutSuccessHandl
 public class SecurityConfig {
 
     private final ClientRegistrationRepository clientRegistrationRepository;
+    private final UserCineflixService userCineflixService;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
@@ -28,10 +38,15 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(registry -> registry
                         .requestMatchers(HttpMethod.OPTIONS).permitAll()
-                        .anyRequest()
-                        .authenticated()
+                        .requestMatchers("/users/").hasAnyRole("USER", "ADMIN")
+                        .requestMatchers("/users/update/**").hasRole("ADMIN")
+                        .requestMatchers("/movies/**").hasAnyRole("USER", "ADMIN")
+                        .anyRequest().authenticated()
                 )
                 .oauth2Login(oauth2Login -> oauth2Login
+                        .userInfoEndpoint(userInfo -> {
+                            userInfo.userAuthoritiesMapper(this.userAuthoritiesMapper());
+                        })
                         .successHandler((request, response, authentication) -> {
                             response.sendRedirect("http://localhost:3000");
                         })
@@ -45,6 +60,29 @@ public class SecurityConfig {
         return httpSecurity.build();
 
     }
+
+    private GrantedAuthoritiesMapper userAuthoritiesMapper() {
+        return (authorities) -> {
+            Set<GrantedAuthority> mappedAuthorities = new HashSet<>();
+
+            authorities.forEach(authority -> {
+                if (authority instanceof OAuth2UserAuthority oauth2UserAuthority) {
+                    String username = (String) oauth2UserAuthority.getAttributes().get("preferred_username");
+                    UserCineflix.Role role = userCineflixService.getUserRole(username);
+
+                    GrantedAuthority mappedAuthority = switch (role) {
+                        case USER -> new SimpleGrantedAuthority("ROLE_USER");
+                        case ADMIN -> new SimpleGrantedAuthority("ROLE_ADMIN");
+                    };
+
+                    mappedAuthorities.add(mappedAuthority);
+                }
+            });
+
+            return mappedAuthorities;
+        };
+    }
+
     private LogoutSuccessHandler oidcLogoutSuccessHandler() {
         OidcClientInitiatedLogoutSuccessHandler oidcLogoutSuccessHandler =
                 new OidcClientInitiatedLogoutSuccessHandler(this.clientRegistrationRepository);

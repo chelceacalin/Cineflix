@@ -8,6 +8,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.oauth2.core.oidc.OidcUserInfo;
 import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 import org.springframework.stereotype.Service;
@@ -108,4 +109,13 @@ public class UserCineflixService {
         return null;
     }
 
+    public UserCineflix.Role getUserRole(String username) {
+        Optional<UserCineflix> userCineflix = userCineflixRepository.findByUsername(username);
+
+        if (userCineflix.isPresent()) {
+            return userCineflix.get().getRole();
+        }
+
+        throw new UsernameNotFoundException("User with username " + username + " not found");
+    }
 }
