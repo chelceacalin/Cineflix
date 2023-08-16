@@ -9,10 +9,13 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.oauth2.core.oidc.OidcUserInfo;
+import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 import org.springframework.stereotype.Service;
 import ro.esolutions.cineflix.DTO.UserDTO;
 import ro.esolutions.cineflix.DTO.UserFilterDTO;
+import ro.esolutions.cineflix.DTO.UserInfoDTO;
 import ro.esolutions.cineflix.entities.UserCineflix;
+import ro.esolutions.cineflix.mapper.UserInfoMapper;
 import ro.esolutions.cineflix.mapper.UserMapper;
 import ro.esolutions.cineflix.repositories.UserCineflixRepository;
 import ro.esolutions.cineflix.specification.GenericSpecification;
@@ -93,6 +96,16 @@ public class UserCineflixService {
         if (userCineflixNew.isEmpty()) {
             userCineflixRepository.save(userCineflix);
         }
+    }
+
+    public UserInfoDTO getUserInfo(OidcUser oidcUser) {
+        Optional<UserCineflix> userCineflix = userCineflixRepository.findById(oidcUser.getUserInfo().getClaim("sub"));
+        if (userCineflix.isPresent()) {
+            String token = oidcUser.getIdToken().getTokenValue();
+            return UserInfoMapper.toDTO(userCineflix.get(), token);
+        }
+
+        return null;
     }
 
 }
