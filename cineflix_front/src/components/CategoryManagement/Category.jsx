@@ -8,12 +8,12 @@ function Category({name, classes}) {
             {name}
         </td>
         <td className={classes}>
-            <Button> 
+            <Button  className="outlined-button font-normal w-full" variant="outlined"> 
                 Edit
             </Button>
         </td>
         <td className={classes}>
-            <Button>
+            <Button className="contained-button font-normal w-full" variant="contained">
                 Remove
             </Button>
         </td>

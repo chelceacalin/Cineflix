@@ -27,7 +27,7 @@ function FilterComponent({ filterInput }) {
   }, [firstName, lastName, email, admin, user]);
 
   return (
-    <div className="filterContainer space-y-4 ml-6">
+    <div className="border-r-2 space-y-4 ml-6">
       <div className="mt-10 mr-6">
         <label>First Name:</label>
         <TextField

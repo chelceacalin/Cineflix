@@ -1,9 +1,9 @@
-import { TextField } from '@mui/material'
-import React from 'react'
+import { TextField } from '@mui/material';
+import React from 'react';
 
 function FilterCategory() {
   return (
-    <div className="filterContainer w-56 ml-6">
+    <div className="w-72 ml-6 border-r-2">
       <div className="mt-10 mr-6">
         <div>
         <label>Name: </label>

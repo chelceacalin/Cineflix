@@ -2,6 +2,7 @@ import React from 'react'
 import Category from './Category';
 import { Button } from '@mui/material';
 import FilterCategory from './FilterCategory';
+import "./css/CategoryManagement.css"
 
 function CategoryManagement() {
   const TABLE_HEAD = ["Category", "Actions", ""]
@@ -26,8 +27,9 @@ function CategoryManagement() {
   return (
     <>
       <FilterCategory />
+      <div className="bg-grey-texture w-full">
       <div className="w-1/3 h-full ml-10 mr-10 mt-5">
-        <table className="w-3/4 min-w-max table-auto text-left">
+        <table className="w-3/4 min-w-max table-auto text-left bg-white border-2">
           <thead className="bg-basic-red text-white">
             <tr>
               {TABLE_HEAD.slice(0, TABLE_HEAD.length - 1).map((elem) => {
@@ -70,7 +72,7 @@ function CategoryManagement() {
               })}
               <th className="border-b-white p-4">
                 <div>
-                  <Button>
+                  <Button className="white-outlined-button" variant="outlined">
                     Add new
                   </Button>
                 </div>
@@ -82,7 +84,7 @@ function CategoryManagement() {
               const isLast = index === categories.length - 1;
               const classes = isLast
                 ? "px-4 py-2"
-                : "px-4 py-2 border-b border-blue-gray-50";
+                : "px-4 py-2 border-b-2";
 
               return (
                 <Category
@@ -93,6 +95,7 @@ function CategoryManagement() {
             })}
           </tbody>
         </table>
+      </div>
       </div>
     </>
   )
