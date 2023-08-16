@@ -8,6 +8,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
 import java.util.UUID;
 
 @Table(name = "category")
@@ -27,6 +28,6 @@ public class Category {
 
     private boolean isAvailable;
 
-//    @OneToMany(mappedBy = "category",cascade = CascadeType.ALL,orphanRemoval = true)
-//    private List<Movie>g movieList;
+    @OneToMany(mappedBy = "category",cascade = CascadeType.ALL,orphanRemoval = true)
+    private List<Movie> movieList;
 }
