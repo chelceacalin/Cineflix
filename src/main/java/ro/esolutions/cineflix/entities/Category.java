@@ -1,6 +1,7 @@
 package ro.esolutions.cineflix.entities;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -25,4 +26,7 @@ public class Category {
     private String name;
 
     private Boolean isAvailable;
+
+//    @OneToMany(mappedBy = "category",cascade = CascadeType.ALL,orphanRemoval = true)
+//    private List<Movie> movieList;
 }
