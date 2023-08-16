@@ -14,7 +14,10 @@ import NotFound from "./components/NotFound/NotFound";
 import LoginProvider from "./utils/context/LoginProvider.jsx";
 import AdminRoute from "./utils/protectedRoutes/AdminRoute";
 
+
 function App() {
+
+
   return (
     <div className="app-container">
       <LoginProvider>
