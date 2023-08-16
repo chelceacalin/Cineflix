@@ -38,4 +38,12 @@ public class CategoryService {
         return categoryRepository.save(toUpdateCategory);
 
     }
+
+    public void deleteCategory(UUID id) throws CategoryNotFoundException {
+        Optional<Category> existsCategory = categoryRepository.findById(id);
+        if (existsCategory.isEmpty()) {
+            throw new CategoryNotFoundException("Category to be deleted does not exist");
+        }
+        categoryRepository.deleteById(id);
+    }
 }
