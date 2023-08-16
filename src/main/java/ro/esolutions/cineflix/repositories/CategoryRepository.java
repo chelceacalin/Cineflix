@@ -5,7 +5,6 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;
 import ro.esolutions.cineflix.entities.Category;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
