@@ -33,25 +33,21 @@ public class MovieImageDataService {
         if (movieOptional.isPresent()) {
             MovieImageData movieImageData = movieImageDataRepository.findImageDataByMovieID(movieID);
             if (movieImageData != null) {
-                if (movieImageData.getName().equals(file.getOriginalFilename())) {
-                    return "You cannot add the same image twice";
-                } else {
-//                    data = movieImageDataRepository.save(MovieImageData.builder()
-//                            .name(file.getOriginalFilename())
-//                            .type(file.getContentType())
-//                            .imageData(movieImageDataUtil.compressImage(file.getBytes()))
-//                            .movie(movieOptional.get())
-//                            .build());
-//                    movieOptional.get().setPhoto(data);
-//                    movieService.updateMovie(movieOptional.get().getId(), movieOptional.get());
-                }
+                    data = movieImageDataRepository.save(MovieImageData.builder()
+                            .name(file.getOriginalFilename())
+                            .type(file.getContentType())
+                            .imageData(movieImageDataUtil.compressImage(file.getBytes()))
+                            .movie(movieOptional.get())
+                            .build());
+                    movieOptional.get().setPhoto(data);
+                    movieService.updateMovie(movieOptional.get().getId(), movieOptional.get());
             }
 
         } else {
             throw new UsernameNotFoundException("Movie with id " + movieID + " not found");
         }
 
-        if (!data.equals("")) {
+        if (data!=null) {
             return "File uploaded successfully " + file.getOriginalFilename();
         } else
             return "Error while uploading file " + file.getOriginalFilename();
