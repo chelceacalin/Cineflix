@@ -19,7 +19,7 @@ public class CategoryService {
     @NonNull
     private final CategoryRepository categoryRepository;
 
-    public Optional<String> validateUpdate(CategoryDTO categoryDTO) {
+    public Optional<String> validateCategory(CategoryDTO categoryDTO) {
         if (categoryDTO.getName().isEmpty()) {
             return Optional.of("You must add a name for the category, it cannot be empty");
         }
@@ -41,7 +41,7 @@ public class CategoryService {
 
     }
 
-    public Category createCategory(final CategoryDTO categoryDTO) {
+    public Category ScreateCategory(final CategoryDTO categoryDTO) {
         Category categoryToBeSaved = Category.builder()
                 .name(categoryDTO.getName())
                 .isAvailable(true)

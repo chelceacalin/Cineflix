@@ -24,7 +24,7 @@ public class CategoryController {
 
     @PostMapping("/create")
     public ResponseEntity<?> createCategory(@RequestBody final CategoryDTO categoryDTO) {
-        Optional<String> errorOptional = categoryService.validateUpdate(categoryDTO);
+        Optional<String> errorOptional = categoryService.validateCategory(categoryDTO);
         if (errorOptional.isEmpty()) {
             return new ResponseEntity<>(categoryService.createCategory(categoryDTO), HttpStatus.OK);
         } else {
@@ -36,7 +36,7 @@ public class CategoryController {
     @PutMapping("/update/{id}")
     public ResponseEntity<?> updateCategory(@RequestBody CategoryDTO categoryDTO,
                                             @PathVariable("id") @NotNull UUID id) {
-        Optional<String> errorOptional = categoryService.validateUpdate(categoryDTO);
+        Optional<String> errorOptional = categoryService.validateCategory(categoryDTO);
         if (errorOptional.isEmpty()) {
             try {
                 return new ResponseEntity<>(categoryService.updateCategory(categoryDTO, id), HttpStatus.OK);
