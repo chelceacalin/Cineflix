@@ -23,31 +23,6 @@ public class ImageDataController {
     @NonNull
     private MovieImageDataService movieImageDataService;
 
-    @PostMapping("/upload")
-    public ResponseEntity<String> uploadFile(@RequestParam("file") MultipartFile file) {
-        String message = "";
-        try {
-            movieImageDataService.store(file);
-
-            message = "Uploaded the file successfully: " + file.getOriginalFilename();
-            return ResponseEntity.status(HttpStatus.OK).body(message);
-        } catch (Exception e) {
-            message = "Could not upload the file: " + file.getOriginalFilename() + "!";
-            return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(message);
-        }
-    }
-
-
-
-    @GetMapping("/files/{id}")
-    public ResponseEntity<byte[]> getFile(@PathVariable UUID id) {
-        MovieImageData fileDB = movieImageDataService.getFile(id);
-
-        return ResponseEntity.ok()
-                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + fileDB.getName() + "\"")
-                .body(fileDB.getImageData());
-    }
-
     @PostMapping("/images/{movieID}")
     public ResponseEntity<?> uploadImage(@RequestParam("image") MultipartFile file,
                                          @PathVariable UUID movieID) throws Exception {
@@ -57,15 +32,15 @@ public class ImageDataController {
 
     @GetMapping("/images/{fileName}")
     public ResponseEntity<?> downloadImage(@PathVariable String fileName) throws IOException {
-        byte[] imgData=movieImageDataService.downloadImage(fileName);
+        byte[] imgData = movieImageDataService.downloadImage(fileName);
         return ResponseEntity.status(HttpStatus.OK)
                 .contentType(MediaType.valueOf("image/png"))
                 .body(imgData);
     }
 
     @GetMapping("/imagesByMovieID/{id}")
-    public ResponseEntity<?> getImageDataByEmpID(@PathVariable(name = "id") UUID movieID){
-        byte[] imgData= movieImageDataService.findImageByMovieID(movieID);
+    public ResponseEntity<?> getImageDataByEmpID(@PathVariable(name = "id") UUID movieID) {
+        byte[] imgData = movieImageDataService.findImageByMovieID(movieID);
         return ResponseEntity.status(HttpStatus.OK)
                 .contentType(MediaType.valueOf("image/png"))
                 .body(imgData);

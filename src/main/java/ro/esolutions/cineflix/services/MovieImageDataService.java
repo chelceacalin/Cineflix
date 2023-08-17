@@ -3,18 +3,16 @@ package ro.esolutions.cineflix.services;
 import jakarta.transaction.Transactional;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 import ro.esolutions.cineflix.entities.Movie;
 import ro.esolutions.cineflix.entities.MovieImageData;
 import ro.esolutions.cineflix.repositories.MovieImageDataRepository;
 import ro.esolutions.cineflix.util.MovieImageDataUtil;
 
-import java.io.IOException;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.stream.Stream;
 
 @Service
 @Transactional
@@ -24,65 +22,58 @@ public class MovieImageDataService {
     @NonNull
     private MovieImageDataRepository movieImageDataRepository;
     @NonNull
-    private MovieImageDataUtil util;
+    private MovieImageDataUtil movieImageDataUtil;
     @NonNull
     private MovieService movieService;
-    public MovieImageData store(MultipartFile file) throws IOException {
-        String fileName = StringUtils.cleanPath(file.getOriginalFilename());
-        MovieImageData data=
-                MovieImageData.builder()
-                        .name(fileName)
-                        .type(file.getContentType())
-                        .imageData(file.getBytes())
-                        .build();
 
+    public String uploadImage(MultipartFile file, UUID movieID) throws Exception {
+        if (file == null) return "File is empty";
+        Optional<Movie> movieOptional = movieService.findById(movieID);
+        MovieImageData data = null;
+        if (movieOptional.isPresent()) {
+            MovieImageData movieImageData = movieImageDataRepository.findImageDataByMovieID(movieID);
+            if (movieImageData != null) {
+                if (movieImageData.getName().equals(file.getOriginalFilename())) {
+                    return "You cannot add the same image twice";
+                } else {
+//                    data = movieImageDataRepository.save(MovieImageData.builder()
+//                            .name(file.getOriginalFilename())
+//                            .type(file.getContentType())
+//                            .imageData(movieImageDataUtil.compressImage(file.getBytes()))
+//                            .movie(movieOptional.get())
+//                            .build());
+//                    movieOptional.get().setPhoto(data);
+//                    movieService.updateMovie(movieOptional.get().getId(), movieOptional.get());
+                }
+            }
 
-        return movieImageDataRepository.save(data);
-    }
-
-    public MovieImageData getFile(UUID id) {
-        return movieImageDataRepository.findById(id).get();
-    }
-
-
-    public String uploadImage(MultipartFile file,UUID empID) throws Exception {
-        Optional<Movie> e1=movieService.findById(empID);
-        MovieImageData data;
-        if(e1.isPresent()){
-            data= movieImageDataRepository.save(MovieImageData.builder()
-                    .name(file.getOriginalFilename())
-                    .type(file.getContentType())
-                    .imageData(util.compressImage(file.getBytes()))
-                    .movie(e1.get())
-                    .build());
-            System.out.println(e1.toString());
-            e1.get().setPhoto(data);
-            movieService.updateMovie(e1.get().getId(),e1.get());
-        }
-        else
-        {
-            data= movieImageDataRepository.save(MovieImageData.builder()
-                    .name(file.getOriginalFilename())
-                    .type(file.getContentType())
-                    .imageData(util.compressImage(file.getBytes()))
-                    .build());
+        } else {
+            throw new UsernameNotFoundException("Movie with id " + movieID + " not found");
         }
 
-        if(!data.equals("")){
-            return "File uploaded successfully "+file.getOriginalFilename();
-        }
-        else
-            return null;
+        if (!data.equals("")) {
+            return "File uploaded successfully " + file.getOriginalFilename();
+        } else
+            return "Error while uploading file " + file.getOriginalFilename();
     }
 
-    public byte[] downloadImage(String fileName){
-        Optional<MovieImageData> data=movieImageDataRepository.findImageDataByName(fileName);
-        return data.map(movieImageData -> util.decompressImage(movieImageData.getImageData())).orElse(null);
+    public byte[] downloadImage(String fileName) {
+        Optional<MovieImageData> data = movieImageDataRepository.findImageDataByName(fileName);
+        byte[] bytes;
+        if (data.isPresent()) {
+            bytes = movieImageDataUtil.decompressImage(data.get().getImageData());
+        } else throw new UsernameNotFoundException("The image you are trying to download does not exist");
+
+        return bytes;
     }
+
     public byte[] findImageByMovieID(UUID id) {
-        MovieImageData data=movieImageDataRepository.findImageDataByMovieID(id);
-        byte[] image=util.decompressImage(data.getImageData());
-        return image;
+        MovieImageData data = movieImageDataRepository.findImageDataByMovieID(id);
+        if (data != null) {
+            return movieImageDataUtil.decompressImage(data.getImageData());
+        } else {
+            throw new UsernameNotFoundException("Image not found");
+        }
     }
 
 }

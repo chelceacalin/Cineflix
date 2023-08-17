@@ -1,7 +1,9 @@
 package ro.esolutions.cineflix.repositories;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import ro.esolutions.cineflix.entities.MovieImageData;
 
@@ -14,4 +16,5 @@ public interface MovieImageDataRepository  extends JpaRepository<MovieImageData,
 
     @Query("select imgd from MovieImageData imgd where imgd.movie.id=:id")
     MovieImageData findImageDataByMovieID(UUID id);
+
 }
