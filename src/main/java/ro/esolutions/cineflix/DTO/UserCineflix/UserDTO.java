@@ -1,4 +1,4 @@
-package ro.esolutions.cineflix.DTO;
+package ro.esolutions.cineflix.DTO.UserCineflix;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

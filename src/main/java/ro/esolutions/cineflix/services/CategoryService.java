@@ -1,7 +1,6 @@
 package ro.esolutions.cineflix.services;
 
 import jakarta.transaction.Transactional;
-import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -9,8 +8,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
-import ro.esolutions.cineflix.DTO.CategoryDTO;
-import ro.esolutions.cineflix.DTO.CategoryFilterDTO;
+import ro.esolutions.cineflix.DTO.Category.CategoryDTO;
+import ro.esolutions.cineflix.DTO.Category.CategoryFilterDTO;
 import ro.esolutions.cineflix.entities.Category;
 import ro.esolutions.cineflix.exceptions.CategoryNotFoundException;
 import ro.esolutions.cineflix.mapper.CategoryMapper;

@@ -8,14 +8,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import ro.esolutions.cineflix.DTO.CategoryDTO;
+import ro.esolutions.cineflix.DTO.Category.CategoryDTO;
 import ro.esolutions.cineflix.services.CategoryService;
 import java.util.Optional;
 import org.springframework.web.bind.annotation.*;
 import ro.esolutions.cineflix.exceptions.CategoryNotFoundException;
 import java.util.UUID;
 import org.springframework.data.domain.Page;
-import ro.esolutions.cineflix.DTO.CategoryFilterDTO;
+import ro.esolutions.cineflix.DTO.Category.CategoryFilterDTO;
 
 @RestController
 @RequiredArgsConstructor

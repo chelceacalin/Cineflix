@@ -8,14 +8,13 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import ro.esolutions.cineflix.DTO.CategoryDTO;
+import ro.esolutions.cineflix.DTO.Category.CategoryDTO;
 import ro.esolutions.cineflix.controllers.CategoryController;
 import ro.esolutions.cineflix.entities.Category;
 import ro.esolutions.cineflix.exceptions.CategoryNotFoundException;
 import ro.esolutions.cineflix.services.CategoryService;
 
 import java.util.Optional;
-import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;

@@ -1,6 +1,6 @@
 package ro.esolutions.cineflix.mapper;
 
-import ro.esolutions.cineflix.DTO.CategoryDTO;
+import ro.esolutions.cineflix.DTO.Category.CategoryDTO;
 import ro.esolutions.cineflix.entities.Category;
 
 

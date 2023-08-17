@@ -1,7 +1,6 @@
 package ro.esolutions.cineflix.specification;
 
 import org.springframework.data.jpa.domain.Specification;
-import ro.esolutions.cineflix.DTO.UserDTO;
 import ro.esolutions.cineflix.entities.UserCineflix;
 
 public class UserCineflixSpecification {
