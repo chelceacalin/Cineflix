@@ -4,6 +4,7 @@ import { Button } from "@mui/material";
 import FilterCategory from "./FilterCategory";
 import "./css/CategoryManagement.css";
 import axios from "axios";
+import Pagination from "../RoleManagement/Pagination";
 axios.defaults.withCredentials = true;
 
 function CategoryManagement() {
@@ -51,6 +52,11 @@ function CategoryManagement() {
 
   let getFilterInput = (params) => {
     setName(params[0]);
+  };
+
+  const handleSelectChange = (event) => {
+    const value = event.target.value;
+    setPageSize(value);
   };
 
   return (
@@ -127,6 +133,35 @@ function CategoryManagement() {
               })}
             </tbody>
           </table>
+          <span className="w-96 bg-basic-red hard_width flex flex-wrap py-3 mb-4">
+          <span className=" inline-flex marginResizable">
+            <p className="text-white font-normal">
+              Results per page:{" "}
+            </p>
+            <p className="ml-5">
+              <select
+                name="sizes"
+                id="sizes"
+                form="sizesform"
+                onChange={handleSelectChange}
+              >
+                <option value="15">15</option>
+                <option value="10">10</option>
+                <option value="5">5</option>
+              </select>
+            </p>
+          </span>
+          <div className="ml-10 justify-center w-1/2 items-center">
+            <Pagination
+              pageNo={pageNo}
+              pageSize={pageSize}
+              totalPages={totalPages}
+              updatePageNumber={updatePageNumber}
+              responseLength={totalCategories}
+              nrCurrentUsers={categories.length}
+            />
+          </div>
+        </span>
         </div>
       </div>
     </>
