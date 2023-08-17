@@ -52,10 +52,10 @@ public class CategoryController {
 
     }
 
-    @DeleteMapping("/delete/{id}")
-    public ResponseEntity<?> deleteCategory(@PathVariable("id") @NotNull UUID id) {
+    @DeleteMapping("/delete/{name}")
+    public ResponseEntity<?> deleteCategory(@PathVariable("name") @NotNull String name) {
         try {
-            categoryService.deleteCategory(id);
+            categoryService.deleteCategory(name);
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (CategoryNotFoundException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);

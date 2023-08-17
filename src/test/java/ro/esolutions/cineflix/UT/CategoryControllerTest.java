@@ -28,19 +28,19 @@ public class CategoryControllerTest {
     @Test
     @DisplayName("Delete Category Without Exception Thrown Controller UT")
     public void deleteCategoryWithoutExceptionThrown() throws CategoryNotFoundException {
-        UUID id = UUID.fromString("12f310ee-3cc9-11ee-be56-0242ac120002");
-        ResponseEntity<?> deletedUser = categoryController.deleteCategory(id);
-        verify(categoryService, times(1)).deleteCategory(id);
+        String name = "Drama";
+        ResponseEntity<?> deletedUser = categoryController.deleteCategory(name);
+        verify(categoryService, times(1)).deleteCategory(name);
         assertEquals(HttpStatus.OK, deletedUser.getStatusCode());
     }
 
     @Test
     @DisplayName("Delete Category With Exception Thrown Controller UT")
     public void deleteCategoryWithExceptionThrown() throws CategoryNotFoundException {
-        UUID id = UUID.fromString("12f310ee-3cc9-11ee-be56-0242ac120002");
-        doThrow(CategoryNotFoundException.class).when(categoryService).deleteCategory(id);
-        ResponseEntity<?> response = categoryController.deleteCategory(id);
-        verify(categoryService, times(1)).deleteCategory(id);
+        String name = "Drama";
+        doThrow(CategoryNotFoundException.class).when(categoryService).deleteCategory(name);
+        ResponseEntity<?> response = categoryController.deleteCategory(name);
+        verify(categoryService, times(1)).deleteCategory(name);
         assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
     }
 }

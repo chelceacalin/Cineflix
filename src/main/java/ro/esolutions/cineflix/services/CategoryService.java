@@ -59,12 +59,12 @@ public class CategoryService {
         return categoryRepository.save(categoryToBeSaved);
     }
 
-    public void deleteCategory(UUID id) throws CategoryNotFoundException {
-        Optional<Category> existsCategory = categoryRepository.findById(id);
+    public void deleteCategory(String name) throws CategoryNotFoundException {
+        Optional<Category> existsCategory = categoryRepository.findByName(name);
         if (existsCategory.isEmpty()) {
             throw new CategoryNotFoundException("Category to be deleted does not exist");
         }
-        categoryRepository.deleteById(id);
+        categoryRepository.deleteById(existsCategory.get().getId());
     }
 
     public Page<CategoryDTO> getCategories(CategoryFilterDTO dto, int pageNo, int pageSize) {

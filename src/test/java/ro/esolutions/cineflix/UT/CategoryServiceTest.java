@@ -28,11 +28,11 @@ public class CategoryServiceTest {
     @Test()
     @DisplayName("Delete Category With Exception Thrown Service UT")
     public void deleteCategoryWithExceptionThrown() {
-        UUID id = UUID.fromString("12f310ee-3cc9-11ee-be56-0242ac120002");
-        when(categoryRepository.findById(id))
+        String name = "Horror";
+        when(categoryRepository.findByName(name))
                 .thenReturn(Optional.empty());
         assertThrows(CategoryNotFoundException.class, () -> categoryService.deleteCategory(
-                id));
+                name));
     }
 
     @Test
@@ -44,10 +44,10 @@ public class CategoryServiceTest {
                 .name("Drama")
                 .build();
 
-        when(categoryRepository.findById(id)).thenReturn(Optional.of(categoryToBeDeleted));
-        categoryService.deleteCategory(id);
+        when(categoryRepository.findByName("Drama")).thenReturn(Optional.of(categoryToBeDeleted));
+        categoryService.deleteCategory(categoryToBeDeleted.getName());
 
-        verify(categoryRepository, times(1)).findById(id);
+        verify(categoryRepository, times(1)).findByName("Drama");
         verify(categoryRepository, times(1)).deleteById(id);
     }
 }
