@@ -14,8 +14,6 @@ import ro.esolutions.cineflix.services.CategoryService;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-import java.util.UUID;
-
 @ExtendWith(MockitoExtension.class)
 public class CategoryControllerTest {
 
