@@ -4,6 +4,8 @@ import { Button } from "@mui/material";
 import FilterCategory from "./FilterCategory";
 import "./css/CategoryManagement.css";
 import axios from "axios";
+import CreateCategoryModalWindow from "./CreateCategoryModalWIndow.jsx";
+import category from "./Category";
 axios.defaults.withCredentials = true;
 
 function CategoryManagement() {
@@ -31,6 +33,7 @@ function CategoryManagement() {
     setLastClicked(fieldName);
   };
 
+
   useEffect(() => {
     newUrl = `http://localhost:8081/category?direction=${
       direction ? "ASC" : "DESC"
@@ -43,11 +46,15 @@ function CategoryManagement() {
         setTotalPages(elems.data.totalPages);
       }
     });
-  }, [direction, name, pageSize, pageNo]);
+  }, [direction, name, pageSize, pageNo,categories.length]);
 
   const updatePageNumber = (pgNo) => {
     setPageNo(pgNo);
   };
+
+  const [open, setOpen] = React.useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
 
   let getFilterInput = (params) => {
     setName(params[0]);
@@ -102,12 +109,16 @@ function CategoryManagement() {
                 })}
                 <th className="border-b-white p-4">
                   <div>
-                    <Button
+                    <Button onClick={handleOpen}
                       className="white-outlined-button"
                       variant="outlined"
                     >
                       Add new
                     </Button>
+                    <CreateCategoryModalWindow
+                        isModalOpen={open}
+                        closeModal={handleClose}
+                      />
                   </div>
                 </th>
               </tr>
