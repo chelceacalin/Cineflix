@@ -85,8 +85,9 @@ function RoleManagement() {
   return (
     <>
       <FilterComponent filterInput={getFilterInput} />
-      <div className="w-full h-full ml-10 mr-10 mt-5">
-        <table className="w-full min-w-max table-auto text-left">
+      <div className="bg-grey-texture w-full">
+      <div className="w-2/3 h-full ml-10 mr-10 mt-5">
+        <table className="w-full min-w-max table-auto text-left bg-white border-2">
           <thead className="bg-basic-red text-white">
             <tr>
               {TABLE_HEAD.slice(0, TABLE_HEAD.length - 2).map((elem) => {
@@ -152,7 +153,7 @@ function RoleManagement() {
               const isLast = index === users.length - 1;
               const classes = isLast
                 ? "px-4 py-2"
-                : "px-4 py-2 border-b border-blue-gray-50";
+                : "px-4 py-2 border-b-2";
 
               return (
                 <UserCineflix
@@ -199,6 +200,7 @@ function RoleManagement() {
             />
           </div>
         </span>
+      </div>
       </div>
     </>
   );

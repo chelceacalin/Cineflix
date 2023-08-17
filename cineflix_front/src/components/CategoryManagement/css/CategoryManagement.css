@@ -1,0 +1,32 @@
+.white-outlined-button {
+    border-radius: 0 !important;
+    border: 1px solid white !important;
+    color: white !important;
+    background-color: transparent !important;
+}
+
+.white-outlined-button:hover {
+    color: #E0812E !important;
+    border-color: #E0812E !important;
+}
+
+.hover:hover{
+    --tw-bg-opacity: 1;
+    background-color: rgb(215 50 56 / var(--tw-bg-opacity));
+}
+
+/* .hard_width{
+    width: 366px !important;
+} */
+
+.marginResizable{
+    margin-left: 3rem;
+}
+
+@media only screen and (max-width: 1100px) 
+{
+    .marginResizable{
+        margin-left: 2px;
+        margin-right: 4px;
+    }
+}
