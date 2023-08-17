@@ -30,5 +30,6 @@ public class Category {
     private boolean isAvailable;
 
     @OneToMany(mappedBy = "category",cascade = CascadeType.ALL,orphanRemoval = true)
+    @JsonIgnore
     private List<Movie> movieList;
 }
