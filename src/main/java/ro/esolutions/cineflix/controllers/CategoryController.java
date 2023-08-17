@@ -52,7 +52,7 @@ public class CategoryController {
 
     }
 
-    @DeleteMapping("/delete/{name}")
+    @PostMapping("/delete/{name}")
     public ResponseEntity<?> deleteCategory(@PathVariable("name") @NotNull String name) {
         try {
             categoryService.deleteCategory(name);
