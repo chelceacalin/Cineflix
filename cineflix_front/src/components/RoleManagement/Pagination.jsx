@@ -76,8 +76,26 @@ function Pagination({
                 </li>
               ))}
 
+            {pageNo <= 3 ? (
+              <div
+                key="dots-after"
+                onClick={() => handlePageClick(parseInt(pageNo + 1))}
+              >
+                {"..."}
+              </div>
+            ) : null}
+
             {pageNo > 3 && pageNo < totalPages - 2 && (
               <>
+                {pageNo > 4 ? (
+                  <div
+                    key="dots=before"
+                    onClick={() => handlePageClick(parseInt(pageNo - 1))}
+                  >
+                  {"..."}
+                  </div>
+                  ) : null}
+
                 <li
                   key={pageNo}
                   onClick={() => handlePageClick(parseInt(pageNo))
@@ -93,8 +111,25 @@ function Pagination({
                     {pageNo}{" "}
                   </div>
                 </li>
+
+                {pageNo < totalPages - 3 ? (
+                <div
+                  key="dots-after"
+                  onClick={() => handlePageClick(parseInt(pageNo + 1))}
+                >
+                {"..."}
+                </div>) : null}
               </>
             )}
+
+            {pageNo >= totalPages - 2 ? (
+              <div
+                key="dots-before"
+                onClick={() => handlePageClick(parseInt(pageNo - 1))}
+              >
+                {"..."}
+              </div>
+            ) : null}
 
             {Array(3)
               .fill()
