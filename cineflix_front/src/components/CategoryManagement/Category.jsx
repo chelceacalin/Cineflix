@@ -2,6 +2,10 @@ import { Button } from '@mui/material'
 import React from 'react'
 
 function Category({name, classes}) {
+    const [open, setOpen] = React.useState(false);
+    const handleOpen = () => setOpen(true);
+    const handleClose = () => setOpen(false);
+
   return (
     <tr>
         <td className={classes}>
