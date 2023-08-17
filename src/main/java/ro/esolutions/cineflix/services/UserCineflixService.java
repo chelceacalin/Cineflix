@@ -106,7 +106,7 @@ public class UserCineflixService {
             return UserInfoMapper.toDTO(userCineflix.get(), token);
         }
 
-        return null;
+        throw new UsernameNotFoundException("User with username not found");
     }
 
     public UserCineflix.Role getUserRole(String username) {
@@ -116,6 +116,6 @@ public class UserCineflixService {
             return userCineflix.get().getRole();
         }
 
-        throw new UsernameNotFoundException("User with username " + username + " not found");
+        throw new UsernameNotFoundException("User with username not found");
     }
 }
