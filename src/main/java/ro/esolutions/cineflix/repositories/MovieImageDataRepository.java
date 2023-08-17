@@ -11,9 +11,9 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Repository
-public interface MovieImageDataRepository  extends JpaRepository<MovieImageData, UUID> {
+public interface MovieImageDataRepository extends JpaRepository<MovieImageData, UUID> {
     Optional<MovieImageData> findImageDataByName(String filename);
 
-@Query("select img from MovieImageData img where img.movie.id=:id")
-   MovieImageData findMovieImageDataByMovieId(UUID id);
+    @Query("select img from MovieImageData img where img.movie.id=:id")
+    Optional<MovieImageData> findMovieImageDataByMovieId(UUID id);
 }

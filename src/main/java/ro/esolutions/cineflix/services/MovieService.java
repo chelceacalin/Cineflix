@@ -28,10 +28,15 @@ import static java.util.Objects.nonNull;
 @RequiredArgsConstructor
 public class MovieService {
 
+    public static final String RENTED_UNTIL = "rentedUntil";
     @NonNull
     private final MovieRepository movieRepository;
     @NonNull
     private final MovieHistoryRepository movieHistoryRepository;
+
+    public static final String USERNAME = "movieHistories.rentedBy.username";
+    public static final String MOVIE_HISTORIES_RENTED_UNTIL = "movieHistories.rentedUntil";
+    public static final String RENTED_BY="rentedBy";
 
     public Page<MovieDTO> findUserMovies(MovieFilterDTO movieFilter, int pageNo, int pageSize) {
         if (movieFilter.getOwner_username() == null) {
@@ -45,10 +50,10 @@ public class MovieService {
         String sortField = movieFilter.getSortField();
 
         Pageable pageable = null;
-        if ("rentedBy".equals(sortField)) {
-            pageable = PageRequest.of(pageNo, pageSize, Sort.by(sortDirection, "movieHistories.rentedBy.username"));
-        } else if ("rentedUntil".equals(sortField)) {
-            sortField = "movieHistories.rentedUntil";
+        if (RENTED_BY.equals(sortField)) {
+            pageable = PageRequest.of(pageNo, pageSize, Sort.by(sortDirection, USERNAME));
+        } else if (RENTED_UNTIL.equals(sortField)) {
+            sortField = MOVIE_HISTORIES_RENTED_UNTIL;
             pageable = PageRequest.of(pageNo, pageSize, Sort.by(sortDirection, sortField));
         } else {
             pageable = PageRequest.of(pageNo, pageSize, Sort.by(sortDirection, sortField));

@@ -13,6 +13,9 @@ import ro.esolutions.cineflix.util.MovieImageDataUtil;
 
 import java.util.*;
 
+import static java.util.Objects.isNull;
+import static java.util.Objects.nonNull;
+
 @Service
 @Transactional
 @RequiredArgsConstructor
@@ -25,52 +28,63 @@ public class MovieImageDataService {
     @NonNull
     private MovieService movieService;
 
+    private final static Set<String> allowedFormats = new HashSet<>(List.of("image/png", "image/jpeg", "image/jpg"));
+
     @Transactional
-    public void deleteExistingImage(UUID movieID) throws InterruptedException {
-        MovieImageData checkExistingMovieImageData = movieImageDataRepository.findMovieImageDataByMovieId(movieID);
-        if (checkExistingMovieImageData != null)
-            movieImageDataRepository.deleteById(checkExistingMovieImageData.getId());
+    public void deleteExistingImage(UUID movieID) {
+        Optional<MovieImageData> checkExistingMovieImageData = movieImageDataRepository.findMovieImageDataByMovieId(movieID);
+        checkExistingMovieImageData.ifPresent(movieImageData -> movieImageDataRepository.deleteById(movieImageData.getId()));
     }
 
     @Transactional
-    public String uploadImage(MultipartFile file, UUID movieID) throws Exception {
-        if (movieID != null)
+    public void uploadImage(MultipartFile file, UUID movieID) throws Exception {
+        if (nonNull(movieID)) {
             deleteExistingImage(movieID);
-
-        MovieImageData checkExisting = movieImageDataRepository.findMovieImageDataByMovieId(movieID);
-        Optional<Movie> movieOptional = movieService.findById(movieID);
-        MovieImageData data;
-        if (checkExisting == null) {
-            data = movieImageDataRepository.save(MovieImageData.builder()
-                    .name(file.getOriginalFilename())
-                    .type(file.getContentType())
-                    .imageData(movieImageDataUtil.compressImage(file.getBytes()))
-                    .movie(movieOptional.get())
-                    .build());
-            movieOptional.get().setPhoto(data);
-            movieService.updateMovie(movieOptional.get().getId(), movieOptional.get());
-        } else {
-            return "Already existing";
         }
 
-        return data != null ? "Successfully uploaded file "+file.getOriginalFilename() : "Error while uploading file "+file.getOriginalFilename();
+        if (isNull(file)) {
+            throw new Exception("You have to introduce a file");
+        }
+
+        if (!allowedFormats.contains(file.getContentType())) {
+            throw new Exception("File type not allowed");
+        }
+
+
+        Optional<Movie> movieOptional = movieService.findById(movieID);
+        if (movieImageDataRepository.findMovieImageDataByMovieId(movieID).isEmpty() && movieOptional.isPresent()) {
+            Movie movie = movieOptional.get();
+            MovieImageData data = movieImageDataRepository.save(
+                    MovieImageData.builder()
+                            .name(file.getOriginalFilename())
+                            .type(file.getContentType())
+                            .imageData(movieImageDataUtil.compressImage(file.getBytes()))
+                            .movie(movie)
+                            .build());
+            movieOptional.get().setPhoto(data);
+            movieService.updateMovie(movie.getId(), movie);
+        } else {
+            throw new Exception(" Error uploading image");
+        }
     }
 
 
-    public byte[] downloadImage(String fileName) {
+    public byte[] downloadImage(String fileName) throws Exception {
         Optional<MovieImageData> data = movieImageDataRepository.findImageDataByName(fileName);
         byte[] bytes;
         if (data.isPresent()) {
-            bytes = movieImageDataUtil.decompressImage(data.get().getImageData());
+            MovieImageData imageData = data.get();
+            bytes = movieImageDataUtil.decompressImage(imageData.getImageData());
         } else throw new UsernameNotFoundException("The image you are trying to download does not exist");
 
         return bytes;
     }
 
-    public byte[] findImageByMovieID(UUID id) {
-        MovieImageData data = movieImageDataRepository.findMovieImageDataByMovieId(id);
-        if (data != null) {
-            return movieImageDataUtil.decompressImage(data.getImageData());
+    public byte[] findImageByMovieID(UUID id) throws Exception {
+        Optional<MovieImageData> data = movieImageDataRepository.findMovieImageDataByMovieId(id);
+        if (data.isPresent()) {
+            MovieImageData imageData = data.get();
+            return movieImageDataUtil.decompressImage(imageData.getImageData());
         } else {
             throw new UsernameNotFoundException("Image not found");
         }

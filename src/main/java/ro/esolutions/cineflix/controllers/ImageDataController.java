@@ -22,27 +22,28 @@ public class ImageDataController {
 
     @NonNull
     private MovieImageDataService movieImageDataService;
+    private static final String CONTENT_TYPE = "image/png";
 
     @PostMapping("/images/{movieID}")
-    public ResponseEntity<?> uploadImage(@RequestParam("image") MultipartFile file,
-                                         @PathVariable UUID movieID) throws Exception {
-        String upload = movieImageDataService.uploadImage(file, movieID);
-        return ResponseEntity.ok(upload);
+    public ResponseEntity<HttpStatus> uploadImage(@RequestParam("image") MultipartFile file,
+                                                  @PathVariable UUID movieID) throws Exception {
+        movieImageDataService.uploadImage(file, movieID);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @GetMapping("/images/{fileName}")
-    public ResponseEntity<?> downloadImage(@PathVariable String fileName) throws IOException {
+    public ResponseEntity<?> downloadImage(@PathVariable String fileName) throws Exception {
         byte[] imgData = movieImageDataService.downloadImage(fileName);
         return ResponseEntity.status(HttpStatus.OK)
-                .contentType(MediaType.valueOf("image/png"))
+                .contentType(MediaType.valueOf(CONTENT_TYPE))
                 .body(imgData);
     }
 
     @GetMapping("/imagesByMovieID/{id}")
-    public ResponseEntity<?> getImageByMovidID(@PathVariable(name = "id") UUID movieID) {
+    public ResponseEntity<?> getImageByMovidID(@PathVariable(name = "id") UUID movieID) throws Exception {
         byte[] imgData = movieImageDataService.findImageByMovieID(movieID);
         return ResponseEntity.status(HttpStatus.OK)
-                .contentType(MediaType.valueOf("image/png"))
+                .contentType(MediaType.valueOf(CONTENT_TYPE))
                 .body(imgData);
     }
 }
