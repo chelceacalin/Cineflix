@@ -11,8 +11,7 @@ import ro.esolutions.cineflix.entities.MovieImageData;
 import ro.esolutions.cineflix.repositories.MovieImageDataRepository;
 import ro.esolutions.cineflix.util.MovieImageDataUtil;
 
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 @Transactional
@@ -27,31 +26,48 @@ public class MovieImageDataService {
     private MovieService movieService;
 
     public String uploadImage(MultipartFile file, UUID movieID) throws Exception {
-        if (file == null) return "File is empty";
-        Optional<Movie> movieOptional = movieService.findById(movieID);
-        MovieImageData data = null;
-        if (movieOptional.isPresent()) {
-            MovieImageData movieImageData = movieImageDataRepository.findImageDataByMovieID(movieID);
-            if (movieImageData != null) {
-                    data = movieImageDataRepository.save(MovieImageData.builder()
-                            .name(file.getOriginalFilename())
-                            .type(file.getContentType())
-                            .imageData(movieImageDataUtil.compressImage(file.getBytes()))
-                            .movie(movieOptional.get())
-                            .build());
-                    movieOptional.get().setPhoto(data);
-                    movieService.updateMovie(movieOptional.get().getId(), movieOptional.get());
-            }
-
-        } else {
-            throw new UsernameNotFoundException("Movie with id " + movieID + " not found");
+        Set<String> contentTypes = new HashSet<>(List.of("image/jpeg", "image/jpg", "image/png"));
+        if (file == null) {
+            return "You haven't selected a file";
+        }
+        if (!contentTypes.contains(file.getContentType())) {
+            return "Content type is invalid";
         }
 
-        if (data!=null) {
+        Optional<MovieImageData> checkExisting = movieImageDataRepository.findMovieImageDataByMovieId(movieID);
+        checkExisting.ifPresent(movieImageData -> movieImageDataRepository.deleteById(movieImageData.getId()));
+
+        Optional<Movie> movieOptional = movieService.findById(movieID);
+        MovieImageData data = null;
+
+        if (movieOptional.isPresent()) {
+            data = movieOptional.get().getPhoto();
+
+            data = movieImageDataRepository.save(MovieImageData.builder()
+                    .name(file.getOriginalFilename())
+                    .type(file.getContentType())
+                    .imageData(movieImageDataUtil.compressImage(file.getBytes()))
+                    .movie(movieOptional.get())
+                    .build());
+
+
+            movieOptional.get().setPhoto(data);
+            movieService.updateMovie(movieOptional.get().getId(), movieOptional.get());
+        } else {
+            data = movieImageDataRepository.save(MovieImageData.builder()
+                    .name(file.getOriginalFilename())
+                    .type(file.getContentType())
+                    .imageData(movieImageDataUtil.compressImage(file.getBytes()))
+                    .build());
+        }
+
+        if (data != null) {
             return "File uploaded successfully " + file.getOriginalFilename();
-        } else
-            return "Error while uploading file " + file.getOriginalFilename();
+        } else {
+            return "Eroare la încărcarea fișierului " + file.getOriginalFilename();
+        }
     }
+
 
     public byte[] downloadImage(String fileName) {
         Optional<MovieImageData> data = movieImageDataRepository.findImageDataByName(fileName);
@@ -64,9 +80,9 @@ public class MovieImageDataService {
     }
 
     public byte[] findImageByMovieID(UUID id) {
-        MovieImageData data = movieImageDataRepository.findImageDataByMovieID(id);
-        if (data != null) {
-            return movieImageDataUtil.decompressImage(data.getImageData());
+        Optional<MovieImageData> data = movieImageDataRepository.findMovieImageDataByMovieId(id);
+        if (data.isPresent()) {
+            return movieImageDataUtil.decompressImage(data.get().getImageData());
         } else {
             throw new UsernameNotFoundException("Image not found");
         }
