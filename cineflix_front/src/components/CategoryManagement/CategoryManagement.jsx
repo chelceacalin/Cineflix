@@ -121,7 +121,6 @@ function CategoryManagement() {
                   <Category
                     name={name}
                     classes={classes}
-                    //category has an unique name that is why i used it as a key
                     key={name}
                   />
                 );
