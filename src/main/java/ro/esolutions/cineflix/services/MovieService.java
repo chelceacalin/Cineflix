@@ -41,10 +41,20 @@ public class MovieService {
         Specification<Movie> specification = getSpecification(movieFilter);
 
         Sort.Direction sortDirection = Sort.Direction.fromString(movieFilter.getDirection());
-        Pageable pageable = PageRequest.of(pageNo, pageSize, Sort.by(sortDirection, movieFilter.getSortField()));
+
+        String sortField = movieFilter.getSortField();
+
+        Pageable pageable = null;
+        if ("rentedBy".equals(sortField)) {
+            pageable = PageRequest.of(pageNo, pageSize, Sort.by(sortDirection, "movieHistories.rentedBy.username"));
+        } else if ("rentedUntil".equals(sortField)) {
+            sortField = "movieHistories.rentedUntil";
+            pageable = PageRequest.of(pageNo, pageSize, Sort.by(sortDirection, sortField));
+        } else {
+            pageable = PageRequest.of(pageNo, pageSize, Sort.by(sortDirection, sortField));
+        }
 
         Page<Movie> moviesPage = movieRepository.findAll(specification, pageable);
-
         List<MovieDTO> movies = moviesPage.getContent().stream()
                 .map(movie -> {
                     MovieHistory history = movieHistoryRepository.findMovieHistoryByRentedUntilMostRecent(movie.getId());
@@ -86,7 +96,9 @@ public class MovieService {
         return specification;
     }
 
-    public Optional<Movie> findById(UUID id){ return movieRepository.findById(id); }
+    public Optional<Movie> findById(UUID id) {
+        return movieRepository.findById(id);
+    }
 
     public Movie updateMovie(UUID id, Movie employee) {
         Optional<Movie> optionalEmployee = movieRepository.findById(id);

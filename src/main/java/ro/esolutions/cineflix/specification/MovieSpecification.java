@@ -25,8 +25,8 @@ public class MovieSpecification {
     }
     public static <T> Specification<T> getRentedBy(String username){
         return (root, query, criteriaBuilder) -> {
-            Join<Movie, MovieHistory> movieHistoryJoin = root.join("movieHistories", JoinType.LEFT);
-            Join<MovieHistory, UserCineflix> userJoin = movieHistoryJoin.join("rentedBy");
+            Join<Movie, MovieHistory> movieHistoryJoin = root.join("movieHistories", JoinType.INNER);
+            Join<MovieHistory, UserCineflix> userJoin = movieHistoryJoin.join("rentedBy",JoinType.INNER);
             return criteriaBuilder.equal(userJoin.get("username"),username);
         };
     }
