@@ -26,7 +26,7 @@ public class CategoryController {
 
     @PostMapping("/create")
     public ResponseEntity<?> createCategory(@RequestBody final CategoryDTO categoryDTO) {
-        Optional<String> errorOptional = categoryService.validateUpdate(categoryDTO);
+        Optional<String> errorOptional = categoryService.validateCategory(categoryDTO);
         if (errorOptional.isEmpty()) {
             return new ResponseEntity<>(categoryService.createCategory(categoryDTO), HttpStatus.OK);
         } else {

@@ -26,7 +26,7 @@ import static java.util.Objects.nonNull;
 @Transactional
 @RequiredArgsConstructor
 public class CategoryService {
-    @NonNull
+
     private final CategoryRepository categoryRepository;
 
     public Optional<String> validateCategory(CategoryDTO categoryDTO) {
