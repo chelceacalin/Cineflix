@@ -84,8 +84,12 @@ function EditRoleModalWindow({ isModalOpen, closeModal, name, firstName, lastNam
                             <option value="USER">User</option>
                             <option value="ADMIN">Admin</option>
                         </NativeSelect>
-                        <Button className="save" variant="contained" onClick={editUserRole}>Save</Button>
-                        <Button className="cancel" variant="outlined" onClick={closeModal} >Cancel</Button>
+                        <div className="mt-2 mb-2">
+                        <Button className="contained-button w-full" variant="contained" onClick={editUserRole}>Save</Button>
+                        </div>
+                        <div className="mb-2">
+                            <Button className="outlined-button w-full" variant="outlined" onClick={closeModal} >Cancel</Button>
+                        </div>
                     </FormControl>
                 </div>
             </DialogContent>
