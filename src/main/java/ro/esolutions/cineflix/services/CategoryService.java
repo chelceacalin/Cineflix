@@ -17,7 +17,7 @@ import java.util.UUID;
 public class CategoryService {
     private final CategoryRepository categoryRepository;
 
-    public Optional<String> validateUpdate(CategoryDTO categoryDTO) {
+    public Optional<String> validateCategory(CategoryDTO categoryDTO) {
         if (categoryDTO.getName().isEmpty()) {
             return Optional.of("You must add a name for the category, it cannot be empty");
         }
@@ -37,5 +37,17 @@ public class CategoryService {
         toUpdateCategory.setName(categoryDTO.getName());
         return categoryRepository.save(toUpdateCategory);
 
+    }
+
+
+    public void deleteCategoryIfNoBooks(UUID id) throws CategoryNotFoundException {
+        Category category = categoryRepository.findById(id)
+                .orElseThrow(() -> new CategoryNotFoundException("Category to be deleted does not exist"));
+
+        if (category.getMovieList().isEmpty()) {
+            categoryRepository.delete(category);
+        } else {
+            throw new RuntimeException("The category cannot be deleted as there are movie with this category available in the library");
+        }
     }
 }
