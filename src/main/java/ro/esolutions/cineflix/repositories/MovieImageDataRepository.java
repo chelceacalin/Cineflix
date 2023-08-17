@@ -14,6 +14,6 @@ import java.util.UUID;
 public interface MovieImageDataRepository  extends JpaRepository<MovieImageData, UUID> {
     Optional<MovieImageData> findImageDataByName(String filename);
 
-
-    Optional<MovieImageData> findMovieImageDataByMovieId(UUID id);
+@Query("select img from MovieImageData img where img.movie.id=:id")
+   MovieImageData findMovieImageDataByMovieId(UUID id);
 }

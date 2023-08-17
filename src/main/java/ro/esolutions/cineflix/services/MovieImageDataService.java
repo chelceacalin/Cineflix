@@ -25,47 +25,35 @@ public class MovieImageDataService {
     @NonNull
     private MovieService movieService;
 
+    @Transactional
+    public void deleteExistingImage(UUID movieID) throws InterruptedException {
+        MovieImageData checkExistingMovieImageData = movieImageDataRepository.findMovieImageDataByMovieId(movieID);
+        if (checkExistingMovieImageData != null)
+            movieImageDataRepository.deleteById(checkExistingMovieImageData.getId());
+    }
+
+    @Transactional
     public String uploadImage(MultipartFile file, UUID movieID) throws Exception {
-        Set<String> contentTypes = new HashSet<>(List.of("image/jpeg", "image/jpg", "image/png"));
-        if (file == null) {
-            return "You haven't selected a file";
-        }
-        if (!contentTypes.contains(file.getContentType())) {
-            return "Content type is invalid";
-        }
+        if (movieID != null)
+            deleteExistingImage(movieID);
 
-        Optional<MovieImageData> checkExisting = movieImageDataRepository.findMovieImageDataByMovieId(movieID);
-        checkExisting.ifPresent(movieImageData -> movieImageDataRepository.deleteById(movieImageData.getId()));
-
+        MovieImageData checkExisting = movieImageDataRepository.findMovieImageDataByMovieId(movieID);
         Optional<Movie> movieOptional = movieService.findById(movieID);
-        MovieImageData data = null;
-
-        if (movieOptional.isPresent()) {
-            data = movieOptional.get().getPhoto();
-
+        MovieImageData data;
+        if (checkExisting == null) {
             data = movieImageDataRepository.save(MovieImageData.builder()
                     .name(file.getOriginalFilename())
                     .type(file.getContentType())
                     .imageData(movieImageDataUtil.compressImage(file.getBytes()))
                     .movie(movieOptional.get())
                     .build());
-
-
             movieOptional.get().setPhoto(data);
             movieService.updateMovie(movieOptional.get().getId(), movieOptional.get());
         } else {
-            data = movieImageDataRepository.save(MovieImageData.builder()
-                    .name(file.getOriginalFilename())
-                    .type(file.getContentType())
-                    .imageData(movieImageDataUtil.compressImage(file.getBytes()))
-                    .build());
+            return "Already existing";
         }
 
-        if (data != null) {
-            return "File uploaded successfully " + file.getOriginalFilename();
-        } else {
-            return "Eroare la încărcarea fișierului " + file.getOriginalFilename();
-        }
+        return data != null ? "Successfully uploaded file "+file.getOriginalFilename() : "Error while uploading file "+file.getOriginalFilename();
     }
 
 
@@ -80,9 +68,9 @@ public class MovieImageDataService {
     }
 
     public byte[] findImageByMovieID(UUID id) {
-        Optional<MovieImageData> data = movieImageDataRepository.findMovieImageDataByMovieId(id);
-        if (data.isPresent()) {
-            return movieImageDataUtil.decompressImage(data.get().getImageData());
+        MovieImageData data = movieImageDataRepository.findMovieImageDataByMovieId(id);
+        if (data != null) {
+            return movieImageDataUtil.decompressImage(data.getImageData());
         } else {
             throw new UsernameNotFoundException("Image not found");
         }
