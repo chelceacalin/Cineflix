@@ -49,7 +49,6 @@ public class CategoryControllerTest {
         ResponseEntity<?> response = categoryController.createCategory(categoryDTO);
         verify(categoryService,times(0)).createCategory(categoryDTO);
         assertEquals(new ResponseEntity<>("Error", HttpStatus.BAD_REQUEST),response);
-
     }
 
 
