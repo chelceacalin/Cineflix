@@ -14,6 +14,8 @@ import java.util.Optional;
 import org.springframework.web.bind.annotation.*;
 import ro.esolutions.cineflix.exceptions.CategoryNotFoundException;
 import java.util.UUID;
+import org.springframework.data.domain.Page;
+import ro.esolutions.cineflix.DTO.CategoryFilterDTO;
 
 @RestController
 @RequiredArgsConstructor
@@ -58,5 +60,12 @@ public class CategoryController {
         } catch (CategoryNotFoundException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
         }
+    }
+
+    @GetMapping()
+    public Page<CategoryDTO> getCategories(@ModelAttribute CategoryFilterDTO dto,
+                                  @RequestParam(defaultValue = "0",required = false) int pageNo,
+                                  @RequestParam(defaultValue = "15",required = false) int pageSize) {
+        return categoryService.getCategories(dto,pageNo,pageSize);
     }
 }
