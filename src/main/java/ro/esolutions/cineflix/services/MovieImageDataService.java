@@ -3,7 +3,6 @@ package ro.esolutions.cineflix.services;
 import jakarta.transaction.Transactional;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import ro.esolutions.cineflix.entities.Movie;
@@ -27,7 +26,6 @@ public class MovieImageDataService {
     private MovieImageDataUtil movieImageDataUtil;
     @NonNull
     private MovieService movieService;
-
     private final static Set<String> allowedFormats = new HashSet<>(List.of("image/png", "image/jpeg", "image/jpg"));
 
     @Transactional
@@ -52,7 +50,8 @@ public class MovieImageDataService {
 
 
         Optional<Movie> movieOptional = movieService.findById(movieID);
-        if (movieImageDataRepository.findMovieImageDataByMovieId(movieID).isEmpty() && movieOptional.isPresent()) {
+        boolean shouldUploadImage = movieImageDataRepository.findMovieImageDataByMovieId(movieID).isEmpty() && movieOptional.isPresent();
+        if (shouldUploadImage) {
             Movie movie = movieOptional.get();
             MovieImageData data = movieImageDataRepository.save(
                     MovieImageData.builder()
@@ -64,7 +63,7 @@ public class MovieImageDataService {
             movieOptional.get().setPhoto(data);
             movieService.updateMovie(movie.getId(), movie);
         } else {
-            throw new Exception(" Error uploading image");
+            throw new Exception("Error uploading image");
         }
     }
 
@@ -75,7 +74,9 @@ public class MovieImageDataService {
         if (data.isPresent()) {
             MovieImageData imageData = data.get();
             bytes = movieImageDataUtil.decompressImage(imageData.getImageData());
-        } else throw new UsernameNotFoundException("The image you are trying to download does not exist");
+        } else {
+            throw new Exception("The image you are trying to download does not exist");
+        }
 
         return bytes;
     }
@@ -86,7 +87,7 @@ public class MovieImageDataService {
             MovieImageData imageData = data.get();
             return movieImageDataUtil.decompressImage(imageData.getImageData());
         } else {
-            throw new UsernameNotFoundException("Image not found");
+            throw new Exception("Image not found");
         }
     }
 

@@ -36,7 +36,8 @@ public class UserCineflixService {
     private final UserCineflixRepository userCineflixRepository;
 
     public Page<UserDTO> getUsers(UserFilterDTO dto, int pageNo, int pageSize) {
-        if (isNull(dto.getUsername()) && isNull(dto.getEmail()) && isNull(dto.getRole()) && isNull(dto.getFirstName()) && isNull(dto.getLastName()) && isNull(dto.getSortField()) && isNull(dto.getDirection())) {
+        boolean isRequestEmpty = isNull(dto.getUsername()) && isNull(dto.getEmail()) && isNull(dto.getRole()) && isNull(dto.getFirstName()) && isNull(dto.getLastName()) && isNull(dto.getSortField()) && isNull(dto.getDirection());
+        if (isRequestEmpty) {
             return userCineflixRepository.findAll(PageRequest.of(pageNo, pageSize)).map(UserMapper::toDTO);
         }
 
