@@ -29,7 +29,7 @@ public class CategoryService {
     @NonNull
     private final CategoryRepository categoryRepository;
 
-    public Optional<String> validateUpdate(CategoryDTO categoryDTO) {
+    public Optional<String> validateCategory(CategoryDTO categoryDTO) {
         if (categoryDTO.getName().isEmpty()) {
             return Optional.of("You must add a name for the category, it cannot be empty");
         }
@@ -77,5 +77,17 @@ public class CategoryService {
             specification = specification.and(CategorySpecification.getCategoryLike(dto.getName(),"name"));
         }
         return specification;
+    }
+
+
+    public void deleteCategoryIfNoBooks(UUID id) throws CategoryNotFoundException {
+        Category category = categoryRepository.findById(id)
+                .orElseThrow(() -> new CategoryNotFoundException("Category to be deleted does not exist"));
+
+        if (category.getMovieList().isEmpty()) {
+            categoryRepository.delete(category);
+        } else {
+            throw new RuntimeException("The category cannot be deleted as there are movie with this category available in the library");
+        }
     }
 }

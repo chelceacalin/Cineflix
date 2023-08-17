@@ -38,7 +38,7 @@ public class CategoryController {
     @PutMapping("/update/{id}")
     public ResponseEntity<?> updateCategory(@RequestBody CategoryDTO categoryDTO,
                                             @PathVariable("id") @NotNull UUID id) {
-        Optional<String> errorOptional = categoryService.validateUpdate(categoryDTO);
+        Optional<String> errorOptional = categoryService.validateCategory(categoryDTO);
         if (errorOptional.isEmpty()) {
             try {
                 return new ResponseEntity<>(categoryService.updateCategory(categoryDTO, id), HttpStatus.OK);
@@ -57,5 +57,17 @@ public class CategoryController {
                                   @RequestParam(defaultValue = "0",required = false) int pageNo,
                                   @RequestParam(defaultValue = "15",required = false) int pageSize) {
         return categoryService.getCategories(dto,pageNo,pageSize);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deleteCategory(@PathVariable UUID id) {
+        try {
+            categoryService.deleteCategoryIfNoBooks(id);
+            return ResponseEntity.ok("Category deleted successfully");
+        } catch (CategoryNotFoundException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 }
