@@ -41,7 +41,7 @@ public class CategoryService {
 
     }
 
-    public Category ScreateCategory(final CategoryDTO categoryDTO) {
+    public Category createCategory(final CategoryDTO categoryDTO) {
         Category categoryToBeSaved = Category.builder()
                 .name(categoryDTO.getName())
                 .isAvailable(true)
