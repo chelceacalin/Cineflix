@@ -11,12 +11,9 @@ import org.springframework.http.ResponseEntity;
 import ro.esolutions.cineflix.DTO.CategoryDTO;
 import ro.esolutions.cineflix.controllers.CategoryController;
 import ro.esolutions.cineflix.entities.Category;
-import ro.esolutions.cineflix.mapper.CategoryMapper;
 import ro.esolutions.cineflix.services.CategoryService;
-import ro.esolutions.cineflix.util.CategoryGenerator;
 
 import java.util.Optional;
-import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
