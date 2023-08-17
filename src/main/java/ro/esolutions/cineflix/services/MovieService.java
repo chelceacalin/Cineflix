@@ -17,6 +17,8 @@ import ro.esolutions.cineflix.specification.GenericSpecification;
 import ro.esolutions.cineflix.specification.MovieSpecification;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 import static java.util.Objects.nonNull;
@@ -26,10 +28,15 @@ import static java.util.Objects.nonNull;
 @RequiredArgsConstructor
 public class MovieService {
 
+    public static final String RENTED_UNTIL = "rentedUntil";
     @NonNull
     private final MovieRepository movieRepository;
     @NonNull
     private final MovieHistoryRepository movieHistoryRepository;
+
+    public static final String USERNAME = "movieHistories.rentedBy.username";
+    public static final String MOVIE_HISTORIES_RENTED_UNTIL = "movieHistories.rentedUntil";
+    public static final String RENTED_BY="rentedBy";
 
     public Page<MovieDTO> findUserMovies(MovieFilterDTO movieFilter, int pageNo, int pageSize) {
         if (movieFilter.getOwner_username() == null) {
@@ -39,10 +46,20 @@ public class MovieService {
         Specification<Movie> specification = getSpecification(movieFilter);
 
         Sort.Direction sortDirection = Sort.Direction.fromString(movieFilter.getDirection());
-        Pageable pageable = PageRequest.of(pageNo, pageSize, Sort.by(sortDirection, movieFilter.getSortField()));
+
+        String sortField = movieFilter.getSortField();
+
+        Pageable pageable = null;
+        if (RENTED_BY.equals(sortField)) {
+            pageable = PageRequest.of(pageNo, pageSize, Sort.by(sortDirection, USERNAME));
+        } else if (RENTED_UNTIL.equals(sortField)) {
+            sortField = MOVIE_HISTORIES_RENTED_UNTIL;
+            pageable = PageRequest.of(pageNo, pageSize, Sort.by(sortDirection, sortField));
+        } else {
+            pageable = PageRequest.of(pageNo, pageSize, Sort.by(sortDirection, sortField));
+        }
 
         Page<Movie> moviesPage = movieRepository.findAll(specification, pageable);
-
         List<MovieDTO> movies = moviesPage.getContent().stream()
                 .map(movie -> {
                     MovieHistory history = movieHistoryRepository.findMovieHistoryByRentedUntilMostRecent(movie.getId());
@@ -84,5 +101,16 @@ public class MovieService {
         return specification;
     }
 
+    public Optional<Movie> findById(UUID id) {
+        return movieRepository.findById(id);
+    }
+
+    public Movie updateMovie(UUID id, Movie employee) {
+        Optional<Movie> optionalEmployee = movieRepository.findById(id);
+        if (optionalEmployee.isPresent()) {
+            return movieRepository.save(employee);
+        }
+        return employee;
+    }
 
 }
