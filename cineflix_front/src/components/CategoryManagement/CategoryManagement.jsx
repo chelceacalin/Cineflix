@@ -6,6 +6,7 @@ import "./css/CategoryManagement.css";
 import axios from "axios";
 import CreateCategoryModalWindow from "./CreateCategoryModalWIndow.jsx";
 import category from "./Category";
+import { faL } from "@fortawesome/free-solid-svg-icons";
 axios.defaults.withCredentials = true;
 
 function CategoryManagement() {
@@ -19,12 +20,17 @@ function CategoryManagement() {
   let [pageSize, setPageSize] = useState(15);
   let [totalPages, setTotalPages] = useState("");
   let [totalCategories, setTotalCategories] = useState(0);
+  let [signalCall,setSignalCall]=useState(false)
 
   useEffect(() => {
+    console.log(signalCall)
     axios.get(`http://localhost:8081/category`).then((data) => {
       setTotalCategories(data.data.content.length);
+      setCategories(data.data.content)
     });
-  }, [totalCategories]);
+
+  }, [totalCategories,signalCall]);
+
 
   let handleClick = (fieldName) => {
     if (lastClicked === fieldName) {
@@ -33,6 +39,9 @@ function CategoryManagement() {
     setLastClicked(fieldName);
   };
 
+  let signal=()=>{
+      setSignalCall(!signalCall)
+  }
 
   useEffect(() => {
     newUrl = `http://localhost:8081/category?direction=${
@@ -118,6 +127,7 @@ function CategoryManagement() {
                     <CreateCategoryModalWindow
                         isModalOpen={open}
                         closeModal={handleClose}
+                        signal={signal}
                       />
                   </div>
                 </th>
