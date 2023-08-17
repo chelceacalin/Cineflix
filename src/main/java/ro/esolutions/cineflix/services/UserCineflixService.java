@@ -30,7 +30,7 @@ public class UserCineflixService {
 
     public static final String DEFAULTSORT = "defaultsort";
     public static final String FIRST_NAME="firstName";
-    public static final String LAST_NAME="firstName";
+    public static final String LAST_NAME="lastName";
     public static final String EMAIL="email";
     @NonNull
     private final UserCineflixRepository userCineflixRepository;
