@@ -31,7 +31,7 @@ build-front:
     - npm run build
   artifacts:
     paths:
-      - target/dist/
+      - cineflix_front/dist/
 # test:
 #  image: gitlab.esolutions.ro:5050/internship-2023/test/maven-openjdk-docker:1.0
 #  stage: test
