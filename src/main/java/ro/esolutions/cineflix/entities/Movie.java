@@ -33,6 +33,7 @@ public class Movie {
 
     @ManyToOne
     @JoinColumn(name = "category_id", referencedColumnName = "id")
+    @JsonIgnore
     private Category category;
 
     @ManyToOne

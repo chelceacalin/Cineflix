@@ -1,10 +1,8 @@
 package ro.esolutions.cineflix.mapper;
 
-import ro.esolutions.cineflix.DTO.MovieDTO;
+import ro.esolutions.cineflix.DTO.Movie.MovieDTO;
 import ro.esolutions.cineflix.entities.Movie;
 import ro.esolutions.cineflix.entities.MovieHistory;
-
-import java.time.LocalDate;
 
 public class MovieMapper {
     public static MovieDTO toDto(Movie m, MovieHistory mh) {
