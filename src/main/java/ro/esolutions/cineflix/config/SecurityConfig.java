@@ -38,8 +38,8 @@ public class SecurityConfig {
         httpSecurity
                 .authorizeHttpRequests(registry -> registry
                         .requestMatchers(HttpMethod.OPTIONS).permitAll()
+                        .requestMatchers("/users/").hasAnyRole("USER", "ADMIN")
                         .requestMatchers("/users/update/**").hasRole("ADMIN")
-                        .requestMatchers("/users/").hasRole("USER")
                         .requestMatchers("/movies/**").hasAnyRole("USER", "ADMIN")
                         .anyRequest().authenticated()
                 )
