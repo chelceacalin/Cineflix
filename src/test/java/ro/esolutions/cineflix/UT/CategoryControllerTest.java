@@ -13,7 +13,6 @@ import ro.esolutions.cineflix.controllers.CategoryController;
 import ro.esolutions.cineflix.entities.Category;
 import ro.esolutions.cineflix.exceptions.CategoryNotFoundException;
 import ro.esolutions.cineflix.services.CategoryService;
-import ro.esolutions.cineflix.util.CategoryGenerator;
 
 import java.util.Optional;
 
