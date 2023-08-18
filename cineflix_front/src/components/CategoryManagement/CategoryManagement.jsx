@@ -59,6 +59,17 @@ function CategoryManagement() {
     setPageSize(value);
   };
 
+  const updateCategory = (updatedCategory) => {
+    const updatedCategories = categories.map(category => {
+      if (category.id === updatedCategory.id) {
+        return updatedCategory;
+      }
+      return category;
+    });
+    setCategories(updatedCategories);
+  };
+
+
   return (
     <>
       <FilterCategory filterInput={getFilterInput} />
@@ -119,14 +130,16 @@ function CategoryManagement() {
               </tr>
             </thead>
             <tbody className="text-blue-marine">
-              {categories.map(({ name }, index) => {
+              {categories.map(({ name, id }, index) => {
                 const isLast = index === categories.length - 1;
                 const classes = isLast ? "px-4 py-2" : "px-4 py-2 border-b-2";
 
                 return (
                   <Category
+                    id={id}
                     name={name}
                     classes={classes}
+                    updateCategory={updateCategory}
                     key={name}
                   />
                 );

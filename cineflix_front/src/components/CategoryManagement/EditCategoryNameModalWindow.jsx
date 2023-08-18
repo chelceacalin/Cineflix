@@ -2,36 +2,42 @@ import React, { useState, useEffect } from 'react'
 import { Button, Dialog, DialogContent, FormControl, InputLabel, NativeSelect, TextField } from '@mui/material';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
-import "./css/EditRoleModalWindow.css";
+import "../RoleManagement/css/EditRoleModalWindow.css";
 import axios from 'axios';
 
 axios.defaults.withCredentials = true
 
-function EditRoleModalWindow({ isModalOpen, closeModal, id, name, updateCategory }) {
-
+function EditRoleModalWindow({ isModalOpen, closeModal, id, name, updateCategory}) {
+    const [newName, setNewName]=useState(name);
     const [categoryDTO, setCategoryDTO] = useState({  
-        name: ''
+        name: '',
+        id: ''
     });
 
     useEffect(() => {
         setCategoryDTO(() => ({
-            'name': name,
+            'name': newName,
+            'id': id
         }))
-    }, [name])
+    }, [name, newName])
 
     const editCategoryName = () => {
         let url = 'http://localhost:8081/category/update/' + id;
-
+        console.log(newName);
         try {
             setCategoryDTO(() => ({
-                'name': name,
+                'name': newName,
+                'id': id
             }));
             const response = axios.post(url, categoryDTO).then(()=>{
-
+                console.log("AICI");
                 updateCategory(categoryDTO);
                 closeModal();
+            }).catch(error => {
+                console.log("error: ", error.response.data);
             });
         } catch (error) {
+            console.log(error);
         }
     };
 
@@ -54,6 +60,7 @@ function EditRoleModalWindow({ isModalOpen, closeModal, id, name, updateCategory
                         id="outlined-read-only-input"
                         label="New Name"
                         defaultValue={""}
+                        onChange={(e) => setNewName(e.target.value)}
                     />
                 </div>
                 <div className='mt-4'>
