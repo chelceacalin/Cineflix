@@ -43,7 +43,7 @@ public class CategoryControllerTest {
     }
 
     @Test
-    @DisplayName("Thrown exception when category already exists or is null")
+    @DisplayName("Thrown exception when category already exists or category name is null")
     public void thrownExceptionWhenCategoryAlreadyExistsOrIsNull() {
         CategoryDTO categoryDTO = aCategoryDTO();
         when(categoryService.validateCategory(categoryDTO)).thenReturn(Optional.of("Error"));
