@@ -146,7 +146,7 @@ function CategoryManagement() {
               })}
             </tbody>
           </table>
-          <span className="w-96 bg-basic-red hard_width flex flex-wrap py-3 mb-4">
+          <span className="w-96 bg-basic-red flex flex-wrap py-3 mb-4">
           <span className=" inline-flex marginResizable">
             <p className="text-white font-normal">
               Results per page:{" "}
