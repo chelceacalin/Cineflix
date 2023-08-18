@@ -9,7 +9,7 @@ stages:
   - release-new-version-backend
   - build-frontend
   - build-docker-image-frontend
-  - release-new-version-frontend
+  # - release-new-version-frontend
 
 # test:
 #  image: gitlab.esolutions.ro:5050/internship-2023/test/maven-openjdk-docker:1.0
@@ -55,7 +55,7 @@ release-new-version-backend:
   rules:
     - if: $CI_COMMIT_BRANCH == "main"
   needs:
-    - build-docker-image
+    - build-docker-image-backend
   before_script:
     - git config --global user.email "ci-robot"
     - git config --global user.name "ci-robot"
