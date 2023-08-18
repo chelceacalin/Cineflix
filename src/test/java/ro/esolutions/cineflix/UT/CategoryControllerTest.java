@@ -2,8 +2,6 @@ package ro.esolutions.cineflix.UT;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -22,11 +20,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 import static ro.esolutions.cineflix.util.CategoryGenerator.aCategory;
 import static ro.esolutions.cineflix.util.CategoryGenerator.aCategoryDTO;
-import ro.esolutions.cineflix.controllers.CategoryController;
-import ro.esolutions.cineflix.exceptions.CategoryNotFoundException;
-import ro.esolutions.cineflix.services.CategoryService;
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class CategoryControllerTest {

@@ -6,6 +6,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import ro.esolutions.cineflix.DTO.Category.CategoryDTO;
 import ro.esolutions.cineflix.entities.Category;
 import ro.esolutions.cineflix.exceptions.CategoryNotFoundException;
 import ro.esolutions.cineflix.repositories.CategoryRepository;
@@ -16,9 +17,7 @@ import static org.mockito.Mockito.*;
 import java.util.Optional;
 import java.util.UUID;
 
-import static org.junit.Assert.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.*;
 import static ro.esolutions.cineflix.util.CategoryGenerator.aCategoryDTO;
 
 @ExtendWith(MockitoExtension.class)
@@ -56,9 +55,9 @@ public class CategoryServiceTest {
         verify(categoryRepository, times(1)).deleteById(id);
     }
 
-
+    @Test
     @DisplayName("Update Category With Exception Thrown Service UT")
-    public void deleteCategoryWithExceptionThrown() {
+    public void updateCategoryWithExceptionThrown() {
         UUID id = UUID.fromString("12f310ee-3cc9-11ee-be56-0242ac120002");
         CategoryDTO categoryDTO = aCategoryDTO();
         when(categoryRepository.findById(id))
