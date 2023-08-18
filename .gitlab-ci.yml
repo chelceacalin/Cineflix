@@ -1,4 +1,4 @@
-image: maven:3-openjdk-17-slim
+
 
 default:
   tags:
@@ -6,11 +6,14 @@ default:
 
 stages:
   - build
+  - build-front
+  - build-docker-image-front
 #  - test
   - build-docker-image
   - release-new-version
 
 build:
+ image: maven:3-openjdk-17-slim
  stage: build
  script:
    - mvn -DskipTests package
@@ -18,6 +21,17 @@ build:
    paths:
      - target/*.jar
 
+
+build-front:
+  image: node:20
+  stage: build-front
+  script:
+    - cd cineflix_front
+    - npm install vite
+    - npm run build
+  artifacts:
+    paths:
+      - target/dist/
 # test:
 #  image: gitlab.esolutions.ro:5050/internship-2023/test/maven-openjdk-docker:1.0
 #  stage: test
@@ -32,6 +46,22 @@ build:
 #    - build
 #  script:
 #    - mvn $MAVEN_CLI_OPTS test
+
+
+build-docker-image-front:
+  image: docker:24.0.2
+  stage: build-docker-image-front
+  services:
+    - docker:dind
+  variables: 
+    DOCKER_TLS_CERTDIR: ""
+  dependencies:
+    - build-front
+  script:
+    - cd cineflix_front
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+    - docker build -t $CI_REGISTRY_IMAGE-front:$CI_COMMIT_SHORT_SHA .
+    - docker push $CI_REGISTRY_IMAGE-front:$CI_COMMIT_SHORT_SHA
 
 build-docker-image:
   image: docker:24.0.2
