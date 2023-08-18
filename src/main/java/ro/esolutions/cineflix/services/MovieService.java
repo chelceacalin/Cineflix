@@ -1,7 +1,5 @@
 package ro.esolutions.cineflix.services;
 
-import jakarta.persistence.criteria.Join;
-import jakarta.persistence.criteria.JoinType;
 import jakarta.transaction.Transactional;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -12,7 +10,6 @@ import ro.esolutions.cineflix.DTO.Movie.MovieDTO;
 import ro.esolutions.cineflix.DTO.Movie.MovieFilterDTO;
 import ro.esolutions.cineflix.entities.Movie;
 import ro.esolutions.cineflix.entities.MovieHistory;
-import ro.esolutions.cineflix.entities.UserCineflix;
 import ro.esolutions.cineflix.mapper.MovieMapper;
 import ro.esolutions.cineflix.repositories.MovieHistoryRepository;
 import ro.esolutions.cineflix.repositories.MovieRepository;
@@ -31,7 +28,6 @@ import static java.util.Objects.nonNull;
 @RequiredArgsConstructor
 public class MovieService {
 
-    public static final String RENTED_UNTIL = "rentedUntil";
     @NonNull
     private final MovieRepository movieRepository;
     @NonNull
@@ -40,6 +36,9 @@ public class MovieService {
     public static final String USERNAME = "movieHistories.rentedBy.username";
     public static final String MOVIE_HISTORIES_RENTED_UNTIL = "movieHistories.rentedUntil";
     public static final String RENTED_BY = "rentedBy";
+    public static final String RENTED_UNTIL = "rentedUntil";
+    public static final String DIRECTOR = "director";
+    public static final String TITLE = "title";
 
     public Page<MovieDTO> findUserMovies(MovieFilterDTO movieFilter, int pageNo, int pageSize) {
         if (movieFilter.getOwner_username() == null) {
@@ -82,11 +81,11 @@ public class MovieService {
         }
 
         if (nonNull(movieFilter.getTitle())) {
-            specification = specification.and(GenericSpecification.fieldNameLike(movieFilter.getTitle(), "title"));
+            specification = specification.and(GenericSpecification.fieldNameLike(movieFilter.getTitle(), TITLE));
         }
 
         if (nonNull(movieFilter.getDirector())) {
-            specification = specification.and(GenericSpecification.fieldNameLike(movieFilter.getDirector(), "director"));
+            specification = specification.and(GenericSpecification.fieldNameLike(movieFilter.getDirector(), DIRECTOR));
         }
 
         if (nonNull(movieFilter.getCategory())) {
