@@ -7,7 +7,7 @@ import axios from 'axios';
 
 axios.defaults.withCredentials = true
 
-function EditRoleModalWindow({ isModalOpen, closeModal, name, updateCategory }) {
+function EditRoleModalWindow({ isModalOpen, closeModal, id, name, updateCategory }) {
 
     const [categoryDTO, setCategoryDTO] = useState({  
         name: ''
@@ -19,20 +19,16 @@ function EditRoleModalWindow({ isModalOpen, closeModal, name, updateCategory }) 
         }))
     }, [name])
 
-    const editUserRole = () => {
-        let url = 'http://localhost:8081/users/update/' + selectedOption;
+    const editCategoryName = () => {
+        let url = 'http://localhost:8081/category/update/' + id;
 
         try {
-            setUserDTO(() => ({
-                'username': username,
-                'firstName': firstName,
-                'lastName': lastName,
-                'email': email,
-                'role': selectedOption
+            setCategoryDTO(() => ({
+                'name': name,
             }));
-            const response = axios.post(url, userDTO).then(()=>{
+            const response = axios.post(url, categoryDTO).then(()=>{
 
-                updateUser(userDTO);
+                updateCategory(categoryDTO);
                 closeModal();
             });
         } catch (error) {
@@ -47,7 +43,7 @@ function EditRoleModalWindow({ isModalOpen, closeModal, name, updateCategory }) 
                     <TextField
                         id="outlined-read-only-input"
                         label="Name"
-                        defaultValue={fullName}
+                        defaultValue={name}
                         InputProps={{
                             readOnly: true,
                         }}
@@ -56,25 +52,14 @@ function EditRoleModalWindow({ isModalOpen, closeModal, name, updateCategory }) 
                 <div className='mt-4'>
                     <TextField
                         id="outlined-read-only-input"
-                        label="Email"
-                        defaultValue={email}
-                        InputProps={{
-                            readOnly: true,
-                        }}
+                        label="New Name"
+                        defaultValue={""}
                     />
                 </div>
                 <div className='mt-4'>
                     <FormControl fullWidth>
-                        <InputLabel variant="standard" htmlFor="uncontrolled-native">Role</InputLabel>
-                        <NativeSelect defaultValue={role}
-                            onChange={(e) => setSelectedOption(e.target.value)}
-                            placeholder=''
-                        >
-                            <option value="USER">User</option>
-                            <option value="ADMIN">Admin</option>
-                        </NativeSelect>
                         <div className="mt-2 mb-2">
-                        <Button className="contained-button w-full" variant="contained" onClick={editUserRole}>Save</Button>
+                        <Button className="contained-button w-full" variant="contained" onClick={editCategoryName}>Save</Button>
                         </div>
                         <div className="mb-2">
                             <Button className="outlined-button w-full" variant="outlined" onClick={closeModal} >Cancel</Button>
