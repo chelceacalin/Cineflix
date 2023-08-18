@@ -7,6 +7,7 @@ import axios from "axios";
 import CreateCategoryModalWindow from "./CreateCategoryModalWIndow.jsx";
 import category from "./Category";
 import { faL } from "@fortawesome/free-solid-svg-icons";
+import Pagination from "../RoleManagement/Pagination";
 axios.defaults.withCredentials = true;
 
 function CategoryManagement() {
@@ -20,7 +21,6 @@ function CategoryManagement() {
   let [pageSize, setPageSize] = useState(15);
   let [totalPages, setTotalPages] = useState("");
   let [totalCategories, setTotalCategories] = useState(0);
-  let [signalCall,setSignalCall]=useState(false)
 
   useEffect(() => {
     axios.get(`http://localhost:8081/category`).then((data) => {
@@ -72,6 +72,22 @@ function CategoryManagement() {
   let getFilterInput = (params) => {
     setName(params[0]);
   };
+
+  const handleSelectChange = (event) => {
+    const value = event.target.value;
+    setPageSize(value);
+  };
+
+  const updateCategory = (updatedCategory) => {
+    const updatedCategories = categories.map(category => {
+      if (category.id === updatedCategory.id) {
+        return updatedCategory;
+      }
+      return category;
+    });
+    setCategories(updatedCategories);
+  };
+
 
   return (
     <>
@@ -140,20 +156,51 @@ function CategoryManagement() {
               </tr>
             </thead>
             <tbody className="text-blue-marine">
-              {categories.map(({ name }, index) => {
+              {categories.map(({ name, id }, index) => {
                 const isLast = index === categories.length - 1;
                 const classes = isLast ? "px-4 py-2" : "px-4 py-2 border-b-2";
 
                 return (
                   <Category
+                    id={id}
                     name={name}
                     classes={classes}
+                    updateCategory={updateCategory}
                     key={name}
                   />
                 );
               })}
             </tbody>
           </table>
+          <span className="w-96 bg-basic-red flex flex-wrap py-3 mb-4">
+          <span className=" inline-flex marginResizable">
+            <p className="text-white font-normal">
+              Results per page:{" "}
+            </p>
+            <p className="ml-5">
+              <select
+                name="sizes"
+                id="sizes"
+                form="sizesform"
+                onChange={handleSelectChange}
+              >
+                <option value="15">15</option>
+                <option value="10">10</option>
+                <option value="5">5</option>
+              </select>
+            </p>
+          </span>
+          <div className="ml-10 justify-center w-1/2 items-center">
+            <Pagination
+              pageNo={pageNo}
+              pageSize={pageSize}
+              totalPages={totalPages}
+              updatePageNumber={updatePageNumber}
+              responseLength={totalCategories}
+              nrCurrentUsers={categories.length}
+            />
+          </div>
+        </span>
         </div>
       </div>
     </>

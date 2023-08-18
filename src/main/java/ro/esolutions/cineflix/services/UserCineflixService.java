@@ -8,11 +8,15 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.oauth2.core.oidc.OidcUserInfo;
+import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 import org.springframework.stereotype.Service;
+import ro.esolutions.cineflix.DTO.UserInfoDTO;
 import ro.esolutions.cineflix.DTO.UserCineflix.UserDTO;
 import ro.esolutions.cineflix.DTO.UserCineflix.UserFilterDTO;
 import ro.esolutions.cineflix.entities.UserCineflix;
+import ro.esolutions.cineflix.mapper.UserInfoMapper;
 import ro.esolutions.cineflix.mapper.UserMapper;
 import ro.esolutions.cineflix.repositories.UserCineflixRepository;
 import ro.esolutions.cineflix.specification.GenericSpecification;
@@ -31,9 +35,9 @@ public class UserCineflixService {
     @NonNull
     private final UserCineflixRepository userCineflixRepository;
     public static final String DEFAULTSORT = "defaultsort";
-    public static final String FIRST_NAME="firstName";
-    public static final String LAST_NAME="lastName";
-    public static final String EMAIL="email";
+    public static final String FIRST_NAME = "firstName";
+    public static final String LAST_NAME = "lastName";
+    public static final String EMAIL = "email";
     public static final String USERNAME = "username";
 
     public Page<UserDTO> getUsers(UserFilterDTO dto, int pageNo, int pageSize) {
@@ -56,8 +60,8 @@ public class UserCineflixService {
     public <T> Specification<T> getSpecification(UserFilterDTO dto) {
         Specification<T> specification = Specification.where(null);
 
-        if(nonNull(dto.getUsername())){
-            specification=specification.and(UserCineflixSpecification.hasUsernameEquals(dto.getUsername()));
+        if (nonNull(dto.getUsername())) {
+            specification = specification.and(UserCineflixSpecification.hasUsernameEquals(dto.getUsername()));
         }
 
         if (nonNull(dto.getFirstName())) {
@@ -100,10 +104,25 @@ public class UserCineflixService {
                 UserCineflix.Role.USER
         );
 
-        Optional<UserCineflix> userCineflixNew = userCineflixRepository.findById(userCineflix.getId());
-        if (userCineflixNew.isEmpty()) {
-            userCineflixRepository.save(userCineflix);
-        }
+        userCineflixRepository.findByUsername(userCineflix.getUsername())
+                .orElseGet(() -> userCineflixRepository.save(userCineflix));
     }
 
+    public UserInfoDTO getUserInfo(OidcUser oidcUser) {
+        String username = oidcUser.getUserInfo().getClaim("preferred_username");
+
+        return userCineflixRepository.findByUsername(username)
+                .map(user -> {
+                    String token = oidcUser.getIdToken().getTokenValue();
+                    return UserInfoMapper.toDTO(user, token);
+                })
+                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+
+    }
+
+    public UserCineflix.Role getUserRole(String username) {
+        return userCineflixRepository.findByUsername(username)
+                .map(UserCineflix::getRole)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+    }
 }

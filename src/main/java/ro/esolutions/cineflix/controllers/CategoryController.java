@@ -35,7 +35,7 @@ public class CategoryController {
 
     }
 
-    @PutMapping("/update/{id}")
+    @PostMapping("/update/{id}")
     public ResponseEntity<?> updateCategory(@RequestBody CategoryDTO categoryDTO,
                                             @PathVariable("id") @NotNull UUID id) {
         Optional<String> errorOptional = categoryService.validateCategory(categoryDTO);
