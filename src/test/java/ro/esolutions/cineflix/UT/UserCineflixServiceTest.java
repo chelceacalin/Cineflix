@@ -6,7 +6,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import ro.esolutions.cineflix.DTO.UserDTO;
+import ro.esolutions.cineflix.DTO.UserCineflix.UserDTO;
 import ro.esolutions.cineflix.entities.UserCineflix;
 import ro.esolutions.cineflix.mapper.UserMapper;
 import ro.esolutions.cineflix.repositories.UserCineflixRepository;

@@ -271,6 +271,7 @@ function Navbar() {
                   onClick={(e) => {
                     e.preventDefault();
                     handleItemClick("logout", "red");
+                    window.location.href="http://localhost:8081/logout";
                   }}
                 >
                   <svg

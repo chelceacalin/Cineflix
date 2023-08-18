@@ -4,8 +4,8 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
-import ro.esolutions.cineflix.DTO.MovieDTO;
-import ro.esolutions.cineflix.DTO.MovieFilterDTO;
+import ro.esolutions.cineflix.DTO.Movie.MovieDTO;
+import ro.esolutions.cineflix.DTO.Movie.MovieFilterDTO;
 import ro.esolutions.cineflix.services.MovieService;
 
 @RestController
