@@ -39,6 +39,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(registry -> registry
                         .requestMatchers(HttpMethod.OPTIONS).permitAll()
                         .requestMatchers("/users/").hasAnyRole("USER", "ADMIN")
+                        .requestMatchers("/users/").hasAnyRole("USER", "ADMIN")
                         .requestMatchers("/users/update/**").hasRole("ADMIN")
                         .requestMatchers("/movies/**").hasAnyRole("USER", "ADMIN")
                         .anyRequest().authenticated()

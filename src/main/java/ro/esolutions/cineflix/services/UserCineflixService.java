@@ -35,9 +35,9 @@ public class UserCineflixService {
     @NonNull
     private final UserCineflixRepository userCineflixRepository;
     public static final String DEFAULTSORT = "defaultsort";
-    public static final String FIRST_NAME="firstName";
-    public static final String LAST_NAME="lastName";
-    public static final String EMAIL="email";
+    public static final String FIRST_NAME = "firstName";
+    public static final String LAST_NAME = "lastName";
+    public static final String EMAIL = "email";
     public static final String USERNAME = "username";
 
     public Page<UserDTO> getUsers(UserFilterDTO dto, int pageNo, int pageSize) {
@@ -60,8 +60,8 @@ public class UserCineflixService {
     public <T> Specification<T> getSpecification(UserFilterDTO dto) {
         Specification<T> specification = Specification.where(null);
 
-        if(nonNull(dto.getUsername())){
-            specification=specification.and(UserCineflixSpecification.hasUsernameEquals(dto.getUsername()));
+        if (nonNull(dto.getUsername())) {
+            specification = specification.and(UserCineflixSpecification.hasUsernameEquals(dto.getUsername()));
         }
 
         if (nonNull(dto.getFirstName())) {
@@ -114,21 +114,20 @@ public class UserCineflixService {
         String username = oidcUser.getUserInfo().getClaim("preferred_username");
         Optional<UserCineflix> userCineflix = userCineflixRepository.findByUsername(username);
 
-        if (userCineflix.isPresent()) {
-            String token = oidcUser.getIdToken().getTokenValue();
-            return UserInfoMapper.toDTO(userCineflix.get(), token);
-        }
+        return userCineflix
+                .map(user -> {
+                    String token = oidcUser.getIdToken().getTokenValue();
+                    return UserInfoMapper.toDTO(user, token);
+                })
+                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
-        throw new UsernameNotFoundException("User with username not found");
     }
 
     public UserCineflix.Role getUserRole(String username) {
         Optional<UserCineflix> userCineflix = userCineflixRepository.findByUsername(username);
 
-        if (userCineflix.isPresent()) {
-            return userCineflix.get().getRole();
-        }
-
-        throw new UsernameNotFoundException("User with username not found GET USER ROLE");
+        return userCineflix
+                .map(UserCineflix::getRole)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
     }
 }
