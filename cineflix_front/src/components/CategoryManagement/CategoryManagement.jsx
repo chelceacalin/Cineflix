@@ -23,7 +23,6 @@ function CategoryManagement() {
   let [signalCall,setSignalCall]=useState(false)
 
   useEffect(() => {
-    console.log(signalCall)
     axios.get(`http://localhost:8081/category`).then((data) => {
       setTotalCategories(data.data.content.length);
       setCategories(data.data.content)
@@ -62,8 +61,13 @@ function CategoryManagement() {
   };
 
   const [open, setOpen] = React.useState(false);
-  const handleOpen = () => setOpen(true);
+  const handleOpen = () => {
+    setErrorMessage("");
+    setOpen(true);
+  }
+
   const handleClose = () => setOpen(false);
+  const [errorMessage,setErrorMessage] = useState("");
 
   let getFilterInput = (params) => {
     setName(params[0]);
@@ -128,6 +132,8 @@ function CategoryManagement() {
                         isModalOpen={open}
                         closeModal={handleClose}
                         signal={signal}
+                        setErrorMessage={setErrorMessage}
+                        errorMessage = {errorMessage}
                       />
                   </div>
                 </th>
