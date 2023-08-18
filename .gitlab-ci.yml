@@ -9,7 +9,7 @@ stages:
   - release-new-version-backend
   - build-frontend
   - build-docker-image-frontend
-  # - release-new-version-frontend
+  - release-new-version-frontend
 
 # test:
 #  image: gitlab.esolutions.ro:5050/internship-2023/test/maven-openjdk-docker:1.0
