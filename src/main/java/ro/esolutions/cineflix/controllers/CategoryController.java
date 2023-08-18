@@ -59,7 +59,7 @@ public class CategoryController {
         return categoryService.getCategories(dto,pageNo,pageSize);
     }
 
-    @PostMapping ("/{id}")
+    @PostMapping ("/delete/{id}")
     public ResponseEntity<String> deleteCategory(@PathVariable UUID id) {
         categoryService.deleteCategoryIfNoBooks(id);
         return ResponseEntity.ok("Category was deleted successfully");
