@@ -27,7 +27,7 @@ build-front:
   stage: build-front
   script:
     - cd cineflix_front
-    - npm install vite
+    - npm install
     - npm run build
   artifacts:
     paths:
