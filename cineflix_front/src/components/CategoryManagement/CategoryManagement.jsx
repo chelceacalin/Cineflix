@@ -4,6 +4,9 @@ import { Button } from "@mui/material";
 import FilterCategory from "./FilterCategory";
 import "./css/CategoryManagement.css";
 import axios from "axios";
+import CreateCategoryModalWindow from "./CreateCategoryModalWIndow.jsx";
+import category from "./Category";
+import { faL } from "@fortawesome/free-solid-svg-icons";
 import Pagination from "../RoleManagement/Pagination";
 axios.defaults.withCredentials = true;
 
@@ -18,12 +21,16 @@ function CategoryManagement() {
   let [pageSize, setPageSize] = useState(15);
   let [totalPages, setTotalPages] = useState("");
   let [totalCategories, setTotalCategories] = useState(0);
+  let [signalCall,setSignalCall]=useState(false)
 
   useEffect(() => {
     axios.get(`http://localhost:8081/category`).then((data) => {
       setTotalCategories(data.data.content.length);
+      setCategories(data.data.content)
     });
-  }, [totalCategories]);
+
+  }, [totalCategories,signalCall]);
+
 
   let handleClick = (fieldName) => {
     if (lastClicked === fieldName) {
@@ -31,6 +38,10 @@ function CategoryManagement() {
     }
     setLastClicked(fieldName);
   };
+
+  let signal=()=>{
+      setSignalCall(!signalCall)
+  }
 
   useEffect(() => {
     newUrl = `http://localhost:8081/category?direction=${
@@ -44,11 +55,24 @@ function CategoryManagement() {
         setTotalPages(elems.data.totalPages);
       }
     });
-  }, [direction, name, pageSize, pageNo]);
+  }, [direction, name, pageSize, pageNo,categories.length]);
 
   const updatePageNumber = (pgNo) => {
     setPageNo(pgNo);
   };
+
+  const [open, setOpen] = React.useState(false);
+  const [errorMessage,setErrorMessage] = useState("");
+  const handleOpen = () => {
+    setErrorMessage("");
+    setOpen(true);
+  }
+
+  const handleClose = () => {
+    setErrorMessage("");
+    setOpen(false);
+  }
+
 
   let getFilterInput = (params) => {
     setName(params[0]);
@@ -119,12 +143,19 @@ function CategoryManagement() {
                 })}
                 <th className="border-b-white p-4">
                   <div>
-                    <Button
+                    <Button onClick={handleOpen}
                       className="white-outlined-button"
                       variant="outlined"
                     >
                       Add new
                     </Button>
+                    <CreateCategoryModalWindow
+                        isModalOpen={open}
+                        closeModal={handleClose}
+                        signal={signal}
+                        setErrorMessage={setErrorMessage}
+                        errorMessage = {errorMessage}
+                      />
                   </div>
                 </th>
               </tr>

@@ -10,7 +10,7 @@ function Navbar() {
   const [selectedColor, setSelectedColor] = useState("");
   const { isAdmin, setIsAdmin, username, setUsername, token, setToken, isLogged, setIsLoggedIn } = useContext(UserLoginContext);
   const location = useLocation();
-
+  localStorage.setItem("isAdmin",true);
   useEffect(() => {
     if (location.pathname === "/") {
       setSelectedItem("Movies");
