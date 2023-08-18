@@ -6,13 +6,15 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import ro.esolutions.cineflix.entities.UserCineflix;
 
+import java.util.UUID;
+
 
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
 public class UserDTO {
-
+    private String id;
     private String username;
     private String firstName;
     private String lastName;
