@@ -18,13 +18,13 @@ import {
     let [category, setCategory] = useState("");
     let [available, setAvailable] = useState(true);
     let [unavailable, setUnavailable] = useState(true);
-    let [rentedUntil, setRentedUntil] = useState(new Date());
+    let [rentedUntil, setRentedUntil] = useState("");
     let [rentedBy, setRentedBy] = useState("");
   
     useEffect(() => {
-      let date = `${rentedUntil.getFullYear()}-${(rentedUntil.getMonth() + 1)
+      let date = rentedUntil ? `${rentedUntil.getFullYear()}-${(rentedUntil.getMonth() + 1)
         .toString()
-        .padStart(2, "0")}-${rentedUntil.getDate().toString().padStart(2, "0")}`;
+        .padStart(2, "0")}-${rentedUntil.getDate().toString().padStart(2, "0")}` : "";
       let array = [];
       if (
         (available == true && unavailable == true) ||
@@ -32,9 +32,9 @@ import {
       ) {
         array.push(category, director, title, "BOTH", date, rentedBy);
       } else if (available == true && unavailable == false) {
-        array.push(category, director, title, "AVAILABLE", date, rentedBy);
+        array.push(category, director, title, "true", date, rentedBy);
       } else if (available == false && unavailable == true) {
-        array.push(category, director, title, "UNAVAILABLE", date, rentedBy);
+        array.push(category, director, title, "false", date, rentedBy);
       } else array.push(category, director, title, "", date, rentedBy);
       filterInput(array);
     }, [
@@ -107,17 +107,11 @@ import {
           <label>Rented Until:</label>
           <DatePicker
             selected={rentedUntil}
+            placeholderText={"Select the date"}
             onChange={(date) => setRentedUntil(date)}
           />
         </div>
         <div className="mt-4 mr-6">
-          {/* <TextField
-              id="outlined-search"
-              name="title"
-              label="Search rented by"
-              type="search"
-              onChange={(e) => setRentedBy(e.target.value)}
-            /> */}
           <InputLabel variant="standard" htmlFor="uncontrolled-native">
               Rented By
             </InputLabel>

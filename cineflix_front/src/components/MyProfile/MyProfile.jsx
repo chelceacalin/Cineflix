@@ -48,10 +48,14 @@ function MyProfile() {
 
   useEffect(() => {
     const normalizedSortField = sortField || "title";
+    let baseUrl = `http://localhost:8081/movies?owner_username=adminusername&sortField=${normalizedSortField}&direction=${direction ? "ASC" : "DESC"}&title=${title}&director=${director}&category=${category}&isAvailable=${isAvailable}&rentedUntil=${rentedUntil}&pageNo=${
+      parseInt(pageNo) - 1}&pageSize=${pageSize}`;
 
-    newUrl = `http://localhost:8081/movies?owner_username=adminusername&sortField=${normalizedSortField}&direction=${
-        direction ? "ASC" : "DESC"}&title=${title}&director=${director}&category=${category}&isAvailable=${isAvailable}&rentedUntil=${rentedUntil}&rentedBy=${!rentedBy? "adminusername" : rentedBy}&pageNo=${
-            parseInt(pageNo) - 1}&pageSize=${pageSize}`;
+    if (rentedBy) {
+      baseUrl += `&rentedBy=${rentedBy}`;
+    }
+  
+    newUrl = `${baseUrl}&pageNo=${parseInt(pageNo) - 1}&pageSize=${pageSize}`;
 
     axios.get(newUrl).then((elems) => {
       if (elems.data.content.length === 0 && pageNo > 1) {
@@ -61,7 +65,7 @@ function MyProfile() {
         setTotalPages(elems.data.totalPages);
       }
     });
-    // console.log("url: " + newUrl);
+    console.log("url: " + newUrl);
 
   }, [ sortField, direction, title, director, category, isAvailable, rentedUntil, rentedBy, ownerUsername, pageSize, pageNo ]);
 
@@ -114,43 +118,19 @@ function MyProfile() {
                           setSortField("title");
                           setDirection(!direction);
                         } else if (e.target.textContent === "Director") {
-                          if (
-                            title.length > 0 ||
-                            director.length > 0 ||
-                            category.length > 0
-                          ) {
-                            setDirection(!direction);
-                          }
+                          setDirection(!direction);
                           setSortField("director");
                           handleClick(e.target.textContent.toLowerCase());
                         } else if (e.target.textContent === "Category") {
-                          if (
-                            title.length > 0 ||
-                            director.length > 0 ||
-                            category.length > 0
-                          ) 
-                           setDirection(!direction);
+                          setDirection(!direction);
                           setSortField("category");
                           handleClick(e.target.textContent.toLowerCase());
                         } else if (e.target.textContent === "Rented Until") {
-                          if (
-                            title.length > 0 ||
-                            director.length > 0 ||
-                            category.length > 0
-                          ) {
-                            setDirection(!direction);
-                          }
+                          setDirection(!direction);
                           setSortField("rentedUntil");
                           handleClick(e.target.textContent.toLowerCase());
                         } else if (e.target.textContent === "Rented By") {
-                          console.log(e.target.textContent)
-                          if (
-                            title.length > 0 ||
-                            director.length > 0 ||
-                            category.length > 0
-                          ) {
-                            setDirection(!direction);
-                          }
+                          setDirection(!direction);
                           setSortField("rentedBy");
                           handleClick(e.target.textContent.toLowerCase());
                         }
@@ -168,8 +148,31 @@ function MyProfile() {
                         fill="none"
                         xmlns="http://www.w3.org/2000/svg"
                         onClick={(e) => {
-                          setDirection(!direction);
-                          handleClick(e.currentTarget.getAttribute("data-column").toLowerCase());
+                          const column = e.currentTarget.getAttribute("data-column");
+                          // setDirection(!direction);
+                          // handleClick(e.currentTarget.getAttribute("data-column").toLowerCase());
+                          if (column !== "Status") {
+                            if (column === "Title") {
+                              setSortField("title");
+                              setDirection(!direction);
+                            } else if (column === "Director") {
+                              setDirection(!direction);
+                              setSortField("director");
+                              handleClick(column.toLowerCase());
+                            } else if (column === "Category") {
+                              setDirection(!direction);
+                              setSortField("category");
+                              handleClick(column.toLowerCase());
+                            } else if (column === "Rented Until") {
+                              setDirection(!direction);
+                              setSortField("rentedUntil");
+                              handleClick(column.toLowerCase());
+                            } else if (column === "Rented By") {
+                              setDirection(!direction);
+                              setSortField("rentedBy");
+                              handleClick(column.toLowerCase());
+                            }
+                          }
                         }}
                       >
                         {elem != "Status" && (
