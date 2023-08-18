@@ -61,7 +61,7 @@ release-new-version-backend:
     - git config --global user.name "ci-robot"
   script:
     - git clone https://ci-robot:$GIT_ACCESS_TOKEN_BACKEND@$CI_SERVER_HOST/cineflix/cineflix-backend-k8s.git
-    - cd cineflix-k8s
+    - cd cineflix-backend-k8s
     # set the new docker image tag
     # dev
     - 'sed -i "/^\([[:space:]]*newTag: \).*/s//\1\"${CI_COMMIT_SHORT_SHA}\"/" backoffice/overlays/dev/kustomization.yaml'
