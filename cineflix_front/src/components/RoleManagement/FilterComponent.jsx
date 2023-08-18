@@ -1,13 +1,10 @@
 import {
   Checkbox,
-  FormControlLabel,
-  FormGroup,
   TextField,
 } from "@mui/material";
 import React from "react";
 import "./css/FilterComponent.css";
 import { useEffect, useState } from "react";
-import { Radio } from "@material-tailwind/react";
 
 function FilterComponent({ filterInput }) {
   let [firstName, setFirstName] = useState("");
@@ -30,13 +27,12 @@ function FilterComponent({ filterInput }) {
   }, [firstName, lastName, email, admin, user]);
 
   return (
-    <div className="filterContainer space-y-4 ml-6">
+    <div className="border-r-2 space-y-4 ml-6">
       <div className="mt-10 mr-6">
         <label>First Name:</label>
         <TextField
           id="outlined-search"
           name="firstName"
-          label="Search first name"
           type="search"
           onChange={(e) => setFirstName(e.target.value)}
         />
@@ -46,7 +42,6 @@ function FilterComponent({ filterInput }) {
         <TextField
           id="outlined-search"
           name="lastName"
-          label="Search last name"
           type="search"
           onChange={(e) => setLastName(e.target.value)}
         />
