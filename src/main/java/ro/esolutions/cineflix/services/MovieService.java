@@ -28,7 +28,6 @@ import static java.util.Objects.nonNull;
 @RequiredArgsConstructor
 public class MovieService {
 
-    public static final String RENTED_UNTIL = "rentedUntil";
     @NonNull
     private final MovieRepository movieRepository;
     @NonNull
@@ -36,7 +35,10 @@ public class MovieService {
 
     public static final String USERNAME = "movieHistories.rentedBy.username";
     public static final String MOVIE_HISTORIES_RENTED_UNTIL = "movieHistories.rentedUntil";
-    public static final String RENTED_BY="rentedBy";
+    public static final String RENTED_BY = "rentedBy";
+    public static final String RENTED_UNTIL = "rentedUntil";
+    public static final String DIRECTOR = "director";
+    public static final String TITLE = "title";
 
     public Page<MovieDTO> findUserMovies(MovieFilterDTO movieFilter, int pageNo, int pageSize) {
         if (movieFilter.getOwner_username() == null) {
@@ -78,11 +80,11 @@ public class MovieService {
         }
 
         if (nonNull(movieFilter.getTitle())) {
-            specification = specification.and(GenericSpecification.fieldNameLike(movieFilter.getTitle(), "title"));
+            specification = specification.and(GenericSpecification.fieldNameLike(movieFilter.getTitle(), TITLE));
         }
 
         if (nonNull(movieFilter.getDirector())) {
-            specification = specification.and(GenericSpecification.fieldNameLike(movieFilter.getDirector(), "director"));
+            specification = specification.and(GenericSpecification.fieldNameLike(movieFilter.getDirector(), DIRECTOR));
         }
 
         if (nonNull(movieFilter.getCategory())) {
@@ -97,6 +99,9 @@ public class MovieService {
             specification = specification.and(MovieSpecification.getRentedBy(movieFilter.getRentedBy()));
         }
 
+        if (nonNull(movieFilter.getRentedUntil())) {
+            specification = specification.and(MovieSpecification.rentedUntilEquals(movieFilter.getRentedUntil()));
+        }
 
         return specification;
     }
