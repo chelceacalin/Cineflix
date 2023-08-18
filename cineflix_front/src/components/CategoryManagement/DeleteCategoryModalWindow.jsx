@@ -1,26 +1,29 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { Button, Dialog, DialogContent } from '@mui/material'
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
-import React from 'react';
+import React, { useState } from 'react';
 import axios from 'axios';
 
 axios.defaults.withCredentials = true
 
 function DeleteCategoryModalWindow({ isEditModalOpen, closeEditModal, name, signal }) {
-    
+    const [requestError, setRequestError] = useState(false);
+
     const deleteCategory = () => {
         let url = 'http://localhost:8081/category/delete/' + name;
 
-        try {
-            const response = axios.post(url).then(() => {
+            axios.post(url).then(() => {
                 signal();
                 closeEditModal();
+                setRequestError(false);
             })
-        } catch (error) {
-
-        }
+            .catch((error) => {
+                if (error.response) {
+                    setRequestError(true);
+                }
+            })
     }
-    
+
     return (
         <Dialog open={isEditModalOpen} onClose={closeEditModal}>
             <div className="overflow-x-hidden">
@@ -33,6 +36,9 @@ function DeleteCategoryModalWindow({ isEditModalOpen, closeEditModal, name, sign
                             </span>
                             &nbsp; category ?
                         </p>
+                        <div>
+                            {!requestError ? <p></p> : <p className="font-bold text-basic-red">This category has been already deleted by another user!</p>}
+                        </div>
                         <div className="mt-2 mb-2">
                             <Button className="contained-button w-full" variant="contained" onClick={deleteCategory}>Yes</Button>
                         </div>

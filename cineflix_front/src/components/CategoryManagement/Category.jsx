@@ -4,7 +4,10 @@ import React from 'react'
 
 function Category({name, classes, signal}) {
   const [isEditModalOpen, setEditModalOpen] = React.useState(false);  
-  const closeEditModal = () => setEditModalOpen(false);
+  const closeEditModal = () => {
+    setEditModalOpen(false);
+    signal();
+}
   const openEditModal = () => setEditModalOpen(true);
 
   return (
