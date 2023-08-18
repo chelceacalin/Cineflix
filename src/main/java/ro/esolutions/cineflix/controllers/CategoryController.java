@@ -59,15 +59,9 @@ public class CategoryController {
         return categoryService.getCategories(dto,pageNo,pageSize);
     }
 
-    @DeleteMapping("/{id}")
+    @PostMapping ("/{id}")
     public ResponseEntity<String> deleteCategory(@PathVariable UUID id) {
-        try {
-            categoryService.deleteCategoryIfNoBooks(id);
-            return ResponseEntity.ok("Category deleted successfully");
-        } catch (CategoryNotFoundException e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
-        } catch (RuntimeException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+        categoryService.deleteCategoryIfNoBooks(id);
+        return ResponseEntity.ok("Category was deleted successfully");
     }
 }
