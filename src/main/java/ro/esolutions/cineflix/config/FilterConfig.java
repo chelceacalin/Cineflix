@@ -13,7 +13,7 @@ public class FilterConfig {
     public FilterRegistrationBean<ParameterNameValidationFilter> usersFilter() {
         FilterRegistrationBean<ParameterNameValidationFilter> registrationBean = new FilterRegistrationBean<>();
         registrationBean.setFilter(new ParameterNameValidationFilter(new HashSet<>(Arrays.asList("email", "role", "firstName", "lastName",
-                "pageNo", "pageSize", "sortField", "direction"))));
+                "pageNo", "pageSize", "sortField", "direction","username"))));
 
         registrationBean.addUrlPatterns("/users");
         return registrationBean;

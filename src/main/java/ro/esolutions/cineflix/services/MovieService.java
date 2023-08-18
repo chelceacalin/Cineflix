@@ -1,5 +1,7 @@
 package ro.esolutions.cineflix.services;
 
+import jakarta.persistence.criteria.Join;
+import jakarta.persistence.criteria.JoinType;
 import jakarta.transaction.Transactional;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -10,6 +12,7 @@ import ro.esolutions.cineflix.DTO.Movie.MovieDTO;
 import ro.esolutions.cineflix.DTO.Movie.MovieFilterDTO;
 import ro.esolutions.cineflix.entities.Movie;
 import ro.esolutions.cineflix.entities.MovieHistory;
+import ro.esolutions.cineflix.entities.UserCineflix;
 import ro.esolutions.cineflix.mapper.MovieMapper;
 import ro.esolutions.cineflix.repositories.MovieHistoryRepository;
 import ro.esolutions.cineflix.repositories.MovieRepository;
@@ -36,7 +39,7 @@ public class MovieService {
 
     public static final String USERNAME = "movieHistories.rentedBy.username";
     public static final String MOVIE_HISTORIES_RENTED_UNTIL = "movieHistories.rentedUntil";
-    public static final String RENTED_BY="rentedBy";
+    public static final String RENTED_BY = "rentedBy";
 
     public Page<MovieDTO> findUserMovies(MovieFilterDTO movieFilter, int pageNo, int pageSize) {
         if (movieFilter.getOwner_username() == null) {
@@ -58,6 +61,7 @@ public class MovieService {
         } else {
             pageable = PageRequest.of(pageNo, pageSize, Sort.by(sortDirection, sortField));
         }
+
 
         Page<Movie> moviesPage = movieRepository.findAll(specification, pageable);
         List<MovieDTO> movies = moviesPage.getContent().stream()
@@ -97,6 +101,9 @@ public class MovieService {
             specification = specification.and(MovieSpecification.getRentedBy(movieFilter.getRentedBy()));
         }
 
+        if (nonNull(movieFilter.getRentedUntil())) {
+            specification = specification.and(MovieSpecification.rentedUntilEquals(movieFilter.getRentedUntil()));
+        }
 
         return specification;
     }

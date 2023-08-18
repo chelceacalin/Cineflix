@@ -8,6 +8,8 @@ import ro.esolutions.cineflix.entities.Movie;
 import ro.esolutions.cineflix.entities.MovieHistory;
 import ro.esolutions.cineflix.entities.UserCineflix;
 
+import java.time.LocalDate;
+
 public class MovieSpecification {
     public static final String MOVIE_HISTORIES = "movieHistories";
     public static final String RENTED_BY = "rentedBy";
@@ -15,6 +17,7 @@ public class MovieSpecification {
     public static final String OWNER = "owner";
     private static final String USERNAME = "username";
     private static final String CATEGORY_FIELD = "category";
+    public static final String RENTED_UNTIL = "rentedUntil";
 
     public static <T> Specification<T> hasUsername(String username) {
         return (root, query, criteriaBuilder) -> {
@@ -30,11 +33,18 @@ public class MovieSpecification {
         };
     }
 
+    public static <T> Specification<T> rentedUntilEquals(LocalDate rentedUntil) {
+        return (root, query, criteriaBuilder) -> {
+            Join<Movie,MovieHistory> movieHistoryJoin=root.join(MOVIE_HISTORIES);
+            return criteriaBuilder.equal(movieHistoryJoin.get(RENTED_UNTIL),rentedUntil);
+        };
+    }
+
     public static <T> Specification<T> getRentedBy(String username) {
         return (root, query, criteriaBuilder) -> {
             Join<Movie, MovieHistory> movieHistoryJoin = root.join(MOVIE_HISTORIES, JoinType.INNER);
-            Join<MovieHistory, UserCineflix> userJoin = movieHistoryJoin.join(RENTED_BY, JoinType.INNER);
-            return criteriaBuilder.equal(userJoin.get(USERNAME), username);
+            Join<MovieHistory, UserCineflix> rentedByJoin = movieHistoryJoin.join(RENTED_BY, JoinType.INNER);
+            return criteriaBuilder.like(criteriaBuilder.lower(rentedByJoin.get(USERNAME)),"%"+ username.toLowerCase()+"%");
         };
     }
 }
