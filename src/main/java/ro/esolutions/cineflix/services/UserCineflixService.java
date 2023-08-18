@@ -100,7 +100,9 @@ public class UserCineflixService {
     }
 
     public UserInfoDTO getUserInfo(OidcUser oidcUser) {
-        Optional<UserCineflix> userCineflix = userCineflixRepository.findById(oidcUser.getUserInfo().getClaim("sub"));
+        String username = oidcUser.getUserInfo().getClaim("preferred_username");
+        Optional<UserCineflix> userCineflix = userCineflixRepository.findByUsername(username);
+
         if (userCineflix.isPresent()) {
             String token = oidcUser.getIdToken().getTokenValue();
             return UserInfoMapper.toDTO(userCineflix.get(), token);
@@ -109,13 +111,14 @@ public class UserCineflixService {
         throw new UsernameNotFoundException("User with username not found");
     }
 
-    public UserCineflix.Role getUserRole(String username) {
+    public UserCineflix.Role getUserRole(OidcUser oidcUser) {
+        String username = oidcUser.getUserInfo().getClaim("preferred_username");
         Optional<UserCineflix> userCineflix = userCineflixRepository.findByUsername(username);
 
         if (userCineflix.isPresent()) {
             return userCineflix.get().getRole();
         }
 
-        throw new UsernameNotFoundException("User with username not found");
+        throw new UsernameNotFoundException("User with username not found GET USER ROLE");
     }
 }
