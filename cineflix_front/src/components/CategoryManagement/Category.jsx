@@ -4,16 +4,24 @@ import React from 'react'
 
 import EditCategoryNameModalWindow from "./EditCategoryNameModalWindow";
 
-function Category({id, name, classes, updateCategory, signal}) {
+function Category({id, name, classes, updateCategory, signal, setErrorMessage, errorMessage}) {
     const [open, setOpen] = React.useState(false);
-    const handleOpen = () => setOpen(true);
-    const handleClose = () => setOpen(false);
     const [isEditModalOpen, setEditModalOpen] = React.useState(false);
     const closeEditModal = () => {
         setEditModalOpen(false);
         signal();
     }
     const openEditModal = () => setEditModalOpen(true);
+
+    const handleOpen = () => {
+        setErrorMessage("");
+        setOpen(true);
+    }
+    
+      const handleClose = () => {
+        setErrorMessage("");
+        setOpen(false);
+    }
 
   return (
     <tr>
@@ -30,6 +38,8 @@ function Category({id, name, classes, updateCategory, signal}) {
             id={id}
             name={name}
             updateCategory={updateCategory}
+            setErrorMessage={setErrorMessage}
+            errorMessage={errorMessage}
             />
         </td>
         <td className={classes}>
