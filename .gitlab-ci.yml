@@ -51,7 +51,7 @@ build-docker-image-backend:
 
 release-new-version-backend:
   image: bitnami/git
-  stage: release-new-version
+  stage: release-new-version-backend
   rules:
     - if: $CI_COMMIT_BRANCH == "main"
   needs:
