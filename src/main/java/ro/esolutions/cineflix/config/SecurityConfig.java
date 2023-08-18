@@ -38,10 +38,10 @@ public class SecurityConfig {
         httpSecurity
                 .authorizeHttpRequests(registry -> registry
                         .requestMatchers(HttpMethod.OPTIONS).permitAll()
-                        .requestMatchers("/users/").hasAnyRole("USER", "ADMIN")
-                        .requestMatchers("/users/").hasAnyRole("USER", "ADMIN")
+                        .requestMatchers("/users/").hasRole("ADMIN")
                         .requestMatchers("/users/update/**").hasRole("ADMIN")
                         .requestMatchers("/movies/**").hasAnyRole("USER", "ADMIN")
+                        .requestMatchers("/category/**").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )
                 .csrf(csrf -> csrf.disable())
