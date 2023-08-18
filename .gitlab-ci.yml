@@ -5,21 +5,21 @@ default:
     - esol-runner
 
 stages:
-  - build
+  # - build
   - build-front
   - build-docker-image-front
 #  - test
-  - build-docker-image
-  - release-new-version
+  # - build-docker-image
+  # - release-new-version
 
-build:
- image: maven:3-openjdk-17-slim
- stage: build
- script:
-   - mvn -DskipTests package
- artifacts:
-   paths:
-     - target/*.jar
+# build:
+#  image: maven:3-openjdk-17-slim
+#  stage: build
+#  script:
+#    - mvn -DskipTests package
+#  artifacts:
+#    paths:
+#      - target/*.jar
 
 
 build-front:
@@ -63,41 +63,41 @@ build-docker-image-front:
     - docker build -t $CI_REGISTRY_IMAGE-front:$CI_COMMIT_SHORT_SHA .
     - docker push $CI_REGISTRY_IMAGE-front:$CI_COMMIT_SHORT_SHA
 
-build-docker-image:
-  image: docker:24.0.2
-  stage: build-docker-image
-  services:
-    - docker:dind
-  variables: 
-    DOCKER_TLS_CERTDIR: ""
-  dependencies:
-    - build
-  script:
-    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
-    - docker build -t $CI_REGISTRY_IMAGE:$CI_COMMIT_SHORT_SHA .
-    - docker push $CI_REGISTRY_IMAGE:$CI_COMMIT_SHORT_SHA
+# build-docker-image:
+#   image: docker:24.0.2
+#   stage: build-docker-image
+#   services:
+#     - docker:dind
+#   variables: 
+#     DOCKER_TLS_CERTDIR: ""
+#   dependencies:
+#     - build
+#   script:
+#     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+#     - docker build -t $CI_REGISTRY_IMAGE:$CI_COMMIT_SHORT_SHA .
+#     - docker push $CI_REGISTRY_IMAGE:$CI_COMMIT_SHORT_SHA
 
 
-release-new-version:
-  image: bitnami/git
-  stage: release-new-version
-  rules:
-    - if: $CI_COMMIT_BRANCH == "main"
-  needs:
-    - build-docker-image
-  before_script:
-    - git config --global user.email "ci-robot"
-    - git config --global user.name "ci-robot"
-  script:
-    - git clone https://ci-robot:$GIT_ACCESS_TOKEN@$CI_SERVER_HOST/cineflix/cineflix-k8s.git
-    - cd cineflix-k8s
-    # set the new docker image tag
-    # dev
-    - 'sed -i "/^\([[:space:]]*newTag: \).*/s//\1\"${CI_COMMIT_SHORT_SHA}\"/" backoffice/overlays/dev/kustomization.yaml'
-    # prod
-    - 'sed -i "/^\([[:space:]]*newTag: \).*/s//\1\"${CI_COMMIT_SHORT_SHA}\"/" backoffice/overlays/prod/kustomization.yaml'
-    # push changes
-    - git add .
-    - git commit -m "Upgrade deployment with new docker image tag $CI_COMMIT_SHORT_SHA"
-    - git remote set-url origin "https://ci-robot:$GIT_ACCESS_TOKEN@$CI_SERVER_HOST/cineflix/cineflix-k8s.git"
-    - git push -o ci.skip origin HEAD:main
+# release-new-version:
+#   image: bitnami/git
+#   stage: release-new-version
+#   rules:
+#     - if: $CI_COMMIT_BRANCH == "main"
+#   needs:
+#     - build-docker-image
+#   before_script:
+#     - git config --global user.email "ci-robot"
+#     - git config --global user.name "ci-robot"
+#   script:
+#     - git clone https://ci-robot:$GIT_ACCESS_TOKEN@$CI_SERVER_HOST/cineflix/cineflix-k8s.git
+#     - cd cineflix-k8s
+#     # set the new docker image tag
+#     # dev
+#     - 'sed -i "/^\([[:space:]]*newTag: \).*/s//\1\"${CI_COMMIT_SHORT_SHA}\"/" backoffice/overlays/dev/kustomization.yaml'
+#     # prod
+#     - 'sed -i "/^\([[:space:]]*newTag: \).*/s//\1\"${CI_COMMIT_SHORT_SHA}\"/" backoffice/overlays/prod/kustomization.yaml'
+#     # push changes
+#     - git add .
+#     - git commit -m "Upgrade deployment with new docker image tag $CI_COMMIT_SHORT_SHA"
+#     - git remote set-url origin "https://ci-robot:$GIT_ACCESS_TOKEN@$CI_SERVER_HOST/cineflix/cineflix-k8s.git"
+#     - git push -o ci.skip origin HEAD:main
