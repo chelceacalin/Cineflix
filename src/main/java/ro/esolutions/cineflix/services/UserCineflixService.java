@@ -12,8 +12,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.oauth2.core.oidc.OidcUserInfo;
 import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 import org.springframework.stereotype.Service;
-import ro.esolutions.cineflix.DTO.UserDTO;
-import ro.esolutions.cineflix.DTO.UserFilterDTO;
 import ro.esolutions.cineflix.DTO.UserInfoDTO;
 import ro.esolutions.cineflix.DTO.UserCineflix.UserDTO;
 import ro.esolutions.cineflix.DTO.UserCineflix.UserFilterDTO;
