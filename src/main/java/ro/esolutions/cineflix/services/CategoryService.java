@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import ro.esolutions.cineflix.DTO.Category.CategoryDTO;
 import ro.esolutions.cineflix.DTO.Category.CategoryFilterDTO;
 import ro.esolutions.cineflix.entities.Category;
+import ro.esolutions.cineflix.exceptions.CategoryContainsMovieException;
 import ro.esolutions.cineflix.exceptions.CategoryNotFoundException;
 import ro.esolutions.cineflix.mapper.CategoryMapper;
 import ro.esolutions.cineflix.repositories.CategoryRepository;
@@ -65,34 +66,33 @@ public class CategoryService {
     }
 
     public Page<CategoryDTO> getCategories(CategoryFilterDTO dto, int pageNo, int pageSize) {
-        if(dto.getName() == null && dto.getDirection() == null){
+        if (dto.getName() == null && dto.getDirection() == null) {
             return categoryRepository.findAll(PageRequest.of(pageNo, pageSize)).map(CategoryMapper::toDTO);
         }
         Specification<Category> specification = getSpecification(dto);
-        Pageable pageable;
         Sort.Direction sortDirection = Sort.Direction.fromString(dto.getDirection());
-        pageable = PageRequest.of(pageNo, pageSize, Sort.by(sortDirection, "name"));
-        return categoryRepository.findAll(specification,pageable).map(CategoryMapper::toDTO);
+        Pageable pageable = PageRequest.of(pageNo, pageSize, Sort.by(sortDirection, "name"));
+        return categoryRepository.findAll(specification, pageable).map(CategoryMapper::toDTO);
     }
 
     public <T> Specification<T> getSpecification(CategoryFilterDTO dto) {
         Specification<T> specification = Specification.where(null);
 
         if (nonNull(dto.getName())) {
-            specification = specification.and(CategorySpecification.getCategoryLike(dto.getName(),"name"));
+            specification = specification.and(CategorySpecification.getCategoryLike(dto.getName(), "name"));
         }
         return specification;
     }
 
 
-    public void deleteCategoryIfNoBooks(UUID id) throws CategoryNotFoundException {
-        Category category = categoryRepository.findById(id)
+    public void deleteCategory(UUID id) {
+        Category categoryFound = categoryRepository.findById(id)
                 .orElseThrow(() -> new CategoryNotFoundException("Category to be deleted does not exist"));
 
-        if (category.getMovieList().isEmpty()) {
-            categoryRepository.delete(category);
-        } else {
-            throw new RuntimeException("The category cannot be deleted as there are movie with this category available in the library");
-        }
+        categoryFound.getMovieList().stream()
+                .findAny()
+                .ifPresent(movie -> {
+                    throw new CategoryContainsMovieException("Found a movie, can not delete the category");
+                });
     }
 }
