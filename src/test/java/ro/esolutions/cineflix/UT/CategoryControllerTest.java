@@ -31,45 +31,46 @@ public class CategoryControllerTest {
     CategoryController categoryController;
 
     @Test
-    @DisplayName("Delete Category Without Exception Thrown Controller UT")
-    public void deleteCategoryWithoutExceptionThrown() throws CategoryNotFoundException {
-        String name = "Drama";
-        ResponseEntity<?> deletedUser = categoryController.deleteCategory(name);
-        verify(categoryService, times(1)).deleteCategory(name);
-        assertEquals(HttpStatus.OK, deletedUser.getStatusCode());
+    @DisplayName("Create category")
+    public void createCategory() {
+        Category category = aCategory();
+        CategoryDTO categoryDTO = aCategoryDTO();
+        when(categoryService.validateCategory(categoryDTO)).thenReturn(Optional.empty());
+        when(categoryService.createCategory(categoryDTO)).thenReturn(category);
+        ResponseEntity response = categoryController.createCategory(categoryDTO);
+        verify(categoryService,times(1)).createCategory(categoryDTO);
+        assertEquals(ResponseEntity.ok(category),response);
     }
 
     @Test
-    @DisplayName("Delete Category With Exception Thrown Controller UT")
-    public void deleteCategoryWithExceptionThrown() throws CategoryNotFoundException {
-        String name = "Drama";
-        doThrow(CategoryNotFoundException.class).when(categoryService).deleteCategory(name);
-        ResponseEntity<?> response = categoryController.deleteCategory(name);
-        verify(categoryService, times(1)).deleteCategory(name);
-        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+    @DisplayName("Thrown exception when category already exists or category name is null")
+    public void thrownExceptionWhenCategoryAlreadyExistsOrIsNull() {
+        CategoryDTO categoryDTO = aCategoryDTO();
+        when(categoryService.validateCategory(categoryDTO)).thenReturn(Optional.of("Error"));
+        ResponseEntity response = categoryController.createCategory(categoryDTO);
+        verify(categoryService,times(0)).createCategory(categoryDTO);
+        assertEquals(new ResponseEntity<>("Error", HttpStatus.BAD_REQUEST),response);
     }
 
     @Test
-    @DisplayName("Update category controller test UT")
+    @DisplayName("Update category")
     public void updateCategory() throws CategoryNotFoundException {
         Category category = aCategory();
         CategoryDTO categoryDTO = aCategoryDTO();
         when(categoryService.validateCategory(categoryDTO)).thenReturn(Optional.empty());
         when(categoryService.updateCategory(categoryDTO,category.getId())).thenReturn(category);
-        ResponseEntity<?> response = categoryController.updateCategory(categoryDTO,category.getId());
+        ResponseEntity response = categoryController.updateCategory(categoryDTO,category.getId());
         verify(categoryService,times(1)).updateCategory(categoryDTO,category.getId());
         assertEquals(ResponseEntity.ok(category),response);
     }
     @Test
-    @DisplayName("Update category exception controller test UT")
-    public void updateCategoryException() throws CategoryNotFoundException {
+    @DisplayName("Thrown exception when updating a that category already exists or is null")
+    public void thrownExceptionWhenUpdatingACategoryThatAlreadyExistsOrIsNull() throws CategoryNotFoundException {
         CategoryDTO categoryDTO = aCategoryDTO();
         Category category = aCategory();
         when(categoryService.validateCategory(categoryDTO)).thenReturn(Optional.of("Error"));
-        ResponseEntity<?> response = categoryController.updateCategory(categoryDTO,category.getId());
+        ResponseEntity response = categoryController.updateCategory(categoryDTO,category.getId());
         verify(categoryService,times(0)).updateCategory(categoryDTO,category.getId());
         assertEquals(new ResponseEntity<>("Error", HttpStatus.BAD_REQUEST),response);
-    }
-
-
+       }
 }

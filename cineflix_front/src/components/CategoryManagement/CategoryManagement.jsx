@@ -4,6 +4,10 @@ import { Button } from "@mui/material";
 import FilterCategory from "./FilterCategory";
 import "./css/CategoryManagement.css";
 import axios from "axios";
+import CreateCategoryModalWindow from "./CreateCategoryModalWIndow.jsx";
+import category from "./Category";
+import { faL } from "@fortawesome/free-solid-svg-icons";
+import Pagination from "../RoleManagement/Pagination";
 axios.defaults.withCredentials = true;
 
 function CategoryManagement() {
@@ -24,7 +28,9 @@ function CategoryManagement() {
       setTotalCategories(data.data.content.length);
       setCategories(data.data.content);
     });
-  }, [totalCategories, signalCall]);
+
+  }, [totalCategories,signalCall]);
+
 
   let handleClick = (fieldName) => {
     if (lastClicked === fieldName) {
@@ -49,15 +55,44 @@ function CategoryManagement() {
         setTotalPages(elems.data.totalPages);
       }
     });
-  }, [direction, name, pageSize, pageNo]);
+  }, [direction, name, pageSize, pageNo,categories.length]);
 
   const updatePageNumber = (pgNo) => {
     setPageNo(pgNo);
   };
 
+  const [open, setOpen] = React.useState(false);
+  const [errorMessage,setErrorMessage] = useState("");
+  const handleOpen = () => {
+    setErrorMessage("");
+    setOpen(true);
+  }
+
+  const handleClose = () => {
+    setErrorMessage("");
+    setOpen(false);
+  }
+
+
   let getFilterInput = (params) => {
     setName(params[0]);
   };
+
+  const handleSelectChange = (event) => {
+    const value = event.target.value;
+    setPageSize(value);
+  };
+
+  const updateCategory = (updatedCategory) => {
+    const updatedCategories = categories.map(category => {
+      if (category.id === updatedCategory.id) {
+        return updatedCategory;
+      }
+      return category;
+    });
+    setCategories(updatedCategories);
+  };
+
 
   return (
     <>
@@ -108,25 +143,34 @@ function CategoryManagement() {
                 })}
                 <th className="border-b-white p-4">
                   <div>
-                    <Button
+                    <Button onClick={handleOpen}
                       className="white-outlined-button"
                       variant="outlined"
                     >
                       Add new
                     </Button>
+                    <CreateCategoryModalWindow
+                        isModalOpen={open}
+                        closeModal={handleClose}
+                        signal={signal}
+                        setErrorMessage={setErrorMessage}
+                        errorMessage = {errorMessage}
+                      />
                   </div>
                 </th>
               </tr>
             </thead>
             <tbody className="text-blue-marine">
-              {categories.map(({ name }, index) => {
+              {categories.map(({ name, id }, index) => {
                 const isLast = index === categories.length - 1;
                 const classes = isLast ? "px-4 py-2" : "px-4 py-2 border-b-2";
 
                 return (
                   <Category
+                    id={id}
                     name={name}
                     classes={classes}
+                    updateCategory={updateCategory}
                     key={name}
                     signal={signal}
                   />
@@ -134,6 +178,35 @@ function CategoryManagement() {
               })}
             </tbody>
           </table>
+          <span className="w-96 bg-basic-red flex flex-wrap py-3 mb-4">
+          <span className=" inline-flex marginResizable">
+            <p className="text-white font-normal">
+              Results per page:{" "}
+            </p>
+            <p className="ml-5">
+              <select
+                name="sizes"
+                id="sizes"
+                form="sizesform"
+                onChange={handleSelectChange}
+              >
+                <option value="15">15</option>
+                <option value="10">10</option>
+                <option value="5">5</option>
+              </select>
+            </p>
+          </span>
+          <div className="ml-10 justify-center w-1/2 items-center">
+            <Pagination
+              pageNo={pageNo}
+              pageSize={pageSize}
+              totalPages={totalPages}
+              updatePageNumber={updatePageNumber}
+              responseLength={totalCategories}
+              nrCurrentUsers={categories.length}
+            />
+          </div>
+        </span>
         </div>
       </div>
     </>
