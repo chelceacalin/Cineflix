@@ -12,13 +12,13 @@ function CreateCategoryModalWindow({ isModalOpen, closeModal, signal, setErrorMe
 
   const createCategory = () => {
     let url = "http://localhost:8081/category/create";
+    setCategoryDTO("");
     axios.post(url, { name: categoryDTO }).then(() => {
       signal();
       closeModal();
     })
         .catch((error) => {
           if(error.response){
-            console.log(error.response.data)
             setErrorMessage(error.response.data);
           }
         })
