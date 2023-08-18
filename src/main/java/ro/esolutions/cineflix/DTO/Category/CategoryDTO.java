@@ -1,4 +1,4 @@
-package ro.esolutions.cineflix.DTO;
+package ro.esolutions.cineflix.DTO.Category;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -14,6 +14,5 @@ import java.util.UUID;
 public class CategoryDTO {
 
     private UUID id;
-
     private String name;
 }
