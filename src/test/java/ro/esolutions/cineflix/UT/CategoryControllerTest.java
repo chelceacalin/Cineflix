@@ -13,6 +13,7 @@ import ro.esolutions.cineflix.controllers.CategoryController;
 import ro.esolutions.cineflix.entities.Category;
 import ro.esolutions.cineflix.exceptions.CategoryNotFoundException;
 import ro.esolutions.cineflix.services.CategoryService;
+import ro.esolutions.cineflix.util.CategoryGenerator;
 
 import java.util.Optional;
 
@@ -31,7 +32,7 @@ public class CategoryControllerTest {
     CategoryController categoryController;
 
     @Test
-    @DisplayName("Create category controller test UT")
+    @DisplayName("Create category")
     public void createCategory() {
         Category category = aCategory();
         CategoryDTO categoryDTO = aCategoryDTO();
@@ -43,8 +44,8 @@ public class CategoryControllerTest {
     }
 
     @Test
-    @DisplayName("Create category exception controller test UT")
-    public void createCategoryException() {
+    @DisplayName("Thrown exception when category already exists or is null")
+    public void thrown_exception_when_category_already_exists_or_is_null() {
         CategoryDTO categoryDTO = aCategoryDTO();
         when(categoryService.validateCategory(categoryDTO)).thenReturn(Optional.of("Error"));
         ResponseEntity<?> response = categoryController.createCategory(categoryDTO);

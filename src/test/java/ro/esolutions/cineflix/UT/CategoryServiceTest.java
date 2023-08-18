@@ -18,6 +18,7 @@ import java.util.UUID;
 import static org.junit.Assert.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
+import static ro.esolutions.cineflix.util.CategoryGenerator.aCategory;
 import static ro.esolutions.cineflix.util.CategoryGenerator.aCategoryDTO;
 
 @ExtendWith(MockitoExtension.class)
@@ -31,7 +32,7 @@ public class CategoryServiceTest {
 
 
     @Test
-    @DisplayName("Create category test UT")
+    @DisplayName("Create category")
     public void createCategory() {
         Category categoryToBeSaved = aCategory();
         categoryToBeSaved.setId(null);
@@ -44,7 +45,7 @@ public class CategoryServiceTest {
 
 
     @Test()
-    @DisplayName("Update Category With Exception Thrown Service UT")
+    @DisplayName("Delete Category With Exception Thrown Service UT")
     public void deleteCategoryWithExceptionThrown() {
         UUID id = UUID.fromString("12f310ee-3cc9-11ee-be56-0242ac120002");
         CategoryDTO categoryDTO = aCategoryDTO();
