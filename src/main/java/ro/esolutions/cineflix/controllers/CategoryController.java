@@ -25,18 +25,18 @@ public class CategoryController {
     private final CategoryService categoryService;
 
     @PostMapping("/create")
-    public ResponseEntity<?> createCategory(@RequestBody final CategoryDTO categoryDTO) {
+    public ResponseEntity createCategory(@RequestBody final CategoryDTO categoryDTO) {
         Optional<String> errorOptional = categoryService.validateCategory(categoryDTO);
         if (errorOptional.isEmpty()) {
-            return new ResponseEntity<>(categoryService.createCategory(categoryDTO), HttpStatus.OK);
+            return new ResponseEntity(categoryService.createCategory(categoryDTO), HttpStatus.OK);
         } else {
-            return new ResponseEntity<>(errorOptional.get(), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity(errorOptional.get(), HttpStatus.BAD_REQUEST);
         }
 
     }
 
-    @PutMapping("/update/{id}")
-    public ResponseEntity<?> updateCategory(@RequestBody CategoryDTO categoryDTO,
+    @PostMapping("/update/{id}")
+    public ResponseEntity updateCategory(@RequestBody CategoryDTO categoryDTO,
                                             @PathVariable("id") @NotNull UUID id) {
         Optional<String> errorOptional = categoryService.validateCategory(categoryDTO);
         if (errorOptional.isEmpty()) {

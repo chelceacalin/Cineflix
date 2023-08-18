@@ -8,9 +8,9 @@ function Navbar() {
   let navigate = useNavigate();
   const [selectedItem, setSelectedItem] = useState("");
   const [selectedColor, setSelectedColor] = useState("");
-  const { isAdmin, setIsAdmin } = useContext(UserLoginContext);
+  const { isAdmin, setIsAdmin, username, setUsername, token, setToken, isLogged, setIsLoggedIn } = useContext(UserLoginContext);
   const location = useLocation();
-
+  localStorage.setItem("isAdmin",true);
   useEffect(() => {
     if (location.pathname === "/") {
       setSelectedItem("Movies");
@@ -271,6 +271,11 @@ function Navbar() {
                   onClick={(e) => {
                     e.preventDefault();
                     handleItemClick("logout", "red");
+                    setIsAdmin(false);
+                    setIsLoggedIn(false);
+                    setUsername(null);
+                    setToken(null);
+                    window.location.href="http://localhost:8081/logout";
                   }}
                 >
                   <svg
