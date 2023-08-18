@@ -60,7 +60,7 @@ release-new-version-backend:
     - git config --global user.email "ci-robot"
     - git config --global user.name "ci-robot"
   script:
-    - git clone https://ci-robot:$GIT_ACCESS_TOKEN@$CI_SERVER_HOST/cineflix/cineflix-k8s.git
+    - git clone https://ci-robot:$GIT_ACCESS_TOKEN_BACKEND@$CI_SERVER_HOST/cineflix/cineflix-k8s.git
     - cd cineflix-k8s
     # set the new docker image tag
     # dev
@@ -70,7 +70,7 @@ release-new-version-backend:
     # push changes
     - git add .
     - git commit -m "Upgrade deployment with new docker image tag $CI_COMMIT_SHORT_SHA"
-    - git remote set-url origin "https://ci-robot:$GIT_ACCESS_TOKEN@$CI_SERVER_HOST/cineflix/cineflix-k8s.git"
+    - git remote set-url origin "https://ci-robot:$GIT_ACCESS_TOKEN_BACKEND@$CI_SERVER_HOST/cineflix/cineflix-k8s.git"
     - git push -o ci.skip origin HEAD:main
 
 
@@ -114,7 +114,7 @@ build-docker-image-frontend:
 #     - git config --global user.email "ci-robot"
 #     - git config --global user.name "ci-robot"
 #   script:
-#     - git clone https://ci-robot:$GIT_ACCESS_TOKEN@$CI_SERVER_HOST/cineflix/cineflix-k8s.git
+#     - git clone https://ci-robot:$GIT_ACCESS_TOKEN_BACKEND@$CI_SERVER_HOST/cineflix/cineflix-k8s.git
 #     - cd cineflix-k8s
 #     # set the new docker image tag
 #     # dev
@@ -124,5 +124,5 @@ build-docker-image-frontend:
 #     # push changes
 #     - git add .
 #     - git commit -m "Upgrade deployment with new docker image tag $CI_COMMIT_SHORT_SHA"
-#     - git remote set-url origin "https://ci-robot:$GIT_ACCESS_TOKEN@$CI_SERVER_HOST/cineflix/cineflix-k8s.git"
+#     - git remote set-url origin "https://ci-robot:$GIT_ACCESS_TOKEN_BACKEND@$CI_SERVER_HOST/cineflix/cineflix-k8s.git"
 #     - git push -o ci.skip origin HEAD:main
