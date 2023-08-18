@@ -4,8 +4,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ro.esolutions.cineflix.DTO.UserDTO;
-import ro.esolutions.cineflix.DTO.UserFilterDTO;
+import ro.esolutions.cineflix.DTO.UserCineflix.UserDTO;
+import ro.esolutions.cineflix.DTO.UserCineflix.UserFilterDTO;
 import ro.esolutions.cineflix.entities.UserCineflix;
 import ro.esolutions.cineflix.services.UserCineflixService;
 
