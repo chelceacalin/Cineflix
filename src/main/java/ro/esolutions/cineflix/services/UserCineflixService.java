@@ -111,8 +111,7 @@ public class UserCineflixService {
         throw new UsernameNotFoundException("User with username not found");
     }
 
-    public UserCineflix.Role getUserRole(OidcUser oidcUser) {
-        String username = oidcUser.getUserInfo().getClaim("preferred_username");
+    public UserCineflix.Role getUserRole(String username) {
         Optional<UserCineflix> userCineflix = userCineflixRepository.findByUsername(username);
 
         if (userCineflix.isPresent()) {

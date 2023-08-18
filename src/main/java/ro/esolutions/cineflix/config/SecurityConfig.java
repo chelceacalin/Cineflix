@@ -14,8 +14,8 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.authority.mapping.GrantedAuthoritiesMapper;
 import org.springframework.security.oauth2.client.oidc.web.logout.OidcClientInitiatedLogoutSuccessHandler;
 import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
-import org.springframework.security.oauth2.core.oidc.user.OidcUser;
-import org.springframework.security.oauth2.core.user.OAuth2UserAuthority;
+import org.springframework.security.oauth2.core.oidc.OidcUserInfo;
+import org.springframework.security.oauth2.core.oidc.user.OidcUserAuthority;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 import ro.esolutions.cineflix.entities.UserCineflix;
@@ -36,14 +36,14 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity
-                .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(registry -> registry
                         .requestMatchers(HttpMethod.OPTIONS).permitAll()
-                        .requestMatchers("/users/").hasRole("USER")
                         .requestMatchers("/users/update/**").hasRole("ADMIN")
+                        .requestMatchers("/users/").hasRole("USER")
                         .requestMatchers("/movies/**").hasAnyRole("USER", "ADMIN")
                         .anyRequest().authenticated()
                 )
+                .csrf(csrf -> csrf.disable())
                 .oauth2Login(oauth2Login -> oauth2Login
                         .userInfoEndpoint(userInfo -> {
                             userInfo.userAuthoritiesMapper(this.userAuthoritiesMapper());
@@ -67,9 +67,11 @@ public class SecurityConfig {
             Set<GrantedAuthority> mappedAuthorities = new HashSet<>();
 
             authorities.forEach(authority -> {
-                if (authority instanceof OidcUser oidcUser) {
-                    userCineflixService.addUserCineflix(oidcUser.getUserInfo());
-                    UserCineflix.Role role = userCineflixService.getUserRole(oidcUser);
+                if (authority instanceof OidcUserAuthority oidcUserAuthority) {
+                    OidcUserInfo userInfo = oidcUserAuthority.getUserInfo();
+
+                    userCineflixService.addUserCineflix(userInfo);
+                    UserCineflix.Role role = userCineflixService.getUserRole(userInfo.getClaim("preferred_username"));
 
                     GrantedAuthority mappedAuthority = switch (role) {
                         case USER -> new SimpleGrantedAuthority("ROLE_USER");
