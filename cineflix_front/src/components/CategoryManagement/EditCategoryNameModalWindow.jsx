@@ -23,21 +23,18 @@ function EditRoleModalWindow({ isModalOpen, closeModal, id, name, updateCategory
 
     const editCategoryName = () => {
         let url = 'http://localhost:8081/category/update/' + id;
-        console.log(newName);
         try {
             setCategoryDTO(() => ({
                 'name': newName,
                 'id': id
             }));
             const response = axios.post(url, categoryDTO).then(()=>{
-                console.log("AICI");
                 updateCategory(categoryDTO);
                 closeModal();
             }).catch(error => {
                 console.log("error: ", error.response.data);
             });
         } catch (error) {
-            console.log(error);
         }
     };
 
