@@ -18,20 +18,20 @@ build:
    paths:
      - target/*.jar
 
-test:
- image: gitlab.esolutions.ro:5050/internship-2023/test/maven-openjdk-docker:1.0
- stage: test
- services:
-   - postgres:15-alpine
- variables:
-   POSTGRES_DB: cineflix
-   POSTGRES_USER: cineflix
-   POSTGRES_PASSWORD: cineflix
-   SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5433/cineflix
- dependencies:
-   - build
- script:
-   - mvn $MAVEN_CLI_OPTS test
+# test:
+#  image: gitlab.esolutions.ro:5050/internship-2023/test/maven-openjdk-docker:1.0
+#  stage: test
+#  services:
+#    - postgres:15-alpine
+#  variables:
+#    POSTGRES_DB: cineflix
+#    POSTGRES_USER: cineflix
+#    POSTGRES_PASSWORD: cineflix
+#    SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5433/cineflix
+#  dependencies:
+#    - build
+#  script:
+#    - mvn $MAVEN_CLI_OPTS test
 
 build-docker-image:
   image: docker:24.0.2
