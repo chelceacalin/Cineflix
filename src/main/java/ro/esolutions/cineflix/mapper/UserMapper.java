@@ -1,6 +1,6 @@
 package ro.esolutions.cineflix.mapper;
 
-import ro.esolutions.cineflix.DTO.UserDTO;
+import ro.esolutions.cineflix.DTO.UserCineflix.UserDTO;
 import ro.esolutions.cineflix.entities.UserCineflix;
 
 public class UserMapper {

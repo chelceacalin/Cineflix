@@ -1,7 +1,6 @@
 package ro.esolutions.cineflix.services;
 
 import jakarta.transaction.Transactional;
-import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -9,8 +8,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
-import ro.esolutions.cineflix.DTO.CategoryDTO;
-import ro.esolutions.cineflix.DTO.CategoryFilterDTO;
+import ro.esolutions.cineflix.DTO.Category.CategoryDTO;
+import ro.esolutions.cineflix.DTO.Category.CategoryFilterDTO;
 import ro.esolutions.cineflix.entities.Category;
 import ro.esolutions.cineflix.exceptions.CategoryNotFoundException;
 import ro.esolutions.cineflix.mapper.CategoryMapper;
@@ -26,7 +25,7 @@ import static java.util.Objects.nonNull;
 @Transactional
 @RequiredArgsConstructor
 public class CategoryService {
-    @NonNull
+
     private final CategoryRepository categoryRepository;
 
     public Optional<String> validateCategory(CategoryDTO categoryDTO) {
@@ -77,5 +76,17 @@ public class CategoryService {
             specification = specification.and(CategorySpecification.getCategoryLike(dto.getName(),"name"));
         }
         return specification;
+    }
+
+
+    public void deleteCategoryIfNoBooks(UUID id) throws CategoryNotFoundException {
+        Category category = categoryRepository.findById(id)
+                .orElseThrow(() -> new CategoryNotFoundException("Category to be deleted does not exist"));
+
+        if (category.getMovieList().isEmpty()) {
+            categoryRepository.delete(category);
+        } else {
+            throw new RuntimeException("The category cannot be deleted as there are movie with this category available in the library");
+        }
     }
 }

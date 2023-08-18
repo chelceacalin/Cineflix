@@ -30,7 +30,7 @@ function Pagination({
             getPreviousPage();
           }}
         >
-          <div className="relative block rounded bg-transparent px-3  text-sm text-neutral-600 transition-all duration-300 hover:bg-neutral-100 dark:text-white dark:hover:bg-white dark:hover:text-blue-marine">
+          <div className="relative block rounded bg-transparent px-3  text-sm text-neutral-600 transition-all duration-300 hover:bg-neutral-100 text-white hover:bg-white hover:text-blue-marine">
             Previous
           </div>
         </li>
@@ -44,7 +44,7 @@ function Pagination({
                   onClick={()=>handlePageClick(parseInt(index)+1)}
                 >
                 <div
-                  className={` ml-0.5 mr-0.5 relative block rounded bg-transparent px-3 py-1 text-sm text-neutral-600 transition-all duration-300 hover:bg-neutral-100 dark:text-white dark:hover:bg-white dark:hover:text-blue-marine ${
+                  className={` ml-0.5 mr-0.5 relative block rounded bg-transparent px-3 py-1 text-sm text-neutral-600 transition-all duration-300 hover:bg-neutral-100 text-white hover:bg-white hover:text-blue-marine ${
                     index + 1 === pageNo ? "current-page" : ""
                   }`}
                 >
@@ -66,7 +66,7 @@ function Pagination({
                   onClick={()=>handlePageClick(parseInt(index)+1)}
                 >
                   <div
-                    className={` ml-0.5 mr-0.5 relative block rounded bg-transparent px-3 py-1 text-sm text-neutral-600 transition-all duration-300 hover:bg-neutral-100 dark:text-white dark:hover:bg-white dark:hover:text-blue-marine ${
+                    className={` ml-0.5 mr-0.5 relative block rounded bg-transparent px-3 py-1 text-sm text-neutral-600 transition-all duration-300 hover:bg-neutral-100 text-white hover:bg-white hover:text-blue-marine ${
                       index + 1 === pageNo ? "current-page" : ""
                     }`}
                   >
@@ -76,15 +76,31 @@ function Pagination({
                 </li>
               ))}
 
+            {pageNo <= 3 ? (
+              <div
+                className={` ml-0.5 mr-0.5 relative block rounded bg-transparent px-3 py-1 text-sm text-neutral-600 transition-all duration-300 hover:bg-neutral-100 text-white hover:bg-white hover:text-blue-marine`}
+              >
+                {"..."}
+              </div>
+            ) : null}
+
             {pageNo > 3 && pageNo < totalPages - 2 && (
               <>
+                {pageNo > 4 ? (
+                  <div
+                    className={` ml-0.5 mr-0.5 relative block rounded bg-transparent px-3 py-1 text-sm text-neutral-600 transition-all duration-300 hover:bg-neutral-100 text-white hover:bg-white hover:text-blue-marine`}
+                  >
+                  {"..."}
+                  </div>
+                  ) : null}
+
                 <li
                   key={pageNo}
                   onClick={() => handlePageClick(parseInt(pageNo))
                  }
                 >
                   <div
-                    className={` ml-0.5 mr-0.5 relative block rounded bg-transparent px-3 py-1 text-sm text-neutral-600 transition-all duration-300 hover:bg-neutral-100 dark:text-white dark:hover:bg-white dark:hover:text-blue-marine ${
+                    className={` ml-0.5 mr-0.5 relative block rounded bg-transparent px-3 py-1 text-sm text-neutral-600 transition-all duration-300 hover:bg-neutral-100 text-white hover:bg-white hover:text-blue-marine ${
                       pageNo > 3 && pageNo < totalPages - 2
                         ? "current-page"
                         : ""
@@ -93,8 +109,23 @@ function Pagination({
                     {pageNo}{" "}
                   </div>
                 </li>
+
+                {pageNo < totalPages - 3 ? (
+                <div
+                  className={` ml-0.5 mr-0.5 relative block rounded bg-transparent px-3 py-1 text-sm text-neutral-600 transition-all duration-300 hover:bg-neutral-100 text-white hover:bg-white hover:text-blue-marine`}
+                >
+                {"..."}
+                </div>) : null}
               </>
             )}
+
+            {pageNo >= totalPages - 2 ? (
+              <div
+                className={` ml-0.5 mr-0.5 relative block rounded bg-transparent px-3 py-1 text-sm text-neutral-600 transition-all duration-300 hover:bg-neutral-100 text-white hover:bg-white hover:text-blue-marine`}
+              >
+                {"..."}
+              </div>
+            ) : null}
 
             {Array(3)
               .fill()
@@ -104,7 +135,7 @@ function Pagination({
                   onClick={(e) => handlePageClick(totalPages - 3 + parseInt(index) + 1)}
                 >
                   <div
-                    className={` ml-0.  5 mr-0.5 relative block rounded bg-transparent px-3 py-1 text-sm text-neutral-600 transition-all duration-300 hover:bg-neutral-100 dark:text-white dark:hover:bg-white dark:hover:text-blue-marine ${
+                    className={` ml-0.  5 mr-0.5 relative block rounded bg-transparent px-3 py-1 text-sm text-neutral-600 transition-all duration-300 hover:bg-neutral-100 text-white hover:bg-white hover:text-blue-marine ${
                       totalPages - 3 + index + 1 === pageNo
                         ? "current-page"
                         : ""
@@ -120,7 +151,7 @@ function Pagination({
         <li
           onClick={()=>getNextPage()}
         >
-          <div className="relative block rounded bg-transparent px-3  text-sm text-neutral-600 transition-all duration-300 hover:bg-neutral-100 dark:text-white dark:hover:bg-white dark:hover:text-blue-marine">
+          <div className="relative block rounded bg-transparent px-3  text-sm text-neutral-600 transition-all duration-300 hover:bg text-white hover:bg-white hover:text-blue-marine">
             Next
           </div>
         </li>
