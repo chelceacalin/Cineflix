@@ -54,12 +54,8 @@ public class CategoryController {
 
     @PostMapping("/delete/{name}")
     public ResponseEntity<?> deleteCategory(@PathVariable("name") @NotNull String name) {
-        try {
-            categoryService.deleteCategory(name);
-            return new ResponseEntity<>(HttpStatus.OK);
-        } catch (CategoryNotFoundException e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
-        }
+        categoryService.deleteCategory(name);
+        return ResponseEntity.ok("Category was deleted successfully");
     }
 
     @GetMapping()
