@@ -21,12 +21,12 @@ function CategoryManagement() {
   let [pageSize, setPageSize] = useState(15);
   let [totalPages, setTotalPages] = useState("");
   let [totalCategories, setTotalCategories] = useState(0);
-  let [signalCall,setSignalCall]=useState(false)
+  let [signalCall, setSignalCall] = useState(false);
 
   useEffect(() => {
     axios.get(`http://localhost:8081/category`).then((data) => {
       setTotalCategories(data.data.content.length);
-      setCategories(data.data.content)
+      setCategories(data.data.content);
     });
 
   }, [totalCategories,signalCall]);
@@ -39,8 +39,8 @@ function CategoryManagement() {
     setLastClicked(fieldName);
   };
 
-  let signal=()=>{
-      setSignalCall(!signalCall)
+  let signal = () => {
+    setSignalCall(!signalCall);
   }
 
   useEffect(() => {
@@ -172,6 +172,7 @@ function CategoryManagement() {
                     classes={classes}
                     updateCategory={updateCategory}
                     key={name}
+                    signal={signal}
                   />
                 );
               })}
