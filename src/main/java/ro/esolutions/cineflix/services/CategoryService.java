@@ -64,9 +64,8 @@ public class CategoryService {
             return categoryRepository.findAll(PageRequest.of(pageNo, pageSize)).map(CategoryMapper::toDTO);
         }
         Specification<Category> specification = getSpecification(dto);
-        Pageable pageable;
         Sort.Direction sortDirection = Sort.Direction.fromString(dto.getDirection());
-        pageable = PageRequest.of(pageNo, pageSize, Sort.by(sortDirection, "name"));
+        Pageable pageable = PageRequest.of(pageNo, pageSize, Sort.by(sortDirection, "name"));
         return categoryRepository.findAll(specification, pageable).map(CategoryMapper::toDTO);
     }
 
@@ -80,7 +79,7 @@ public class CategoryService {
     }
 
 
-    public void deleteCategoryIfNoBooks(UUID id) {
+    public void deleteCategory(UUID id) {
         Category categoryFound = categoryRepository.findById(id)
                 .orElseThrow(() -> new CategoryNotFoundException("Category to be deleted does not exist"));
 
