@@ -3,29 +3,25 @@ import React, { useState, createContext } from "react";
 export const UserLoginContext = createContext();
 
 function LoginProvider({ children }) {
-  let [isLogged, setIsLoggedIn] = useState(localStorage.getItem("isLogged") === "true");
-  let [isAdmin, setIsAdmin] = useState(localStorage.getItem("isAdmin") === "true");
-  let [username, setUsername] = useState(localStorage.getItem("username") === "true");
-  let [token, setToken] = useState(localStorage.getItem("token") === "true");
+  let [isLoggedIn, setIsLoggedIn] = useState(false);
+  let [isAdmin, setIsAdmin] = useState(false);
+  let [username, setUsername] = useState(false);
+  let [token, setToken] = useState(false);
 
   let setIsAdminHandler = (value) => {
     setIsAdmin(value);
-    localStorage.setItem("isAdmin", value);
   };
 
   let setUsernameHandler = (value) => {
     setUsername(value);
-    localStorage.setItem("username", value);
   };
 
   let setTokenHandler = (value) => {
     setToken(value);
-    localStorage.setItem("token", value);
   };
 
   let setIsLoggedInHandler = (value) => {
     setIsLoggedIn(value);
-    localStorage.setItem("isLogged", value);
   }
 
   return (
@@ -37,8 +33,8 @@ function LoginProvider({ children }) {
         setUsername: setUsernameHandler,
         token,
         setToken: setTokenHandler,
-        isLogged,
-        setIsLoggedIn: setIsLoggedInHandler
+        isLoggedIn,
+        setIsLoggedIn
       }}
     >
       {children}

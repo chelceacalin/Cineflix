@@ -8,7 +8,7 @@ function Navbar() {
   let navigate = useNavigate();
   const [selectedItem, setSelectedItem] = useState("");
   const [selectedColor, setSelectedColor] = useState("");
-  const { isAdmin, setIsAdmin, username, setUsername, token, setToken, isLogged, setIsLoggedIn } = useContext(UserLoginContext);
+  const { isAdmin, setIsAdmin, username, setUsername, token, setToken, isLoggedIn, setIsLoggedIn } = useContext(UserLoginContext);
   const location = useLocation();
 
   useEffect(() => {
