@@ -38,7 +38,7 @@ function Movie({ title, director, category, isAvailable, rentedUntil, rentedBy, 
       </td>
       <td className={classes}>
         <div variant="small" color="blue-gray" className="font-normal">
-          {rentedBy&&isAvailable ? "" : rentedBy}
+          {rentedBy == "available" && isAvailable ? "" : rentedBy}
         </div>
       </td>
       <td className={classes}>
