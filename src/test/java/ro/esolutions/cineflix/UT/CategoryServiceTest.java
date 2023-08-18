@@ -45,8 +45,8 @@ public class CategoryServiceTest {
 
 
     @Test()
-    @DisplayName("Delete Category With Exception Thrown Service UT")
-    public void deleteCategoryWithExceptionThrown() {
+    @DisplayName("Thrown exception when deleting a category that doesn't exist")
+    public void thrownExceptionWhenDeletingACategoryThatDoesntExist() {
         UUID id = UUID.fromString("12f310ee-3cc9-11ee-be56-0242ac120002");
         CategoryDTO categoryDTO = aCategoryDTO();
         when(categoryRepository.findById(id))
@@ -56,7 +56,8 @@ public class CategoryServiceTest {
     }
 
     @Test
-    public void testUpdateCategorySuccess() throws CategoryNotFoundException {
+    @DisplayName("Update category")
+    public void updateCategory() throws CategoryNotFoundException {
         UUID categoryId = UUID.randomUUID();
         CategoryDTO categoryDTO = new CategoryDTO();
         categoryDTO.setName("Updated Category Name");
@@ -85,7 +86,7 @@ public class CategoryServiceTest {
         Optional<String> validationResult = categoryService.validateCategory(categoryDTO);
 
         verify(categoryRepository, times(1)).findByNameIgnoreCase(categoryDTO.getName());
-        assertFalse(validationResult.isPresent()); // Expecting an empty Optional
+        assertFalse(validationResult.isPresent());
     }
 
     @Test

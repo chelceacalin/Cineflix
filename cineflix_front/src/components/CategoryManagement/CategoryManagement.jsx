@@ -21,6 +21,7 @@ function CategoryManagement() {
   let [pageSize, setPageSize] = useState(15);
   let [totalPages, setTotalPages] = useState("");
   let [totalCategories, setTotalCategories] = useState(0);
+  let [signalCall,setSignalCall]=useState(false)
 
   useEffect(() => {
     axios.get(`http://localhost:8081/category`).then((data) => {
@@ -61,13 +62,17 @@ function CategoryManagement() {
   };
 
   const [open, setOpen] = React.useState(false);
+  const [errorMessage,setErrorMessage] = useState("");
   const handleOpen = () => {
     setErrorMessage("");
     setOpen(true);
   }
 
-  const handleClose = () => setOpen(false);
-  const [errorMessage,setErrorMessage] = useState("");
+  const handleClose = () => {
+    setErrorMessage("");
+    setOpen(false);
+  }
+
 
   let getFilterInput = (params) => {
     setName(params[0]);
