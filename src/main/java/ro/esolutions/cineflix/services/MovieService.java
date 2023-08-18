@@ -61,7 +61,6 @@ public class MovieService {
             pageable = PageRequest.of(pageNo, pageSize, Sort.by(sortDirection, sortField));
         }
 
-
         Page<Movie> moviesPage = movieRepository.findAll(specification, pageable);
         List<MovieDTO> movies = moviesPage.getContent().stream()
                 .map(movie -> {
