@@ -50,6 +50,7 @@ function Category({id, name, classes, updateCategory, signal, setErrorMessage, e
             isEditModalOpen={isEditModalOpen}
             closeEditModal={closeEditModal}
             name={name}
+            id={id}
             signal={signal}
             />
         </td>
