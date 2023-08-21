@@ -10,7 +10,7 @@ axios.defaults.withCredentials = true
 function EditRoleModalWindow({ isModalOpen, closeModal, id, name, updateCategory, setErrorMessage, errorMessage}) {
     const newNameRef = useRef();
     const editCategoryName = () => {
-        let url = 'http://localhost:8081/category/update/' + id;
+        let url = '/category/update/' + id;
         axios.post(url, {
             id: id,
             name: newNameRef.current.value

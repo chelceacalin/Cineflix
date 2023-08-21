@@ -1,8 +1,8 @@
 import React, { useEffect } from "react";
 import Button from "@mui/material/Button";
-
 import DetailsMovieModalView from "./DetailsMovieModalView";
 import DeleteMovieModalView from "./DeleteMovieModalView";
+import './css/Movie.css'
 
 function Movie({
   title,
@@ -66,8 +66,7 @@ function Movie({
       <div>
         <button 
           onClick={handleDetailsOpen} 
-          className="inline-block rounded  px-3 mr-4 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-white"
-          style={{ backgroundColor: "blue", fontWeight: "bold" }}>
+          className="inline-block rounded  px-3 mr-4 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-blue-marine outlined-button" >
           Details
         </button>
         
@@ -86,8 +85,7 @@ function Movie({
 
         <button 
           onClick={handleDeleteOpen} 
-          className="inline-block rounded px-3 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-white"
-          style={{ backgroundColor: "red", fontWeight: "bold" }}>
+          className="inline-block rounded px-3 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-white contained-button">
           Delete
         </button>
 

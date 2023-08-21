@@ -269,9 +269,9 @@ function DetailsMovieModalView({
             <button
               type="button"
               onClick={handleSave}
-              className="inline-block rounded  px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-white
+              className="inline-block rounded  px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-white hoverColorDetails
                  "
-              style={{ backgroundColor: "blue", fontWeight: "bold" }}
+              style={{ backgroundColor: "#1E1D5B", fontWeight: "bold" }}
             >
               Save
             </button>
@@ -282,7 +282,7 @@ function DetailsMovieModalView({
               className="inline-block rounded  px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-white 
              "
               style={{
-                backgroundColor: "red",
+                backgroundColor: "#BE2517",
                 fontWeight: "bold",
                 marginLeft: 15,
               }}
