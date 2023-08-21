@@ -40,7 +40,7 @@ public class ImageDataController {
     }
 
     @GetMapping("/imagesByMovieID/{id}")
-    public ResponseEntity<?> getImageByMovidID(@PathVariable(name = "id") UUID movieID) throws Exception {
+    public ResponseEntity<?> getImageByMovieID(@PathVariable(name = "id") UUID movieID) throws Exception {
         byte[] imgData = movieImageDataService.findImageByMovieID(movieID);
         return ResponseEntity.status(HttpStatus.OK)
                 .contentType(MediaType.valueOf(CONTENT_TYPE))

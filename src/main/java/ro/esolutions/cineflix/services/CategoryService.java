@@ -1,6 +1,7 @@
 package ro.esolutions.cineflix.services;
 
 import jakarta.transaction.Transactional;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -11,8 +12,8 @@ import org.springframework.stereotype.Service;
 import ro.esolutions.cineflix.DTO.Category.CategoryDTO;
 import ro.esolutions.cineflix.DTO.Category.CategoryFilterDTO;
 import ro.esolutions.cineflix.entities.Category;
-import ro.esolutions.cineflix.exceptions.CategoryContainsMovieException;
-import ro.esolutions.cineflix.exceptions.CategoryNotFoundException;
+import ro.esolutions.cineflix.exceptions.Category.CategoryContainsMovieException;
+import ro.esolutions.cineflix.exceptions.Category.CategoryNotFoundException;
 import ro.esolutions.cineflix.mapper.CategoryMapper;
 import ro.esolutions.cineflix.repositories.CategoryRepository;
 import ro.esolutions.cineflix.specification.CategorySpecification;
@@ -27,6 +28,7 @@ import static java.util.Objects.nonNull;
 @RequiredArgsConstructor
 public class CategoryService {
 
+    @NonNull
     private final CategoryRepository categoryRepository;
 
     public Optional<String> validateCategory(CategoryDTO categoryDTO) {

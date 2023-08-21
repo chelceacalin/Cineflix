@@ -11,7 +11,7 @@ import org.springframework.http.ResponseEntity;
 import ro.esolutions.cineflix.DTO.Category.CategoryDTO;
 import ro.esolutions.cineflix.controllers.CategoryController;
 import ro.esolutions.cineflix.entities.Category;
-import ro.esolutions.cineflix.exceptions.CategoryNotFoundException;
+import ro.esolutions.cineflix.exceptions.Category.CategoryNotFoundException;
 import ro.esolutions.cineflix.services.CategoryService;
 
 import java.util.Optional;

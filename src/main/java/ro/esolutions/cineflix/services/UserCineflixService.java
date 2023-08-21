@@ -16,6 +16,7 @@ import ro.esolutions.cineflix.DTO.UserInfoDTO;
 import ro.esolutions.cineflix.DTO.UserCineflix.UserDTO;
 import ro.esolutions.cineflix.DTO.UserCineflix.UserFilterDTO;
 import ro.esolutions.cineflix.entities.UserCineflix;
+import ro.esolutions.cineflix.exceptions.User.UserNotFoundException;
 import ro.esolutions.cineflix.mapper.UserInfoMapper;
 import ro.esolutions.cineflix.mapper.UserMapper;
 import ro.esolutions.cineflix.repositories.UserCineflixRepository;
@@ -132,7 +133,7 @@ public class UserCineflixService {
             UserCineflix user = optionalUserCineflix.get();
             return UserMapper.toDTO(user);
         } else {
-            throw new RuntimeException("User with username " + username + " not found");
+            throw new UserNotFoundException("User with username " + username + " not found");
         }
     }
 }

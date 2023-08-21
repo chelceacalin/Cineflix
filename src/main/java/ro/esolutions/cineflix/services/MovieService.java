@@ -6,7 +6,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.*;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
-import ro.esolutions.cineflix.DTO.Category.CategoryDTO;
 import ro.esolutions.cineflix.DTO.Movie.MovieAddDTO;
 import ro.esolutions.cineflix.DTO.Movie.MovieDTO;
 import ro.esolutions.cineflix.DTO.Movie.MovieFilterDTO;
@@ -14,19 +13,16 @@ import ro.esolutions.cineflix.DTO.UserCineflix.UserDTO;
 import ro.esolutions.cineflix.entities.Category;
 import ro.esolutions.cineflix.entities.Movie;
 import ro.esolutions.cineflix.entities.MovieHistory;
-import ro.esolutions.cineflix.entities.UserCineflix;
-import ro.esolutions.cineflix.exceptions.CategoryNotFoundException;
-import ro.esolutions.cineflix.exceptions.MovieNotFoundException;
+import ro.esolutions.cineflix.exceptions.Category.CategoryNotFoundException;
+import ro.esolutions.cineflix.exceptions.Movie.MovieNotFoundException;
+import ro.esolutions.cineflix.exceptions.User.UserNotFoundException;
 import ro.esolutions.cineflix.mapper.MovieMapper;
-import ro.esolutions.cineflix.mapper.UserMapper;
 import ro.esolutions.cineflix.repositories.CategoryRepository;
 import ro.esolutions.cineflix.repositories.MovieHistoryRepository;
 import ro.esolutions.cineflix.repositories.MovieRepository;
-import ro.esolutions.cineflix.repositories.UserCineflixRepository;
 import ro.esolutions.cineflix.specification.GenericSpecification;
 import ro.esolutions.cineflix.specification.MovieSpecification;
 
-import javax.swing.text.html.Option;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -41,15 +37,12 @@ public class MovieService {
 
     @NonNull
     private final MovieRepository movieRepository;
+
     @NonNull
     private final MovieHistoryRepository movieHistoryRepository;
 
-    private final UserCineflixRepository userCineflixRepository;
-
     @NonNull
     private final UserCineflixService userCineflixService;
-    @NonNull
-    private final CategoryService categoryService;
 
     @NonNull
     private final CategoryRepository categoryRepository;
@@ -154,10 +147,9 @@ public class MovieService {
         Optional<Movie> movieOptional = movieRepository.findById(id);
         if (movieOptional.isPresent()) {
             Movie movie = movieOptional.get();
-            MovieAddDTO dto = MovieMapper.toMovieAddDto(movie);
-            return dto;
+            return MovieMapper.toMovieAddDto(movie);
         } else {
-            throw new RuntimeException("Movie with id " + id + " not found");
+            throw new MovieNotFoundException("Movie with id " + id + " not found");
         }
     }
 
@@ -173,10 +165,10 @@ public class MovieService {
                 return MovieMapper.toMovieAddDto(createdMovie);
 
             } else {
-                throw new RuntimeException("Category not found");
+                throw new CategoryNotFoundException("Category not found");
             }
         } else {
-            throw new RuntimeException("User not found");
+            throw new UserNotFoundException("User not found");
         }
     }
 }

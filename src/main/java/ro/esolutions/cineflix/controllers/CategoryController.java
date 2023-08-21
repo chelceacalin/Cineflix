@@ -12,7 +12,7 @@ import ro.esolutions.cineflix.DTO.Category.CategoryDTO;
 import ro.esolutions.cineflix.services.CategoryService;
 import java.util.Optional;
 import org.springframework.web.bind.annotation.*;
-import ro.esolutions.cineflix.exceptions.CategoryNotFoundException;
+import ro.esolutions.cineflix.exceptions.Category.CategoryNotFoundException;
 import java.util.UUID;
 import org.springframework.data.domain.Page;
 import ro.esolutions.cineflix.DTO.Category.CategoryFilterDTO;
