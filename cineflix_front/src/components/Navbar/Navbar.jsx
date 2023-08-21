@@ -11,6 +11,7 @@ function Navbar() {
   const { isAdmin, setIsAdmin, username, setUsername, token, setToken, isLoggedIn, setIsLoggedIn } = useContext(UserLoginContext);
   const location = useLocation();
 
+  
   useEffect(() => {
     if (location.pathname === "/") {
       setSelectedItem("Movies");

@@ -19,7 +19,7 @@ import { useContext,useState } from "react";
 import axios from "axios";
 import Authenticated from "./utils/protectedRoutes/Authenticated";
 import ProfileRoute from "./utils/protectedRoutes/ProfileRoute";
-
+import Login from "./components/Login/Login";
 function App() { 
   return (
     <div className="app-container">
@@ -44,10 +44,10 @@ function App() {
             else {
               setIsAdmin(false);
             }
-  
             setUsername(userInfo.username);
             setToken(userInfo.token);
             setIsLoggedIn(true);
+            sessionStorage.setItem('isLoggedIn',true)
         }
       })
       .catch(error => {
@@ -55,17 +55,17 @@ function App() {
         setUsername(null);
         setToken(null);
         setIsLoggedIn(false);
-        
         console.error("Error fetching userInfo:", error);
       });
     }, [])
   
-    return (
+      return (
       <>
-        <Navbar />
+      {isLoggedIn&&  <Navbar />}
         <Routes>
+          <Route path="/login" element={<Login/>}/>
+          <Route element={<Authenticated/>}>
 
-          {/* <Route element={<Authenticated/>}> */}
             <Route index path="/" element={<Movies />} />
 
             <Route element={<ProfileRoute/>}>
@@ -82,7 +82,7 @@ function App() {
             <Route element={<AdminRoute />}>
               <Route path="/roleManagement" element={<RoleManagement />} />
             </Route>
-          {/* </Route> */}
+          </Route>  
 
           <Route path="/*" element={<NotFound />} />
         </Routes>
