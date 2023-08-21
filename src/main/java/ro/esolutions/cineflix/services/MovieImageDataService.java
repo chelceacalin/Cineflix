@@ -22,12 +22,9 @@ import static java.util.Objects.nonNull;
 @RequiredArgsConstructor
 public class MovieImageDataService {
 
-    @NonNull
-    private MovieImageDataRepository movieImageDataRepository;
-    @NonNull
-    private MovieImageDataUtil movieImageDataUtil;
-    @NonNull
-    private MovieService movieService;
+    private final MovieImageDataRepository movieImageDataRepository;
+    private final MovieImageDataUtil movieImageDataUtil;
+    private final MovieService movieService;
     private final static Set<String> allowedFormats = new HashSet<>(List.of("image/png", "image/jpeg", "image/jpg"));
 
     @Transactional

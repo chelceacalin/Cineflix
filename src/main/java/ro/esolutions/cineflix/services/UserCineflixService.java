@@ -33,7 +33,6 @@ import static java.util.Objects.nonNull;
 @RequiredArgsConstructor
 public class UserCineflixService {
 
-    @NonNull
     private final UserCineflixRepository userCineflixRepository;
     public static final String DEFAULTSORT = "defaultsort";
     public static final String FIRST_NAME = "firstName";

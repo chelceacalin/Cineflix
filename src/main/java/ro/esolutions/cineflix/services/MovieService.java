@@ -35,16 +35,12 @@ import static java.util.Objects.nonNull;
 @RequiredArgsConstructor
 public class MovieService {
 
-    @NonNull
     private final MovieRepository movieRepository;
 
-    @NonNull
     private final MovieHistoryRepository movieHistoryRepository;
 
-    @NonNull
     private final UserCineflixService userCineflixService;
 
-    @NonNull
     private final CategoryRepository categoryRepository;
     public static final String USERNAME = "movieHistories.rentedBy.username";
     public static final String MOVIE_HISTORIES_RENTED_UNTIL = "movieHistories.rentedUntil";
