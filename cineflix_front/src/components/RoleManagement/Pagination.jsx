@@ -14,8 +14,6 @@ function Pagination({
 
   let getNextPage = () => {
     if (pageNo < totalPages) updatePageNumber(++pageNo);
-    console.log("In butonul next page");
-    console.log("pageNo: " + pageNo, "total pages: " + totalPages);
   };
 
   const handlePageClick = (pageNumber) => {
