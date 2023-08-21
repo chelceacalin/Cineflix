@@ -5,8 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
 import java.time.LocalDate;
+import java.util.UUID;
 
 @Data
 @Builder
@@ -14,10 +14,11 @@ import java.time.LocalDate;
 @AllArgsConstructor
 public class MovieDTO {
 
+    private UUID id;
+
     private String owner_username;
 
     private String title;
-
     private String director;
 
     private String category;

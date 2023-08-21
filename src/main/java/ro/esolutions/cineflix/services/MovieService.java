@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.*;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import ro.esolutions.cineflix.DTO.Category.CategoryDTO;
 import ro.esolutions.cineflix.DTO.Movie.MovieAddDTO;
 import ro.esolutions.cineflix.DTO.Movie.MovieDTO;
 import ro.esolutions.cineflix.DTO.Movie.MovieFilterDTO;
@@ -13,7 +14,11 @@ import ro.esolutions.cineflix.DTO.UserCineflix.UserDTO;
 import ro.esolutions.cineflix.entities.Category;
 import ro.esolutions.cineflix.entities.Movie;
 import ro.esolutions.cineflix.entities.MovieHistory;
+import ro.esolutions.cineflix.entities.UserCineflix;
+import ro.esolutions.cineflix.exceptions.CategoryNotFoundException;
+import ro.esolutions.cineflix.exceptions.MovieNotFoundException;
 import ro.esolutions.cineflix.mapper.MovieMapper;
+import ro.esolutions.cineflix.mapper.UserMapper;
 import ro.esolutions.cineflix.repositories.CategoryRepository;
 import ro.esolutions.cineflix.repositories.MovieHistoryRepository;
 import ro.esolutions.cineflix.repositories.MovieRepository;
@@ -21,6 +26,7 @@ import ro.esolutions.cineflix.repositories.UserCineflixRepository;
 import ro.esolutions.cineflix.specification.GenericSpecification;
 import ro.esolutions.cineflix.specification.MovieSpecification;
 
+import javax.swing.text.html.Option;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -124,15 +130,36 @@ public class MovieService {
         return movieRepository.findById(id);
     }
 
-    public Movie updateMovie(UUID id, Movie movie) throws Exception {
+    public void updateMovie(UUID id, MovieAddDTO movieDTO) {
         Optional<Movie> optionalMovie = movieRepository.findById(id);
         if (optionalMovie.isPresent()) {
-            return movieRepository.save(movie);
+            Movie foundMovie = optionalMovie.get();
+            Optional<Category> categoryOptional = categoryRepository.findByNameIgnoreCase(movieDTO.getCategory());
+            if (categoryOptional.isPresent()) {
+                foundMovie.setCategory(categoryOptional.get());
+                foundMovie.setTitle(movieDTO.getTitle());
+                foundMovie.setDirector(movieDTO.getDirector());
+                foundMovie.setDescription(movieDTO.getDescription());
+                movieRepository.save(foundMovie);
+            } else {
+                throw new CategoryNotFoundException("Category not found");
+            }
+
         } else {
-            throw new Exception("Movie Not Found");
+            throw new MovieNotFoundException("Movie Not Found");
         }
     }
 
+    public MovieAddDTO findMovieByID(UUID id) {
+        Optional<Movie> movieOptional = movieRepository.findById(id);
+        if (movieOptional.isPresent()) {
+            Movie movie = movieOptional.get();
+            MovieAddDTO dto = MovieMapper.toMovieAddDto(movie);
+            return dto;
+        } else {
+            throw new RuntimeException("Movie with id " + id + " not found");
+        }
+    }
 
     @Transactional
     public MovieAddDTO addMovie(MovieAddDTO movie) {

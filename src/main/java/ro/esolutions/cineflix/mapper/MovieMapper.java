@@ -7,10 +7,10 @@ import ro.esolutions.cineflix.entities.Category;
 import ro.esolutions.cineflix.entities.Movie;
 import ro.esolutions.cineflix.entities.MovieHistory;
 import ro.esolutions.cineflix.entities.UserCineflix;
-
 public class MovieMapper {
     public static MovieDTO toDto(Movie m, MovieHistory mh) {
         return MovieDTO.builder()
+                .id(m.getId())
                 .title(m.getTitle())
                 .director(m.getDirector())
                 .category(m.getCategory() != null ? m.getCategory().getName() : "DEFAULT")
@@ -22,7 +22,7 @@ public class MovieMapper {
                 .build();
     }
 
-    public static Movie toMovie(MovieAddDTO dto, UserDTO userDTO, Category category) {
+    public static Movie toMovie(MovieAddDTO dto, UserDTO userDTO, Category category){
         return Movie.builder()
                 .title(dto.getTitle())
                 .description(dto.getDescription())
@@ -32,7 +32,8 @@ public class MovieMapper {
                 .owner(UserMapper.toUserCineflix(userDTO))
                 .build();
     }
-    public static MovieAddDTO toMovieAddDto(Movie movie) {
+
+    public static MovieAddDTO toMovieAddDto(Movie movie){
         return MovieAddDTO.builder()
                 .title(movie.getTitle())
                 .director(movie.getDirector())

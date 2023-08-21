@@ -10,14 +10,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ro.esolutions.cineflix.DTO.Category.CategoryDTO;
 import ro.esolutions.cineflix.services.CategoryService;
-
 import java.util.Optional;
-
 import org.springframework.web.bind.annotation.*;
 import ro.esolutions.cineflix.exceptions.CategoryNotFoundException;
-
 import java.util.UUID;
-
 import org.springframework.data.domain.Page;
 import ro.esolutions.cineflix.DTO.Category.CategoryFilterDTO;
 
@@ -38,6 +34,7 @@ public class CategoryController {
         }
 
     }
+
     @PostMapping("/update/{id}")
     public ResponseEntity updateCategory(@RequestBody CategoryDTO categoryDTO,
                                          @PathVariable("id") @NotNull UUID id) {
@@ -61,21 +58,21 @@ public class CategoryController {
         return ResponseEntity.ok("Category was deleted successfully");
     }
 
-    @GetMapping
+    @GetMapping()
     public Page<CategoryDTO> getCategories(@ModelAttribute CategoryFilterDTO dto,
-                                           @RequestParam(defaultValue = "0", required = false) int pageNo,
-                                           @RequestParam(defaultValue = "15", required = false) int pageSize) {
-        return categoryService.getCategories(dto, pageNo, pageSize);
+                                           @RequestParam(defaultValue = "0",required = false) int pageNo,
+                                           @RequestParam(defaultValue = "15",required = false) int pageSize) {
+        return categoryService.getCategories(dto,pageNo,pageSize);
     }
 
-    @PostMapping("/delete/{id}")
+    @PostMapping ("/delete/{id}")
     public ResponseEntity<String> deleteCategory(@PathVariable UUID id) {
         categoryService.deleteCategory(id);
         return ResponseEntity.ok("Category was deleted successfully");
     }
 
     @GetMapping("/{name}")
-    public CategoryDTO findCategoryByName(@PathVariable String name) {
+    public CategoryDTO findCategoryByName(@PathVariable String name){
         return categoryService.findCategoryByName(name);
     }
 }

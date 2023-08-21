@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import ro.esolutions.cineflix.entities.Movie;
 import ro.esolutions.cineflix.entities.MovieImageData;
+import ro.esolutions.cineflix.mapper.MovieMapper;
 import ro.esolutions.cineflix.repositories.MovieImageDataRepository;
 import ro.esolutions.cineflix.util.MovieImageDataUtil;
 
@@ -61,7 +62,7 @@ public class MovieImageDataService {
                             .movie(movie)
                             .build());
             movieOptional.get().setPhoto(data);
-            movieService.updateMovie(movie.getId(), movie);
+            movieService.updateMovie(movie.getId(), MovieMapper.toMovieAddDto(movie));
         } else {
             throw new Exception("Error uploading image");
         }
