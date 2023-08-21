@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import axios from "axios";
 import Button from '@mui/material/Button';
 import MyProfileFilterComponent from "./MyProfileFilterComponent";
 import Pagination from "../RoleManagement/Pagination";
 import Movie from "./Movie";
 import AddNewMovieModalWindow from "./AddNewMovieModalWindow";
+import { UserLoginContext } from "../../utils/context/LoginProvider";
 
 function MyProfile() {
   const TABLE_HEAD = ["Title", "Director", "Category", "Status", "Rented Until", "Rented By", ""];
@@ -29,7 +30,7 @@ function MyProfile() {
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   const [triggerRefresh, setTriggerRefresh] = useState(false);
-
+  const { username } = useContext(UserLoginContext);
 
   let handleClick = (fieldName) => {
     if (lastClicked === fieldName) {
@@ -41,7 +42,7 @@ function MyProfile() {
   useEffect(() => {
     const normalizedSortField = sortField || "title";
 
-    newUrl = `/movies?owner_username=adminusername&sortField=${normalizedSortField}&direction=${
+    newUrl = `/movies?owner_username=${username}&sortField=${normalizedSortField}&direction=${
         direction ? "ASC" : "DESC"}&title=${title}&director=${director}&category=${category}&isAvailable=${isAvailable}&pageNo=${
             parseInt(pageNo) - 1}&pageSize=${pageSize}`;
 

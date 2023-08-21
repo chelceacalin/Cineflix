@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import {
@@ -14,7 +14,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faL, faTimes } from "@fortawesome/free-solid-svg-icons";
 import "./css/AddNewMovieModalWindow.css";
 import axios from "axios";
-
+import { UserLoginContext } from "../../utils/context/LoginProvider";
 
 
 function AddNewMovieModalWindow({
@@ -31,7 +31,9 @@ function AddNewMovieModalWindow({
   const [photo, setPhoto] = useState("");
   const [selectedImage, setSelectedImage] = useState(null);
   const [availableCategories, setAvailableCategories] = useState([]);
-  const [owner_username, setOwnerUsername] = useState("adminusername");
+  const { username } = useContext(UserLoginContext);
+  const [owner_username, setOwnerUsername] = useState(username);
+
   const validationChecks = [
     { condition: !title, message: "Title should not be empty!" },
     { condition: !director, message: "Director should not be empty!" },

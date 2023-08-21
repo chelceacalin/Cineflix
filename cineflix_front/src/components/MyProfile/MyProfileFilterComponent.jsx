@@ -10,8 +10,9 @@ import React from "react";
 import axios from "axios";
 import "./css/MyProfileFilterComponent.css";
 import "react-datepicker/dist/react-datepicker.css";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import DatePicker from "react-datepicker";
+import { UserLoginContext } from "../../utils/context/LoginProvider";
 
 function MyProfileFilterComponent({ filterInput }) {
   let [title, setTitle] = useState("");
@@ -23,9 +24,10 @@ function MyProfileFilterComponent({ filterInput }) {
   let [rentedBy, setRentedBy] = useState("");
   let [url, setUrl] = useState("");
   const [usersWhoRented, setUsersWhoRented] = useState([]);
+  const { username } = useContext(UserLoginContext);
 
   useEffect(() => {
-    url = `/movies?owner_username=adminusername`;
+    url = `/movies?owner_username=${username}`;
     axios.get(url).then((elems) => {
       setUsersWhoRented(elems.data.content);
     });
