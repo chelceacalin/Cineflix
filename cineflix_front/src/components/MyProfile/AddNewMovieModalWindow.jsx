@@ -249,7 +249,7 @@ function AddNewMovieModalWindow({
             <button
               type="button"
               onClick={handleSave}
-              className="inline-block rounded  px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normaltext-white  "
+              className="inline-block rounded  px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-white contained-button"
               style={{ backgroundColor: "blue", fontWeight: "bold" }}
             >
               Save
@@ -258,7 +258,7 @@ function AddNewMovieModalWindow({
             <button
               type="button"
               onClick={closeModal}
-              className="inline-block rounded  px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-white "
+              className="inline-block rounded  px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-blue-marine outlined-button"
               style={{
 
                 backgroundColor: "red",

@@ -7,7 +7,7 @@ function NotFound() {
   let navigate = useNavigate();
 
   useEffect(() => {
-    document.body.style.background="red";
+    document.body.style.background="#C63238";
 
     return () => {
       document.body.style.background="white";
