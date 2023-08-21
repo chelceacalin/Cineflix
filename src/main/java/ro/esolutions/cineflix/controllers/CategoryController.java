@@ -12,7 +12,7 @@ import ro.esolutions.cineflix.DTO.Category.CategoryDTO;
 import ro.esolutions.cineflix.services.CategoryService;
 import java.util.Optional;
 import org.springframework.web.bind.annotation.*;
-import ro.esolutions.cineflix.exceptions.CategoryNotFoundException;
+import ro.esolutions.cineflix.exceptions.Category.CategoryNotFoundException;
 import java.util.UUID;
 import org.springframework.data.domain.Page;
 import ro.esolutions.cineflix.DTO.Category.CategoryFilterDTO;
@@ -37,7 +37,7 @@ public class CategoryController {
 
     @PostMapping("/update/{id}")
     public ResponseEntity updateCategory(@RequestBody CategoryDTO categoryDTO,
-                                            @PathVariable("id") @NotNull UUID id) {
+                                         @PathVariable("id") @NotNull UUID id) {
         Optional<String> errorOptional = categoryService.validateCategory(categoryDTO);
         if (errorOptional.isEmpty()) {
             try {
@@ -60,8 +60,14 @@ public class CategoryController {
 
     @GetMapping()
     public Page<CategoryDTO> getCategories(@ModelAttribute CategoryFilterDTO dto,
-                                  @RequestParam(defaultValue = "0",required = false) int pageNo,
-                                  @RequestParam(defaultValue = "15",required = false) int pageSize) {
+                                           @RequestParam(defaultValue = "0",required = false) int pageNo,
+                                           @RequestParam(defaultValue = "15",required = false) int pageSize) {
         return categoryService.getCategories(dto,pageNo,pageSize);
+    }
+
+
+    @GetMapping("/{name}")
+    public CategoryDTO findCategoryByName(@PathVariable String name){
+        return categoryService.findCategoryByName(name);
     }
 }

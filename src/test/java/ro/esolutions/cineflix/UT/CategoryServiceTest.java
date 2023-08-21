@@ -8,7 +8,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import ro.esolutions.cineflix.DTO.Category.CategoryDTO;
 import ro.esolutions.cineflix.entities.Category;
-import ro.esolutions.cineflix.exceptions.CategoryNotFoundException;
+import ro.esolutions.cineflix.exceptions.Category.CategoryNotFoundException;
 import ro.esolutions.cineflix.repositories.CategoryRepository;
 import ro.esolutions.cineflix.services.CategoryService;
 import static org.junit.jupiter.api.Assertions.*;
@@ -18,7 +18,6 @@ import java.util.Optional;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.*;
 import static ro.esolutions.cineflix.util.CategoryGenerator.aCategory;
 import static ro.esolutions.cineflix.util.CategoryGenerator.aCategoryDTO;
 
@@ -125,7 +124,7 @@ public class CategoryServiceTest {
         Category existingCategory = new Category();
         existingCategory.setName("Existing Category");
 
-        when(categoryRepository.findByNameIgnoreCase(categoryDTO.getName())).thenReturn(existingCategory);
+        when(categoryRepository.findByNameIgnoreCase(categoryDTO.getName())).thenReturn(Optional.of(existingCategory));
 
         Optional<String> validationResult = categoryService.validateCategory(categoryDTO);
 

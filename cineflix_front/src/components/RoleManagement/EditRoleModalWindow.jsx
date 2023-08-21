@@ -31,7 +31,7 @@ function EditRoleModalWindow({ isModalOpen, closeModal, name, firstName, lastNam
     }, [role, selectedOption])
 
     const editUserRole = () => {
-        let url = 'http://localhost:8081/users/update/' + selectedOption;
+        let url = '/users/update/' + selectedOption;
 
         try {
             setUserDTO(() => ({

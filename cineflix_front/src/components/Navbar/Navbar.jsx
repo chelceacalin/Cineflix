@@ -275,7 +275,7 @@ function Navbar() {
                     setIsLoggedIn(false);
                     setUsername(null);
                     setToken(null);
-                    window.location.href="http://localhost:8081/logout";
+                    window.location.href="/logout";
                   }}
                 >
                   <svg

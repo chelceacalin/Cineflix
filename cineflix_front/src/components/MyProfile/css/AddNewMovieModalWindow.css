@@ -1,37 +1,68 @@
 body {
-    font-family: 'Sanchez', serif;
-}
-
-
-.closeModalWindowButton {
+    font-family: "Sanchez", serif;
+  }
+  
+  .closeModalWindowButton {
     position: relative;
     top: 20px;
     right: -230px;
     width: 20px;
     cursor: pointer;
-}
-
-.save,
-.cancel {
+  }
+  
+  .save,
+  .cancel {
     margin-top: 10px;
-}
-
-.save {
-    background-color: #1E1D5B;
-}
-
-.save:hover {
-    background-color: #E0812E;
-}
-
-.cancel {
+    margin-left: 5px;
+  }
+  
+  .save {
+    background-color: #1e1d5b;
+  }
+  
+  .save:hover {
+    background-color: #e0812e;
+  }
+  
+  .cancel {
     background-color: white;
-    color: #1E1D5B;
-    border-color: #1E1D5B;
-}
-
-.cancel:hover {
-    color: #E0812E;
-    border-color: #E0812E;
-}
-
+    color: #1e1d5b;
+    border-color: #1e1d5b;
+  }
+  
+  .cancel:hover {
+    color: #e0812e;
+    border-color: #e0812e;
+  }
+  
+  .modal-content {
+    margin-top: 9px;
+  }
+  
+  .header-container {
+    display: flex;
+    align-items: center;
+  }
+  
+  .header-title {
+    margin: 0;
+    font-size: 1.2em;
+    font-weight: bold;
+  }
+  
+  .modal-body {
+    margin-bottom: 15px;
+  }
+  
+  .fields-container {
+    margin-bottom: 20px;
+  }
+  
+  .field-group {
+    margin-bottom: 20px;
+  }
+  
+  .modal-content.wider-modal {
+    width: 500px;
+  }
+  

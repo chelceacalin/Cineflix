@@ -25,7 +25,7 @@ function MyProfileFilterComponent({ filterInput }) {
   const [usersWhoRented, setUsersWhoRented] = useState([]);
 
   useEffect(() => {
-    url = `http://localhost:8081/movies?owner_username=adminusername`;
+    url = `/movies?owner_username=adminusername`;
     axios.get(url).then((elems) => {
       setUsersWhoRented(elems.data.content);
     });

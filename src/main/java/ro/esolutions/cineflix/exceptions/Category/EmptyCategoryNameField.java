@@ -1,4 +1,4 @@
-package ro.esolutions.cineflix.exceptions;
+package ro.esolutions.cineflix.exceptions.Category;
 
 public class EmptyCategoryNameField extends RuntimeException {
     public EmptyCategoryNameField(String message) {

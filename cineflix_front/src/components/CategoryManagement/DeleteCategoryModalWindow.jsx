@@ -10,7 +10,7 @@ function DeleteCategoryModalWindow({ isEditModalOpen, closeEditModal, name, id, 
     const [requestError, setRequestError] = useState(false);
 
     const deleteCategory = () => {
-        let url = 'http://localhost:8081/category/delete/' + id;
+        let url = '/category/delete/' + name;
 
             axios.post(url).then(() => {
                 signal();

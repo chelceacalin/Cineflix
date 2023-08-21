@@ -12,7 +12,7 @@ function DeleteMovieModalView({ isModalOpen, closeModal, title, movieId, deleteM
 
 
     const confirmToDelete = () => {
-        let url = 'http://localhost:8081/movies/delete/' + selectedOption;
+        let url = '/movies/delete/' + selectedOption;
 
         try {
             setUserDTO(() => ({

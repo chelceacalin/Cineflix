@@ -24,7 +24,7 @@ function CategoryManagement() {
   let [signalCall, setSignalCall] = useState(false);
 
   useEffect(() => {
-    axios.get(`http://localhost:8081/category`).then((data) => {
+    axios.get(`/category`).then((data) => {
       setTotalCategories(data.data.content.length);
       setCategories(data.data.content);
     });
@@ -44,7 +44,7 @@ function CategoryManagement() {
   }
 
   useEffect(() => {
-    newUrl = `http://localhost:8081/category?direction=${
+    newUrl = `/category?direction=${
       direction ? "ASC" : "DESC"
     }&name=${name}&pageNo=${parseInt(pageNo) - 1}&pageSize=${pageSize}`;
     axios.get(newUrl).then((elems) => {

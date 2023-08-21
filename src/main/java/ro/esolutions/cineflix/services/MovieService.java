@@ -6,11 +6,18 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.*;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import ro.esolutions.cineflix.DTO.Movie.MovieAddDTO;
 import ro.esolutions.cineflix.DTO.Movie.MovieDTO;
 import ro.esolutions.cineflix.DTO.Movie.MovieFilterDTO;
+import ro.esolutions.cineflix.DTO.UserCineflix.UserDTO;
+import ro.esolutions.cineflix.entities.Category;
 import ro.esolutions.cineflix.entities.Movie;
 import ro.esolutions.cineflix.entities.MovieHistory;
+import ro.esolutions.cineflix.exceptions.Category.CategoryNotFoundException;
+import ro.esolutions.cineflix.exceptions.Movie.MovieNotFoundException;
+import ro.esolutions.cineflix.exceptions.User.UserNotFoundException;
 import ro.esolutions.cineflix.mapper.MovieMapper;
+import ro.esolutions.cineflix.repositories.CategoryRepository;
 import ro.esolutions.cineflix.repositories.MovieHistoryRepository;
 import ro.esolutions.cineflix.repositories.MovieRepository;
 import ro.esolutions.cineflix.specification.GenericSpecification;
@@ -28,11 +35,13 @@ import static java.util.Objects.nonNull;
 @RequiredArgsConstructor
 public class MovieService {
 
-    @NonNull
     private final MovieRepository movieRepository;
-    @NonNull
+
     private final MovieHistoryRepository movieHistoryRepository;
 
+    private final UserCineflixService userCineflixService;
+
+    private final CategoryRepository categoryRepository;
     public static final String USERNAME = "movieHistories.rentedBy.username";
     public static final String MOVIE_HISTORIES_RENTED_UNTIL = "movieHistories.rentedUntil";
     public static final String RENTED_BY = "rentedBy";
@@ -110,12 +119,52 @@ public class MovieService {
         return movieRepository.findById(id);
     }
 
-    public Movie updateMovie(UUID id, Movie employee) {
-        Optional<Movie> optionalEmployee = movieRepository.findById(id);
-        if (optionalEmployee.isPresent()) {
-            return movieRepository.save(employee);
+    public void updateMovie(UUID id, MovieAddDTO movieDTO) {
+        Optional<Movie> optionalMovie = movieRepository.findById(id);
+        if (optionalMovie.isPresent()) {
+            Movie foundMovie = optionalMovie.get();
+            Optional<Category> categoryOptional = categoryRepository.findByNameIgnoreCase(movieDTO.getCategory());
+            if (categoryOptional.isPresent()) {
+                foundMovie.setCategory(categoryOptional.get());
+                foundMovie.setTitle(movieDTO.getTitle());
+                foundMovie.setDirector(movieDTO.getDirector());
+                foundMovie.setDescription(movieDTO.getDescription());
+                movieRepository.save(foundMovie);
+            } else {
+                throw new CategoryNotFoundException("Category not found");
+            }
+
+        } else {
+            throw new MovieNotFoundException("Movie Not Found");
         }
-        return employee;
     }
 
+    public MovieAddDTO findMovieByID(UUID id) {
+        Optional<Movie> movieOptional = movieRepository.findById(id);
+        if (movieOptional.isPresent()) {
+            Movie movie = movieOptional.get();
+            return MovieMapper.toMovieAddDto(movie);
+        } else {
+            throw new MovieNotFoundException("Movie with id " + id + " not found");
+        }
+    }
+
+    @Transactional
+    public MovieAddDTO addMovie(MovieAddDTO movie) {
+        UserDTO userCineflix = userCineflixService.findUserByUsername(movie.getOwner_username());
+        if (nonNull(userCineflix)) {
+            Optional<Category> categoryOptional = categoryRepository.findByNameIgnoreCase(movie.getCategory());
+            if (categoryOptional.isPresent()) {
+                Category category = categoryOptional.get();
+                Movie createdMovie = MovieMapper.toMovie(movie, userCineflix, category);
+                movieRepository.save(createdMovie);
+                return MovieMapper.toMovieAddDto(createdMovie);
+
+            } else {
+                throw new CategoryNotFoundException("Category not found");
+            }
+        } else {
+            throw new UserNotFoundException("User not found");
+        }
+    }
 }

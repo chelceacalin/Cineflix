@@ -18,14 +18,19 @@ public class UserRoleManagementController {
 
     @GetMapping()
     public Page<UserDTO> getUsers(@ModelAttribute UserFilterDTO dto,
-                                  @RequestParam(defaultValue = "0",required = false) int pageNo,
-                                  @RequestParam(defaultValue = "15",required = false) int pageSize) {
-        return userCineflixService.getUsers(dto,pageNo,pageSize);
+                                  @RequestParam(defaultValue = "0", required = false) int pageNo,
+                                  @RequestParam(defaultValue = "15", required = false) int pageSize) {
+        return userCineflixService.getUsers(dto, pageNo, pageSize);
     }
 
 
     @PostMapping("/update/{role}")
     public ResponseEntity<UserCineflix> updateUserRole(@RequestBody UserDTO userDTO, @PathVariable("role") UserCineflix.Role role) {
         return ResponseEntity.ok(userCineflixService.updateUserRole(userDTO, role));
+    }
+
+    @GetMapping("/{username}")
+    public UserDTO findByUsername(@PathVariable String username) throws Exception {
+        return userCineflixService.findUserByUsername(username);
     }
 }
