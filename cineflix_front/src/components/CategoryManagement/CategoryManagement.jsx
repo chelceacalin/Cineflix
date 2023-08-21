@@ -173,6 +173,8 @@ function CategoryManagement() {
                     updateCategory={updateCategory}
                     key={name}
                     signal={signal}
+                    setErrorMessage={setErrorMessage}
+                    errorMessage = {errorMessage}
                   />
                 );
               })}
