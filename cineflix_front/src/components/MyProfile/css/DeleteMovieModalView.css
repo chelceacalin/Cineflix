@@ -1,37 +1,54 @@
-body {
-    font-family: 'Sanchez', serif;
+.white-outlined-button {
+    border-radius: 0 !important;
+    border: 1px solid white !important;
+    color: white !important;
+    background-color: transparent !important;
 }
 
-
-.closeModalWindowButton {
-    position: relative;
-    top: 20px;
-    right: -230px;
-    width: 20px;
-    cursor: pointer;
+.white-outlined-button:hover {
+    color: #E0812E !important;
+    border-color: #E0812E !important;
 }
 
-.save,
-.cancel {
+.hover:hover{
+    --tw-bg-opacity: 1;
+    background-color: rgb(215 50 56 / var(--tw-bg-opacity));
+}
+
+.marginResizable{
+    margin-left: 3rem;
+}
+
+.contained-button,
+.outlined-button {
     margin-top: 10px;
 }
 
-.save {
-    background-color: #1E1D5B;
+.contained-button {
+    background-color: #1E1D5B !important;
+    border-radius: 0 !important;
 }
 
-.save:hover {
-    background-color: #E0812E;
+.contained-button:hover {
+    background-color: #E0812E !important;
 }
 
-.cancel {
-    background-color: white;
-    color: #1E1D5B;
-    border-color: #1E1D5B;
+.outlined-button {
+    background-color: white !important;
+    color: #1E1D5B !important;
+    border-color: #1E1D5B !important;
+    border-radius: 0 !important;
 }
 
-.cancel:hover {
-    color: #E0812E;
-    border-color: #E0812E;
+.outlined-button:hover {
+    color: #E0812E !important;
+    border-color: #E0812E !important;
 }
 
+@media only screen and (max-width: 1100px) 
+{
+    .marginResizable{
+        margin-left: 2px;
+        margin-right: 4px;
+    }
+}
