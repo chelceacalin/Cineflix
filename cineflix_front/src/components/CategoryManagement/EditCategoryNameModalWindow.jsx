@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { Button, Dialog, DialogContent, FormControl, InputLabel, NativeSelect, TextField } from '@mui/material';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
@@ -7,35 +7,22 @@ import axios from 'axios';
 
 axios.defaults.withCredentials = true
 
-function EditRoleModalWindow({ isModalOpen, closeModal, id, name, updateCategory}) {
-    const [newName, setNewName]=useState(name);
-    const [categoryDTO, setCategoryDTO] = useState({  
-        name: '',
-        id: ''
-    });
-
-    useEffect(() => {
-        setCategoryDTO(() => ({
-            'name': newName,
-            'id': id
-        }))
-    }, [name, newName])
-
+function EditRoleModalWindow({ isModalOpen, closeModal, id, name, updateCategory, setErrorMessage, errorMessage}) {
+    const newNameRef = useRef();
     const editCategoryName = () => {
-        let url = '/category/update/' + id;
-        try {
-            setCategoryDTO(() => ({
-                'name': newName,
-                'id': id
-            }));
-            const response = axios.post(url, categoryDTO).then(()=>{
-                updateCategory(categoryDTO);
-                closeModal();
-            }).catch(error => {
-                console.log("error: ", error.response.data);
+        let url = 'http://localhost:8081/category/update/' + id;
+        axios.post(url, {
+            id: id,
+            name: newNameRef.current.value
+        }).then(response => {
+            updateCategory({
+                id: response.data.id,
+                name: response.data.name,
             });
-        } catch (error) {
-        }
+            closeModal();
+        }).catch(error => {
+            setErrorMessage(error.response.data);
+        });
     };
 
     return (
@@ -52,12 +39,15 @@ function EditRoleModalWindow({ isModalOpen, closeModal, id, name, updateCategory
                         }}
                     />
                 </div>
+                <div className="text-basic-red font-bold w-52 text-center" >
+                    {errorMessage}
+                </div>
                 <div className='mt-4'>
                     <TextField
+                        inputRef={newNameRef}
                         id="outlined-read-only-input"
                         label="New Name"
                         defaultValue={""}
-                        onChange={(e) => setNewName(e.target.value)}
                     />
                 </div>
                 <div className='mt-4'>
