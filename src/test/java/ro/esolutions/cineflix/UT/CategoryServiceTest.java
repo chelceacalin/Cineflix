@@ -1,23 +1,24 @@
 package ro.esolutions.cineflix.UT;
 
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import ro.esolutions.cineflix.DTO.Category.CategoryDTO;
 import ro.esolutions.cineflix.entities.Category;
-import ro.esolutions.cineflix.exceptions.CategoryNotFoundException;
+import ro.esolutions.cineflix.exceptions.Category.CategoryNotFoundException;
 import ro.esolutions.cineflix.repositories.CategoryRepository;
 import ro.esolutions.cineflix.services.CategoryService;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
 import java.util.Optional;
 import java.util.UUID;
 
-import static org.junit.Assert.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.*;
+import static ro.esolutions.cineflix.util.CategoryGenerator.aCategory;
 import static ro.esolutions.cineflix.util.CategoryGenerator.aCategoryDTO;
 
 @ExtendWith(MockitoExtension.class)
@@ -29,9 +30,23 @@ public class CategoryServiceTest {
     @InjectMocks
     CategoryService categoryService;
 
+
+    @Test
+    @DisplayName("Create category")
+    public void createCategory() {
+        Category categoryToBeSaved = aCategory();
+        categoryToBeSaved.setId(null);
+        Category savedCategory = aCategory();
+        CategoryDTO categoryDTO = aCategoryDTO();
+        when(categoryRepository.save(categoryToBeSaved)).thenReturn(savedCategory);
+        Category result = categoryService.createCategory(categoryDTO);
+        assertEquals(savedCategory, result);
+    }
+
+
     @Test()
-    @DisplayName("Update Category With Exception Thrown Service UT")
-    public void deleteCategoryWithExceptionThrown() {
+    @DisplayName("Thrown exception when deleting a category that doesn't exist")
+    public void thrownExceptionWhenDeletingACategoryThatDoesntExist() {
         UUID id = UUID.fromString("12f310ee-3cc9-11ee-be56-0242ac120002");
         CategoryDTO categoryDTO = aCategoryDTO();
         when(categoryRepository.findById(id))
@@ -40,8 +55,36 @@ public class CategoryServiceTest {
                 id));
     }
 
+    @Test()
+    @DisplayName("Delete Category With Exception Thrown Service UT")
+    public void deleteCategoryWithExceptionThrown() {
+        String name = "Horror";
+        when(categoryRepository.findByName(name))
+                .thenReturn(Optional.empty());
+        assertThrows(CategoryNotFoundException.class, () -> categoryService.deleteCategory(
+                name));
+    }
+
     @Test
-    public void testUpdateCategorySuccess() throws CategoryNotFoundException {
+    @DisplayName("Delete Category Without Exception Thrown Service UT")
+    public void deleteCategoryWithoutExceptionThrown() throws CategoryNotFoundException {
+        UUID id = UUID.fromString("12f310ee-3cc9-11ee-be56-0242ac120002");
+        Category categoryToBeDeleted = Category.builder()
+                .id(id)
+                .name("Drama")
+                .build();
+
+        when(categoryRepository.findByName("Drama")).thenReturn(Optional.of(categoryToBeDeleted));
+        categoryService.deleteCategory(categoryToBeDeleted.getName());
+
+        verify(categoryRepository, times(1)).findByName("Drama");
+        verify(categoryRepository, times(1)).deleteById(id);
+    }
+
+
+    @Test
+    @DisplayName("Update category")
+    public void updateCategory() throws CategoryNotFoundException {
         UUID categoryId = UUID.randomUUID();
         CategoryDTO categoryDTO = new CategoryDTO();
         categoryDTO.setName("Updated Category Name");
@@ -70,7 +113,7 @@ public class CategoryServiceTest {
         Optional<String> validationResult = categoryService.validateCategory(categoryDTO);
 
         verify(categoryRepository, times(1)).findByNameIgnoreCase(categoryDTO.getName());
-        assertFalse(validationResult.isPresent()); // Expecting an empty Optional
+        assertFalse(validationResult.isPresent());
     }
 
     @Test
@@ -81,7 +124,7 @@ public class CategoryServiceTest {
         Category existingCategory = new Category();
         existingCategory.setName("Existing Category");
 
-        when(categoryRepository.findByNameIgnoreCase(categoryDTO.getName())).thenReturn(existingCategory);
+        when(categoryRepository.findByNameIgnoreCase(categoryDTO.getName())).thenReturn(Optional.of(existingCategory));
 
         Optional<String> validationResult = categoryService.validateCategory(categoryDTO);
 

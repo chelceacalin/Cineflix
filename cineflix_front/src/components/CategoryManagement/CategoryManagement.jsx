@@ -4,6 +4,9 @@ import { Button } from "@mui/material";
 import FilterCategory from "./FilterCategory";
 import "./css/CategoryManagement.css";
 import axios from "axios";
+import CreateCategoryModalWindow from "./CreateCategoryModalWIndow.jsx";
+import category from "./Category";
+import { faL } from "@fortawesome/free-solid-svg-icons";
 import Pagination from "../RoleManagement/Pagination";
 axios.defaults.withCredentials = true;
 
@@ -18,12 +21,16 @@ function CategoryManagement() {
   let [pageSize, setPageSize] = useState(15);
   let [totalPages, setTotalPages] = useState("");
   let [totalCategories, setTotalCategories] = useState(0);
+  let [signalCall, setSignalCall] = useState(false);
 
   useEffect(() => {
-    axios.get(`http://localhost:8081/category`).then((data) => {
+    axios.get(`/category`).then((data) => {
       setTotalCategories(data.data.content.length);
+      setCategories(data.data.content);
     });
-  }, [totalCategories]);
+
+  }, [totalCategories,signalCall]);
+
 
   let handleClick = (fieldName) => {
     if (lastClicked === fieldName) {
@@ -32,8 +39,12 @@ function CategoryManagement() {
     setLastClicked(fieldName);
   };
 
+  let signal = () => {
+    setSignalCall(!signalCall);
+  }
+
   useEffect(() => {
-    newUrl = `http://localhost:8081/category?direction=${
+    newUrl = `/category?direction=${
       direction ? "ASC" : "DESC"
     }&name=${name}&pageNo=${parseInt(pageNo) - 1}&pageSize=${pageSize}`;
     axios.get(newUrl).then((elems) => {
@@ -44,11 +55,24 @@ function CategoryManagement() {
         setTotalPages(elems.data.totalPages);
       }
     });
-  }, [direction, name, pageSize, pageNo]);
+  }, [direction, name, pageSize, pageNo,categories.length]);
 
   const updatePageNumber = (pgNo) => {
     setPageNo(pgNo);
   };
+
+  const [open, setOpen] = React.useState(false);
+  const [errorMessage,setErrorMessage] = useState("");
+  const handleOpen = () => {
+    setErrorMessage("");
+    setOpen(true);
+  }
+
+  const handleClose = () => {
+    setErrorMessage("");
+    setOpen(false);
+  }
+
 
   let getFilterInput = (params) => {
     setName(params[0]);
@@ -74,15 +98,15 @@ function CategoryManagement() {
     <>
       <FilterCategory filterInput={getFilterInput} />
       <div className="bg-grey-texture w-full">
-        <div className="w-1/3 h-full ml-10 mr-10 mt-5">
-          <table className="w-3/4 min-w-max table-auto text-left bg-white border-2">
+        <div className="w-full h-full px-10 py-5">
+          <table className="cater w-full text-left bg-white border-2">
             <thead className="bg-basic-red text-white">
               <tr>
                 {TABLE_HEAD.slice(0, TABLE_HEAD.length - 1).map((elem) => {
                   return (
                     <th
                       key={elem}
-                      className="border-b-white p-4 hover "
+                      className="border-b-white p-4 hover"
                       onClick={(e) => {
                         e.preventDefault();
                         if (e.target.textContent === "Category") {
@@ -119,12 +143,19 @@ function CategoryManagement() {
                 })}
                 <th className="border-b-white p-4">
                   <div>
-                    <Button
+                    <Button onClick={handleOpen}
                       className="white-outlined-button"
                       variant="outlined"
                     >
                       Add new
                     </Button>
+                    <CreateCategoryModalWindow
+                        isModalOpen={open}
+                        closeModal={handleClose}
+                        signal={signal}
+                        setErrorMessage={setErrorMessage}
+                        errorMessage = {errorMessage}
+                      />
                   </div>
                 </th>
               </tr>
@@ -141,12 +172,15 @@ function CategoryManagement() {
                     classes={classes}
                     updateCategory={updateCategory}
                     key={name}
+                    signal={signal}
+                    setErrorMessage={setErrorMessage}
+                    errorMessage = {errorMessage}
                   />
                 );
               })}
             </tbody>
           </table>
-          <span className="w-96 bg-basic-red flex flex-wrap py-3 mb-4">
+          <span className="bg-basic-red flex flex-wrap py-3 mb-4">
           <span className=" inline-flex marginResizable">
             <p className="text-white font-normal">
               Results per page:{" "}

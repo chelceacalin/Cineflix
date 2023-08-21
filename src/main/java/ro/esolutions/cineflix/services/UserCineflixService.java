@@ -16,6 +16,7 @@ import ro.esolutions.cineflix.DTO.UserInfoDTO;
 import ro.esolutions.cineflix.DTO.UserCineflix.UserDTO;
 import ro.esolutions.cineflix.DTO.UserCineflix.UserFilterDTO;
 import ro.esolutions.cineflix.entities.UserCineflix;
+import ro.esolutions.cineflix.exceptions.User.UserNotFoundException;
 import ro.esolutions.cineflix.mapper.UserInfoMapper;
 import ro.esolutions.cineflix.mapper.UserMapper;
 import ro.esolutions.cineflix.repositories.UserCineflixRepository;
@@ -32,7 +33,6 @@ import static java.util.Objects.nonNull;
 @RequiredArgsConstructor
 public class UserCineflixService {
 
-    @NonNull
     private final UserCineflixRepository userCineflixRepository;
     public static final String DEFAULTSORT = "defaultsort";
     public static final String FIRST_NAME = "firstName";
@@ -124,5 +124,15 @@ public class UserCineflixService {
         return userCineflixRepository.findByUsername(username)
                 .map(UserCineflix::getRole)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+    }
+
+    public UserDTO findUserByUsername(String username) {
+        Optional<UserCineflix> optionalUserCineflix = userCineflixRepository.findByUsername(username);
+        if (optionalUserCineflix.isPresent()) {
+            UserCineflix user = optionalUserCineflix.get();
+            return UserMapper.toDTO(user);
+        } else {
+            throw new UserNotFoundException("User with username " + username + " not found");
+        }
     }
 }
