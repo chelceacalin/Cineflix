@@ -5,8 +5,11 @@ import org.junit.Test;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.context.annotation.Import;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
@@ -16,24 +19,29 @@ import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.jdbc.SqlGroup;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.testcontainers.containers.PostgreSQLContainer;
-import ro.esolutions.cineflix.CineflixApplication;
 import ro.esolutions.cineflix.DTO.UserCineflix.UserDTO;
 import ro.esolutions.cineflix.DTO.UserCineflix.UserFilterDTO;
 import ro.esolutions.cineflix.config.CommonPostgresqlContainer;
+import ro.esolutions.cineflix.config.SecurityConfig;
+import ro.esolutions.cineflix.config.TestSecurityConfig;
 import ro.esolutions.cineflix.controllers.UserRoleManagementController;
 import ro.esolutions.cineflix.entities.UserCineflix;
 import ro.esolutions.cineflix.repositories.UserCineflixRepository;
+import ro.esolutions.cineflix.services.UserCineflixService;
 import ro.esolutions.cineflix.wrapper.UserPageWrapper;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
 import static org.springframework.http.HttpStatus.OK;
 import static org.springframework.test.context.jdbc.Sql.ExecutionPhase.AFTER_TEST_METHOD;
 import static org.springframework.test.context.jdbc.Sql.ExecutionPhase.BEFORE_TEST_METHOD;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes = CineflixApplication.class, webEnvironment = RANDOM_PORT)
+
+@AutoConfigureMockMvc
+@SpringBootTest(webEnvironment= SpringBootTest.WebEnvironment.RANDOM_PORT)
+@Import(TestSecurityConfig.class)
+
 public class UserRoleManagementControllerTestIT {
 
     @ClassRule
@@ -47,6 +55,11 @@ public class UserRoleManagementControllerTestIT {
 
     @Autowired
     UserCineflixRepository userCineflixRepository;
+
+    @MockBean
+    private SecurityConfig securityConfig;
+    @Autowired
+    UserCineflixService userCineflixService;
 
     @Test
     @DisplayName("Edit user role IT")
@@ -64,7 +77,7 @@ public class UserRoleManagementControllerTestIT {
                .email("test@gmail.com")
                .role(UserCineflix.Role.USER)
                .build();
-       ResponseEntity<UserCineflix> userCineflixResponseEntity = restTemplate.exchange(url, HttpMethod.POST, new HttpEntity<>(userDTO), new ParameterizedTypeReference<UserCineflix>(){});
+       ResponseEntity<UserCineflix> userCineflixResponseEntity = restTemplate.exchange(url, HttpMethod.POST, new HttpEntity<>(userDTO), new ParameterizedTypeReference<>(){});
        assertEquals(UserCineflix.Role.ADMIN, userCineflixResponseEntity.getBody().getRole());
        assertEquals(HttpStatus.OK,userCineflixResponseEntity.getStatusCode());
     }
@@ -167,7 +180,7 @@ public class UserRoleManagementControllerTestIT {
     })
     public void getUsersUsingWrongQueryStringRole(){
         String url="/users" + "?" + missingLastLetterFromField("role") + "=" + "e";
-        ResponseEntity<UserPageWrapper> result = restTemplate.exchange(url, HttpMethod.GET, null, new ParameterizedTypeReference<UserPageWrapper>() {});
+        ResponseEntity<?> result = restTemplate.exchange(url, HttpMethod.GET, null, new ParameterizedTypeReference<>() {});
         assertEquals(OK, result.getStatusCode());
         assertNull(result.getBody());
     }
@@ -188,7 +201,7 @@ public class UserRoleManagementControllerTestIT {
                 .role(UserCineflix.Role.USER)
                 .build();
         String url="/users" + dtoFilteredUser.toString() + missingLastLetterFromField("firstName") + "=" + "e";
-        ResponseEntity<UserPageWrapper> result = restTemplate.exchange(url, HttpMethod.GET, null, new ParameterizedTypeReference<UserPageWrapper>() {});
+        ResponseEntity<?> result = restTemplate.exchange(url, HttpMethod.GET, null, new ParameterizedTypeReference<>() {});
         assertEquals(OK, result.getStatusCode());
         assertNull(result.getBody());
     }
@@ -205,7 +218,7 @@ public class UserRoleManagementControllerTestIT {
                 .role(UserCineflix.Role.USER)
                 .build();
         String url="/users" + dtoFilteredUser.toString() + missingLastLetterFromField("lastName") + "=" + "e";
-        ResponseEntity<UserPageWrapper> result = restTemplate.exchange(url, HttpMethod.GET, null, new ParameterizedTypeReference<UserPageWrapper>() {});
+        ResponseEntity<?> result = restTemplate.exchange(url, HttpMethod.GET, null, new ParameterizedTypeReference<>() {});
         assertEquals(OK, result.getStatusCode());
         assertNull(result.getBody());
     }
@@ -222,7 +235,7 @@ public class UserRoleManagementControllerTestIT {
                 .role(UserCineflix.Role.USER)
                 .build();
         String url="/users" + dtoFilteredUser.toString() + missingLastLetterFromField("email") + "=" + "e";
-        ResponseEntity<UserPageWrapper> result = restTemplate.exchange(url, HttpMethod.GET, null, new ParameterizedTypeReference<UserPageWrapper>() {});
+        ResponseEntity<?> result = restTemplate.exchange(url, HttpMethod.GET, null, new ParameterizedTypeReference<>() {});
         assertEquals(OK, result.getStatusCode());
         assertNull(result.getBody());
     }
@@ -239,7 +252,7 @@ public class UserRoleManagementControllerTestIT {
                 .email("e")
                 .build();
         String url="/users" + dtoFilteredUser.toString() + missingLastLetterFromField("role") + "=" + UserCineflix.Role.USER;
-        ResponseEntity<UserPageWrapper> result = restTemplate.exchange(url, HttpMethod.GET, null, new ParameterizedTypeReference<UserPageWrapper>() {});
+        ResponseEntity<?> result = restTemplate.exchange(url, HttpMethod.GET, null, new ParameterizedTypeReference<>() {});
         assertEquals(OK, result.getStatusCode());
         assertNull(result.getBody());
     }
@@ -254,7 +267,7 @@ public class UserRoleManagementControllerTestIT {
                 .role(UserCineflix.Role.USER)
                 .build();
         String url="/users" + dtoFilteredUser.toString();
-        ResponseEntity<UserPageWrapper> result = restTemplate.exchange(url, HttpMethod.GET, null, new ParameterizedTypeReference<UserPageWrapper>() {});
+        ResponseEntity<UserPageWrapper> result = restTemplate.exchange(url, HttpMethod.GET, null, new ParameterizedTypeReference<>() {});
         assertEquals(OK, result.getStatusCode());
         assertEquals(1, result.getBody().getContent().size());
     }
