@@ -52,9 +52,9 @@ public class CategoryController {
 
     }
 
-    @PostMapping("/delete/{name}")
-    public ResponseEntity<?> deleteCategory(@PathVariable("name") @NotNull String name) {
-        categoryService.deleteCategory(name);
+    @PostMapping("/delete/{id}")
+    public ResponseEntity<?> deleteCategory(@PathVariable UUID id) {
+        categoryService.deleteCategory(id);
         return ResponseEntity.ok("Category was deleted successfully");
     }
 
@@ -65,11 +65,6 @@ public class CategoryController {
         return categoryService.getCategories(dto,pageNo,pageSize);
     }
 
-    @PostMapping ("/delete/{id}")
-    public ResponseEntity<String> deleteCategory(@PathVariable UUID id) {
-        categoryService.deleteCategory(id);
-        return ResponseEntity.ok("Category was deleted successfully");
-    }
 
     @GetMapping("/{name}")
     public CategoryDTO findCategoryByName(@PathVariable String name){

@@ -6,7 +6,7 @@ import axios from 'axios';
 
 axios.defaults.withCredentials = true
 
-function DeleteCategoryModalWindow({ isEditModalOpen, closeEditModal, name, signal }) {
+function DeleteCategoryModalWindow({ isEditModalOpen, closeEditModal, name, id, signal }) {
     const [requestError, setRequestError] = useState(false);
 
     const deleteCategory = () => {

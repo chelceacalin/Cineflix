@@ -94,6 +94,7 @@ public class CategoryService {
                 .ifPresent(movie -> {
                     throw new CategoryContainsMovieException("Found a movie, can not delete the category");
                 });
+        categoryRepository.deleteById(id);
     }
 
 
