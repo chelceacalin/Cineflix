@@ -1,13 +1,30 @@
 import React, { useEffect } from "react";
-import Button from '@mui/material/Button';
+import Button from "@mui/material/Button";
 
 import DetailsMovieModalView from "./DetailsMovieModalView";
 import DeleteMovieModalView from "./DeleteMovieModalView";
 
-function Movie({ title, director, category, isAvailable, rentedUntil, rentedBy, rating, classes, updateMovie }) {
-    const [open, setOpen] = React.useState(false);
-    const handleOpen = () => setOpen(true);
-    const handleClose = () => setOpen(false);
+function Movie({
+  title,
+  director,
+  category,
+  isAvailable,
+  rentedUntil,
+  rentedBy,
+  rating,
+  classes,
+  updateMovie,
+  id,
+  triggerRefresh,
+  setTriggerRefresh
+}) {
+
+  const [detailsModalOpen, setDetailsModalOpen] = React.useState(false);
+  const [deleteModalOpen, setDeleteModalOpen] = React.useState(false);
+  const handleDetailsOpen = () => setDetailsModalOpen(true);
+  const handleDetailsClose = () => setDetailsModalOpen(false);
+  const handleDeleteOpen = () => setDeleteModalOpen(true);
+  const handleDeleteClose = () => setDeleteModalOpen(false);
 
   return (
     <tr key={title}>
@@ -27,8 +44,12 @@ function Movie({ title, director, category, isAvailable, rentedUntil, rentedBy, 
         </div>
       </td>
       <td className={classes}>
-        <div variant="small" style={{color: isAvailable? 'green' : 'red'}} className="font-normal">
-          {isAvailable? "Available" : "Unavailable"}
+        <div
+          variant="small"
+          style={{ color: isAvailable ? "green" : "red" }}
+          className="font-normal"
+        >
+          {isAvailable ? "Available" : "Unavailable"}
         </div>
       </td>
       <td className={classes}>
@@ -42,33 +63,45 @@ function Movie({ title, director, category, isAvailable, rentedUntil, rentedBy, 
         </div>
       </td>
       <td className={classes}>
-        <div>
-            <button onClick={handleOpen} className="font-normal bg-white hover:border-hover-cream hover:text-hover-cream text-blue-marine border border-blue-marine py-2 px-3 mr-3">
-                Details
-            </button>
-          {/* <DetailsMovieModalView
-            isModalOpen={open}
-            closeModal={handleClose}
-            firstName={firstName}
-            lastName={lastName}
-            name={name}
-            role={role}
-            email={email}
-            username={username}
-            updateMovie={updateMovie}
-          /> */}
-            <button onClick={handleOpen} className="font-normal bg-blue-marine hover:border-hover-cream hover:bg-hover-cream text-white border border-blue-marine py-2 px-3">
-                Delete
-            </button>
-          { <DeleteMovieModalView
-            isModalOpen={open}
-            closeModal={handleClose}
+      <div>
+        <button 
+          onClick={handleDetailsOpen} 
+          className="inline-block rounded  px-3 mr-4 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-white"
+          style={{ backgroundColor: "blue", fontWeight: "bold" }}>
+          Details
+        </button>
+        
+        {detailsModalOpen && (
+          <DetailsMovieModalView
+            isModalOpen={detailsModalOpen}
+            closeModal={handleDetailsClose}
+            defaultTitle={title}
+            defaultDirector={director}
+            defaultCategory={category}
+            id={id}
+            setTriggerRefresh={setTriggerRefresh}
+            triggerRefresh={triggerRefresh}
+          />
+        )}
+
+        <button 
+          onClick={handleDeleteOpen} 
+          className="inline-block rounded px-3 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-white"
+          style={{ backgroundColor: "red", fontWeight: "bold" }}>
+          Delete
+        </button>
+
+        {deleteModalOpen && (
+          <DeleteMovieModalView
+            isModalOpen={deleteModalOpen}
+            closeModal={handleDeleteClose}
             title={title}
-            movieId={""}
+            category={category}
             deleteMovie={""}
-          /> }        
-        </div>
-      </td>
+          />
+        )}
+      </div>
+    </td>
     </tr>
   );
 }

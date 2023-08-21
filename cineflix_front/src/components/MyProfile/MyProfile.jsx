@@ -5,7 +5,6 @@ import MyProfileFilterComponent from "./MyProfileFilterComponent";
 import Pagination from "../RoleManagement/Pagination";
 import Movie from "./Movie";
 import AddNewMovieModalWindow from "./AddNewMovieModalWindow";
-axios.defaults.withCredentials = true;
 
 function MyProfile() {
   const TABLE_HEAD = ["Title", "Director", "Category", "Status", "Rented Until", "Rented By", ""];
@@ -29,22 +28,14 @@ function MyProfile() {
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+  const [triggerRefresh, setTriggerRefresh] = useState(false);
+
 
   let handleClick = (fieldName) => {
     if (lastClicked === fieldName) {
       setDirection(!direction);
     }
     setLastClicked(fieldName);
-  };
-
-  const updateMovie = (updatedMovie) => {
-    const updatedMovies = movies.map(movie => {
-      if (movie.title === updatedMovie.title) {
-        return updatedMovie;
-      }
-      return movie;
-    });
-    setMovies(updatedMovie);
   };
 
   useEffect(() => {
@@ -62,9 +53,7 @@ function MyProfile() {
         setTotalPages(elems.data.totalPages);
       }
     });
-    // console.log("url: " + newUrl);
-
-  }, [ sortField, direction, title, director, category, isAvailable, rentedUntil, rentedBy, ownerUsername, pageSize, pageNo ]);
+  }, [triggerRefresh, sortField, direction, title, director, category, isAvailable, rentedUntil, rentedBy, ownerUsername, pageSize, pageNo ]);
 
   let getFilterInput = (params) => {
     setCategory(params[0]);
@@ -144,7 +133,6 @@ function MyProfile() {
                           setSortField("rentedUntil");
                           handleClick(e.target.textContent.toLowerCase());
                         } else if (e.target.textContent === "Rented By") {
-                          console.log(e.target.textContent)
                           if (
                             title.length > 0 ||
                             director.length > 0 ||
@@ -198,19 +186,21 @@ function MyProfile() {
                   director={director}
                   category={category}
                   addMovie={addMovie}
+                  triggerRefresh={triggerRefresh}
+                  setTriggerRefresh={setTriggerRefresh}
                 />
               </th>
             </tr>
           </thead>
           <tbody className="text-blue-marine">
-            {movies.map(({ category, director, title, isAvailable, rentedUntil, rentedBy }, index) => {
+          {movies.map(({ category, director, title, isAvailable, rentedUntil, rentedBy, id }, index) => {
               const isLast = index === movies.length - 1;
               const classes = isLast
                 ? "px-4 py-2"
                 : "px-4 py-2 border-b border-blue-gray-50";
-
               return (
                 <Movie
+                  id={id}
                   title={title}
                   category={category}
                   director={director}                  
@@ -218,9 +208,10 @@ function MyProfile() {
                   rentedUntil={rentedUntil}
                   rentedBy={rentedBy}
                   key={index}
-                  updateMovie={updateMovie} 
                   classes={classes}
-                />
+                  triggerRefresh={triggerRefresh}
+                  setTriggerRefresh={setTriggerRefresh}
+                  />
               );
             })}
           </tbody>

@@ -17,7 +17,12 @@ import axios from "axios";
 
 axios.defaults.withCredentials = true;
 
-function AddNewMovieModalWindow({ isModalOpen, closeModal }) {
+function AddNewMovieModalWindow({
+  isModalOpen,
+  closeModal,
+  setTriggerRefresh,
+  triggerRefresh,
+}) {
   const [title, setTitle] = useState("");
   const [director, setDirector] = useState("");
   const [description, setDescription] = useState("");
@@ -31,10 +36,7 @@ function AddNewMovieModalWindow({ isModalOpen, closeModal }) {
     { condition: !title, message: "Title should not be empty!" },
     { condition: !director, message: "Director should not be empty!" },
     {
-      condition:
-        availableCategories.length === 0 ||
-        (availableCategories.length > 0 &&
-          availableCategories[0].name !== categorySelect),
+      condition: availableCategories.length === 0,
       message: "Invalid category name!",
     },
     { condition: !description, message: "Description should not be empty!" },
@@ -62,15 +64,6 @@ function AddNewMovieModalWindow({ isModalOpen, closeModal }) {
     setSelectedImage(file);
   };
 
-  const resetForm = () => {
-    setTitle("");
-    setDirector("");
-    setDescription("");
-    setCategory("");
-    setCategorySelect("");
-    setSelectedImage(null);
-  };
-
   const validRequest = () => {
     for (const check of validationChecks) {
       if (check.condition) {
@@ -81,28 +74,30 @@ function AddNewMovieModalWindow({ isModalOpen, closeModal }) {
     return true;
   };
 
-  const showToastError = (message) => {
-    toast.error(message, {
-      className: "bg-red-500 text-black p-4 rounded-lg",
-      position: "top-right",
-      autoClose: 3500,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-    });
+  const validCategory = () => {
+    return (
+      availableCategories &&
+      availableCategories.some((cat) => cat.name == categorySelect)
+    );
   };
 
   const handleSave = () => {
     if (validRequest() == true) {
       let urlAddMovie = `http://localhost:8081/movies`;
+      let finalCategory;
+
+      if (validCategory) {
+        finalCategory = categorySelect;
+      } else {
+        finalCategory = availableCategories[0].name;
+      }
+
       let movie = {
         title: title,
         director: director,
         description: description,
         isAvailable: true,
-        category: categorySelect,
+        category: finalCategory,
         owner_username: owner_username,
       };
 
@@ -116,15 +111,14 @@ function AddNewMovieModalWindow({ isModalOpen, closeModal }) {
               formData.append("image", selectedImage);
               axios
                 .post(urlAddMovieImage, formData)
-                .then((response) => {
-                })
+                .then((response) => {})
                 .catch((error) => {
                   console.error("eroare " + error);
                 });
             } else {
               console.error("Movie does not exist");
             }
-
+            setTriggerRefresh(!triggerRefresh);
             resetForm();
           })
           .catch((err) => {
@@ -136,6 +130,15 @@ function AddNewMovieModalWindow({ isModalOpen, closeModal }) {
         showToastError("Image should not be empty! ");
       }
     }
+  };
+
+  const resetForm = () => {
+    setTitle("");
+    setDirector("");
+    setDescription("");
+    setCategory("");
+    setCategorySelect("");
+    setSelectedImage(null);
   };
   return (
     <Dialog open={isModalOpen} onClose={closeModal}>
@@ -254,7 +257,11 @@ function AddNewMovieModalWindow({ isModalOpen, closeModal }) {
               type="button"
               onClick={closeModal}
               className="inline-block rounded  px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-white shadow-[0_4px_9px_-4px_#3b71ca] transition duration-150 ease-in-out hover:bg-primary-600 hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:bg-primary-600 focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:outline-none focus:ring-0 active:bg-primary-700 active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] dark:shadow-[0_4px_9px_-4px_rgba(59,113,202,0.5)] dark:hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] "
-              style={{ backgroundColor: "red", fontWeight: "bold" ,marginLeft:15}}
+              style={{
+                backgroundColor: "red",
+                fontWeight: "bold",
+                marginLeft: 15,
+              }}
             >
               Close
             </button>
@@ -265,5 +272,18 @@ function AddNewMovieModalWindow({ isModalOpen, closeModal }) {
     </Dialog>
   );
 }
+
+const showToastError = (message) => {
+  toast.error(message, {
+    className: "bg-red-500 text-black p-4 rounded-lg",
+    position: "top-right",
+    autoClose: 3500,
+    hideProgressBar: false,
+    closeOnClick: true,
+    pauseOnHover: true,
+    draggable: true,
+    progress: undefined,
+  });
+};
 
 export default AddNewMovieModalWindow;
