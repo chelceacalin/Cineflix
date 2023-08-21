@@ -25,7 +25,7 @@ function RoleManagement() {
   let [totalUsers, setTotalUsers] = useState(0);
 
   useEffect(() => {
-    axios.get(`http://localhost:8081/users`).then((data) => {
+    axios.get(`/users`).then((data) => {
       setTotalUsers(data.data.content.length);
     });
   }, [totalUsers]);
@@ -52,7 +52,7 @@ function RoleManagement() {
 
   useEffect(() => {
     const normalizedSortField = sortField || "defaultsort";
-    newUrl = `http://localhost:8081/users?sortField=${normalizedSortField}&direction=${
+    newUrl = `/users?sortField=${normalizedSortField}&direction=${
       direction ? "ASC" : "DESC"
     }&firstName=${firstName}&lastName=${lastName}&email=${email}&pageNo=${
       parseInt(pageNo) - 1

@@ -22,7 +22,7 @@ function EditRoleModalWindow({ isModalOpen, closeModal, id, name, updateCategory
     }, [name, newName])
 
     const editCategoryName = () => {
-        let url = 'http://localhost:8081/category/update/' + id;
+        let url = '/category/update/' + id;
         try {
             setCategoryDTO(() => ({
                 'name': newName,

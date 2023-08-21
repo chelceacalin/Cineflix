@@ -15,7 +15,7 @@ import { faL, faTimes } from "@fortawesome/free-solid-svg-icons";
 import "./css/AddNewMovieModalWindow.css";
 import axios from "axios";
 
-axios.defaults.withCredentials = true;
+
 
 function AddNewMovieModalWindow({
   isModalOpen,
@@ -42,7 +42,7 @@ function AddNewMovieModalWindow({
     { condition: !description, message: "Description should not be empty!" },
   ];
   useEffect(() => {
-    let url = `http://localhost:8081/category?name=${category}`;
+    let url = `/category?name=${category}`;
     axios
       .get(url)
       .then((response) => {
@@ -82,8 +82,8 @@ function AddNewMovieModalWindow({
   };
 
   const handleSave = () => {
-    if (validRequest() == true) {
-      let urlAddMovie = `http://localhost:8081/movies`;
+    if (validRequest()) {
+      let urlAddMovie = `/movies`;
       let finalCategory;
 
       if (validCategory) {
@@ -106,7 +106,7 @@ function AddNewMovieModalWindow({
           .post(urlAddMovie, movie)
           .then((data) => {
             if (data.data) {
-              let urlAddMovieImage = `http://localhost:8081/images/${data.data.id}`;
+              let urlAddMovieImage = `/images/${data.data.id}`;
               const formData = new FormData();
               formData.append("image", selectedImage);
               axios
@@ -247,7 +247,7 @@ function AddNewMovieModalWindow({
             <button
               type="button"
               onClick={handleSave}
-              className="inline-block rounded  px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-white shadow-[0_4px_9px_-4px_#3b71ca] transition duration-150 ease-in-out hover:bg-primary-600 hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:bg-primary-600 focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:outline-none focus:ring-0 active:bg-primary-700 active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] dark:shadow-[0_4px_9px_-4px_rgba(59,113,202,0.5)] dark:hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] "
+              className="inline-block rounded  px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normaltext-white  "
               style={{ backgroundColor: "blue", fontWeight: "bold" }}
             >
               Save
@@ -256,8 +256,9 @@ function AddNewMovieModalWindow({
             <button
               type="button"
               onClick={closeModal}
-              className="inline-block rounded  px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-white shadow-[0_4px_9px_-4px_#3b71ca] transition duration-150 ease-in-out hover:bg-primary-600 hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:bg-primary-600 focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:outline-none focus:ring-0 active:bg-primary-700 active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] dark:shadow-[0_4px_9px_-4px_rgba(59,113,202,0.5)] dark:hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] "
+              className="inline-block rounded  px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-white "
               style={{
+
                 backgroundColor: "red",
                 fontWeight: "bold",
                 marginLeft: 15,

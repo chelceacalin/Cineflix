@@ -13,7 +13,6 @@ import axios from "axios";
 
 axios.defaults.withCredentials = true;
 
-const BASE_URL=`http://localhost:8081`;
 function DetailsMovieModalView({
   isModalOpen,
   closeModal,
@@ -36,8 +35,7 @@ function DetailsMovieModalView({
 
   const fetchMovieImage = async () => {
     try {
-      const response = await axios.get(
-        BASE_URL+`/imagesByMovieID/${id}`,
+      const response = await axios.get(`/imagesByMovieID/${id}`,
         {
           responseType: "blob",
         }
@@ -53,7 +51,7 @@ function DetailsMovieModalView({
   };
 
   useEffect(() => {
-    axios.get(BASE_URL+`/movies/${id}`).then((data) => {
+    axios.get(`/movies/${id}`).then((data) => {
       if (data.data.description.length > 0) {
         setDescription(data.data.description);
       }
@@ -85,7 +83,7 @@ function DetailsMovieModalView({
   };
 
   useEffect(() => {
-    let url = BASE_URL+`/category?name=${category}`;
+    let url =`/category?name=${category}`;
     axios
       .get(url)
       .then((response) => {
@@ -126,7 +124,7 @@ function DetailsMovieModalView({
           formData.append("image", selectedImageFile);
 
           axios
-            .post(BASE_URL+`/images/${id}`, formData)
+            .post(`/images/${id}`, formData)
             .then((response) => {
               if (response.status === 200) {
                 showToast("Image uploaded successfully!", "bg-green-500");
@@ -147,7 +145,7 @@ function DetailsMovieModalView({
         };
 
         axios
-          .post(BASE_URL+`/movies/${id}`, movie)
+          .post(`/movies/${id}`, movie)
           .then((response) => {
             showToast("Movie edited successfully!", "bg-green-500");
             setTriggerRefresh(!triggerRefresh);

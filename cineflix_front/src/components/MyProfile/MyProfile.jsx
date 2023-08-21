@@ -41,7 +41,7 @@ function MyProfile() {
   useEffect(() => {
     const normalizedSortField = sortField || "title";
 
-    newUrl = `http://localhost:8081/movies?owner_username=adminusername&sortField=${normalizedSortField}&direction=${
+    newUrl = `/movies?owner_username=adminusername&sortField=${normalizedSortField}&direction=${
         direction ? "ASC" : "DESC"}&title=${title}&director=${director}&category=${category}&isAvailable=${isAvailable}&pageNo=${
             parseInt(pageNo) - 1}&pageSize=${pageSize}`;
 

@@ -32,7 +32,7 @@ function App() {
   function MainContent() {
     const { isAdmin, setIsAdmin, username, setUsername, token, setToken, isLogged, setIsLoggedIn } = useContext(UserLoginContext);
     useEffect(() => {
-      axios.get(`http://localhost:8081/userInfo`)
+      axios.get(`/userInfo`)
       .then((response) => {
         console.log(response.data.role);
         const userInfo = response.data;
