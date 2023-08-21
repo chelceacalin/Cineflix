@@ -78,7 +78,7 @@ public class MovieService {
                 })
                 .collect(Collectors.toList());
 
-        return new PageImpl<>(movies, pageable, moviesPage.getTotalPages());
+        return new PageImpl<>(movies, pageable, moviesPage.getTotalElements());
     }
 
     private Specification<Movie> getSpecification(MovieFilterDTO movieFilter) {

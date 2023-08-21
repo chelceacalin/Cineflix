@@ -42,8 +42,7 @@ function MyProfile() {
     const normalizedSortField = sortField || "title";
 
     newUrl = `/movies?owner_username=adminusername&sortField=${normalizedSortField}&direction=${
-        direction ? "ASC" : "DESC"}&title=${title}&director=${director}&category=${category}&isAvailable=${isAvailable}&pageNo=${
-            parseInt(pageNo) - 1}&pageSize=${pageSize}`;
+        direction ? "ASC" : "DESC"}&title=${title}&director=${director}&category=${category}&isAvailable=${isAvailable}&pageNo=${parseInt(pageNo) - 1}&pageSize=${pageSize}`;
 
     axios.get(newUrl).then((elems) => {
       if (elems.data.content.length === 0 && pageNo > 1) {
@@ -53,7 +52,7 @@ function MyProfile() {
         setTotalPages(elems.data.totalPages);
       }
     });
-  }, [triggerRefresh, sortField, direction, title, director, category, isAvailable, rentedUntil, rentedBy, ownerUsername, pageSize, pageNo ]);
+  }, [triggerRefresh, sortField, direction, title, director, category, isAvailable, rentedUntil, rentedBy, ownerUsername, pageSize, pageNo, movies.length ]);
 
   let getFilterInput = (params) => {
     setCategory(params[0]);

@@ -14,6 +14,8 @@ function Pagination({
 
   let getNextPage = () => {
     if (pageNo < totalPages) updatePageNumber(++pageNo);
+    console.log("In butonul next page");
+    console.log("pageNo: " + pageNo, "total pages: " + totalPages);
   };
 
   const handlePageClick = (pageNumber) => {
@@ -149,7 +151,10 @@ function Pagination({
         )}
 
         <li
-          onClick={()=>getNextPage()}
+          onClick={(e)=>{
+            e.preventDefault();
+            getNextPage();
+          }}
         >
           <div className="relative block rounded bg-transparent px-3  text-sm text-neutral-600 transition-all duration-300 hover:bg text-white hover:bg-white hover:text-blue-marine">
             Next
