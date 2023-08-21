@@ -88,7 +88,7 @@ function RoleManagement() {
       <FilterComponent filterInput={getFilterInput} />
       <div className="bg-grey-texture w-full">
       <div className="w-full h-full px-10 py-5">
-        <table className="w-full min-w-max table-auto text-left bg-white border-2">
+        <table className="w-full text-left bg-white border-2">
           <thead className="bg-basic-red text-white">
             <tr>
               {TABLE_HEAD.slice(0, TABLE_HEAD.length - 2).map((elem) => {
