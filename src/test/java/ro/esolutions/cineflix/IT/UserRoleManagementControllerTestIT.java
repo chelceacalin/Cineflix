@@ -15,15 +15,10 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
-import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.jdbc.SqlGroup;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.testcontainers.containers.PostgreSQLContainer;
-import ro.esolutions.cineflix.DTO.UserDTO;
-import ro.esolutions.cineflix.DTO.UserFilterDTO;
-import ro.esolutions.cineflix.CineflixApplication;
 import ro.esolutions.cineflix.DTO.UserCineflix.UserDTO;
 import ro.esolutions.cineflix.DTO.UserCineflix.UserFilterDTO;
 import ro.esolutions.cineflix.config.CommonPostgresqlContainer;
@@ -60,8 +55,7 @@ public class UserRoleManagementControllerTestIT {
 
     @Autowired
     UserCineflixRepository userCineflixRepository;
-    @Autowired
-    private ClientRegistrationRepository clientRegistrationRepository;
+
     @MockBean
     private SecurityConfig securityConfig;
     @Autowired
