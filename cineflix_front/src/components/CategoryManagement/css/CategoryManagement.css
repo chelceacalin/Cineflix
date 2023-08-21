@@ -26,3 +26,15 @@
         margin-right: 4px;
     }
 }
+
+table.cater tr th:nth-child(2),
+table.cater tr td:nth-child(2){
+    max-width: 20px;
+    text-align: center;
+}
+
+table.cater tr th:nth-child(3),
+table.cater tr td:nth-child(3){
+    max-width: 20px;
+    text-align: center;
+}
