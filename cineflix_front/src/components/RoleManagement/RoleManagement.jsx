@@ -87,7 +87,7 @@ function RoleManagement() {
     <>
       <FilterComponent filterInput={getFilterInput} />
       <div className="bg-grey-texture w-full">
-      <div className="w-2/3 h-full ml-10 mr-10 mt-5">
+      <div className="w-full h-full px-10 py-5">
         <table className="w-full min-w-max table-auto text-left bg-white border-2">
           <thead className="bg-basic-red text-white">
             <tr>
@@ -183,7 +183,7 @@ function RoleManagement() {
             })}
           </tbody>
         </table>
-        <span className="w-full bg-basic-red flex flex-wrap py-3 mb-4">
+        <span className="bg-basic-red flex flex-wrap py-3 mb-4">
           <span className=" inline-flex marginResizable">
             <p className="text-white font-normal">
               Results per page:{" "}
