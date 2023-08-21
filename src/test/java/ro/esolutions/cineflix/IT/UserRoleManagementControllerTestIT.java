@@ -3,26 +3,43 @@ package ro.esolutions.cineflix.IT;
 import org.junit.ClassRule;
 import org.junit.Test;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.actuate.autoconfigure.wavefront.WavefrontProperties;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.web.client.TestRestTemplate;
+
+import org.springframework.context.annotation.Import;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
+import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.security.test.context.support.WithUserDetails;
+import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.jdbc.SqlGroup;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.testcontainers.containers.PostgreSQLContainer;
 import ro.esolutions.cineflix.CineflixApplication;
 import ro.esolutions.cineflix.DTO.UserDTO;
 import ro.esolutions.cineflix.DTO.UserFilterDTO;
 import ro.esolutions.cineflix.config.CommonPostgresqlContainer;
+import ro.esolutions.cineflix.config.SecurityConfig;
+import ro.esolutions.cineflix.config.TestSecurityConfig;
 import ro.esolutions.cineflix.controllers.UserRoleManagementController;
 import ro.esolutions.cineflix.entities.UserCineflix;
 import ro.esolutions.cineflix.repositories.UserCineflixRepository;
+import ro.esolutions.cineflix.services.UserCineflixService;
 import ro.esolutions.cineflix.wrapper.UserPageWrapper;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -33,7 +50,11 @@ import static org.springframework.test.context.jdbc.Sql.ExecutionPhase.AFTER_TES
 import static org.springframework.test.context.jdbc.Sql.ExecutionPhase.BEFORE_TEST_METHOD;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes = CineflixApplication.class, webEnvironment = RANDOM_PORT)
+
+@AutoConfigureMockMvc
+@SpringBootTest(webEnvironment= SpringBootTest.WebEnvironment.RANDOM_PORT)
+@Import(TestSecurityConfig.class)
+
 public class UserRoleManagementControllerTestIT {
 
     @ClassRule
@@ -47,6 +68,12 @@ public class UserRoleManagementControllerTestIT {
 
     @Autowired
     UserCineflixRepository userCineflixRepository;
+    @Autowired
+    private ClientRegistrationRepository clientRegistrationRepository;
+    @MockBean
+    private SecurityConfig securityConfig;
+    @Autowired
+    UserCineflixService userCineflixService;
 
     @Test
     @DisplayName("Edit user role IT")
@@ -55,6 +82,7 @@ public class UserRoleManagementControllerTestIT {
             @Sql(value = "/sql/insert_user.sql", executionPhase = BEFORE_TEST_METHOD),
             @Sql(value = "/sql/clean_up_user.sql", executionPhase = AFTER_TEST_METHOD)
     })
+
     public void updateUserRole() {
        String url = "/users/update/ADMIN";
        UserDTO userDTO = UserDTO.builder()
@@ -74,6 +102,8 @@ public class UserRoleManagementControllerTestIT {
             @Sql(value = "/sql/clean_up_user.sql", executionPhase = BEFORE_TEST_METHOD),
             @Sql(value = "/sql/insert_user.sql", executionPhase = BEFORE_TEST_METHOD)
     })
+
+    @WithMockUser(username="admin",roles="admin")
     public void getAllUsers(){
         UserFilterDTO dtoFilter = UserFilterDTO.builder()
                 .build();

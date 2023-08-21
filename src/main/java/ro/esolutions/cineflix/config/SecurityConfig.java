@@ -18,6 +18,7 @@ import org.springframework.security.oauth2.core.oidc.OidcUserInfo;
 import org.springframework.security.oauth2.core.oidc.user.OidcUserAuthority;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
+import org.springframework.web.client.RestTemplate;
 import ro.esolutions.cineflix.entities.UserCineflix;
 import ro.esolutions.cineflix.services.UserCineflixService;
 
@@ -37,6 +38,7 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity
                 .authorizeHttpRequests(registry -> registry
+
                         .requestMatchers(HttpMethod.OPTIONS).permitAll()
                         .requestMatchers("/users/").hasAnyRole("USER", "ADMIN")
                         .requestMatchers("/users/update/**").hasRole("ADMIN")
