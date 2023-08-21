@@ -4,10 +4,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import ro.esolutions.cineflix.exceptions.CategoryAlreadyExistsException;
-import ro.esolutions.cineflix.exceptions.CategoryContainsMovieException;
-import ro.esolutions.cineflix.exceptions.CategoryNotFoundException;
-import ro.esolutions.cineflix.exceptions.EmptyCategoryNameField;
+import ro.esolutions.cineflix.exceptions.*;
 
 @ControllerAdvice
 public class ExceptionsHandler {
@@ -27,8 +24,13 @@ public class ExceptionsHandler {
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler(CategoryContainsMovieException.class)
-    public ResponseEntity<String> handleCategoryContainsMovieException(CategoryContainsMovieException ex) {
-        return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
+    @ExceptionHandler(MovieNotAvailableException.class)
+    public ResponseEntity<String> handleMovieNotAvailableException(MovieNotAvailableException ex) {
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.METHOD_NOT_ALLOWED);
+    }
+
+    @ExceptionHandler(MovieNotFoundException.class)
+    public ResponseEntity<String> handleMovieNotFoundException(MovieNotFoundException ex) {
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
     }
 }

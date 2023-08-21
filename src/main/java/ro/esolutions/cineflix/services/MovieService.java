@@ -10,9 +10,13 @@ import ro.esolutions.cineflix.DTO.Movie.MovieDTO;
 import ro.esolutions.cineflix.DTO.Movie.MovieFilterDTO;
 import ro.esolutions.cineflix.entities.Movie;
 import ro.esolutions.cineflix.entities.MovieHistory;
+import ro.esolutions.cineflix.entities.UserCineflix;
+import ro.esolutions.cineflix.exceptions.MovieNotAvailableException;
+import ro.esolutions.cineflix.exceptions.MovieNotFoundException;
 import ro.esolutions.cineflix.mapper.MovieMapper;
 import ro.esolutions.cineflix.repositories.MovieHistoryRepository;
 import ro.esolutions.cineflix.repositories.MovieRepository;
+import ro.esolutions.cineflix.repositories.UserCineflixRepository;
 import ro.esolutions.cineflix.specification.GenericSpecification;
 import ro.esolutions.cineflix.specification.MovieSpecification;
 
@@ -32,6 +36,8 @@ public class MovieService {
     private final MovieRepository movieRepository;
     @NonNull
     private final MovieHistoryRepository movieHistoryRepository;
+
+    private final UserCineflixRepository userCineflixRepository;
 
     public static final String USERNAME = "movieHistories.rentedBy.username";
     public static final String MOVIE_HISTORIES_RENTED_UNTIL = "movieHistories.rentedUntil";
@@ -116,6 +122,24 @@ public class MovieService {
             return movieRepository.save(employee);
         }
         return employee;
+    }
+
+    public String[] getRentedBy(UUID id) {
+        MovieHistory movieHistory = movieHistoryRepository.findMovieHistoryByRentedUntilMostRecent(id);
+        String firstName=movieHistory.getRentedBy().getFirstName();
+        String lastName=movieHistory.getRentedBy().getLastName();
+        return new String[]{firstName + lastName};
+    }
+
+    public void deleteMovieIfNotRented(UUID id) {
+        Movie movieFound = movieRepository.findById(id)
+                .orElseThrow(() -> new MovieNotFoundException("Movie to be deleted does not exist"));
+        if (!movieFound.isAvailable()) {
+            String[] userName = getRentedBy(id);
+            throw new MovieNotAvailableException("Movie is being watched by :" + userName
+                    + "You will be able to delete it after it's been returned");
+        }
+        movieRepository.deleteById(id);
     }
 
 }
