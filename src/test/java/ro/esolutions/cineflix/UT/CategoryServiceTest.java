@@ -125,7 +125,7 @@ public class CategoryServiceTest {
         Category existingCategory = new Category();
         existingCategory.setName("Existing Category");
 
-        when(categoryRepository.findByNameIgnoreCase(categoryDTO.getName())).thenReturn(existingCategory);
+        when(categoryRepository.findByNameIgnoreCase(categoryDTO.getName())).thenReturn(Optional.of(existingCategory));
 
         Optional<String> validationResult = categoryService.validateCategory(categoryDTO);
 

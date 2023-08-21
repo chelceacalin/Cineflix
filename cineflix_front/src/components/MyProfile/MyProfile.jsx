@@ -5,7 +5,7 @@ import MyProfileFilterComponent from "./MyProfileFilterComponent";
 import Pagination from "../RoleManagement/Pagination";
 import Movie from "./Movie";
 import AddNewMovieModalWindow from "./AddNewMovieModalWindow";
-import SortIcon from "../../utils/icon/SortIcon";
+axios.defaults.withCredentials = true;
 
 function MyProfile() {
   const TABLE_HEAD = ["Title", "Director", "Category", "Status", "Rented Until", "Rented By", ""];
@@ -49,14 +49,10 @@ function MyProfile() {
 
   useEffect(() => {
     const normalizedSortField = sortField || "title";
-    let baseUrl = `http://localhost:8081/movies?owner_username=adminusername&sortField=${normalizedSortField}&direction=${direction ? "ASC" : "DESC"}&title=${title}&director=${director}&category=${category}&isAvailable=${isAvailable}&rentedUntil=${rentedUntil}&pageNo=${
-      parseInt(pageNo) - 1}&pageSize=${pageSize}`;
 
-    if (rentedBy) {
-      baseUrl += `&rentedBy=${rentedBy}`;
-    }
-  
-    newUrl = `${baseUrl}&pageNo=${parseInt(pageNo) - 1}&pageSize=${pageSize}`;
+    newUrl = `http://localhost:8081/movies?owner_username=adminusername&sortField=${normalizedSortField}&direction=${
+        direction ? "ASC" : "DESC"}&title=${title}&director=${director}&category=${category}&isAvailable=${isAvailable}&pageNo=${
+            parseInt(pageNo) - 1}&pageSize=${pageSize}`;
 
     axios.get(newUrl).then((elems) => {
       if (elems.data.content.length === 0 && pageNo > 1) {
@@ -66,6 +62,8 @@ function MyProfile() {
         setTotalPages(elems.data.totalPages);
       }
     });
+    // console.log("url: " + newUrl);
+
   }, [ sortField, direction, title, director, category, isAvailable, rentedUntil, rentedBy, ownerUsername, pageSize, pageNo ]);
 
   let getFilterInput = (params) => {
@@ -117,19 +115,43 @@ function MyProfile() {
                           setSortField("title");
                           setDirection(!direction);
                         } else if (e.target.textContent === "Director") {
-                          setDirection(!direction);
+                          if (
+                            title.length > 0 ||
+                            director.length > 0 ||
+                            category.length > 0
+                          ) {
+                            setDirection(!direction);
+                          }
                           setSortField("director");
                           handleClick(e.target.textContent.toLowerCase());
                         } else if (e.target.textContent === "Category") {
-                          setDirection(!direction);
+                          if (
+                            title.length > 0 ||
+                            director.length > 0 ||
+                            category.length > 0
+                          ) 
+                           setDirection(!direction);
                           setSortField("category");
                           handleClick(e.target.textContent.toLowerCase());
                         } else if (e.target.textContent === "Rented Until") {
-                          setDirection(!direction);
+                          if (
+                            title.length > 0 ||
+                            director.length > 0 ||
+                            category.length > 0
+                          ) {
+                            setDirection(!direction);
+                          }
                           setSortField("rentedUntil");
                           handleClick(e.target.textContent.toLowerCase());
                         } else if (e.target.textContent === "Rented By") {
-                          setDirection(!direction);
+                          console.log(e.target.textContent)
+                          if (
+                            title.length > 0 ||
+                            director.length > 0 ||
+                            category.length > 0
+                          ) {
+                            setDirection(!direction);
+                          }
                           setSortField("rentedBy");
                           handleClick(e.target.textContent.toLowerCase());
                         }
@@ -147,33 +169,15 @@ function MyProfile() {
                         fill="none"
                         xmlns="http://www.w3.org/2000/svg"
                         onClick={(e) => {
-                          const column = e.currentTarget.getAttribute("data-column");
-                          if (column !== "Status") {
-                            if (column === "Title") {
-                              setSortField("title");
-                              setDirection(!direction);
-                            } else if (column === "Director") {
-                              setDirection(!direction);
-                              setSortField("director");
-                              handleClick(column.toLowerCase());
-                            } else if (column === "Category") {
-                              setDirection(!direction);
-                              setSortField("category");
-                              handleClick(column.toLowerCase());
-                            } else if (column === "Rented Until") {
-                              setDirection(!direction);
-                              setSortField("rentedUntil");
-                              handleClick(column.toLowerCase());
-                            } else if (column === "Rented By") {
-                              setDirection(!direction);
-                              setSortField("rentedBy");
-                              handleClick(column.toLowerCase());
-                            }
-                          }
+                          setDirection(!direction);
+                          handleClick(e.currentTarget.getAttribute("data-column").toLowerCase());
                         }}
                       >
                         {elem != "Status" && (
-                          <SortIcon />
+                          <path
+                            d="M4.16572 7.36845H11.8349C12.4074 7.36845 12.7116 6.72395 12.3311 6.31639L8.49679 2.21243C8.4346 2.14564 8.35821 2.09217 8.27269 2.05555C8.18716 2.01893 8.09444 2 8.00065 2C7.90687 2 7.81415 2.01893 7.72862 2.05555C7.6431 2.09217 7.56671 2.14564 7.50452 2.21243L3.66892 6.31639C3.28835 6.72395 3.59254 7.36845 4.16572 7.36845ZM7.50385 13.7876C7.56605 13.8544 7.64243 13.9078 7.72796 13.9444C7.81348 13.9811 7.9062 14 7.99999 14C8.09378 14 8.1865 13.9811 8.27202 13.9444C8.35755 13.9078 8.43393 13.8544 8.49613 13.7876L12.3304 9.68361C12.7116 9.27669 12.4074 8.63218 11.8343 8.63218H4.16572C3.59321 8.63218 3.28902 9.27669 3.66959 9.68424L7.50385 13.7876Z"
+                            fill="#ffffff"
+                          />
                         )}
                       </svg>
                     </div>
@@ -228,8 +232,8 @@ function MyProfile() {
             </p>
             <p className="ml-5">
               <select
-                name="movies"
-                id="movies"
+                name="cars"
+                id="cars"
                 form="carform"
                 onChange={handleSelectChange}
                 className="cursor-pointer"

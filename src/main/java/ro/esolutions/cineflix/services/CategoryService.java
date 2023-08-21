@@ -33,8 +33,8 @@ public class CategoryService {
         if (categoryDTO.getName().isEmpty()) {
             return Optional.of("You must add a name for the category, it cannot be empty");
         }
-        Category nameCategory = categoryRepository.findByNameIgnoreCase(categoryDTO.getName());
-        if (nameCategory != null) {
+        Optional<Category> nameCategory = categoryRepository.findByNameIgnoreCase(categoryDTO.getName());
+        if (nameCategory.isPresent()) {
             return Optional.of("This category already exists");
         }
         return Optional.empty();
@@ -94,5 +94,16 @@ public class CategoryService {
                 .ifPresent(movie -> {
                     throw new CategoryContainsMovieException("Found a movie, can not delete the category");
                 });
+    }
+
+
+    public CategoryDTO findCategoryByName(String name) {
+        Optional<Category> categoryOptional = categoryRepository.findByNameIgnoreCase(name);
+        if (categoryOptional.isPresent()) {
+            Category category = categoryOptional.get();
+            return CategoryMapper.toDTO(category);
+        } else {
+            throw new CategoryNotFoundException("Category not found");
+        }
     }
 }

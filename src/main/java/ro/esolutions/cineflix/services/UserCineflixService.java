@@ -125,4 +125,14 @@ public class UserCineflixService {
                 .map(UserCineflix::getRole)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
     }
+
+    public UserDTO findUserByUsername(String username) {
+        Optional<UserCineflix> optionalUserCineflix = userCineflixRepository.findByUsername(username);
+        if (optionalUserCineflix.isPresent()) {
+            UserCineflix user = optionalUserCineflix.get();
+            return UserMapper.toDTO(user);
+        } else {
+            throw new RuntimeException("User with username " + username + " not found");
+        }
+    }
 }

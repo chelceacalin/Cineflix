@@ -6,13 +6,18 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.*;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import ro.esolutions.cineflix.DTO.Movie.MovieAddDTO;
 import ro.esolutions.cineflix.DTO.Movie.MovieDTO;
 import ro.esolutions.cineflix.DTO.Movie.MovieFilterDTO;
+import ro.esolutions.cineflix.DTO.UserCineflix.UserDTO;
+import ro.esolutions.cineflix.entities.Category;
 import ro.esolutions.cineflix.entities.Movie;
 import ro.esolutions.cineflix.entities.MovieHistory;
 import ro.esolutions.cineflix.mapper.MovieMapper;
+import ro.esolutions.cineflix.repositories.CategoryRepository;
 import ro.esolutions.cineflix.repositories.MovieHistoryRepository;
 import ro.esolutions.cineflix.repositories.MovieRepository;
+import ro.esolutions.cineflix.repositories.UserCineflixRepository;
 import ro.esolutions.cineflix.specification.GenericSpecification;
 import ro.esolutions.cineflix.specification.MovieSpecification;
 
@@ -33,6 +38,15 @@ public class MovieService {
     @NonNull
     private final MovieHistoryRepository movieHistoryRepository;
 
+    private final UserCineflixRepository userCineflixRepository;
+
+    @NonNull
+    private final UserCineflixService userCineflixService;
+    @NonNull
+    private final CategoryService categoryService;
+
+    @NonNull
+    private final CategoryRepository categoryRepository;
     public static final String USERNAME = "movieHistories.rentedBy.username";
     public static final String MOVIE_HISTORIES_RENTED_UNTIL = "movieHistories.rentedUntil";
     public static final String RENTED_BY = "rentedBy";
@@ -110,12 +124,32 @@ public class MovieService {
         return movieRepository.findById(id);
     }
 
-    public Movie updateMovie(UUID id, Movie employee) {
-        Optional<Movie> optionalEmployee = movieRepository.findById(id);
-        if (optionalEmployee.isPresent()) {
-            return movieRepository.save(employee);
+    public Movie updateMovie(UUID id, Movie movie) throws Exception {
+        Optional<Movie> optionalMovie = movieRepository.findById(id);
+        if (optionalMovie.isPresent()) {
+            return movieRepository.save(movie);
+        } else {
+            throw new Exception("Movie Not Found");
         }
-        return employee;
     }
 
+
+    @Transactional
+    public MovieAddDTO addMovie(MovieAddDTO movie) {
+        UserDTO userCineflix = userCineflixService.findUserByUsername(movie.getOwner_username());
+        if (nonNull(userCineflix)) {
+            Optional<Category> categoryOptional = categoryRepository.findByNameIgnoreCase(movie.getCategory());
+            if (categoryOptional.isPresent()) {
+                Category category = categoryOptional.get();
+                Movie createdMovie = MovieMapper.toMovie(movie, userCineflix, category);
+                movieRepository.save(createdMovie);
+                return MovieMapper.toMovieAddDto(createdMovie);
+
+            } else {
+                throw new RuntimeException("Category not found");
+            }
+        } else {
+            throw new RuntimeException("User not found");
+        }
+    }
 }
