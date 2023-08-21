@@ -54,7 +54,7 @@ function MyProfile() {
         setTotalPages(elems.data.totalPages);
       }
     });
-  }, [triggerRefresh, sortField, direction, title, director, category, isAvailable, rentedUntil, rentedBy, ownerUsername, pageSize, pageNo ]);
+  }, [triggerRefresh, sortField, direction, title, director, category, isAvailable, rentedUntil, rentedBy, ownerUsername, pageSize, pageNo, movies.length ]);
 
   let getFilterInput = (params) => {
     setCategory(params[0]);
