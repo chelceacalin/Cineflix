@@ -1,6 +1,22 @@
 server:
   port: 8081
 spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5433/cineflix
+    username: cineflix
+    password: cineflix
+  servlet:
+    multipart:
+      max-file-size: 2MB
+      max-request-size: 2MB
+  jpa:
+    show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        jdbc:
+          lob:
+            non_contextual_creation: true
   security:
     oauth2:
       client:
@@ -15,11 +31,3 @@ spring:
       resourceserver:
         jwt:
           issuer-uri: https://keycloak-internship.kdev2.esolutions.ro/auth/realms/esolutions
-  datasource:
-    url: jdbc:postgresql://localhost:5433/cineflix
-    username: cineflix
-    password: cineflix
-  jpa:
-    hibernate:
-      ddl-auto: none
-    show-sql: true

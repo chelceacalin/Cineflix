@@ -23,6 +23,9 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.testcontainers.containers.PostgreSQLContainer;
 import ro.esolutions.cineflix.DTO.UserDTO;
 import ro.esolutions.cineflix.DTO.UserFilterDTO;
+import ro.esolutions.cineflix.CineflixApplication;
+import ro.esolutions.cineflix.DTO.UserCineflix.UserDTO;
+import ro.esolutions.cineflix.DTO.UserCineflix.UserFilterDTO;
 import ro.esolutions.cineflix.config.CommonPostgresqlContainer;
 import ro.esolutions.cineflix.config.SecurityConfig;
 import ro.esolutions.cineflix.config.TestSecurityConfig;
@@ -71,7 +74,6 @@ public class UserRoleManagementControllerTestIT {
             @Sql(value = "/sql/insert_user.sql", executionPhase = BEFORE_TEST_METHOD),
             @Sql(value = "/sql/clean_up_user.sql", executionPhase = AFTER_TEST_METHOD)
     })
-
     public void updateUserRole() {
        String url = "/users/update/ADMIN";
        UserDTO userDTO = UserDTO.builder()
@@ -91,8 +93,6 @@ public class UserRoleManagementControllerTestIT {
             @Sql(value = "/sql/clean_up_user.sql", executionPhase = BEFORE_TEST_METHOD),
             @Sql(value = "/sql/insert_user.sql", executionPhase = BEFORE_TEST_METHOD)
     })
-
-    @WithMockUser(username="admin",roles="admin")
     public void getAllUsers(){
         UserFilterDTO dtoFilter = UserFilterDTO.builder()
                 .build();

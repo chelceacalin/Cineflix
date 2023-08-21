@@ -23,7 +23,6 @@ public class MovieImageData {
     private String type;
 
     @Lob
-    @Column(name = "imageData", columnDefinition = "BYTEA")
     private byte[] imageData;
 
     @OneToOne

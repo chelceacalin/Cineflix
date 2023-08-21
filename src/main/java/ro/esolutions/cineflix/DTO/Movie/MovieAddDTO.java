@@ -1,19 +1,18 @@
-package ro.esolutions.cineflix.DTO;
-
+package ro.esolutions.cineflix.DTO.Movie;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.time.LocalDate;
+import java.util.UUID;
 
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class MovieDTO {
+public class MovieAddDTO {
 
+    private UUID id;
     private String owner_username;
 
     private String title;
@@ -24,9 +23,5 @@ public class MovieDTO {
 
     private Boolean isAvailable;
 
-    private String rentedBy;
-
-    private LocalDate rentedDate;
-
-    private LocalDate rentedUntil;
+    private String description;
 }
