@@ -58,36 +58,39 @@ function App() {
         console.error("Error fetching userInfo:", error);
       });
     }, [])
-  
+    if (isLoggedIn) {
       return (
-      <>
-      {isLoggedIn&&  <Navbar />}
+        <>
+          <Navbar />
+          <Routes>
+            <Route element={<Authenticated />}>
+
+              <Route index path="/" element={<Movies />} />
+
+              <Route element={<ProfileRoute />}>
+                <Route path="/myprofile/:id" element={<MyProfile />} />
+              </Route>
+
+              <Route element={<AdminRoute />}>
+                <Route path="/categoryManagement" element={<CategoryManagement />} />
+              </Route>
+
+              <Route element={<AdminRoute />}>
+                <Route path="/roleManagement" element={<RoleManagement />} />
+              </Route>
+            </Route>
+
+            <Route path="/*" element={<NotFound />} />
+          </Routes>
+        </>
+      );
+    } else {
+      return (
         <Routes>
-          <Route path="/login" element={<Login/>}/>
-          <Route element={<Authenticated/>}>
-
-            <Route index path="/" element={<Movies />} />
-
-            <Route element={<ProfileRoute/>}>
-              <Route path="/myprofile/:id" element={<MyProfile />} />
-            </Route>
-
-            <Route element={<AdminRoute />}>
-              <Route
-                path="/categoryManagement"
-                element={<CategoryManagement />}
-              />
-            </Route>
-
-            <Route element={<AdminRoute />}>
-              <Route path="/roleManagement" element={<RoleManagement />} />
-            </Route>
-          </Route>  
-
-          <Route path="/*" element={<NotFound />} />
+          <Route element={<Login />} index="/login" />
         </Routes>
-      </>
-    );
+      );
+    }
   }
 }
 
