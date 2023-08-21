@@ -7,6 +7,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import ro.esolutions.cineflix.entities.Movie;
 import ro.esolutions.cineflix.entities.MovieImageData;
+import ro.esolutions.cineflix.exceptions.MovieImageData.MovieImageDataNotFoundException;
+import ro.esolutions.cineflix.mapper.MovieMapper;
 import ro.esolutions.cineflix.repositories.MovieImageDataRepository;
 import ro.esolutions.cineflix.util.MovieImageDataUtil;
 
@@ -20,12 +22,9 @@ import static java.util.Objects.nonNull;
 @RequiredArgsConstructor
 public class MovieImageDataService {
 
-    @NonNull
-    private MovieImageDataRepository movieImageDataRepository;
-    @NonNull
-    private MovieImageDataUtil movieImageDataUtil;
-    @NonNull
-    private MovieService movieService;
+    private final MovieImageDataRepository movieImageDataRepository;
+    private final MovieImageDataUtil movieImageDataUtil;
+    private final MovieService movieService;
     private final static Set<String> allowedFormats = new HashSet<>(List.of("image/png", "image/jpeg", "image/jpg"));
 
     @Transactional
@@ -41,11 +40,11 @@ public class MovieImageDataService {
         }
 
         if (isNull(file)) {
-            throw new Exception("You have to introduce a file");
+            throw new MovieImageDataNotFoundException("You have to introduce a file");
         }
 
         if (!allowedFormats.contains(file.getContentType())) {
-            throw new Exception("File type not allowed");
+            throw new MovieImageDataNotFoundException("File type not allowed");
         }
 
 
@@ -61,33 +60,33 @@ public class MovieImageDataService {
                             .movie(movie)
                             .build());
             movieOptional.get().setPhoto(data);
-            movieService.updateMovie(movie.getId(), movie);
+            movieService.updateMovie(movie.getId(), MovieMapper.toMovieAddDto(movie));
         } else {
-            throw new Exception("Error uploading image");
+            throw new MovieImageDataNotFoundException("Error uploading image");
         }
     }
 
 
-    public byte[] downloadImage(String fileName) throws Exception {
+    public byte[] downloadImage(String fileName) {
         Optional<MovieImageData> data = movieImageDataRepository.findImageDataByName(fileName);
         byte[] bytes;
         if (data.isPresent()) {
             MovieImageData imageData = data.get();
             bytes = movieImageDataUtil.decompressImage(imageData.getImageData());
         } else {
-            throw new Exception("The image you are trying to download does not exist");
+            throw new MovieImageDataNotFoundException("The image you are trying to download does not exist");
         }
 
         return bytes;
     }
 
-    public byte[] findImageByMovieID(UUID id) throws Exception {
+    public byte[] findImageByMovieID(UUID id) {
         Optional<MovieImageData> data = movieImageDataRepository.findMovieImageDataByMovieId(id);
         if (data.isPresent()) {
             MovieImageData imageData = data.get();
             return movieImageDataUtil.decompressImage(imageData.getImageData());
         } else {
-            throw new Exception("Image not found");
+            throw new MovieImageDataNotFoundException("Image not found");
         }
     }
 

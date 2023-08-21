@@ -11,7 +11,7 @@ function CreateCategoryModalWindow({ isModalOpen, closeModal, signal, setErrorMe
 
 
   const createCategory = () => {
-    let url = "http://localhost:8081/category/create";
+    let url = "/category/create";
     setCategoryDTO("");
     axios.post(url, { name: categoryDTO }).then(() => {
       signal();

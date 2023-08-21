@@ -1,6 +1,7 @@
 package ro.esolutions.cineflix.services;
 
 import jakarta.transaction.Transactional;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -11,8 +12,8 @@ import org.springframework.stereotype.Service;
 import ro.esolutions.cineflix.DTO.Category.CategoryDTO;
 import ro.esolutions.cineflix.DTO.Category.CategoryFilterDTO;
 import ro.esolutions.cineflix.entities.Category;
-import ro.esolutions.cineflix.exceptions.CategoryContainsMovieException;
-import ro.esolutions.cineflix.exceptions.CategoryNotFoundException;
+import ro.esolutions.cineflix.exceptions.Category.CategoryContainsMovieException;
+import ro.esolutions.cineflix.exceptions.Category.CategoryNotFoundException;
 import ro.esolutions.cineflix.mapper.CategoryMapper;
 import ro.esolutions.cineflix.repositories.CategoryRepository;
 import ro.esolutions.cineflix.specification.CategorySpecification;
@@ -33,8 +34,8 @@ public class CategoryService {
         if (categoryDTO.getName().isEmpty()) {
             return Optional.of("You must add a name for the category, it cannot be empty");
         }
-        Category nameCategory = categoryRepository.findByNameIgnoreCase(categoryDTO.getName());
-        if (nameCategory != null) {
+        Optional<Category> nameCategory = categoryRepository.findByNameIgnoreCase(categoryDTO.getName());
+        if (nameCategory.isPresent()) {
             return Optional.of("This category already exists");
         }
         return Optional.empty();
@@ -57,6 +58,12 @@ public class CategoryService {
                 .isAvailable(true)
                 .build();
         return categoryRepository.save(categoryToBeSaved);
+    }
+
+    public void deleteCategory(String name) {
+        Category existsCategory = categoryRepository.findByName(name)
+                .orElseThrow(() -> new CategoryNotFoundException("Category to be deleted does not exist"));
+        categoryRepository.deleteById(existsCategory.getId());
     }
 
     public Page<CategoryDTO> getCategories(CategoryFilterDTO dto, int pageNo, int pageSize) {
@@ -88,5 +95,17 @@ public class CategoryService {
                 .ifPresent(movie -> {
                     throw new CategoryContainsMovieException("Found a movie, can not delete the category");
                 });
+        categoryRepository.deleteById(id);
+    }
+
+
+    public CategoryDTO findCategoryByName(String name) {
+        Optional<Category> categoryOptional = categoryRepository.findByNameIgnoreCase(name);
+        if (categoryOptional.isPresent()) {
+            Category category = categoryOptional.get();
+            return CategoryMapper.toDTO(category);
+        } else {
+            throw new CategoryNotFoundException("Category not found");
+        }
     }
 }

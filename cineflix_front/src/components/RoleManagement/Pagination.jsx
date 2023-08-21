@@ -23,7 +23,7 @@ function Pagination({
 
   return (
     <>
-      <ul className="list-style-none flex items-center justify-center mr-2">
+      <ul className="list-style-none flex items-center justify-center mr-2 cursor-pointer">
         <li
           onClick={(e) => {
             e.preventDefault();

@@ -21,12 +21,12 @@ function CategoryManagement() {
   let [pageSize, setPageSize] = useState(15);
   let [totalPages, setTotalPages] = useState("");
   let [totalCategories, setTotalCategories] = useState(0);
-  let [signalCall,setSignalCall]=useState(false)
+  let [signalCall, setSignalCall] = useState(false);
 
   useEffect(() => {
-    axios.get(`http://localhost:8081/category`).then((data) => {
+    axios.get(`/category`).then((data) => {
       setTotalCategories(data.data.content.length);
-      setCategories(data.data.content)
+      setCategories(data.data.content);
     });
 
   }, [totalCategories,signalCall]);
@@ -39,12 +39,12 @@ function CategoryManagement() {
     setLastClicked(fieldName);
   };
 
-  let signal=()=>{
-      setSignalCall(!signalCall)
+  let signal = () => {
+    setSignalCall(!signalCall);
   }
 
   useEffect(() => {
-    newUrl = `http://localhost:8081/category?direction=${
+    newUrl = `/category?direction=${
       direction ? "ASC" : "DESC"
     }&name=${name}&pageNo=${parseInt(pageNo) - 1}&pageSize=${pageSize}`;
     axios.get(newUrl).then((elems) => {
@@ -98,15 +98,15 @@ function CategoryManagement() {
     <>
       <FilterCategory filterInput={getFilterInput} />
       <div className="bg-grey-texture w-full">
-        <div className="w-1/3 h-full ml-10 mr-10 mt-5">
-          <table className="w-3/4 min-w-max table-auto text-left bg-white border-2">
+        <div className="w-full h-full px-10 py-5">
+          <table className="cater w-full text-left bg-white border-2">
             <thead className="bg-basic-red text-white">
               <tr>
                 {TABLE_HEAD.slice(0, TABLE_HEAD.length - 1).map((elem) => {
                   return (
                     <th
                       key={elem}
-                      className="border-b-white p-4 hover "
+                      className="border-b-white p-4 hover"
                       onClick={(e) => {
                         e.preventDefault();
                         if (e.target.textContent === "Category") {
@@ -172,12 +172,15 @@ function CategoryManagement() {
                     classes={classes}
                     updateCategory={updateCategory}
                     key={name}
+                    signal={signal}
+                    setErrorMessage={setErrorMessage}
+                    errorMessage = {errorMessage}
                   />
                 );
               })}
             </tbody>
           </table>
-          <span className="w-96 bg-basic-red flex flex-wrap py-3 mb-4">
+          <span className="bg-basic-red flex flex-wrap py-3 mb-4">
           <span className=" inline-flex marginResizable">
             <p className="text-white font-normal">
               Results per page:{" "}
