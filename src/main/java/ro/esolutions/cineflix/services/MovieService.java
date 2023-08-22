@@ -1,7 +1,6 @@
 package ro.esolutions.cineflix.services;
 
 import jakarta.transaction.Transactional;
-import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.*;
 import org.springframework.data.jpa.domain.Specification;
@@ -23,11 +22,9 @@ import ro.esolutions.cineflix.mapper.MovieMapper;
 import ro.esolutions.cineflix.repositories.CategoryRepository;
 import ro.esolutions.cineflix.repositories.MovieHistoryRepository;
 import ro.esolutions.cineflix.repositories.MovieRepository;
-import ro.esolutions.cineflix.repositories.UserCineflixRepository;
 import ro.esolutions.cineflix.specification.GenericSpecification;
 import ro.esolutions.cineflix.specification.MovieSpecification;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -47,7 +44,6 @@ public class MovieService {
     private final UserCineflixService userCineflixService;
 
     private final CategoryRepository categoryRepository;
-    private final UserCineflixRepository userCineflixRepository;
 
     public static final String USERNAME = "movieHistories.rentedBy.username";
     public static final String MOVIE_HISTORIES_RENTED_UNTIL = "movieHistories.rentedUntil";
@@ -149,8 +145,8 @@ public class MovieService {
     public Optional<String> getRentedBy(UUID id) {
         MovieHistory movieHistory = movieHistoryRepository.findMovieHistoryByRentedUntilMostRecent(id);
         Optional<UserCineflix> user = Optional.ofNullable(movieHistory.getRentedBy());
-        UserCineflix userCineflix = user.get();
         if (user.isPresent()) {
+            UserCineflix userCineflix = user.get();
             String firstName = userCineflix.getFirstName();
             String lastName = userCineflix.getLastName();
             return Optional.of(firstName + " " + lastName);
