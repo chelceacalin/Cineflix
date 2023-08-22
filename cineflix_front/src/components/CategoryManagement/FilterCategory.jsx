@@ -10,14 +10,12 @@ function FilterCategory({ filterInput }) {
     filterInput(array);
   }, [name]);
   return (
-    <div className="w-72 ml-6 border-r-2">
+    <div className="filterContainer space-y-4 ml-6 border-r-2">
       <div className="mt-10 mr-6">
-        <div>
-        <label>Name: </label>
-        </div>
         <TextField
           id="outlined-search"
           name="name"
+          label="Search name"
           type="search"
           onChange={(e) => setName(e.target.value)}
         />

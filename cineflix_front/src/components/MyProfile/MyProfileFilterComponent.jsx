@@ -5,6 +5,7 @@ import {
   TextField,
   InputLabel,
   NativeSelect,
+  Button,
 } from "@mui/material";
 import React from "react";
 import axios from "axios";
@@ -36,8 +37,8 @@ function MyProfileFilterComponent({ filterInput }) {
   useEffect(() => {
     let date = rentedUntil
       ? `${rentedUntil.getFullYear()}-${(rentedUntil.getMonth() + 1)
-          .toString()
-          .padStart(2, "0")}-${rentedUntil
+        .toString()
+        .padStart(2, "0")}-${rentedUntil
           .getDate()
           .toString()
           .padStart(2, "0")}`
@@ -65,8 +66,8 @@ function MyProfileFilterComponent({ filterInput }) {
   ]);
 
   return (
-    <div className="filterContainer space-y-4 ml-6 border-r-2">
-      <div className="mt-4 mr-6">
+    <div className="filterContainer border-r-2 space-y-4 ml-6">
+      <div className="mt-10 mr-6">
         <TextField
           id="outlined-search"
           name="title"
@@ -94,10 +95,9 @@ function MyProfileFilterComponent({ filterInput }) {
         />
       </div>
       <div className="p-1">
-        <div className="mb-2">Availability: </div>
-        <div className="flex gap-2">
+        <div className="mt-4 mb-2">Availability: </div>
+        <div>
           <div>
-            <label name="unavailable">Unavailable</label>
             <Checkbox
               name="type"
               label="Unavailable"
@@ -106,9 +106,9 @@ function MyProfileFilterComponent({ filterInput }) {
                 setUnavailable(e.target.checked);
               }}
             />
+            <label name="unavailable">Unavailable</label>
           </div>
           <div>
-            <label name="available">Available</label>
             <Checkbox
               name="type"
               label="Available"
@@ -117,28 +117,31 @@ function MyProfileFilterComponent({ filterInput }) {
                 setAvailable(e.target.checked);
               }}
             />
+            <label name="available">Available</label>
           </div>
         </div>
       </div>
-      <div className="mt-4 mr-6">
+      <div className="mt-10 mr-6">
         <label>Rented Until:</label>
         <DatePicker
           selected={rentedUntil}
           placeholderText={"Select the date"}
           onChange={(date) => setRentedUntil(date)}
-          className="rounded-lg border-2 border-gray-500 pl-1"
+          className="rounded-lg w-52 border-2 border-gray-500 pl-1 mt-2"
         />
-        <button
-          className="font-normal bg-blue-marine hover:border-hover-cream hover:bg-hover-cream text-white border border-blue-marine py-1 px-1 mt-1"
-          onClick={(e) => {
-            e.preventDefault();
-            setRentedUntil("");
-          }}
-        >
-          Reset date
-        </button>
+        <div className="mt-2 mb-10">
+          <Button
+            className="font-normal contained-button"
+            onClick={(e) => {
+              e.preventDefault();
+              setRentedUntil("");
+            }}
+          >
+            Reset date
+          </Button>
+        </div>
       </div>
-      <div className="mt-4 mr-6">
+      <div className="mt-10 mr-6">
         <label className="block">Rented by:</label>
         <select
           className="input-field mt-2"
@@ -150,10 +153,10 @@ function MyProfileFilterComponent({ filterInput }) {
           {usersWhoRented &&
             usersWhoRented.map((elem, index) => (
               elem.rentedBy !== "available"
-              ? <option key={index} value={elem.rentedBy}>
+                ? <option key={index} value={elem.rentedBy}>
                   {elem.rentedBy}
                 </option>
-              : ""
+                : ""
             ))}
         </select>
       </div>
