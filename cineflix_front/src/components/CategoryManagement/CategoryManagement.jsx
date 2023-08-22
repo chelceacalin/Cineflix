@@ -29,7 +29,7 @@ function CategoryManagement() {
       setCategories(data.data.content);
     });
 
-  }, [totalCategories,signalCall]);
+  }, [totalCategories, signalCall]);
 
 
   let handleClick = (fieldName) => {
@@ -44,9 +44,8 @@ function CategoryManagement() {
   }
 
   useEffect(() => {
-    newUrl = `/category?direction=${
-      direction ? "ASC" : "DESC"
-    }&name=${name}&pageNo=${parseInt(pageNo) - 1}&pageSize=${pageSize}`;
+    newUrl = `/category?direction=${direction ? "ASC" : "DESC"
+      }&name=${name}&pageNo=${parseInt(pageNo) - 1}&pageSize=${pageSize}`;
     axios.get(newUrl).then((elems) => {
       if (elems.data.content.length === 0 && pageNo > 1) {
         updatePageNumber(pageNo - 1);
@@ -55,14 +54,14 @@ function CategoryManagement() {
         setTotalPages(elems.data.totalPages);
       }
     });
-  }, [direction, name, pageSize, pageNo,categories.length]);
+  }, [direction, name, pageSize, pageNo, categories.length]);
 
   const updatePageNumber = (pgNo) => {
     setPageNo(pgNo);
   };
 
   const [open, setOpen] = React.useState(false);
-  const [errorMessage,setErrorMessage] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
   const handleOpen = () => {
     setErrorMessage("");
     setOpen(true);
@@ -106,7 +105,7 @@ function CategoryManagement() {
                   return (
                     <th
                       key={elem}
-                      className="border-b-white p-4 hover"
+                      className={`border-b-white p-4 ${elem !== 'Actions' ? 'hover' : ''}`}
                       onClick={(e) => {
                         e.preventDefault();
                         if (e.target.textContent === "Category") {
@@ -150,12 +149,12 @@ function CategoryManagement() {
                       Add new
                     </Button>
                     <CreateCategoryModalWindow
-                        isModalOpen={open}
-                        closeModal={handleClose}
-                        signal={signal}
-                        setErrorMessage={setErrorMessage}
-                        errorMessage = {errorMessage}
-                      />
+                      isModalOpen={open}
+                      closeModal={handleClose}
+                      signal={signal}
+                      setErrorMessage={setErrorMessage}
+                      errorMessage={errorMessage}
+                    />
                   </div>
                 </th>
               </tr>
@@ -174,41 +173,41 @@ function CategoryManagement() {
                     key={name}
                     signal={signal}
                     setErrorMessage={setErrorMessage}
-                    errorMessage = {errorMessage}
+                    errorMessage={errorMessage}
                   />
                 );
               })}
             </tbody>
           </table>
           <span className="bg-basic-red flex flex-wrap py-3 mb-4 border-2">
-          <span className=" inline-flex marginResizable">
-            <p className="text-white font-normal">
-              Results per page:{" "}
-            </p>
-            <p className="ml-5">
-              <select
-                name="sizes"
-                id="sizes"
-                form="sizesform"
-                onChange={handleSelectChange}
-              >
-                <option value="15">15</option>
-                <option value="10">10</option>
-                <option value="5">5</option>
-              </select>
-            </p>
+            <span className=" inline-flex marginResizable">
+              <p className="text-white font-normal">
+                Results per page:{" "}
+              </p>
+              <p className="ml-5">
+                <select
+                  name="sizes"
+                  id="sizes"
+                  form="sizesform"
+                  onChange={handleSelectChange}
+                >
+                  <option value="15">15</option>
+                  <option value="10">10</option>
+                  <option value="5">5</option>
+                </select>
+              </p>
+            </span>
+            <div className="ml-10 justify-center w-1/2 items-center">
+              <Pagination
+                pageNo={pageNo}
+                pageSize={pageSize}
+                totalPages={totalPages}
+                updatePageNumber={updatePageNumber}
+                responseLength={totalCategories}
+                nrCurrentUsers={categories.length}
+              />
+            </div>
           </span>
-          <div className="ml-10 justify-center w-1/2 items-center">
-            <Pagination
-              pageNo={pageNo}
-              pageSize={pageSize}
-              totalPages={totalPages}
-              updatePageNumber={updatePageNumber}
-              responseLength={totalCategories}
-              nrCurrentUsers={categories.length}
-            />
-          </div>
-        </span>
         </div>
       </div>
     </>
