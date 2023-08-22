@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import ro.esolutions.cineflix.DTO.Movie.MovieAddDTO;
 import ro.esolutions.cineflix.DTO.Movie.MovieDTO;
 import ro.esolutions.cineflix.DTO.Movie.MovieFilterDTO;
-import ro.esolutions.cineflix.entities.Movie;
+import ro.esolutions.cineflix.DTO.Movie.MovieRentMessageDTO;
 import ro.esolutions.cineflix.services.MovieService;
 
 import java.util.UUID;
@@ -38,5 +38,10 @@ public class MovieController {
     @GetMapping("/{id}")
     public MovieAddDTO findMovieById(@PathVariable UUID id){
         return movieService.findMovieByID(id);
+    }
+
+    @GetMapping("/rent/{id}")
+    public MovieRentMessageDTO findMovieToRent(@PathVariable UUID id) {
+        return movieService.findMovieToRent(id);
     }
 }

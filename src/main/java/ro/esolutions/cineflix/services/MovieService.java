@@ -1,7 +1,6 @@
 package ro.esolutions.cineflix.services;
 
 import jakarta.transaction.Transactional;
-import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.*;
 import org.springframework.data.jpa.domain.Specification;
@@ -9,6 +8,7 @@ import org.springframework.stereotype.Service;
 import ro.esolutions.cineflix.DTO.Movie.MovieAddDTO;
 import ro.esolutions.cineflix.DTO.Movie.MovieDTO;
 import ro.esolutions.cineflix.DTO.Movie.MovieFilterDTO;
+import ro.esolutions.cineflix.DTO.Movie.MovieRentMessageDTO;
 import ro.esolutions.cineflix.DTO.UserCineflix.UserDTO;
 import ro.esolutions.cineflix.entities.Category;
 import ro.esolutions.cineflix.entities.Movie;
@@ -166,5 +166,15 @@ public class MovieService {
         } else {
             throw new UserNotFoundException("User not found");
         }
+    }
+
+    public MovieRentMessageDTO findMovieToRent(UUID id){
+        Optional<Movie> movie = movieRepository.findById(id);
+
+        if (movie.isPresent()) {
+            return MovieMapper.toMovieRentMessageDto(movie.get());
+        }
+
+        throw new MovieNotFoundException("Movie not found");
     }
 }
