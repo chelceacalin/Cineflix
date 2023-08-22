@@ -163,7 +163,7 @@ function DetailsMovieModalView({
       <div className="modal-content wider-modal">
         <div className="header-container">
           <FontAwesomeIcon
-            className="close-modal-button w-10 h-6 ml-4"
+            className="close-modal-button w-10 h-6 ml-4 cursor-pointer"
             icon={faTimes}
             onClick={closeModal}
           />
@@ -269,9 +269,7 @@ function DetailsMovieModalView({
             <button
               type="button"
               onClick={handleSave}
-              className="inline-block rounded  px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-white hoverColorDetails
-                 "
-              style={{ backgroundColor: "#1E1D5B", fontWeight: "bold" }}
+              className="inline-block rounded px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-white contained-button"
             >
               Save
             </button>
@@ -279,13 +277,7 @@ function DetailsMovieModalView({
             <button
               type="button"
               onClick={closeModal}
-              className="inline-block rounded  px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-white 
-             "
-              style={{
-                backgroundColor: "#BE2517",
-                fontWeight: "bold",
-                marginLeft: 15,
-              }}
+              className="inline-block rounded ml-4 px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-blue-marine outlined-button"
             >
               Close
             </button>

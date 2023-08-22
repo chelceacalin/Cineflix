@@ -145,7 +145,7 @@ function AddNewMovieModalWindow({
       <div className="modal-content wider-modal">
         <div className="header-container">
           <FontAwesomeIcon
-            className="close-modal-button w-10 h-6 ml-4"
+            className="close-modal-button w-10 h-6 ml-4 cursor-pointer"
             icon={faTimes}
             onClick={closeModal}
           />
@@ -247,8 +247,7 @@ function AddNewMovieModalWindow({
             <button
               type="button"
               onClick={handleSave}
-              className="inline-block rounded  px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normaltext-white  "
-              style={{ backgroundColor: "blue", fontWeight: "bold" }}
+              className="inline-block rounded px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-white contained-button"
             >
               Save
             </button>
@@ -256,13 +255,7 @@ function AddNewMovieModalWindow({
             <button
               type="button"
               onClick={closeModal}
-              className="inline-block rounded  px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-white "
-              style={{
-
-                backgroundColor: "red",
-                fontWeight: "bold",
-                marginLeft: 15,
-              }}
+              className="inline-block rounded ml-4 px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-blue-marine outlined-button"
             >
               Close
             </button>

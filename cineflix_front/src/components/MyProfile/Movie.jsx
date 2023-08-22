@@ -63,10 +63,9 @@ function Movie({
         </div>
       </td>
       <td className={classes}>
-      <div>
         <button 
           onClick={handleDetailsOpen} 
-          className="inline-block rounded  px-3 mr-4 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-blue-marine outlined-button" >
+          className="inline-block rounded w-full px-3 mr-4 pb-2 pt-2.5 text-sm font-normal uppercase leading-normal text-blue-marine outlined-button tableFontFamily" >
           Details
         </button>
         
@@ -82,10 +81,11 @@ function Movie({
             triggerRefresh={triggerRefresh}
           />
         )}
-
+    </td>
+    <td className={classes}>
         <button 
           onClick={handleDeleteOpen} 
-          className="inline-block rounded px-3 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-white contained-button">
+          className="inline-block rounded w-full px-3 pb-2 pt-2.5 text-sm font-normal uppercase leading-normal text-white contained-button tableFontFamily">
           Delete
         </button>
 
@@ -95,10 +95,12 @@ function Movie({
             closeModal={handleDeleteClose}
             title={title}
             category={category}
-            deleteMovie={""}
+            id={id}
+            rentedBy={rentedBy}
+            setTriggerRefresh={setTriggerRefresh}
+            triggerRefresh={triggerRefresh}
           />
         )}
-      </div>
     </td>
     </tr>
   );
