@@ -29,8 +29,6 @@ stages:
 build-backend:
  image: maven:3-openjdk-17-slim
  stage: build-backend
- rules:
-   - if: $CI_COMMIT_BRANCH == "main"
  script:
    - mvn -DskipTests package
  artifacts:
@@ -40,8 +38,6 @@ build-backend:
 build-docker-image-backend:
   image: docker:24.0.2
   stage: build-docker-image-backend
-  rules:
-   - if: $CI_COMMIT_BRANCH == "main"
   services:
     - docker:dind
   variables: 
@@ -82,8 +78,6 @@ release-new-version-backend:
 build-frontend:
   image: node:20
   stage: build-frontend
-  rules:
-   - if: $CI_COMMIT_BRANCH == "main"
   script:
     - cd cineflix_front
     - npm install
@@ -95,8 +89,6 @@ build-frontend:
 build-docker-image-frontend:
   image: docker:24.0.2
   stage: build-docker-image-frontend
-  rules:
-   - if: $CI_COMMIT_BRANCH == "main"
   services:
     - docker:dind
   variables: 
