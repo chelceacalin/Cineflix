@@ -7,10 +7,10 @@ import axios from 'axios';
 axios.defaults.withCredentials = true
 
 function DeleteCategoryModalWindow({ isEditModalOpen, closeEditModal, name, id, signal }) {
-    const [requestError, setRequestError] = useState(false);
+    const [requestError, setRequestError] = useState("");
 
     const deleteCategory = () => {
-        let url = '/category/delete/' + name;
+        let url = '/category/delete/' + id;
 
             axios.post(url).then(() => {
                 signal();
@@ -19,7 +19,7 @@ function DeleteCategoryModalWindow({ isEditModalOpen, closeEditModal, name, id, 
             })
             .catch((error) => {
                 if (error.response) {
-                    setRequestError(true);
+                    setRequestError("This category contains movies");
                 }
             })
     }
@@ -37,13 +37,16 @@ function DeleteCategoryModalWindow({ isEditModalOpen, closeEditModal, name, id, 
                             &nbsp; category ?
                         </p>
                         <div>
-                            {!requestError ? <p></p> : <p className="font-bold text-basic-red">This category has been already deleted by another user!</p>}
+                            <p>{requestError}</p>
                         </div>
                         <div className="mt-2 mb-2">
                             <Button className="contained-button w-full" variant="contained" onClick={deleteCategory}>Yes</Button>
                         </div>
                         <div className="mb-2">
-                            <Button className="outlined-button w-full" variant="outlined" onClick={closeEditModal} >Cancel</Button>
+                            <Button className="outlined-button w-full" variant="outlined" onClick={()=>{
+                                setRequestError("");
+                                closeEditModal();
+                            }} >Cancel</Button>
                         </div>
                     </div>
                 </DialogContent>
