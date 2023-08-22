@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import Button from "@mui/material/Button";
 import DetailsMovieModalView from "./DetailsMovieModalView";
 import DeleteMovieModalView from "./DeleteMovieModalView";
-import './css/Movie.css'
+import "./css/Movie.css";
 
 function Movie({
   title,
@@ -16,9 +16,8 @@ function Movie({
   updateMovie,
   id,
   triggerRefresh,
-  setTriggerRefresh
+  setTriggerRefresh,
 }) {
-
   const [detailsModalOpen, setDetailsModalOpen] = React.useState(false);
   const [deleteModalOpen, setDeleteModalOpen] = React.useState(false);
   const handleDetailsOpen = () => setDetailsModalOpen(true);
@@ -63,43 +62,45 @@ function Movie({
         </div>
       </td>
       <td className={classes}>
-      <div>
-        <button 
-          onClick={handleDetailsOpen} 
-          className="inline-block rounded  px-3 mr-4 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-blue-marine outlined-button" >
-          Details
-        </button>
-        
-        {detailsModalOpen && (
-          <DetailsMovieModalView
-            isModalOpen={detailsModalOpen}
-            closeModal={handleDetailsClose}
-            defaultTitle={title}
-            defaultDirector={director}
-            defaultCategory={category}
-            id={id}
-            setTriggerRefresh={setTriggerRefresh}
-            triggerRefresh={triggerRefresh}
-          />
-        )}
+        <div>
+          <button
+            onClick={handleDetailsOpen}
+            className="inline-block rounded  px-3 mr-4 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-blue-marine outlined-button"
+          >
+            Details
+          </button>
 
-        <button 
-          onClick={handleDeleteOpen} 
-          className="inline-block rounded px-3 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-white contained-button">
-          Delete
-        </button>
+          {detailsModalOpen && (
+            <DetailsMovieModalView
+              isModalOpen={detailsModalOpen}
+              closeModal={handleDetailsClose}
+              defaultTitle={title}
+              defaultDirector={director}
+              defaultCategory={category}
+              id={id}
+              setTriggerRefresh={setTriggerRefresh}
+              triggerRefresh={triggerRefresh}
+            />
+          )}
 
-        {deleteModalOpen && (
-          <DeleteMovieModalView
-            isModalOpen={deleteModalOpen}
-            closeModal={handleDeleteClose}
-            title={title}
-            category={category}
-            deleteMovie={""}
-          />
-        )}
-      </div>
-    </td>
+          <button
+            onClick={handleDeleteOpen}
+            className="inline-block rounded px-3 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-white contained-button"
+          >
+            Delete
+          </button>
+
+          {deleteModalOpen && (
+            <DeleteMovieModalView
+              isModalOpen={deleteModalOpen}
+              closeModal={handleDeleteClose}
+              title={title}
+              category={category}
+              deleteMovie={""}
+            />
+          )}
+        </div>
+      </td>
     </tr>
   );
 }
