@@ -11,6 +11,7 @@ import axios from "axios";
 import "react-datepicker/dist/react-datepicker.css";
 import DatePicker from "react-datepicker";
 import { UserLoginContext } from "../../utils/context/LoginProvider";
+import { input } from "@material-tailwind/react";
 
 function MovieFilter({ filterInput }) {
   let [title, setTitle] = useState("");
@@ -31,10 +32,17 @@ function MovieFilter({ filterInput }) {
     });
   }, [url]);
 
+
+  let convertDate=(input)=>{
+    const inputDate = new Date(input);
+    const year = inputDate.getFullYear();
+    const month = ('0' + (inputDate.getMonth() + 1)).slice(-2); 
+    const day = ('0' + inputDate.getDate()).slice(-2);
+    return `${year}-${month}-${day}`;
+  }
+
   useEffect(() => {
-    let date = rentedUntil
-      ? new Date(rentedUntil).toISOString().split("T")[0]
-      : "";
+    let date=rentedUntil?convertDate(rentedUntil):"";
     let array = [];
     if (
       (available === true && unavailable === true) ||
@@ -118,7 +126,9 @@ function MovieFilter({ filterInput }) {
         <DatePicker
           selected={rentedUntil}
           placeholderText={"Select the date"}
-          onChange={(date) => setRentedUntil(date)}
+          onChange={(date) => {
+            console.log(date);
+            setRentedUntil(date)}}
           className="rounded-lg border-2 border-gray-500 pl-1"
         />
         <button
