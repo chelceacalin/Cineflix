@@ -61,47 +61,23 @@ function RentedMovie({
         </div>
       </td>
       <td className={classes}>
-          <Button
-            className="contained-button font-normal w-full"
-            variant="contained"
-            onClick={handleDetailsOpen}
-          >
-            Details
-          </Button>
-          </td>
-<td>
-<Button
-            className="contained-button font-normal w-full"
-            variant="contained"
-            onClick={handleDeleteOpen}
-          >
-            Rent Movie
-          </Button>
-
-</td>
-          {/* {detailsModalOpen && (
-              <DetailsMovieModalView
-                isModalOpen={detailsModalOpen}
-                closeModal={handleDetailsClose}
-                defaultTitle={title}
-                defaultDirector={director}
-                defaultCategory={category}
-                id={id}
-                setTriggerRefresh={setTriggerRefresh}
-                triggerRefresh={triggerRefresh}
-              />
-            )} */}
-         
-
-          {/* {deleteModalOpen && (
-              <DeleteMovieModalView
-                isModalOpen={deleteModalOpen}
-                closeModal={handleDeleteClose}
-                title={title}
-                category={category}
-                deleteMovie={""}
-              />
-            )} */}
+        <Button
+          className="contained-button font-normal w-full"
+          variant="contained"
+          onClick={handleDetailsOpen}
+        >
+          Details
+        </Button>
+      </td>
+      <td>
+        <Button
+          className="contained-button font-normal w-full"
+          variant="contained"
+          onClick={handleDeleteOpen}
+        >
+          Rent Movie
+        </Button>
+      </td>
     </tr>
   );
 }
