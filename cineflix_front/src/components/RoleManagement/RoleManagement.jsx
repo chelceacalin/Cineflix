@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import UserCineflix from "./UserCineflix";
+import UserCineflix from "../RoleManagement/UserCineflix";
 import FilterComponent from "./FilterComponent";
 import axios from "axios";
 axios.defaults.withCredentials = true;

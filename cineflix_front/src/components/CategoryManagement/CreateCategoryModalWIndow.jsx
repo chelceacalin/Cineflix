@@ -1,31 +1,66 @@
 import React, { useState } from "react";
-import {Button, Dialog, DialogContent, makeStyles, TextField} from "@mui/material";
+import {
+  Button,
+  Dialog,
+  DialogContent,
+  makeStyles,
+  TextField,
+} from "@mui/material";
 import axios from "axios";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 axios.defaults.withCredentials = true;
 
-function CreateCategoryModalWindow({ isModalOpen, closeModal, signal, setErrorMessage, errorMessage }) {
+function CreateCategoryModalWindow({
+  isModalOpen,
+  closeModal,
+  signal,
+  setErrorMessage,
+  errorMessage,
+}) {
   const [categoryDTO, setCategoryDTO] = useState("");
 
-
   const createCategory = () => {
-    let url = "/category/create";
-    setCategoryDTO("");
-    axios.post(url, { name: categoryDTO }).then(() => {
-      signal();
-      closeModal();
-    })
+    if (categoryDTO.length < 2) {
+      showToastError("Category should have more than 2 characters!");
+    } else if (categoryDTO.charAt(0)!==categoryDTO.charAt(0).toUpperCase()) {
+      showToastError("Category should start with an uppercase letter!");
+    } else {
+      let url = "/category/create";
+      axios
+        .post(url, {
+          name: categoryDTO,
+        })
+        .then(() => {
+          signal();
+          closeModal();
+          setCategoryDTO("");
+        })
         .catch((error) => {
-          if(error.response){
+          if (error.response) {
             setErrorMessage(error.response.data);
           }
-        })
+        });
+    }
+  };
+
+  const showToastError = (message) => {
+    toast.error(message, {
+      className: "bg-red-500 text-black p-4 rounded-lg",
+      position: "top-right",
+      autoClose: 3500,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+    });
   };
 
   return (
-    <Dialog open={isModalOpen} onClose={closeModal} >
+    <Dialog open={isModalOpen} onClose={closeModal}>
       <FontAwesomeIcon
         className="closeModalWindowButton"
         icon={faTimes}
@@ -42,9 +77,9 @@ function CreateCategoryModalWindow({ isModalOpen, closeModal, signal, setErrorMe
             }}
           />
         </div>
-          <div className="text-basic-red font-bold w-52 text-center" >
-              {errorMessage}
-          </div>
+        <div className="text-basic-red font-bold w-52 text-center">
+          {errorMessage}
+        </div>
         <div className="mt-2 mb-2">
           <Button
             className="contained-button w-full"
@@ -58,12 +93,16 @@ function CreateCategoryModalWindow({ isModalOpen, closeModal, signal, setErrorMe
           <Button
             className="outlined-button w-full"
             variant="outlined"
-            onClick={closeModal}
+            onClick={() => {
+              setCategoryDTO("");
+              closeModal();
+            }}
           >
             Cancel
           </Button>
         </div>
       </DialogContent>
+      <ToastContainer />
     </Dialog>
   );
 }
