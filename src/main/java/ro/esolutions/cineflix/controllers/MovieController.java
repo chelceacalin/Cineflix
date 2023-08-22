@@ -29,22 +29,23 @@ public class MovieController {
     }
 
     @PostMapping("/delete/{id}")
-    public ResponseEntity<?> deleteMovie(@PathVariable UUID id){
+    public ResponseEntity<?> deleteMovie(@PathVariable UUID id) {
         movieService.deleteMovieIfNotRented(id);
         return ResponseEntity.ok("Movie can be deleted");
     }
-}
+
     @PostMapping
-    public MovieAddDTO addMovie(@RequestBody MovieAddDTO movieDTO){
+    public MovieAddDTO addMovie(@RequestBody MovieAddDTO movieDTO) {
         return movieService.addMovie(movieDTO);
     }
 
     @PostMapping("/{id}")
-    public void updateMovie(@PathVariable UUID id,@RequestBody MovieAddDTO movie){
-        movieService.updateMovie(id,movie);
+    public void updateMovie(@PathVariable UUID id, @RequestBody MovieAddDTO movie) {
+        movieService.updateMovie(id, movie);
     }
+
     @GetMapping("/{id}")
-    public MovieAddDTO findMovieById(@PathVariable UUID id){
+    public MovieAddDTO findMovieById(@PathVariable UUID id) {
         return movieService.findMovieByID(id);
     }
 }

@@ -15,6 +15,7 @@ import ro.esolutions.cineflix.entities.Movie;
 import ro.esolutions.cineflix.entities.MovieHistory;
 import ro.esolutions.cineflix.exceptions.Category.CategoryNotFoundException;
 import ro.esolutions.cineflix.exceptions.Movie.MovieNotFoundException;
+import ro.esolutions.cineflix.exceptions.MovieNotAvailableException;
 import ro.esolutions.cineflix.exceptions.User.UserNotFoundException;
 import ro.esolutions.cineflix.mapper.MovieMapper;
 import ro.esolutions.cineflix.repositories.CategoryRepository;
@@ -24,6 +25,7 @@ import ro.esolutions.cineflix.repositories.UserCineflixRepository;
 import ro.esolutions.cineflix.specification.GenericSpecification;
 import ro.esolutions.cineflix.specification.MovieSpecification;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -140,14 +142,13 @@ public class MovieService {
         } else {
             throw new MovieNotFoundException("Movie Not Found");
         }
-        return employee;
     }
 
     public String[] getRentedBy(UUID id) {
         MovieHistory movieHistory = movieHistoryRepository.findMovieHistoryByRentedUntilMostRecent(id);
         String firstName=movieHistory.getRentedBy().getFirstName();
         String lastName=movieHistory.getRentedBy().getLastName();
-        return new String[]{firstName + lastName};
+        return new String[]{firstName + " " +lastName};
     }
 
     public void deleteMovieIfNotRented(UUID id) {
@@ -155,13 +156,14 @@ public class MovieService {
                 .orElseThrow(() -> new MovieNotFoundException("Movie to be deleted does not exist"));
         if (!movieFound.isAvailable()) {
             String[] userName = getRentedBy(id);
-            throw new MovieNotAvailableException("Movie is being watched by :" + userName
-                    + "You will be able to delete it after it's been returned");
+            throw new MovieNotAvailableException("Movie is being watched by :" + Arrays.toString(userName)
+                    + " You will be able to delete it after it's been returned");
         }
+        movieHistoryRepository.deleteMovieHistoryByMovie_Id(id);
         movieRepository.deleteById(id);
     }
 
-}
+
     public MovieAddDTO findMovieByID(UUID id) {
         Optional<Movie> movieOptional = movieRepository.findById(id);
         if (movieOptional.isPresent()) {
