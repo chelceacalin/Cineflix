@@ -34,20 +34,7 @@ function EditRoleModalWindow({ isModalOpen, closeModal, id, name, updateCategory
                         id="outlined-read-only-input"
                         label="Name"
                         defaultValue={name}
-                        InputProps={{
-                            readOnly: true,
-                        }}
-                    />
-                </div>
-                <div className="text-basic-red font-bold w-52 text-center" >
-                    {errorMessage}
-                </div>
-                <div className='mt-4'>
-                    <TextField
                         inputRef={newNameRef}
-                        id="outlined-read-only-input"
-                        label="New Name"
-                        defaultValue={""}
                     />
                 </div>
                 <div className='mt-4'>

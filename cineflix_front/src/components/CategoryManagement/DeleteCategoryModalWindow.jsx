@@ -3,6 +3,8 @@ import { Button, Dialog, DialogContent } from '@mui/material'
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import React, { useState } from 'react';
 import axios from 'axios';
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 axios.defaults.withCredentials = true
 
@@ -20,9 +22,23 @@ function DeleteCategoryModalWindow({ isEditModalOpen, closeEditModal, name, id, 
             .catch((error) => {
                 if (error.response) {
                     setRequestError(true);
+                    showToastError("This category has been already deleted by another user!");
                 }
             })
     }
+
+    const showToastError = (message) => {
+        toast.error(message, {
+          className: "bg-red-500 text-black p-4 rounded-lg",
+          position: "top-right",
+          autoClose: 3500,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+      };    
 
     return (
         <Dialog open={isEditModalOpen} onClose={closeEditModal}>
@@ -36,9 +52,6 @@ function DeleteCategoryModalWindow({ isEditModalOpen, closeEditModal, name, id, 
                             </span>
                             &nbsp; category ?
                         </p>
-                        <div>
-                            {!requestError ? <p></p> : <p className="font-bold text-basic-red">This category has been already deleted by another user!</p>}
-                        </div>
                         <div className="mt-2 mb-2">
                             <Button className="contained-button w-full" variant="contained" onClick={deleteCategory}>Yes</Button>
                         </div>
@@ -48,6 +61,7 @@ function DeleteCategoryModalWindow({ isEditModalOpen, closeEditModal, name, id, 
                     </div>
                 </DialogContent>
             </div>
+            <ToastContainer />
         </Dialog>
     )
 }
