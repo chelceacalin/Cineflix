@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-
+import { Button } from "@mui/material";
 function RentedMovie({
   id,
   title,
@@ -11,6 +11,7 @@ function RentedMovie({
   classes,
   triggerRefresh,
   setTriggerRefresh,
+  rentedOn,
 }) {
   const [detailsModalOpen, setDetailsModalOpen] = useState(false);
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
@@ -46,7 +47,12 @@ function RentedMovie({
       </td>
       <td className={classes}>
         <div variant="small" color="blue-gray" className="font-normal">
-          {!rentedUntil ? "N/A" : rentedUntil}
+          {rentedOn}
+        </div>
+      </td>
+      <td className={classes}>
+        <div variant="small" color="blue-gray" className="font-normal">
+          {rentedUntil}
         </div>
       </td>
       <td className={classes}>
@@ -55,14 +61,24 @@ function RentedMovie({
         </div>
       </td>
       <td className={classes}>
-        <div>
-          <button
+          <Button
+            className="contained-button font-normal w-full"
+            variant="contained"
             onClick={handleDetailsOpen}
-            className="inline-block rounded  px-3 mr-4 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-blue-marine outlined-button"
           >
             Details
-          </button>
+          </Button>
+          </td>
+<td>
+<Button
+            className="contained-button font-normal w-full"
+            variant="contained"
+            onClick={handleDeleteOpen}
+          >
+            Rent Movie
+          </Button>
 
+</td>
           {/* {detailsModalOpen && (
               <DetailsMovieModalView
                 isModalOpen={detailsModalOpen}
@@ -75,13 +91,7 @@ function RentedMovie({
                 triggerRefresh={triggerRefresh}
               />
             )} */}
-
-          <button
-            onClick={handleDeleteOpen}
-            className="inline-block rounded px-3 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-white contained-button"
-          >
-            Delete
-          </button>
+         
 
           {/* {deleteModalOpen && (
               <DeleteMovieModalView
@@ -92,8 +102,6 @@ function RentedMovie({
                 deleteMovie={""}
               />
             )} */}
-        </div>
-      </td>
     </tr>
   );
 }

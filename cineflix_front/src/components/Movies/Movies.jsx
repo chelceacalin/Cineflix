@@ -7,7 +7,7 @@ import { UserLoginContext } from "../../utils/context/LoginProvider";
 
 
 function Movies() {
-  const TABLE_HEAD = ["Title", "Director", "Category", "Status","Rented On","Rented Until", "Rented By", ""];
+  const TABLE_HEAD = ["Title", "Director", "Category", "Status","Rented On","Rented Until", "Rented By","","  "];
   const [movies, setMovies] = useState([]);
   const [category, setCategory] = useState("");
   const [director, setDirector] = useState("");
@@ -18,7 +18,6 @@ function Movies() {
   const [rentedOn,setRentedOn]=useState("")
   let [ownerUsername, setOwnerUsername] = useState("");
   const [sortField, setSortField] = useState("title");
-  const [direction, setDirection] = useState(true);
   const [lastClicked, setLastClicked] = useState(null);
   let [newUrl, setNewUrl] = useState("");
   let [pageNo, setPageNo] = useState(1);
@@ -31,6 +30,9 @@ function Movies() {
   const handleClose = () => setOpen(false);
   const [triggerRefresh, setTriggerRefresh] = useState(false);
   const { username } = useContext(UserLoginContext);
+
+  const [direction, setDirection] = useState(true);
+
 
   let handleClick = (fieldName) => {
     if (lastClicked === fieldName) {
@@ -46,6 +48,7 @@ function Movies() {
         direction ? "ASC" : "DESC"}&title=${title}&director=${director}&category=${category}&isAvailable=${isAvailable}&pageNo=${
             parseInt(pageNo) - 1}&pageSize=${pageSize}`;
 
+            console.log(newUrl)
     axios.get(newUrl).then((elems) => {
       if (elems.data.content.length === 0 && pageNo > 1) {
         updatePageNumber(pageNo - 1);
@@ -84,64 +87,69 @@ function Movies() {
     setMovies(updatedMovie);
   };
 
+  let handleDirectionChange = (e) => {
+    const columnContent = e.target.textContent;
+  
+    switch (columnContent) {
+      case "Title": {
+        setSortField("title");
+        setDirection(!direction);
+        break;
+      }
+      case "Director": {
+        if (title.length > 0 || director.length > 0 || category.length > 0) {
+          setDirection(!direction);
+        }
+        setSortField("director");
+        handleClick(columnContent.toLowerCase());
+        break;
+      }
+      case "Category": {
+        if (title.length > 0 || director.length > 0 || category.length > 0) {
+          setDirection(!direction);
+        }
+        setSortField("category");
+        handleClick(columnContent.toLowerCase());
+        break;
+      }
+      case "Rented Until": {
+        if (title.length > 0 || director.length > 0 || category.length > 0) {
+          setDirection(!direction);
+        }
+        setSortField("rentedUntil");
+        handleClick(columnContent.toLowerCase());
+        break;
+      }
+      case "Rented By": {
+        if (title.length > 0 || director.length > 0 || category.length > 0) {
+          setDirection(!direction);
+        }
+        setSortField("rentedBy");
+        handleClick(columnContent.toLowerCase());
+        break;
+      }
+      default:
+        break;
+    }
+  };
+  
+
   return (
     <>
     <div className="w-full h-full ml-10 mr-10 mt-5">
         <table className="w-full min-w-max table-auto text-left">
           <thead className="bg-basic-red text-white">
             <tr>
-              {TABLE_HEAD.slice(0, TABLE_HEAD.length - 1).map((elem) => {
+              {TABLE_HEAD.slice(0, TABLE_HEAD.length).map((elem) => {
                 return (
                   <th
                     key={elem}
-                    className="border-b-white p-4 hover cursor-pointer"
+                    className={`}border-b-white p-4 ${elem.length>2?'hover':''} cursor-pointer`}
                     onClick={(e) => {
                       e.preventDefault();
 
                       if (e.target.textContent !== "Status") {
-                        if (e.target.textContent === "Title") {
-                          setSortField("title");
-                          setDirection(!direction);
-                        } else if (e.target.textContent === "Director") {
-                          if (
-                            title.length > 0 ||
-                            director.length > 0 ||
-                            category.length > 0
-                          ) {
-                            setDirection(!direction);
-                          }
-                          setSortField("director");
-                          handleClick(e.target.textContent.toLowerCase());
-                        } else if (e.target.textContent === "Category") {
-                          if (
-                            title.length > 0 ||
-                            director.length > 0 ||
-                            category.length > 0
-                          ) 
-                           setDirection(!direction);
-                          setSortField("category");
-                          handleClick(e.target.textContent.toLowerCase());
-                        } else if (e.target.textContent === "Rented Until") {
-                          if (
-                            title.length > 0 ||
-                            director.length > 0 ||
-                            category.length > 0
-                          ) {
-                            setDirection(!direction);
-                          }
-                          setSortField("rentedUntil");
-                          handleClick(e.target.textContent.toLowerCase());
-                        } else if (e.target.textContent === "Rented By") {
-                          if (
-                            title.length > 0 ||
-                            director.length > 0 ||
-                            category.length > 0
-                          ) {
-                            setDirection(!direction);
-                          }
-                          setSortField("rentedBy");
-                          handleClick(e.target.textContent.toLowerCase());
-                        }
+                            handleDirectionChange()
                       }
                     }}
                   >
@@ -160,7 +168,7 @@ function Movies() {
                           handleClick(e.currentTarget.getAttribute("data-column").toLowerCase());
                         }}
                       >
-                        {elem != "Status" && (
+                        {(elem != "Status"&&elem.length>2) && (
                           <path
                             d="M4.16572 7.36845H11.8349C12.4074 7.36845 12.7116 6.72395 12.3311 6.31639L8.49679 2.21243C8.4346 2.14564 8.35821 2.09217 8.27269 2.05555C8.18716 2.01893 8.09444 2 8.00065 2C7.90687 2 7.81415 2.01893 7.72862 2.05555C7.6431 2.09217 7.56671 2.14564 7.50452 2.21243L3.66892 6.31639C3.28835 6.72395 3.59254 7.36845 4.16572 7.36845ZM7.50385 13.7876C7.56605 13.8544 7.64243 13.9078 7.72796 13.9444C7.81348 13.9811 7.9062 14 7.99999 14C8.09378 14 8.1865 13.9811 8.27202 13.9444C8.35755 13.9078 8.43393 13.8544 8.49613 13.7876L12.3304 9.68361C12.7116 9.27669 12.4074 8.63218 11.8343 8.63218H4.16572C3.59321 8.63218 3.28902 9.27669 3.66959 9.68424L7.50385 13.7876Z"
                             fill="#ffffff"
@@ -171,22 +179,16 @@ function Movies() {
                   </th>
                 );
               })}
-              <th className="border-b-white p-4 ">
-                <div>Actions</div>
-              </th>
-              <th className="border-b-white p-2">
-                <button onClick={handleOpen} className="bg-basic-red text-white border border-white hover:border-hover-cream hover:text-hover-cream py-2 px-6">
-                  Add New
-                </button>
-              </th>
+            
             </tr>
           </thead>
           <tbody className="text-blue-marine">
-          {movies.map(({ category, director, title, isAvailable, rentedUntil, rentedBy, id }, index) => {
+          {movies.map(({ category, director, title, isAvailable, rentedUntil, rentedBy, id, rentedDate}, index) => {
               const isLast = index === movies.length - 1;
               const classes = isLast
                 ? "px-4 py-2"
                 : "px-4 py-2 border-b border-blue-gray-50";
+
               return (
                 <RentedMovie
                   id={id}
@@ -195,6 +197,7 @@ function Movies() {
                   director={director}                  
                   isAvailable={isAvailable}
                   rentedUntil={rentedUntil}
+                  rentedOn={rentedDate}
                   rentedBy={rentedBy}
                   key={index}
                   classes={classes}
