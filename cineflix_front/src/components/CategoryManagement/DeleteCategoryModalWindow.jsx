@@ -9,10 +9,10 @@ import "react-toastify/dist/ReactToastify.css";
 axios.defaults.withCredentials = true
 
 function DeleteCategoryModalWindow({ isEditModalOpen, closeEditModal, name, id, signal }) {
-    const [requestError, setRequestError] = useState(false);
+    const [requestError, setRequestError] = useState("");
 
     const deleteCategory = () => {
-        let url = '/category/delete/' + name;
+        let url = '/category/delete/' + id;
 
             axios.post(url).then(() => {
                 signal();
@@ -21,8 +21,8 @@ function DeleteCategoryModalWindow({ isEditModalOpen, closeEditModal, name, id, 
             })
             .catch((error) => {
                 if (error.response) {
-                    setRequestError(true);
                     showToastError("This category has been already deleted by another user!");
+                    setRequestError("This category contains movies");
                 }
             })
     }
@@ -38,7 +38,7 @@ function DeleteCategoryModalWindow({ isEditModalOpen, closeEditModal, name, id, 
           draggable: true,
           progress: undefined,
         });
-      };    
+      };
 
     return (
         <Dialog open={isEditModalOpen} onClose={closeEditModal}>
@@ -56,7 +56,10 @@ function DeleteCategoryModalWindow({ isEditModalOpen, closeEditModal, name, id, 
                             <Button className="contained-button w-full" variant="contained" onClick={deleteCategory}>Yes</Button>
                         </div>
                         <div className="mb-2">
-                            <Button className="outlined-button w-full" variant="outlined" onClick={closeEditModal} >Cancel</Button>
+                            <Button className="outlined-button w-full" variant="outlined" onClick={()=>{
+                                setRequestError("");
+                                closeEditModal();
+                            }} >Cancel</Button>
                         </div>
                     </div>
                 </DialogContent>

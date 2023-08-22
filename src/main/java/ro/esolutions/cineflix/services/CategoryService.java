@@ -60,12 +60,6 @@ public class CategoryService {
         return categoryRepository.save(categoryToBeSaved);
     }
 
-    public void deleteCategory(String name) {
-        Category existsCategory = categoryRepository.findByName(name)
-                .orElseThrow(() -> new CategoryNotFoundException("Category to be deleted does not exist"));
-        categoryRepository.deleteById(existsCategory.getId());
-    }
-
     public Page<CategoryDTO> getCategories(CategoryFilterDTO dto, int pageNo, int pageSize) {
         if (dto.getName() == null && dto.getDirection() == null) {
             return categoryRepository.findAll(PageRequest.of(pageNo, pageSize)).map(CategoryMapper::toDTO);
@@ -90,11 +84,10 @@ public class CategoryService {
         Category categoryFound = categoryRepository.findById(id)
                 .orElseThrow(() -> new CategoryNotFoundException("Category to be deleted does not exist"));
 
-        categoryFound.getMovieList().stream()
-                .findAny()
-                .ifPresent(movie -> {
-                    throw new CategoryContainsMovieException("Found a movie, can not delete the category");
-                });
+
+        if(!categoryFound.getMovieList().isEmpty()) {
+            throw new CategoryContainsMovieException("Found a movie, can not delete the category");
+        }
         categoryRepository.deleteById(id);
     }
 
