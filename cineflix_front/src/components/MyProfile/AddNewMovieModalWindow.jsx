@@ -41,7 +41,7 @@ function AddNewMovieModalWindow({
       condition: availableCategories.length === 0,
       message: "Invalid category name!",
     },
-    { condition: !description||director.length<2, message: "Description should not be empty!" },
+    { condition: !description, message: "Description should not be empty!" },
   ];
   useEffect(() => {
     let url = `/category`;
@@ -75,24 +75,18 @@ function AddNewMovieModalWindow({
     }
     return true;
   };
-
-  const validFields=()=>{
-    if(title.charAt(0)!==title.charAt(0).toUpperCase()){
-      showToastError("Title should start with an uppercase letter!")
-    }
-    else
-    if(director.charAt(0)!==director.charAt(0).toUpperCase()){
-      showToastError("Director should start with an uppercase letter!")
-    }
-    else
-    if(category.charAt(0)!==category.charAt(0).toUpperCase()){
-      showToastError("Category should start with an uppercase letter!")
-    }
-  }
-
   const handleSave = () => {
     if (validRequest()) {
-      if(validFields()){
+        if (title.charAt(0) !== title.charAt(0).toUpperCase()) {
+            showToastError("Title should start with an uppercase letter!");
+            return; 
+        }
+        
+        if (director.charAt(0) !== director.charAt(0).toUpperCase()) {
+            showToastError("Director should start with an uppercase letter!");
+            return;
+        }
+        
         let urlAddMovie = `/movies`;
 
         let movie = {
@@ -105,36 +99,36 @@ function AddNewMovieModalWindow({
         };
 
         if (selectedImage) {
-        axios
-          .post(urlAddMovie, movie)
-          .then((data) => {
-            if (data.data) {
-              let urlAddMovieImage = `/images/${data.data.id}`;
-              const formData = new FormData();
-              formData.append("image", selectedImage);
-              axios
-                .post(urlAddMovieImage, formData)
-                .then((response) => {})
-                .catch((error) => {
-                  console.error("eroare " + error);
+            axios
+                .post(urlAddMovie, movie)
+                .then((data) => {
+                    if (data.data) {
+                        let urlAddMovieImage = `/images/${data.data.id}`;
+                        const formData = new FormData();
+                        formData.append("image", selectedImage);
+                        axios
+                            .post(urlAddMovieImage, formData)
+                            .then((response) => {})
+                            .catch((error) => {
+                                console.error("Error " + error);
+                            });
+                    } else {
+                        console.error("Movie does not exist");
+                    }
+                    setTriggerRefresh(!triggerRefresh);
+                    resetForm();
+                })
+                .catch((err) => {
+                    console.error(err);
                 });
-            } else {
-              console.error("Movie does not exist");
-            }
-            setTriggerRefresh(!triggerRefresh);
-            resetForm();
-          })
-          .catch((err) => {
-            console.error(err);
-          });
 
-        closeModal();
-      } else {
-        showToastError("Image should not be empty! ");
-      }
-      }
+            closeModal();
+        } else {
+            showToastError("Image should not be empty!");
+        }
     }
-  };
+};
+
 
   const resetForm = () => {
     setTitle("");
