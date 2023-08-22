@@ -1,16 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { ToastContainer, toast } from "react-toastify";
-import {
-  Dialog,
-  DialogContent,
-  TextField,
-} from "@mui/material";
+import { Dialog, DialogContent, TextField } from "@mui/material";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import "./css/DetailsMovieModalView.css";
 import "./css/AddNewMovieModalWindow.css";
 import axios from "axios";
-
+import { Autocomplete } from "@mui/material";
 axios.defaults.withCredentials = true;
 
 function DetailsMovieModalView({
@@ -23,23 +19,21 @@ function DetailsMovieModalView({
   triggerRefresh,
   setTriggerRefresh,
 }) {
-  const [photo, setPhoto] = useState("");
   const [selectedImage, setSelectedImage] = useState(null);
   const [selectedImageFile, setSelectedImageFile] = useState(null);
   const [availableCategories, setAvailableCategories] = useState([]);
   const [title, setTitle] = useState(defaultTitle);
   const [director, setDirector] = useState(defaultDirector);
   const [description, setDescription] = useState("");
-  const [categorySelect, setCategorySelect] = useState("");
   const [category, setCategory] = useState(defaultCategory);
+
+ 
 
   const fetchMovieImage = async () => {
     try {
-      const response = await axios.get(`/imagesByMovieID/${id}`,
-        {
-          responseType: "blob",
-        }
-      );
+      const response = await axios.get(`/imagesByMovieID/${id}`, {
+        responseType: "blob",
+      });
 
       const blob = new Blob([response.data], { type: "image/png" });
       const avatarUrl = URL.createObjectURL(blob);
@@ -82,17 +76,19 @@ function DetailsMovieModalView({
     }
   };
 
-  useEffect(() => {
-    let url =`/category?name=${category}`;
+  useEffect(()=>{
+    let url=`/category`
     axios
-      .get(url)
-      .then((response) => {
-        setAvailableCategories(response.data.content);
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-  }, [category]);
+    .get(url)
+    .then((response) => {
+      setAvailableCategories(response.data.content);
+    })
+    .catch((error) => {
+      console.error(error);
+    });
+  },[])
+
+ 
 
   const validRequest = () => {
     for (const check of validationChecks) {
@@ -106,17 +102,10 @@ function DetailsMovieModalView({
 
   const handleSave = () => {
     if (validRequest()) {
-      let isValidCategory = false;
-      if (availableCategories) {
-        isValidCategory = availableCategories.some(
-          (cat) => cat.name.toLowerCase() == category.toLowerCase()
-        );
-      }
-
-      if (!isValidCategory && !categorySelect) {
+      if (!category) {
         showToast("Category " + category + " does not exist ");
       } else {
-        let finalCategory = !isValidCategory ? categorySelect : category;
+        let finalCategory =  category;
 
         if (selectedImageFile) {
           const formData = new FormData();
@@ -194,33 +183,14 @@ function DetailsMovieModalView({
               }}
             />
           </div>
-          <div className="field-group">
-            <TextField
-              label="Category"
-              variant="outlined"
-              fullWidth
-              defaultValue={category}
-              className="input-field"
-              onChange={(e) => {
-                setCategory(e.target.value);
-              }}
+            <Autocomplete
+              onChange={(e,value) => setCategory(value)}
+              value={category}
+              options={availableCategories.map((c)=> c.name)}
+              
+              sx={{ width: 300 }}
+              renderInput={(params) => <TextField {...params}  label="Category" />}
             />
-
-            <select
-              className="input-field mt-2"
-              onChange={(e) => {
-                setCategorySelect(e.target.value);
-              }}
-            >
-              <option value="">Select Category</option>
-              {availableCategories &&
-                availableCategories.slice(0, 7).map((categoryOption) => (
-                  <option key={categoryOption.id} value={categoryOption.name}>
-                    {categoryOption.name}
-                  </option>
-                ))}
-            </select>
-          </div>
           <div className="field-group">
             <label className="mb-4">Description</label>
           </div>
