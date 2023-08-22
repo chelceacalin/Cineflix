@@ -32,17 +32,16 @@ function MovieFilter({ filterInput }) {
     });
   }, [url]);
 
-
-  let convertDate=(input)=>{
+  let convertDate = (input) => {
     const inputDate = new Date(input);
     const year = inputDate.getFullYear();
-    const month = ('0' + (inputDate.getMonth() + 1)).slice(-2); 
-    const day = ('0' + inputDate.getDate()).slice(-2);
+    const month = ("0" + (inputDate.getMonth() + 1)).slice(-2);
+    const day = ("0" + inputDate.getDate()).slice(-2);
     return `${year}-${month}-${day}`;
-  }
+  };
 
   useEffect(() => {
-    let date=rentedUntil?convertDate(rentedUntil):"";
+    let date = rentedUntil ? convertDate(rentedUntil) : "";
     let array = [];
     if (
       (available === true && unavailable === true) ||
@@ -127,8 +126,8 @@ function MovieFilter({ filterInput }) {
           selected={rentedUntil}
           placeholderText={"Select the date"}
           onChange={(date) => {
-            console.log(date);
-            setRentedUntil(date)}}
+            setRentedUntil(date);
+          }}
           className="rounded-lg border-2 border-gray-500 pl-1"
         />
         <button
