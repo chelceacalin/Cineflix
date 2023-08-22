@@ -4,6 +4,7 @@ import { Button, Dialog, DialogContent, FormControl, InputLabel, NativeSelect, T
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import "./css/DeleteMovieModalView.css";
+import "react-toastify/dist/ReactToastify.css";
 import axios from 'axios';
 
 axios.defaults.withCredentials = true
@@ -20,12 +21,23 @@ function DeleteMovieModalView({ isModalOpen, closeModal, title, category, id, re
                 setRequestError(false);
             })
             .catch((error) => {
-                if (error.response) {
-                    showToastError(`Movie is being watched by ${rentedBy}. You will be able to delete it after it's been returned.`)
-                    closeModal();
-                }
+                showToastError(error.response.data)
+                
             })
     }
+
+    const showToastError = (message) => {
+        toast.error(message, {
+          className: "bg-red-500 text-black p-4 rounded-lg mr-4 w-98",
+          position: "top-right",
+          autoClose: 3500,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+    };
 
     return (
         <Dialog open={isModalOpen} onClose={closeModal} fullWidth maxWidth={'sm'}>
@@ -49,17 +61,4 @@ function DeleteMovieModalView({ isModalOpen, closeModal, title, category, id, re
     );
 }
 
-
-const showToastError = (message) => {
-    toast.error(message, {
-      className: "bg-red-500 text-black p-4 rounded-lg",
-      position: "top-right",
-      autoClose: 3500,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-    });
-  };
 export default DeleteMovieModalView

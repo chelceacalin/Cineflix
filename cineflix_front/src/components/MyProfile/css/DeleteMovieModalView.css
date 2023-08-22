@@ -52,3 +52,7 @@
         margin-right: 4px;
     }
 }
+
+.wider-toast {
+    width: 400px; /* Adjust the width as needed */
+  }

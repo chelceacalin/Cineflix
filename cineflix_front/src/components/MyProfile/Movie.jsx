@@ -96,7 +96,9 @@ function Movie({
               closeModal={handleDeleteClose}
               title={title}
               category={category}
-              deleteMovie={""}
+              triggerRefresh={triggerRefresh}
+              setTriggerRefresh={setTriggerRefresh}
+              id={id}
             />
           )}
         </div>
