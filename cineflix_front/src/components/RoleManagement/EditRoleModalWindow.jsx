@@ -41,7 +41,7 @@ function EditRoleModalWindow({ isModalOpen, closeModal, name, firstName, lastNam
                 'email': email,
                 'role': selectedOption
             }));
-            const response = axios.post(url, userDTO).then(()=>{
+            const response = axios.post(url, userDTO).then(() => {
 
                 updateUser(userDTO);
                 closeModal();
@@ -51,32 +51,58 @@ function EditRoleModalWindow({ isModalOpen, closeModal, name, firstName, lastNam
     };
 
     return (
-        <Dialog open={isModalOpen} onClose={closeModal}>
-            <FontAwesomeIcon className="closeModalWindowButton" icon={faTimes} onClick={closeModal} />
+        <Dialog fullWidth maxWidth={'sm'} open={isModalOpen} onClose={closeModal}>
+            <FontAwesomeIcon
+                className="absolute top-4 right-4 cursor-pointer"
+                icon={faTimes}
+                size="xl"
+                onClick={closeModal}
+            />
+            <div className="w-full">
+                <h2 className="header-title ml-6 mt-10">Edit user role</h2>
+            </div>
             <DialogContent>
-                <div className='mt-6'>
+                <div className='mt-5'>
                     <TextField
                         id="outlined-read-only-input"
+                        className="w-full"
                         label="Name"
                         defaultValue={fullName}
                         InputProps={{
                             readOnly: true,
+                            style: { fontFamily: "Sanchez" }
                         }}
+                        InputLabelProps={{
+                            style: { fontFamily: "Sanchez" }
+                          }}
                     />
                 </div>
-                <div className='mt-4'>
+                <div className='mt-4 mb-4'>
                     <TextField
                         id="outlined-read-only-input"
+                        className="w-full"
                         label="Email"
                         defaultValue={email}
                         InputProps={{
                             readOnly: true,
+                            style: { fontFamily: "Sanchez" }
                         }}
+                        InputLabelProps={{
+                            style: { fontFamily: "Sanchez" }
+                          }}
                     />
                 </div>
-                <div className='mt-4'>
+                <div className='mt-6'>
                     <FormControl fullWidth>
-                        <InputLabel variant="standard" htmlFor="uncontrolled-native">Role</InputLabel>
+                        <InputLabel 
+                            variant="standard" 
+                            htmlFor="uncontrolled-native"
+                            InputProps={{
+                                style: { fontFamily: "Sanchez" }
+                            }}
+                            InputLabelProps={{
+                                style: { fontFamily: "Sanchez" }
+                              }}> Role </InputLabel>
                         <NativeSelect defaultValue={role}
                             onChange={(e) => setSelectedOption(e.target.value)}
                             placeholder=''
@@ -84,8 +110,8 @@ function EditRoleModalWindow({ isModalOpen, closeModal, name, firstName, lastNam
                             <option value="USER">User</option>
                             <option value="ADMIN">Admin</option>
                         </NativeSelect>
-                        <div className="mt-2 mb-2">
-                        <Button className="contained-button w-full" variant="contained" onClick={editUserRole}>Save</Button>
+                        <div className="mt-6 mb-2">
+                            <Button className="contained-button w-full" variant="contained" onClick={editUserRole}>Save</Button>
                         </div>
                         <div className="mb-2">
                             <Button className="outlined-button w-full" variant="outlined" onClick={closeModal} >Cancel</Button>

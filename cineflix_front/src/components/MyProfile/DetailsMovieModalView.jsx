@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { ToastContainer, toast } from "react-toastify";
-import { Dialog, DialogContent, TextField } from "@mui/material";
+import { Button, Dialog, DialogContent, TextField } from "@mui/material";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import "./css/DetailsMovieModalView.css";
@@ -27,7 +27,7 @@ function DetailsMovieModalView({
   const [description, setDescription] = useState("");
   const [category, setCategory] = useState(defaultCategory);
 
- 
+
 
   const fetchMovieImage = async () => {
     try {
@@ -76,19 +76,19 @@ function DetailsMovieModalView({
     }
   };
 
-  useEffect(()=>{
-    let url=`/category`
+  useEffect(() => {
+    let url = `/category`
     axios
-    .get(url)
-    .then((response) => {
-      setAvailableCategories(response.data.content);
-    })
-    .catch((error) => {
-      console.error(error);
-    });
-  },[])
+      .get(url)
+      .then((response) => {
+        setAvailableCategories(response.data.content);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }, [])
 
- 
+
 
   const validRequest = () => {
     for (const check of validationChecks) {
@@ -105,7 +105,7 @@ function DetailsMovieModalView({
       if (!category) {
         showToast("Category " + category + " does not exist ");
       } else {
-        let finalCategory =  category;
+        let finalCategory = category;
 
         if (selectedImageFile) {
           const formData = new FormData();
@@ -148,26 +148,34 @@ function DetailsMovieModalView({
   };
 
   return (
-    <Dialog open={isModalOpen} onClose={closeModal}>
+    <Dialog fullWidth maxWidth={'sm'} open={isModalOpen} onClose={closeModal}>
       <div className="modal-content wider-modal">
         <div className="header-container">
           <FontAwesomeIcon
-            className="close-modal-button w-10 h-6 ml-4"
+            className="absolute top-4 right-4 cursor-pointer"
             icon={faTimes}
+            size="xl"
             onClick={closeModal}
           />
-          <h2 className="header-title">Edit movie</h2>
+          <div className="w-full">
+            <h2 className="header-title ml-6 mt-10">Edit movie</h2>
+          </div>
         </div>
-        <DialogContent className="modal-body">
+        <DialogContent className="modal-body ml-2 mr-2">
           <div className="field-group">
             <TextField
               label="Title"
               variant="outlined"
-              fullWidth
-              className="input-field"
+              className="input-field w-full"
               defaultValue={title}
               onChange={(e) => {
                 setTitle(e.target.value);
+              }}
+              InputProps={{
+                style: { fontFamily: "Sanchez" }
+              }}
+              InputLabelProps={{
+                style: { fontFamily: "Sanchez" }
               }}
             />
           </div>
@@ -181,25 +189,36 @@ function DetailsMovieModalView({
               onChange={(e) => {
                 setDirector(e.target.value);
               }}
+              InputProps={{
+                style: { fontFamily: "Sanchez" }
+              }}
+              InputLabelProps={{
+                style: { fontFamily: "Sanchez" }
+              }}
             />
           </div>
+          <div className="w-full">
             <Autocomplete
-              onChange={(e,value) => setCategory(value)}
+              onChange={(e, value) => setCategory(value)}
               value={category}
-              options={availableCategories.map((c)=> c.name)}
-              
-              sx={{ width: 300 }}
-              renderInput={(params) => <TextField {...params}  label="Category" />}
+              options={availableCategories.map((c) => c.name)}
+              renderInput={(params) => <TextField {...params} label="Category" 
+              InputProps={{
+                style: { fontFamily: "Sanchez" }
+              }}
+              InputLabelProps={{
+                style: { fontFamily: "Sanchez" }
+              }}
+              />}
             />
-          <div className="field-group">
-            <label className="mb-4">Description</label>
           </div>
-          <div className="field-group">
+          <div className="field-group mt-4">
+            <label>Description</label>
             <textarea
               placeholder=" Write a description for the movie..."
               required
               rows="3"
-              className="textarea-field w-full border-2"
+              className="textarea-field w-full border-2 p-2"
               defaultValue={description}
               onChange={(e) => {
                 setDescription(e.target.value);
@@ -208,7 +227,7 @@ function DetailsMovieModalView({
           </div>
 
           <div className="field-group image-upload-field">
-            <div className=" ">
+            <div className="">
               <h2 className="text-xl font-bold mb-4">Image Upload</h2>
               <div
                 className="border-2 border-gray-400 p-4 rounded-lg mb-4"
@@ -231,34 +250,30 @@ function DetailsMovieModalView({
                 type="file"
                 accept="image/*"
                 onChange={handleImageBrowse}
-                className="mb-4"
+                className="mb-4 w-full"
               />
             </div>
           </div>
-          <div className="modal-footer mt-4">
-            <button
-              type="button"
-              onClick={handleSave}
-              className="inline-block rounded  px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-white hoverColorDetails
-                 "
-              style={{ backgroundColor: "#1E1D5B", fontWeight: "bold" }}
-            >
-              Save
-            </button>
+          <div className="modal-footer mt-4 flex gap-x-2">
+            <div className="flex-1">
+              <Button
+                type="button"
+                onClick={handleSave}
+                className="contained-button w-full"
+              >
+                Save
+              </Button>
+            </div>
 
-            <button
-              type="button"
-              onClick={closeModal}
-              className="inline-block rounded  px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-white 
-             "
-              style={{
-                backgroundColor: "#BE2517",
-                fontWeight: "bold",
-                marginLeft: 15,
-              }}
-            >
-              Close
-            </button>
+            <div className="flex-1">
+              <Button
+                type="button"
+                onClick={closeModal}
+                className="outlined-button w-full"
+              >
+                Close
+              </Button>
+            </div>
           </div>
         </DialogContent>
       </div>
