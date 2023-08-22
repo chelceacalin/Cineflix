@@ -5,7 +5,7 @@ import Pagination from "../RoleManagement/Pagination";
 import RentedMovie from "./RentedMovie";
 import { UserLoginContext } from "../../utils/context/LoginProvider";
 import MovieFilter from "./MovieFilter";
-import SortIcon from '../../utils/icon/SortIcon'
+import SortIcon from "../../utils/icon/SortIcon";
 function Movies() {
   const TABLE_HEAD = [
     "Title",
@@ -39,7 +39,7 @@ function Movies() {
   const [direction, setDirection] = useState(true);
   const [sortField, setSortField] = useState("title");
   let [ownerUsername, setOwnerUsername] = useState("");
-  let [lastClicked,setLastClicked]=useState("")
+  let [lastClicked, setLastClicked] = useState("");
 
   let handleClick = (fieldName) => {
     if (lastClicked === fieldName) {
@@ -62,20 +62,20 @@ function Movies() {
         `pageNo=${parseInt(pageNo) - 1}`,
         `pageSize=${pageSize}`,
       ];
-  
+
       if (rentedUntil) {
         params.push(`rentedUntil=${rentedUntil}`);
       }
-  
+
       if (rentedBy) {
         params.push(`rentedBy=${rentedBy}`);
       }
-  
+
       return `/movies?${params.join("&")}`;
     };
-  
+
     const url = buildUrl();
-  
+
     axios.get(url).then((elems) => {
       if (elems.data.content.length === 0 && pageNo > 1) {
         updatePageNumber(pageNo - 1);
@@ -99,12 +99,12 @@ function Movies() {
     rentedDate,
     pageNo,
     movies.length,
-  ]); 
+  ]);
   let getFilterInput = (params) => {
     setCategory(params[0]);
     setDirector(params[1]);
     setTitle(params[2]);
-    setIsAvailable(params[3] == "BOTH" ? "" : params[3]);
+    setIsAvailable(params[3] === "BOTH" ? "" : params[3]);
     setRentedUntil(params[4]);
     setRentedBy(params[5]);
   };
@@ -118,10 +118,9 @@ function Movies() {
     setPageNo(pgNo);
   };
 
-
   return (
     <>
-    <MovieFilter filterInput={getFilterInput}/>
+      <MovieFilter filterInput={getFilterInput} />
       <div className="w-full h-full ml-10 mr-10 mt-5">
         <table className="w-full min-w-max table-auto text-left">
           <thead className="bg-basic-red text-white">
@@ -136,20 +135,20 @@ function Movies() {
                     onClick={(e) => {
                       e.preventDefault();
                       if (e.target.textContent !== "Status") {
-                        if (e.target.textContent == "Title") {
+                        if (e.target.textContent === "Title") {
                           setSortField("title");
                         } else if (e.target.textContent === "Director") {
                           setSortField("director");
                         } else if (e.target.textContent === "Category") {
                           setSortField("category");
                         }
-                        if (sortField == e.target.textContent.toLowerCase()) {
+                        if (sortField === e.target.textContent.toLowerCase()) {
                           setDirection(!direction);
                         } else {
                           setDirection(true);
                         }
 
-                        if (e.target.textContent == "Rented Until") {
+                        if (e.target.textContent === "Rented Until") {
                           setSortField("rentedUntil");
                           setDirection(!direction);
                         } else if (e.target.textContent === "Rented By") {
@@ -159,7 +158,7 @@ function Movies() {
                       }
                     }}
                   >
-                   <div className="">
+                    <div className="">
                       {elem}
                       <svg
                         data-column={elem}
@@ -171,13 +170,15 @@ function Movies() {
                         xmlns="http://www.w3.org/2000/svg"
                         onClick={(e) => {
                           e.stopPropagation();
-                          setDirection(!direction)
-                          handleClick(e.currentTarget.getAttribute("data-column").toLowerCase());
+                          setDirection(!direction);
+                          handleClick(
+                            e.currentTarget
+                              .getAttribute("data-column")
+                              .toLowerCase()
+                          );
                         }}
                       >
-                        {(elem != "Status"&&elem.length>2) && (
-                          <SortIcon/>
-                        )}
+                        {elem != "Status" && elem.length > 2 && <SortIcon />}
                       </svg>
                     </div>
                   </th>

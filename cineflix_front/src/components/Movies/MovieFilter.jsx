@@ -42,13 +42,13 @@ import {
         : "";
       let array = [];
       if (
-        (available == true && unavailable == true) ||
-        (available == false && unavailable == false)
+        (available === true && unavailable === true) ||
+        (available === false && unavailable === false)
       ) {
         array.push(category, director, title, "BOTH", date, rentedBy);
-      } else if (available == true && unavailable == false) {
+      } else if (available === true && unavailable === false) {
         array.push(category, director, title, "true", date, rentedBy);
-      } else if (available == false && unavailable == true) {
+      } else if (available === false && unavailable === true) {
         array.push(category, director, title, "false", date, rentedBy);
       } else array.push(category, director, title, "", date, rentedBy);
       filterInput(array);

@@ -57,26 +57,24 @@ function RentedMovie({
       </td>
       <td className={classes}>
         <div variant="small" color="blue-gray" className="font-normal">
-          {rentedBy == "available" && isAvailable ? "" : rentedBy}
+          {rentedBy === "available" && isAvailable ? "" : rentedBy}
         </div>
       </td>
       <td className={classes}>
-        <Button
-          className="contained-button font-normal w-full"
-          variant="contained"
+        <button
           onClick={handleDetailsOpen}
+          className="inline-block rounded  px-3 mr-4 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-blue-marine outlined-button"
         >
           Details
-        </Button>
+        </button>
       </td>
       <td>
-        <Button
-          className="contained-button font-normal w-full"
-          variant="contained"
+        <button
           onClick={handleDeleteOpen}
+          className="inline-block rounded px-3 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-white contained-button"
         >
           Rent Movie
-        </Button>
+        </button>
       </td>
     </tr>
   );
