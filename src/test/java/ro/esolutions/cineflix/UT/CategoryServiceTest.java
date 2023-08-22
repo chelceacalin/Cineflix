@@ -14,6 +14,8 @@ import ro.esolutions.cineflix.services.CategoryService;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -58,11 +60,11 @@ public class CategoryServiceTest {
     @Test()
     @DisplayName("Delete Category With Exception Thrown Service UT")
     public void deleteCategoryWithExceptionThrown() {
-        String name = "Horror";
-        when(categoryRepository.findByName(name))
+        UUID id = UUID.fromString("12f310ee-3cc9-11ee-be56-0242ac120002");
+        when(categoryRepository.findById(id))
                 .thenReturn(Optional.empty());
         assertThrows(CategoryNotFoundException.class, () -> categoryService.deleteCategory(
-                name));
+                id));
     }
 
     @Test
@@ -72,12 +74,13 @@ public class CategoryServiceTest {
         Category categoryToBeDeleted = Category.builder()
                 .id(id)
                 .name("Drama")
+                .movieList(new ArrayList<>())
                 .build();
 
-        when(categoryRepository.findByName("Drama")).thenReturn(Optional.of(categoryToBeDeleted));
-        categoryService.deleteCategory(categoryToBeDeleted.getName());
+        when(categoryRepository.findById(id)).thenReturn(Optional.of(categoryToBeDeleted));
+        categoryService.deleteCategory(categoryToBeDeleted.getId());
 
-        verify(categoryRepository, times(1)).findByName("Drama");
+        verify(categoryRepository, times(1)).findById(id);
         verify(categoryRepository, times(1)).deleteById(id);
     }
 
