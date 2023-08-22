@@ -35,3 +35,11 @@ body {
     border-color: #E0812E;
 }
 
+
+.field-group input {
+    border: 1px solid #ccc;
+    padding: 8px;
+    border-radius: 4px;
+  }
+  
+ 
