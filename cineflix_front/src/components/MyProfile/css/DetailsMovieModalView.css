@@ -11,34 +11,37 @@ body {
     cursor: pointer;
 }
 
-.save,
-.cancel {
+.contained-button,
+.outlined-button {
     margin-top: 10px;
 }
 
-.save {
-    background-color: #1E1D5B;
+.contained-button {
+    background-color: #1E1D5B !important;
+    border-radius: 0 !important;
+    color: white !important;
+    border: 1px solid #1E1D5B !important;
 }
 
-.save:hover {
-    background-color: #E0812E;
+.contained-button:hover {
+    background-color: #E0812E !important;
+    border-color: #E0812E !important;
 }
 
-.cancel {
-    background-color: white;
-    color: #1E1D5B;
-    border-color: #1E1D5B;
+.outlined-button {
+    background-color: white !important;
+    color: #1E1D5B !important;
+    border-color: #1E1D5B !important;
+    border-radius: 0 !important;
 }
 
-.cancel:hover {
-    color: #E0812E;
-    border-color: #E0812E;
+.outlined-button:hover {
+    color: #E0812E !important;
+    border-color: #E0812E !important;
 }
-
 
 .field-group input {
     border: 1px solid #ccc;
-    padding: 8px;
     border-radius: 4px;
   }
   
