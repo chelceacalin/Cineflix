@@ -52,14 +52,23 @@ function EditRoleModalWindow({ isModalOpen, closeModal, id, name, updateCategory
                 size="xl"
                 onClick={closeModal}
             />
+            <div className="w-full">
+                <h2 className="header-title ml-6 mt-10">Edit category</h2>
+            </div>
             <DialogContent>
-                <div className='mt-10'>
+                <div className='mt-5'>
                     <TextField
                         className="w-full"
                         id="outlined-read-only-input"
                         label="Name"
                         defaultValue={name}
                         inputRef={newNameRef}
+                        InputProps={{
+                            style: { fontFamily: "Sanchez" }
+                        }}
+                        InputLabelProps={{
+                            style: { fontFamily: "Sanchez" }
+                          }}
                     />
                 </div>
                 <div>

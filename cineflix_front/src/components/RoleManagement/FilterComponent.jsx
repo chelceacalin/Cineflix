@@ -35,6 +35,9 @@ function FilterComponent({ filterInput }) {
           label="Search first name"
           type="search"
           onChange={(e) => setFirstName(e.target.value)}
+          InputLabelProps={{
+            style: { fontFamily: "Sanchez" }
+          }}
         />
       </div>
       <div className="mt-10 mr-6">
@@ -44,6 +47,9 @@ function FilterComponent({ filterInput }) {
           label="Search last name"
           type="search"
           onChange={(e) => setLastName(e.target.value)}
+          InputLabelProps={{
+            style: { fontFamily: "Sanchez" }
+          }}
         />
       </div>
       <div className="mt-4 mr-6">
@@ -53,6 +59,9 @@ function FilterComponent({ filterInput }) {
           label="Search email"
           type="search"
           onChange={(e) => setEmail(e.target.value)}
+          InputLabelProps={{
+            style: { fontFamily: "Sanchez" }
+          }}
         />
       </div>
       <div className="p-1">

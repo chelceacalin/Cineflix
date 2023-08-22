@@ -1,10 +1,6 @@
 import {
   Checkbox,
-  FormControlLabel,
-  FormGroup,
   TextField,
-  InputLabel,
-  NativeSelect,
   Button,
 } from "@mui/material";
 import React from "react";
@@ -74,6 +70,12 @@ function MyProfileFilterComponent({ filterInput }) {
           label="Search title"
           type="search"
           onChange={(e) => setTitle(e.target.value)}
+          InputProps={{
+            style: { fontFamily: "Sanchez" }
+          }}
+          InputLabelProps={{
+            style: { fontFamily: "Sanchez" }
+          }}
         />
       </div>
       <div className="mt-10 mr-6">
@@ -83,6 +85,12 @@ function MyProfileFilterComponent({ filterInput }) {
           label="Search director"
           type="search"
           onChange={(e) => setDirector(e.target.value)}
+          InputProps={{
+            style: { fontFamily: "Sanchez" }
+          }}
+          InputLabelProps={{
+            style: { fontFamily: "Sanchez" }
+          }}
         />
       </div>
       <div className="mt-10 mr-6">
@@ -92,6 +100,12 @@ function MyProfileFilterComponent({ filterInput }) {
           label="Search category"
           type="search"
           onChange={(e) => setCategory(e.target.value)}
+          InputProps={{
+            style: { fontFamily: "Sanchez" }
+          }}
+          InputLabelProps={{
+            style: { fontFamily: "Sanchez" }
+          }}
         />
       </div>
       <div className="p-1">

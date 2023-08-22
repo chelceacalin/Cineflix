@@ -58,8 +58,11 @@ function EditRoleModalWindow({ isModalOpen, closeModal, name, firstName, lastNam
                 size="xl"
                 onClick={closeModal}
             />
+            <div className="w-full">
+                <h2 className="header-title ml-6 mt-10">Edit user role</h2>
+            </div>
             <DialogContent>
-                <div className='mt-10'>
+                <div className='mt-5'>
                     <TextField
                         id="outlined-read-only-input"
                         className="w-full"
@@ -67,7 +70,11 @@ function EditRoleModalWindow({ isModalOpen, closeModal, name, firstName, lastNam
                         defaultValue={fullName}
                         InputProps={{
                             readOnly: true,
+                            style: { fontFamily: "Sanchez" }
                         }}
+                        InputLabelProps={{
+                            style: { fontFamily: "Sanchez" }
+                          }}
                     />
                 </div>
                 <div className='mt-4 mb-4'>
@@ -78,12 +85,24 @@ function EditRoleModalWindow({ isModalOpen, closeModal, name, firstName, lastNam
                         defaultValue={email}
                         InputProps={{
                             readOnly: true,
+                            style: { fontFamily: "Sanchez" }
                         }}
+                        InputLabelProps={{
+                            style: { fontFamily: "Sanchez" }
+                          }}
                     />
                 </div>
                 <div className='mt-6'>
                     <FormControl fullWidth>
-                        <InputLabel variant="standard" htmlFor="uncontrolled-native">Role</InputLabel>
+                        <InputLabel 
+                            variant="standard" 
+                            htmlFor="uncontrolled-native"
+                            InputProps={{
+                                style: { fontFamily: "Sanchez" }
+                            }}
+                            InputLabelProps={{
+                                style: { fontFamily: "Sanchez" }
+                              }}> Role </InputLabel>
                         <NativeSelect defaultValue={role}
                             onChange={(e) => setSelectedOption(e.target.value)}
                             placeholder=''

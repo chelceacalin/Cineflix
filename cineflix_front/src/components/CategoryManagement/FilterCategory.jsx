@@ -18,6 +18,9 @@ function FilterCategory({ filterInput }) {
           label="Search name"
           type="search"
           onChange={(e) => setName(e.target.value)}
+          InputLabelProps={{
+            style: { fontFamily: "Sanchez" }
+          }}
         />
       </div>
     </div>

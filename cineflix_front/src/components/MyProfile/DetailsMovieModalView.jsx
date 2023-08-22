@@ -171,6 +171,12 @@ function DetailsMovieModalView({
               onChange={(e) => {
                 setTitle(e.target.value);
               }}
+              InputProps={{
+                style: { fontFamily: "Sanchez" }
+              }}
+              InputLabelProps={{
+                style: { fontFamily: "Sanchez" }
+              }}
             />
           </div>
           <div className="field-group">
@@ -183,6 +189,12 @@ function DetailsMovieModalView({
               onChange={(e) => {
                 setDirector(e.target.value);
               }}
+              InputProps={{
+                style: { fontFamily: "Sanchez" }
+              }}
+              InputLabelProps={{
+                style: { fontFamily: "Sanchez" }
+              }}
             />
           </div>
           <div className="w-full">
@@ -190,7 +202,14 @@ function DetailsMovieModalView({
               onChange={(e, value) => setCategory(value)}
               value={category}
               options={availableCategories.map((c) => c.name)}
-              renderInput={(params) => <TextField {...params} label="Category" />}
+              renderInput={(params) => <TextField {...params} label="Category" 
+              InputProps={{
+                style: { fontFamily: "Sanchez" }
+              }}
+              InputLabelProps={{
+                style: { fontFamily: "Sanchez" }
+              }}
+              />}
             />
           </div>
           <div className="field-group mt-4">
