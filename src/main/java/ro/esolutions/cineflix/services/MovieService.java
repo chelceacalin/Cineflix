@@ -139,7 +139,6 @@ public class MovieService {
         }
     }
 
-
     public MovieAddDTO findMovieByID(UUID id) {
         Optional<Movie> movieOptional = movieRepository.findById(id);
         if (movieOptional.isPresent()) {
@@ -149,18 +148,7 @@ public class MovieService {
             throw new MovieNotFoundException("Movie with id " + id + " not found");
         }
     }
-    public Optional<String> getRentedBy(UUID id) {
-        MovieHistory movieHistory = movieHistoryRepository.findMovieHistoryByRentedUntilMostRecent(id);
-        Optional<UserCineflix> user = Optional.ofNullable(movieHistory.getRentedBy());
-        if (user.isPresent()) {
-            UserCineflix userCineflix = user.get();
 
-            String firstName = userCineflix.getFirstName();
-            String lastName = userCineflix.getLastName();
-            return Optional.of(firstName + " " + lastName);
-        }
-        return Optional.empty();
-    }
     @Transactional
     public MovieAddDTO addMovie(MovieAddDTO movie) {
         UserDTO userCineflix = userCineflixService.findUserByUsername(movie.getOwner_username());
