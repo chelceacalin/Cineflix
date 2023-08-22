@@ -1,0 +1,40 @@
+.white-outlined-button {
+    border-radius: 0 !important;
+    border: 1px solid white !important;
+    color: white !important;
+    background-color: transparent !important;
+}
+
+.white-outlined-button:hover {
+    color: #E0812E !important;
+    border-color: #E0812E !important;
+}
+
+.hover:hover{
+    --tw-bg-opacity: 1;
+    background-color: rgb(215 50 56 / var(--tw-bg-opacity));
+}
+
+.marginResizable{
+    margin-left: 3rem;
+}
+
+@media only screen and (max-width: 1100px) 
+{
+    .marginResizable{
+        margin-left: 2px;
+        margin-right: 4px;
+    }
+}
+
+table.cater tr th:nth-child(2),
+table.cater tr td:nth-child(2){
+    max-width: 20px;
+    text-align: center;
+}
+
+table.cater tr th:nth-child(3),
+table.cater tr td:nth-child(3){
+    max-width: 20px;
+    text-align: center;
+}

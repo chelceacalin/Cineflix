@@ -8,7 +8,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import ro.esolutions.cineflix.DTO.UserDTO;
+import ro.esolutions.cineflix.DTO.UserCineflix.UserDTO;
 import ro.esolutions.cineflix.controllers.UserRoleManagementController;
 import ro.esolutions.cineflix.entities.UserCineflix;
 import ro.esolutions.cineflix.mapper.UserMapper;

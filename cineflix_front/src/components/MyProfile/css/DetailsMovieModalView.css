@@ -1,0 +1,45 @@
+body {
+    font-family: 'Sanchez', serif;
+}
+
+
+.closeModalWindowButton {
+    position: relative;
+    top: 20px;
+    right: -230px;
+    width: 20px;
+    cursor: pointer;
+}
+
+.save,
+.cancel {
+    margin-top: 10px;
+}
+
+.save {
+    background-color: #1E1D5B;
+}
+
+.save:hover {
+    background-color: #E0812E;
+}
+
+.cancel {
+    background-color: white;
+    color: #1E1D5B;
+    border-color: #1E1D5B;
+}
+
+.cancel:hover {
+    color: #E0812E;
+    border-color: #E0812E;
+}
+
+
+.field-group input {
+    border: 1px solid #ccc;
+    padding: 8px;
+    border-radius: 4px;
+  }
+  
+ 

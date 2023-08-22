@@ -23,3 +23,7 @@
     opacity: 1;
     background-color: #BE2517;
 }
+
+.body-color {
+    background-color: lightblue; /* Set your desired background color here */
+  }
