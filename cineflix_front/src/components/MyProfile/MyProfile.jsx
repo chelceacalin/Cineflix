@@ -6,6 +6,7 @@ import Pagination from "../RoleManagement/Pagination";
 import Movie from "./Movie";
 import AddNewMovieModalWindow from "./AddNewMovieModalWindow";
 import { UserLoginContext } from "../../utils/context/LoginProvider";
+import SortIcon from "../../utils/icon/SortIcon";
 
 function MyProfile() {
   const TABLE_HEAD = ["Title", "Director", "Category", "Status", "Rented Until", "Rented By", ""];
@@ -123,8 +124,9 @@ function MyProfile() {
   return (
     <>
     <MyProfileFilterComponent filterInput={getFilterInput}/>
-    <div className="w-full h-full ml-10 mr-10 mt-5">
-        <table className="w-full min-w-max table-auto text-left">
+    <div className="bg-grey-texture w-full">
+    <div className="w-full h-full px-10 py-5">
+        <table className="w-full min-w-max bg-white border-2 table-auto text-left">
           <thead className="bg-basic-red text-white">
             <tr>
               {TABLE_HEAD.slice(0, TABLE_HEAD.length - 1).map((elem) => {
@@ -198,10 +200,7 @@ function MyProfile() {
                         }}
                       >
                         {elem != "Status" && (
-                          <path
-                            d="M4.16572 7.36845H11.8349C12.4074 7.36845 12.7116 6.72395 12.3311 6.31639L8.49679 2.21243C8.4346 2.14564 8.35821 2.09217 8.27269 2.05555C8.18716 2.01893 8.09444 2 8.00065 2C7.90687 2 7.81415 2.01893 7.72862 2.05555C7.6431 2.09217 7.56671 2.14564 7.50452 2.21243L3.66892 6.31639C3.28835 6.72395 3.59254 7.36845 4.16572 7.36845ZM7.50385 13.7876C7.56605 13.8544 7.64243 13.9078 7.72796 13.9444C7.81348 13.9811 7.9062 14 7.99999 14C8.09378 14 8.1865 13.9811 8.27202 13.9444C8.35755 13.9078 8.43393 13.8544 8.49613 13.7876L12.3304 9.68361C12.7116 9.27669 12.4074 8.63218 11.8343 8.63218H4.16572C3.59321 8.63218 3.28902 9.27669 3.66959 9.68424L7.50385 13.7876Z"
-                            fill="#ffffff"
-                          />
+                          <SortIcon />
                         )}
                       </svg>
                     </div>
@@ -252,7 +251,7 @@ function MyProfile() {
             })}
           </tbody>
         </table>
-        <span className="w-full bg-basic-red flex flex-wrap py-3 mb-4">
+        <span className="w-full bg-basic-red flex flex-wrap py-3 mb-4 border-2">
           <span className=" inline-flex marginResizable">
             <p className="text-white font-normal">
               Results per page:{" "}
@@ -282,6 +281,7 @@ function MyProfile() {
             />
           </div>
         </span>
+      </div>
       </div>
     </>
   )

@@ -35,8 +35,8 @@ function AddNewMovieModalWindow({
   const [owner_username, setOwnerUsername] = useState(username);
 
   const validationChecks = [
-    { condition: !title||title.length<2, message: "Title should have at least 2 characters!" },
-    { condition: !director||director.length<2, message: "Director should not be empty!" },
+    { condition: !title || title.length < 2, message: "Title should have at least 2 characters!" },
+    { condition: !director || director.length < 2, message: "Director should not be empty!" },
     {
       condition: availableCategories.length === 0,
       message: "Invalid category name!",
@@ -77,57 +77,57 @@ function AddNewMovieModalWindow({
   };
   const handleSave = () => {
     if (validRequest()) {
-        if (title.charAt(0) !== title.charAt(0).toUpperCase()) {
-            showToastError("Title should start with an uppercase letter!");
-            return;
-        }
+      if (title.charAt(0) !== title.charAt(0).toUpperCase()) {
+        showToastError("Title should start with an uppercase letter!");
+        return;
+      }
 
-        if (director.charAt(0) !== director.charAt(0).toUpperCase()) {
-            showToastError("Director should start with an uppercase letter!");
-            return;
-        }
+      if (director.charAt(0) !== director.charAt(0).toUpperCase()) {
+        showToastError("Director should start with an uppercase letter!");
+        return;
+      }
 
-        let urlAddMovie = `/movies`;
+      let urlAddMovie = `/movies`;
 
-        let movie = {
-            title: title,
-            director: director,
-            description: description,
-            isAvailable: true,
-            category: category,
-            owner_username: owner_username,
-        };
+      let movie = {
+        title: title,
+        director: director,
+        description: description,
+        isAvailable: true,
+        category: category,
+        owner_username: owner_username,
+      };
 
-        if (selectedImage) {
-            axios
-                .post(urlAddMovie, movie)
-                .then((data) => {
-                    if (data.data) {
-                        let urlAddMovieImage = `/images/${data.data.id}`;
-                        const formData = new FormData();
-                        formData.append("image", selectedImage);
-                        axios
-                            .post(urlAddMovieImage, formData)
-                            .then((response) => {})
-                            .catch((error) => {
-                                console.error("Error " + error);
-                            });
-                    } else {
-                        console.error("Movie does not exist");
-                    }
-                    setTriggerRefresh(!triggerRefresh);
-                    resetForm();
-                })
-                .catch((err) => {
-                    console.error(err);
+      if (selectedImage) {
+        axios
+          .post(urlAddMovie, movie)
+          .then((data) => {
+            if (data.data) {
+              let urlAddMovieImage = `/images/${data.data.id}`;
+              const formData = new FormData();
+              formData.append("image", selectedImage);
+              axios
+                .post(urlAddMovieImage, formData)
+                .then((response) => { })
+                .catch((error) => {
+                  console.error("Error " + error);
                 });
+            } else {
+              console.error("Movie does not exist");
+            }
+            setTriggerRefresh(!triggerRefresh);
+            resetForm();
+          })
+          .catch((err) => {
+            console.error(err);
+          });
 
-            closeModal();
-        } else {
-            showToastError("Image should not be empty!");
-        }
+        closeModal();
+      } else {
+        showToastError("Image should not be empty!");
+      }
     }
-};
+  };
 
 
   const resetForm = () => {
@@ -139,17 +139,20 @@ function AddNewMovieModalWindow({
     setSelectedImage(null);
   };
   return (
-    <Dialog open={isModalOpen} onClose={closeModal}>
+    <Dialog fullWidth maxWidth={'sm'} open={isModalOpen} onClose={closeModal}>
       <div className="modal-content wider-modal">
         <div className="header-container">
           <FontAwesomeIcon
-            className="close-modal-button w-10 h-6 ml-4 cursor-pointer"
+            className="absolute top-4 right-4 cursor-pointer"
             icon={faTimes}
+            size="xl"
             onClick={closeModal}
           />
-          <h2 className="header-title">Add new movie</h2>
+          <div className="w-full">
+            <h2 className="header-title ml-6 mt-10">Add new movie</h2>
+          </div>
         </div>
-        <DialogContent className="modal-body">
+        <DialogContent className="modal-body ml-2 mr-2">
           <div className="field-group">
             <TextField
               label="Title"
@@ -158,6 +161,12 @@ function AddNewMovieModalWindow({
               className="input-field"
               onChange={(e) => {
                 setTitle(e.target.value);
+              }}
+              InputProps={{
+                style: { fontFamily: "Sanchez" }
+              }}
+              InputLabelProps={{
+                style: { fontFamily: "Sanchez" }
               }}
             />
           </div>
@@ -170,24 +179,34 @@ function AddNewMovieModalWindow({
               onChange={(e) => {
                 setDirector(e.target.value);
               }}
+              InputProps={{
+                style: { fontFamily: "Sanchez" }
+              }}
+              InputLabelProps={{
+                style: { fontFamily: "Sanchez" }
+              }}
             />
           </div>
           <Autocomplete
-              onChange={(e,value) => setCategory(value)}
-              value={category}
-              options={availableCategories.map((c)=> c.name)}
-              sx={{ width: 300 }}
-              renderInput={(params) => <TextField {...params}  label="Category" />}
-            />
-          <div className="field-group">
+            onChange={(e, value) => setCategory(value)}
+            value={category}
+            options={availableCategories.map((c) => c.name)}
+            renderInput={(params) => <TextField {...params} label="Category"
+            InputProps={{
+              style: { fontFamily: "Sanchez" }
+            }}
+            InputLabelProps={{
+              style: { fontFamily: "Sanchez" }
+            }}
+            />}
+          />
+          <div className="field-group mt-4">
             <label className="mb-4">Description</label>
-          </div>
-          <div className="field-group">
             <textarea
               placeholder=" Write a description for the movie..."
               required
               rows="3"
-              className="textarea-field w-full border-2"
+              className="textarea-field w-full border-2 p-2"
               onChange={(e) => {
                 setDescription(e.target.value);
               }}
@@ -195,7 +214,7 @@ function AddNewMovieModalWindow({
           </div>
 
           <div className="field-group image-upload-field">
-            <div className=" ">
+            <div>
               <h2 className="text-xl font-bold mb-4">Image Upload</h2>
               <div
                 className=" border-2 border-gray-400 p-4 rounded-lg mb-4"
@@ -218,35 +237,33 @@ function AddNewMovieModalWindow({
                 type="file"
                 accept="image/*"
                 onChange={handleImageBrowse}
-                className="mb-4"
+                className="mb-4 w-full"
               />
             </div>
           </div>
-          <div className="modal-footer mt-4">
-            <button
-              type="button"
-              onClick={handleSave}
-              className="inline-block rounded px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-white contained-button"
-            >
-              Save
-            </button>
-
-              <button
-                  type="button"
-                  onClick={()=>{
-                      resetForm();
-                      closeModal();
-                  }}
-                  className="inline-block rounded  px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-blue-marine outlined-button"
-                  style={{
-
-                      backgroundColor: "red",
-                      fontWeight: "bold",
-                      marginLeft: 15,
-                  }}
+          <div className="modal-footer mt-4 flex gap-x-2">
+            <div className="flex-1">
+              <Button
+                type="button"
+                onClick={handleSave}
+                className="contained-button w-full"
               >
-                  Close
-              </button>
+                Save
+              </Button>
+            </div>
+
+            <div className="flex-1">
+              <Button
+                type="button"
+              onClick={() => {
+                resetForm();
+                closeModal();
+              }}
+              className="outlined-button w-full"
+              >
+                Close
+              </Button>
+            </div>
           </div>
         </DialogContent>
       </div>
