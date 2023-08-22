@@ -1,3 +1,4 @@
+import { Button } from "@mui/material";
 import React from "react";
 import { useEffect } from "react";
 
@@ -15,7 +16,7 @@ function Login() {
       <div className="login-bg" style={{
         position: "absolute",
         left: "50%",
-        top: "50%",
+        top: "45%",
         transform: "translate(-50%, -50%)",
         maxWidth: "100%",
         maxHeight: "100%",
@@ -25,14 +26,17 @@ function Login() {
           alt="Login Image"
         />
 
-        <button
+        <Button
           onClick={(e) => {
             e.preventDefault();
             window.location.href = "http://localhost:8081";
           }}
+
+          className="contained-button font-normal w-full "
+          variant="contained"
         >
-          Go to login
-        </button>
+          LOG IN WITH KEYCLOAK
+        </Button>
       </div>   
 
   );
