@@ -180,7 +180,7 @@ function CategoryManagement() {
               })}
             </tbody>
           </table>
-          <span className="bg-basic-red flex flex-wrap py-3 mb-4">
+          <span className="bg-basic-red flex flex-wrap py-3 mb-4 border-2">
           <span className=" inline-flex marginResizable">
             <p className="text-white font-normal">
               Results per page:{" "}

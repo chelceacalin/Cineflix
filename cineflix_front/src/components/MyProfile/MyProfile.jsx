@@ -88,8 +88,9 @@ function MyProfile() {
   return (
     <>
     <MyProfileFilterComponent filterInput={getFilterInput}/>
-    <div className="w-full h-full ml-10 mr-10 mt-5">
-        <table className="w-full min-w-max table-auto text-left">
+    <div className="bg-grey-texture w-full">
+    <div className="w-full h-full px-10 py-5">
+        <table className="w-full min-w-max bg-white border-2 table-auto text-left">
           <thead className="bg-basic-red text-white">
             <tr>
               {TABLE_HEAD.slice(0, TABLE_HEAD.length - 1).map((elem) => {
@@ -217,7 +218,7 @@ function MyProfile() {
             })}
           </tbody>
         </table>
-        <span className="w-full bg-basic-red flex flex-wrap py-3 mb-4">
+        <span className="w-full bg-basic-red flex flex-wrap py-3 mb-4 border-2">
           <span className=" inline-flex marginResizable">
             <p className="text-white font-normal">
               Results per page:{" "}
@@ -247,6 +248,7 @@ function MyProfile() {
             />
           </div>
         </span>
+      </div>
       </div>
     </>
   )

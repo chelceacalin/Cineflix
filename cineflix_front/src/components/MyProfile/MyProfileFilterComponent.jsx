@@ -65,7 +65,7 @@ function MyProfileFilterComponent({ filterInput }) {
   ]);
 
   return (
-    <div className="filterContainer space-y-4 ml-6">
+    <div className="filterContainer space-y-4 ml-6 border-r-2">
       <div className="mt-4 mr-6">
         <TextField
           id="outlined-search"
