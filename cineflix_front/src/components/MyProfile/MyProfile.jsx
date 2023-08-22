@@ -40,13 +40,34 @@ function MyProfile() {
   };
 
   useEffect(() => {
-    const normalizedSortField = sortField || "title";
-
-    newUrl = `/movies?owner_username=${username}&sortField=${normalizedSortField}&direction=${
-        direction ? "ASC" : "DESC"}&title=${title}&director=${director}&category=${category}&isAvailable=${isAvailable}&pageNo=${
-            parseInt(pageNo) - 1}&pageSize=${pageSize}`;
-
-    axios.get(newUrl).then((elems) => {
+    const buildUrl = () => {
+      const normalizedSortField = sortField || "title";
+      let params = [
+        `owner_username=${username}`,
+        `sortField=${normalizedSortField}`,
+        `direction=${direction ? "ASC" : "DESC"}`,
+        `title=${title}`,
+        `director=${director}`,
+        `category=${category}`,
+        `isAvailable=${isAvailable}`,
+        `pageNo=${parseInt(pageNo) - 1}`,
+        `pageSize=${pageSize}`,
+      ];
+  
+      if (rentedUntil) {
+        params.push(`rentedUntil=${rentedUntil}`);
+      }
+  
+      if (rentedBy) {
+        params.push(`rentedBy=${rentedBy}`);
+      }
+  
+      return `/movies?${params.join("&")}`;
+    };
+  
+    const url = buildUrl();
+  
+    axios.get(url).then((elems) => {
       if (elems.data.content.length === 0 && pageNo > 1) {
         updatePageNumber(pageNo - 1);
       } else {
@@ -54,8 +75,22 @@ function MyProfile() {
         setTotalPages(elems.data.totalPages);
       }
     });
-  }, [triggerRefresh, sortField, direction, title, director, category, isAvailable, rentedUntil, rentedBy, ownerUsername, pageSize, pageNo, movies.length ]);
-
+  }, [
+    triggerRefresh,
+    sortField,
+    direction,
+    title,
+    director,
+    category,
+    isAvailable,
+    rentedUntil,
+    rentedBy,
+    ownerUsername,
+    pageSize,
+    pageNo,
+    movies.length,
+  ]);
+ 
   let getFilterInput = (params) => {
     setCategory(params[0]);
     setDirector(params[1]);
