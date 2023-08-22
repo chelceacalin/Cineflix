@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React from 'react'
 import {Box, Button, Dialog, DialogContent, Grid, TextField} from "@mui/material";
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {faTimes} from '@fortawesome/free-solid-svg-icons';
@@ -6,6 +6,7 @@ import dayjs from "dayjs";
 import {AdapterDayjs} from '@mui/x-date-pickers/AdapterDayjs';
 import {LocalizationProvider} from '@mui/x-date-pickers/LocalizationProvider';
 import {DatePicker} from '@mui/x-date-pickers/DatePicker';
+
 
 function ViewMovieDetailsModalWindow({isModalOpen, closeModal}) {
     const status= "unavailable";
@@ -34,6 +35,9 @@ function ViewMovieDetailsModalWindow({isModalOpen, closeModal}) {
                                     readOnly: true,
                                     style: { fontFamily: "Sanchez" }
                                 }}
+                                InputLabelProps={{
+                                    style: { fontFamily: "Sanchez" }
+                                }}
                             />
                         </div>
                         <div className='mt-6 ml-24'>
@@ -46,6 +50,9 @@ function ViewMovieDetailsModalWindow({isModalOpen, closeModal}) {
                                 }}
                                 InputProps={{
                                     readOnly: true,
+                                    style: { fontFamily: "Sanchez" }
+                                }}
+                                InputLabelProps={{
                                     style: { fontFamily: "Sanchez" }
                                 }}
                             />
@@ -62,6 +69,9 @@ function ViewMovieDetailsModalWindow({isModalOpen, closeModal}) {
                                     readOnly: true,
                                     style: { fontFamily: "Sanchez" }
                                 }}
+                                InputLabelProps={{
+                                    style: { fontFamily: "Sanchez" }
+                                }}
                             />
                         </div>
                         <div className='mt-6 ml-24'>
@@ -73,10 +83,12 @@ function ViewMovieDetailsModalWindow({isModalOpen, closeModal}) {
                                 sx={{
                                     width: { md: 259 },
                                 }}
-                                maxRows={6}
                                 rows={6}
                                 InputProps={{
                                     readOnly: true,
+                                    style: { fontFamily: "Sanchez" }
+                                }}
+                                InputLabelProps={{
                                     style: { fontFamily: "Sanchez" }
                                 }}
                             />
@@ -91,6 +103,9 @@ function ViewMovieDetailsModalWindow({isModalOpen, closeModal}) {
                                 defaultValue="Status"
                                 InputProps={{
                                     readOnly: true,
+                                    style: { fontFamily: "Sanchez" }
+                                }}
+                                InputLabelProps={{
                                     style: { fontFamily: "Sanchez" }
                                 }}
                             />
@@ -109,6 +124,9 @@ function ViewMovieDetailsModalWindow({isModalOpen, closeModal}) {
                                     readOnly: true,
                                     style: { fontFamily: "Sanchez" }
                                 }}
+                                InputLabelProps={{
+                                    style: { fontFamily: "Sanchez" }
+                                }}
                             />
                         </div>
                         <div className='mt-6 ml-32'>
@@ -125,13 +143,20 @@ function ViewMovieDetailsModalWindow({isModalOpen, closeModal}) {
                         <div className='mt-6 ml-32'>
                             <LocalizationProvider dateAdapter={AdapterDayjs}>
                                 <DatePicker
-                                    label="Rented on"
+                                    label={<span style={{ fontFamily: "Sanchez" }}>Rented on</span>}
+
                                     defaultValue={dayjs('2022-04-17')}
+                                    slotProps={{textField: { inputProps: {
+                                                style: { fontFamily: "Sanchez" },
+                                                }}
+                                            }}
+
                                     sx={{
-                                        width: { md: 259 },
+                                        width: { md: 259 }
                                     }}
                                     format="LL"
                                     disabled={true}
+
                                 />
                             </LocalizationProvider>
                         </div>
@@ -140,8 +165,12 @@ function ViewMovieDetailsModalWindow({isModalOpen, closeModal}) {
                         <div className='mt-6 ml-32'>
                             <LocalizationProvider dateAdapter={AdapterDayjs}>
                                 <DatePicker
-                                    label="Rented until"
+                                    label={<span style={{ fontFamily: "Sanchez" }}>Rented until</span>}
                                     defaultValue={dayjs('2024-01-17')}
+                                    slotProps={{textField: { inputProps: {
+                                                style: { fontFamily: "Sanchez" },
+                                            }}
+                                    }}
                                     sx={{
                                         width: { md: 259 },
                                     }}
@@ -163,6 +192,9 @@ function ViewMovieDetailsModalWindow({isModalOpen, closeModal}) {
                                 format="LL"
                                 InputProps={{
                                     readOnly: true,
+                                    style: { fontFamily: "Sanchez" }
+                                }}
+                                InputLabelProps={{
                                     style: { fontFamily: "Sanchez" }
                                 }}
                             />
