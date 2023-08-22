@@ -41,7 +41,7 @@ function AddNewMovieModalWindow({
       condition: availableCategories.length === 0,
       message: "Invalid category name!",
     },
-    { condition: !description||director.length<2, message: "Description should not be empty!" },
+    { condition: !description, message: "Description should not be empty!" },
   ];
   useEffect(() => {
     let url = `/category`;
@@ -77,17 +77,17 @@ function AddNewMovieModalWindow({
   };
 
   const validFields=()=>{
+    let valid=true;
     if(title.charAt(0)!==title.charAt(0).toUpperCase()){
       showToastError("Title should start with an uppercase letter!")
+      valid=false;
     }
     else
     if(director.charAt(0)!==director.charAt(0).toUpperCase()){
       showToastError("Director should start with an uppercase letter!")
+      valid=false;
     }
-    else
-    if(category.charAt(0)!==category.charAt(0).toUpperCase()){
-      showToastError("Category should start with an uppercase letter!")
-    }
+    return valid;
   }
 
   const handleSave = () => {
