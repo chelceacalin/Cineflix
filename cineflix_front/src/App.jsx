@@ -17,7 +17,9 @@ import AdminRoute from "./utils/protectedRoutes/AdminRoute";
 import {UserLoginContext} from "./utils/context/LoginProvider.jsx";
 import { useContext,useState } from "react";
 import axios from "axios";
-
+import Authenticated from "./utils/protectedRoutes/Authenticated";
+import ProfileRoute from "./utils/protectedRoutes/ProfileRoute";
+import Login from "./components/Login/Login";
 function App() { 
   return (
     <div className="app-container">
@@ -30,52 +32,65 @@ function App() {
   );
 
   function MainContent() {
-    const { isAdmin, setIsAdmin, username, setUsername, token, setToken, isLogged, setIsLoggedIn } = useContext(UserLoginContext);
+    const { isAdmin, setIsAdmin, username, setUsername, token, setToken, isLoggedIn, setIsLoggedIn } = useContext(UserLoginContext);
     useEffect(() => {
       axios.get(`/userInfo`)
       .then((response) => {
-        console.log(response.data.role);
-        const userInfo = response.data;
-
-        if (userInfo.role === "ADMIN") {
-          setIsAdmin(true);
+        if (response.status === 200) {
+          const userInfo = response.data;
+            if (userInfo.role === "ADMIN") {
+              setIsAdmin(true);
+            }
+            else {
+              setIsAdmin(false);
+            }
+            setUsername(userInfo.username);
+            setToken(userInfo.token);
+            setIsLoggedIn(true);
+            sessionStorage.setItem('isLoggedIn',true)
         }
-        else {
-          setIsAdmin(false);
-        }
-
-        setUsername(userInfo.username);
-        setToken(userInfo.token);
-        setIsLoggedIn(true);
       })
       .catch(error => {
+        setIsAdmin(false);
+        setUsername(null);
+        setToken(null);
+        setIsLoggedIn(false);
         console.error("Error fetching userInfo:", error);
       });
     }, [])
-  
-    return (
-      <>
-        <Navbar />
+    if (isLoggedIn) {
+      return (
+        <>
+          <Navbar />
+          <Routes>
+            <Route element={<Authenticated />}>
+
+              <Route index path="/" element={<Movies />} />
+
+              <Route element={<ProfileRoute />}>
+                <Route path="/myprofile/:id" element={<MyProfile />} />
+              </Route>
+
+              <Route element={<AdminRoute />}>
+                <Route path="/categoryManagement" element={<CategoryManagement />} />
+              </Route>
+
+              <Route element={<AdminRoute />}>
+                <Route path="/roleManagement" element={<RoleManagement />} />
+              </Route>
+            </Route>
+
+            <Route path="/*" element={<NotFound />} />
+          </Routes>
+        </>
+      );
+    } else {
+      return (
         <Routes>
-
-          <Route index path="/" element={<Movies />} />
-
-          <Route path="/myprofile/:id" element={<MyProfile />} />
-          <Route element={<AdminRoute />}>
-            <Route
-              path="/categoryManagement"
-              element={<CategoryManagement />}
-            />
-          </Route>
-
-          <Route element={<AdminRoute />}>
-            <Route path="/roleManagement" element={<RoleManagement />} />
-          </Route>
-
-          <Route path="/*" element={<NotFound />} />
+          <Route element={<Login />} index="/login" />
         </Routes>
-      </>
-    );
+      );
+    }
   }
 }
 

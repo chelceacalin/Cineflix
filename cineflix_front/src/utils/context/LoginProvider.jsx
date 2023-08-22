@@ -1,49 +1,40 @@
 import React, { useState, createContext } from "react";
+import PropTypes from 'prop-types';
 
 export const UserLoginContext = createContext();
 
 function LoginProvider({ children }) {
-  let [isLogged, setIsLoggedIn] = useState(localStorage.getItem("isLogged") === "true");
-  let [isAdmin, setIsAdmin] = useState(localStorage.getItem("isAdmin") === "true");
-  let [username, setUsername] = useState(localStorage.getItem("username") === "true");
-  let [token, setToken] = useState(localStorage.getItem("token") === "true");
+  let [isLoggedIn, setIsLoggedIn] = useState(false);
+  let [isAdmin, setIsAdmin] = useState(false);
+  let [username, setUsername] = useState("");
+  let [token, setToken] = useState("");
 
-  let setIsAdminHandler = (value) => {
-    setIsAdmin(value);
-    localStorage.setItem("isAdmin", value);
-  };
 
-  let setUsernameHandler = (value) => {
-    setUsername(value);
-    localStorage.setItem("username", value);
-  };
-
-  let setTokenHandler = (value) => {
-    setToken(value);
-    localStorage.setItem("token", value);
-  };
-
-  let setIsLoggedInHandler = (value) => {
-    setIsLoggedIn(value);
-    localStorage.setItem("isLogged", value);
+  let loginHandler = (value) => {
+    setIsLoggedIn(value)
+   sessionStorage.setItem('isLoggedIn', value);
   }
-
+  
   return (
     <UserLoginContext.Provider
       value={{
         isAdmin,
-        setIsAdmin: setIsAdminHandler,
+        setIsAdmin,
         username,
-        setUsername: setUsernameHandler,
+        setUsername,
         token,
-        setToken: setTokenHandler,
-        isLogged,
-        setIsLoggedIn: setIsLoggedInHandler
+        setToken,
+        isLoggedIn,
+        setIsLoggedIn:loginHandler
       }}
     >
       {children}
     </UserLoginContext.Provider>
   );
 }
+
+LoginProvider.propTypes = {
+  children: PropTypes.node.isRequired,
+};
 
 export default LoginProvider;

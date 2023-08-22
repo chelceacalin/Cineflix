@@ -11,4 +11,5 @@ import java.util.Optional;
 public interface UserCineflixRepository extends JpaRepository<UserCineflix, String>, JpaSpecificationExecutor<UserCineflix> {
 
     Optional<UserCineflix> findByUsername(String username);
+
 }

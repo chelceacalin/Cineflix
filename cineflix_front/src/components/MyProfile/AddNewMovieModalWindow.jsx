@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import {
@@ -10,11 +10,12 @@ import {
   NativeSelect,
   TextField,
 } from "@mui/material";
+import { Autocomplete } from "@mui/material";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faL, faTimes } from "@fortawesome/free-solid-svg-icons";
 import "./css/AddNewMovieModalWindow.css";
 import axios from "axios";
-
+import { UserLoginContext } from "../../utils/context/LoginProvider";
 
 
 function AddNewMovieModalWindow({
@@ -28,13 +29,14 @@ function AddNewMovieModalWindow({
   const [description, setDescription] = useState("");
   const [category, setCategory] = useState("");
   const [categorySelect, setCategorySelect] = useState("");
-  const [photo, setPhoto] = useState("");
   const [selectedImage, setSelectedImage] = useState(null);
   const [availableCategories, setAvailableCategories] = useState([]);
-  const [owner_username, setOwnerUsername] = useState("adminusername");
+  const { username } = useContext(UserLoginContext);
+  const [owner_username, setOwnerUsername] = useState(username);
+
   const validationChecks = [
-    { condition: !title, message: "Title should not be empty!" },
-    { condition: !director, message: "Director should not be empty!" },
+    { condition: !title||title.length<2, message: "Title should have at least 2 characters!" },
+    { condition: !director||director.length<2, message: "Director should not be empty!" },
     {
       condition: availableCategories.length === 0,
       message: "Invalid category name!",
@@ -42,7 +44,7 @@ function AddNewMovieModalWindow({
     { condition: !description, message: "Description should not be empty!" },
   ];
   useEffect(() => {
-    let url = `/category?name=${category}`;
+    let url = `/category`;
     axios
       .get(url)
       .then((response) => {
@@ -73,64 +75,60 @@ function AddNewMovieModalWindow({
     }
     return true;
   };
-
-  const validCategory = () => {
-    return (
-      availableCategories &&
-      availableCategories.some((cat) => cat.name == categorySelect)
-    );
-  };
-
   const handleSave = () => {
     if (validRequest()) {
-      let urlAddMovie = `/movies`;
-      let finalCategory;
+        if (title.charAt(0) !== title.charAt(0).toUpperCase()) {
+            showToastError("Title should start with an uppercase letter!");
+            return;
+        }
 
-      if (validCategory) {
-        finalCategory = categorySelect;
-      } else {
-        finalCategory = availableCategories[0].name;
-      }
+        if (director.charAt(0) !== director.charAt(0).toUpperCase()) {
+            showToastError("Director should start with an uppercase letter!");
+            return;
+        }
 
-      let movie = {
-        title: title,
-        director: director,
-        description: description,
-        isAvailable: true,
-        category: finalCategory,
-        owner_username: owner_username,
-      };
+        let urlAddMovie = `/movies`;
 
-      if (selectedImage) {
-        axios
-          .post(urlAddMovie, movie)
-          .then((data) => {
-            if (data.data) {
-              let urlAddMovieImage = `/images/${data.data.id}`;
-              const formData = new FormData();
-              formData.append("image", selectedImage);
-              axios
-                .post(urlAddMovieImage, formData)
-                .then((response) => {})
-                .catch((error) => {
-                  console.error("eroare " + error);
+        let movie = {
+            title: title,
+            director: director,
+            description: description,
+            isAvailable: true,
+            category: category,
+            owner_username: owner_username,
+        };
+
+        if (selectedImage) {
+            axios
+                .post(urlAddMovie, movie)
+                .then((data) => {
+                    if (data.data) {
+                        let urlAddMovieImage = `/images/${data.data.id}`;
+                        const formData = new FormData();
+                        formData.append("image", selectedImage);
+                        axios
+                            .post(urlAddMovieImage, formData)
+                            .then((response) => {})
+                            .catch((error) => {
+                                console.error("Error " + error);
+                            });
+                    } else {
+                        console.error("Movie does not exist");
+                    }
+                    setTriggerRefresh(!triggerRefresh);
+                    resetForm();
+                })
+                .catch((err) => {
+                    console.error(err);
                 });
-            } else {
-              console.error("Movie does not exist");
-            }
-            setTriggerRefresh(!triggerRefresh);
-            resetForm();
-          })
-          .catch((err) => {
-            console.error(err);
-          });
 
-        closeModal();
-      } else {
-        showToastError("Image should not be empty! ");
-      }
+            closeModal();
+        } else {
+            showToastError("Image should not be empty!");
+        }
     }
-  };
+};
+
 
   const resetForm = () => {
     setTitle("");
@@ -174,32 +172,13 @@ function AddNewMovieModalWindow({
               }}
             />
           </div>
-          <div className="field-group">
-            <TextField
-              label="Category"
-              variant="outlined"
-              fullWidth
-              className="input-field"
-              onChange={(e) => {
-                setCategory(e.target.value);
-              }}
+          <Autocomplete
+              onChange={(e,value) => setCategory(value)}
+              value={category}
+              options={availableCategories.map((c)=> c.name)}
+              sx={{ width: 300 }}
+              renderInput={(params) => <TextField {...params}  label="Category" />}
             />
-
-            <select
-              className="input-field mt-2"
-              onChange={(e) => {
-                setCategorySelect(e.target.value);
-              }}
-            >
-              <option value="">Select Category</option>
-              {availableCategories &&
-                availableCategories.slice(0, 7).map((categoryOption) => (
-                  <option key={categoryOption.id} value={categoryOption.name}>
-                    {categoryOption.name}
-                  </option>
-                ))}
-            </select>
-          </div>
           <div className="field-group">
             <label className="mb-4">Description</label>
           </div>
@@ -252,13 +231,22 @@ function AddNewMovieModalWindow({
               Save
             </button>
 
-            <button
-              type="button"
-              onClick={closeModal}
-              className="inline-block rounded ml-4 px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-blue-marine outlined-button"
-            >
-              Close
-            </button>
+              <button
+                  type="button"
+                  onClick={()=>{
+                      resetForm();
+                      closeModal();
+                  }}
+                  className="inline-block rounded  px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-blue-marine outlined-button"
+                  style={{
+
+                      backgroundColor: "red",
+                      fontWeight: "bold",
+                      marginLeft: 15,
+                  }}
+              >
+                  Close
+              </button>
           </div>
         </DialogContent>
       </div>

@@ -65,7 +65,7 @@ body {
   .modal-content.wider-modal {
     width: 500px;
   }
-  
+
   .outlined-button {
     background-color: white !important;
     color: #1E1D5B !important;
@@ -91,3 +91,10 @@ body {
 .contained-button:hover {
     background-color: #E0812E !important;
 }
+
+
+  .field-group input {
+    border: 1px solid #ccc;
+    padding: 8px;
+    border-radius: 4px;
+  }
