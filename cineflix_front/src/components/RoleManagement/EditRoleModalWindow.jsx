@@ -96,13 +96,7 @@ function EditRoleModalWindow({ isModalOpen, closeModal, name, firstName, lastNam
                     <FormControl fullWidth>
                         <InputLabel 
                             variant="standard" 
-                            htmlFor="uncontrolled-native"
-                            InputProps={{
-                                style: { fontFamily: "Sanchez" }
-                            }}
-                            InputLabelProps={{
-                                style: { fontFamily: "Sanchez" }
-                              }}> Role </InputLabel>
+                            htmlFor="uncontrolled-native"> Role </InputLabel>
                         <NativeSelect defaultValue={role}
                             onChange={(e) => setSelectedOption(e.target.value)}
                             placeholder=''

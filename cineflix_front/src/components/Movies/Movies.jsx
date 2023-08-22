@@ -1,6 +1,5 @@
 import React, { useContext, useState, useEffect } from "react";
 import axios from "axios";
-import Button from "@mui/material/Button";
 import Pagination from "../RoleManagement/Pagination";
 import RentedMovie from "./RentedMovie";
 import { UserLoginContext } from "../../utils/context/LoginProvider";
