@@ -9,7 +9,6 @@ import "react-toastify/dist/ReactToastify.css";
 axios.defaults.withCredentials = true
 
 function DeleteCategoryModalWindow({ isEditModalOpen, closeEditModal, name, id, signal }) {
-    const [requestError, setRequestError] = useState("");
 
     const deleteCategory = () => {
         let url = '/category/delete/' + id;
@@ -17,12 +16,11 @@ function DeleteCategoryModalWindow({ isEditModalOpen, closeEditModal, name, id, 
             axios.post(url).then(() => {
                 signal();
                 closeEditModal();
-                setRequestError(false);
             })
             .catch((error) => {
                 if (error.response) {
-                    showToastError("This category has been already deleted by another user!");
-                    setRequestError("This category contains movies");
+                    const message = JSON.stringify(error.response.data).replace('"', '').replace('"', '');
+                    showToastError(message);
                 }
             })
     }
@@ -41,23 +39,27 @@ function DeleteCategoryModalWindow({ isEditModalOpen, closeEditModal, name, id, 
       };
 
     return (
-        <Dialog open={isEditModalOpen} onClose={closeEditModal}>
+        <Dialog fullWidth maxWidth={'sm'} open={isEditModalOpen} onClose={closeEditModal}>
             <div className="overflow-x-hidden">
-                <FontAwesomeIcon className="relative top-3 left-64" icon={faTimes} onClick={closeEditModal} />
+                <FontAwesomeIcon 
+                className="absolute top-4 right-4 cursor-pointer" 
+                icon={faTimes} 
+                size="xl" 
+                onClick={closeEditModal} 
+                />
                 <DialogContent>
-                    <div className="w-64 break-normal text-center">
+                    <div className="break-normal text-center mt-10 text-xl">
                         <p> Are you sure you want to permanently remove &nbsp;
                             <span className="font-bold">
                                 {name}
                             </span>
                             &nbsp; category ?
                         </p>
-                        <div className="mt-2 mb-2">
+                        <div className="mt-8 mb-2">
                             <Button className="contained-button w-full" variant="contained" onClick={deleteCategory}>Yes</Button>
                         </div>
                         <div className="mb-2">
                             <Button className="outlined-button w-full" variant="outlined" onClick={()=>{
-                                setRequestError("");
                                 closeEditModal();
                             }} >Cancel</Button>
                         </div>

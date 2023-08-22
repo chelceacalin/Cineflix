@@ -4,10 +4,12 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import "../RoleManagement/css/EditRoleModalWindow.css";
 import axios from 'axios';
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 axios.defaults.withCredentials = true
 
-function EditRoleModalWindow({ isModalOpen, closeModal, id, name, updateCategory, setErrorMessage, errorMessage}) {
+function EditRoleModalWindow({ isModalOpen, closeModal, id, name, updateCategory, setErrorMessage, errorMessage }) {
     const newNameRef = useRef();
     const editCategoryName = () => {
         let url = '/category/update/' + id;
@@ -21,26 +23,49 @@ function EditRoleModalWindow({ isModalOpen, closeModal, id, name, updateCategory
             });
             closeModal();
         }).catch(error => {
-            setErrorMessage(error.response.data);
+            if (error.response) {
+                const message = JSON.stringify(error.response.data).replace('"', '').replace('"', '');
+                showToastError(message);
+            }
         });
     };
 
+    const showToastError = (message) => {
+        toast.error(message, {
+            className: "bg-red-500 text-black p-4 rounded-lg",
+            position: "top-right",
+            autoClose: 3500,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+        });
+    };
+
+
     return (
-        <Dialog open={isModalOpen} onClose={closeModal}>
-            <FontAwesomeIcon className="closeModalWindowButton" icon={faTimes} onClick={closeModal} />
+        <Dialog fullWidth maxWidth={'sm'} open={isModalOpen} onClose={closeModal}>
+            <FontAwesomeIcon
+                className="absolute top-4 right-4 cursor-pointer"
+                icon={faTimes}
+                size="xl"
+                onClick={closeModal}
+            />
             <DialogContent>
-                <div className='mt-6'>
+                <div className='mt-10'>
                     <TextField
+                        className="w-full"
                         id="outlined-read-only-input"
                         label="Name"
                         defaultValue={name}
                         inputRef={newNameRef}
                     />
                 </div>
-                <div className='mt-4'>
+                <div>
                     <FormControl fullWidth>
                         <div className="mt-2 mb-2">
-                        <Button className="contained-button w-full" variant="contained" onClick={editCategoryName}>Save</Button>
+                            <Button className="contained-button w-full" variant="contained" onClick={editCategoryName}>Save</Button>
                         </div>
                         <div className="mb-2">
                             <Button className="outlined-button w-full" variant="outlined" onClick={closeModal} >Cancel</Button>
@@ -48,6 +73,7 @@ function EditRoleModalWindow({ isModalOpen, closeModal, id, name, updateCategory
                     </FormControl>
                 </div>
             </DialogContent>
+            <ToastContainer />
         </Dialog>
     );
 }

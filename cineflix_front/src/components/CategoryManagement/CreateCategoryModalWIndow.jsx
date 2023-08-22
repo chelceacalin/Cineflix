@@ -40,7 +40,8 @@ function CreateCategoryModalWindow({
         })
         .catch((error) => {
           if (error.response) {
-            setErrorMessage(error.response.data);
+            const message = JSON.stringify(error.response.data).replace('"', '').replace('"', '');
+            showToastError(message);
           }
         });
     }
@@ -60,15 +61,17 @@ function CreateCategoryModalWindow({
   };
 
   return (
-    <Dialog open={isModalOpen} onClose={closeModal}>
+    <Dialog fullWidth maxWidth={'sm'} open={isModalOpen} onClose={closeModal}>
       <FontAwesomeIcon
-        className="closeModalWindowButton"
+        className="absolute top-4 right-4 cursor-pointer"
         icon={faTimes}
+        size="xl"
         onClick={closeModal}
       />
       <DialogContent>
-        <div className="mt-6">
+        <div className="mt-10">
           <TextField
+            className="w-full"
             id="outlined-read-only-input"
             label="Name"
             defaultValue=""
@@ -76,9 +79,6 @@ function CreateCategoryModalWindow({
               setCategoryDTO(e.target.value);
             }}
           />
-        </div>
-        <div className="text-basic-red font-bold w-52 text-center">
-          {errorMessage}
         </div>
         <div className="mt-2 mb-2">
           <Button
