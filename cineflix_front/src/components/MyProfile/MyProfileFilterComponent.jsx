@@ -30,15 +30,16 @@ function MyProfileFilterComponent({ filterInput }) {
     });
   }, [url]);
 
+    let convertDate=(input)=>{
+        const inputDate = new Date(input);
+        const year = inputDate.getFullYear();
+        const month = ('0' + (inputDate.getMonth() + 1)).slice(-2);
+        const day = ('0' + inputDate.getDate()).slice(-2);
+        return `${year}-${month}-${day}`;
+    }
+
   useEffect(() => {
-    let date = rentedUntil
-      ? `${rentedUntil.getFullYear()}-${(rentedUntil.getMonth() + 1)
-        .toString()
-        .padStart(2, "0")}-${rentedUntil
-          .getDate()
-          .toString()
-          .padStart(2, "0")}`
-      : "";
+    let date = rentedUntil?convertDate(rentedUntil):"";
     let array = [];
     if (
       (available == true && unavailable == true) ||
