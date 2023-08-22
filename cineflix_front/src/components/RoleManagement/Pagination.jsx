@@ -23,7 +23,7 @@ function Pagination({
 
   return (
     <>
-      <ul className="list-style-none flex items-center justify-center mr-2">
+      <ul className="list-style-none flex items-center justify-center mr-2 cursor-pointer">
         <li
           onClick={(e) => {
             e.preventDefault();
@@ -149,7 +149,10 @@ function Pagination({
         )}
 
         <li
-          onClick={()=>getNextPage()}
+          onClick={(e)=>{
+            e.preventDefault();
+            getNextPage();
+          }}
         >
           <div className="relative block rounded bg-transparent px-3  text-sm text-neutral-600 transition-all duration-300 hover:bg text-white hover:bg-white hover:text-blue-marine">
             Next

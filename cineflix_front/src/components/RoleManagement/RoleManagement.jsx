@@ -25,7 +25,7 @@ function RoleManagement() {
   let [totalUsers, setTotalUsers] = useState(0);
 
   useEffect(() => {
-    axios.get(`http://localhost:8081/users`).then((data) => {
+    axios.get(`/users`).then((data) => {
       setTotalUsers(data.data.content.length);
     });
   }, [totalUsers]);
@@ -52,7 +52,7 @@ function RoleManagement() {
 
   useEffect(() => {
     const normalizedSortField = sortField || "defaultsort";
-    newUrl = `http://localhost:8081/users?sortField=${normalizedSortField}&direction=${
+    newUrl = `/users?sortField=${normalizedSortField}&direction=${
       direction ? "ASC" : "DESC"
     }&firstName=${firstName}&lastName=${lastName}&email=${email}&pageNo=${
       parseInt(pageNo) - 1
@@ -87,8 +87,8 @@ function RoleManagement() {
     <>
       <FilterComponent filterInput={getFilterInput} />
       <div className="bg-grey-texture w-full">
-      <div className="w-2/3 h-full ml-10 mr-10 mt-5">
-        <table className="w-full min-w-max table-auto text-left bg-white border-2">
+      <div className="w-full h-full px-10 py-5">
+        <table className="w-full text-left bg-white border-2">
           <thead className="bg-basic-red text-white">
             <tr>
               {TABLE_HEAD.slice(0, TABLE_HEAD.length - 2).map((elem) => {
@@ -183,7 +183,7 @@ function RoleManagement() {
             })}
           </tbody>
         </table>
-        <span className="w-full bg-basic-red flex flex-wrap py-3 mb-4">
+        <span className="bg-basic-red flex flex-wrap py-3 mb-4">
           <span className=" inline-flex marginResizable">
             <p className="text-white font-normal">
               Results per page:{" "}

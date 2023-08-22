@@ -4,13 +4,16 @@ package ro.esolutions.cineflix.util;
 import org.springframework.stereotype.Component;
 
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.util.zip.DataFormatException;
 import java.util.zip.Deflater;
 import java.util.zip.Inflater;
 
 @Component
 public class MovieImageDataUtil {
-    private final Integer SIZE=4096;
-    public byte[] compressImage(byte[] data) throws Exception {
+    private final Integer SIZE = 4096;
+
+    public byte[] compressImage(byte[] data)  {
         Deflater deflater = new Deflater();
         deflater.setLevel(Deflater.BEST_COMPRESSION);
         deflater.setInput(data);
@@ -24,15 +27,14 @@ public class MovieImageDataUtil {
         }
         try {
             outputStream.close();
-        } catch (Exception e) {
-            throw new Exception(e.getMessage());
-
+        } catch (RuntimeException | IOException e) {
+            throw new RuntimeException(e);
         }
         return outputStream.toByteArray();
     }
 
 
-    public byte[] decompressImage(byte[] data) throws Exception {
+    public byte[] decompressImage(byte[] data) {
         Inflater inflater = new Inflater();
         inflater.setInput(data);
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream(data.length);
@@ -43,8 +45,8 @@ public class MovieImageDataUtil {
                 outputStream.write(tmp, 0, count);
             }
             outputStream.close();
-        } catch (Exception e) {
-            throw new Exception(e.getMessage());
+        } catch (RuntimeException | IOException | DataFormatException e) {
+            throw new RuntimeException(e);
         }
         return outputStream.toByteArray();
     }
