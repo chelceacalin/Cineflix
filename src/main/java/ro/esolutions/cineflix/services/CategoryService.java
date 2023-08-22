@@ -82,7 +82,7 @@ public class CategoryService {
 
     public void deleteCategory(UUID id) {
         Category categoryFound = categoryRepository.findById(id)
-                .orElseThrow(() -> new CategoryNotFoundException("Category to be deleted does not exist"));
+                .orElseThrow(() -> new CategoryNotFoundException("Category was already deleted by another user"));
 
 
         if(!categoryFound.getMovieList().isEmpty()) {
