@@ -3,6 +3,7 @@ import React from "react";
 import { useEffect } from "react";
 
 function Login() {
+  const url = "http://localhost:8081";
 
   useEffect(() => {
     document.body.style.background="#C64432";
@@ -29,7 +30,7 @@ function Login() {
         <Button
           onClick={(e) => {
             e.preventDefault();
-            window.location.href = "http://localhost:8081";
+            window.location.href = url;
           }}
 
           className="contained-button font-normal w-full "
