@@ -94,10 +94,9 @@ function MovieFilter({ filterInput }) {
         />
       </div>
       <div className="p-1">
-        <div className="mb-2">Availability: </div>
-        <div className="flex gap-2">
+        <div className="mt-4 mb-2">Availability: </div>
+        <div>
           <div>
-            <label name="unavailable">Unavailable</label>
             <Checkbox
               name="type"
               label="Unavailable"
@@ -106,9 +105,9 @@ function MovieFilter({ filterInput }) {
                 setUnavailable(e.target.checked);
               }}
             />
+            <label name="unavailable">Unavailable</label>
           </div>
           <div>
-            <label name="available">Available</label>
             <Checkbox
               name="type"
               label="Available"
@@ -117,6 +116,7 @@ function MovieFilter({ filterInput }) {
                 setAvailable(e.target.checked);
               }}
             />
+            <label name="available">Available</label>
           </div>
         </div>
       </div>

@@ -122,7 +122,7 @@ function Movies() {
     <>
       <MovieFilter filterInput={getFilterInput} />
       <div className="bg-grey-texture w-full">
-        <div className="w-full h-full ml-10 mr-10 mt-5">
+        <div className="w-full h-full px-10 py-5">
           <table className="w-full min-w-max table-auto text-left border-2">
             <thead className="bg-basic-red text-white">
               <tr>
