@@ -8,6 +8,7 @@ import ro.esolutions.cineflix.exceptions.Category.CategoryAlreadyExistsException
 import ro.esolutions.cineflix.exceptions.Category.CategoryContainsMovieException;
 import ro.esolutions.cineflix.exceptions.Category.CategoryNotFoundException;
 import ro.esolutions.cineflix.exceptions.Category.EmptyCategoryNameField;
+import ro.esolutions.cineflix.exceptions.Movie.MovieIsNotRented;
 import ro.esolutions.cineflix.exceptions.Movie.MovieNotFoundException;
 import ro.esolutions.cineflix.exceptions.MovieImageData.MovieImageDataNotFoundException;
 import ro.esolutions.cineflix.exceptions.User.UserNotFoundException;
@@ -56,6 +57,10 @@ public class ExceptionsHandler {
 
     @ExceptionHandler(UserNotFoundException.class)
     public ResponseEntity<String> handleUserNotFoundException(UserNotFoundException ex) {
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
+    }
+    @ExceptionHandler(MovieIsNotRented.class)
+    public ResponseEntity<String> handleMovieIsNotRented(MovieIsNotRented ex) {
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
     }
 }

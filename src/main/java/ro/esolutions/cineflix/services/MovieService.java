@@ -13,7 +13,9 @@ import ro.esolutions.cineflix.DTO.UserCineflix.UserDTO;
 import ro.esolutions.cineflix.entities.Category;
 import ro.esolutions.cineflix.entities.Movie;
 import ro.esolutions.cineflix.entities.MovieHistory;
+import ro.esolutions.cineflix.entities.UserCineflix;
 import ro.esolutions.cineflix.exceptions.Category.CategoryNotFoundException;
+import ro.esolutions.cineflix.exceptions.Movie.MovieIsNotRented;
 import ro.esolutions.cineflix.exceptions.Movie.MovieNotFoundException;
 import ro.esolutions.cineflix.exceptions.MovieNotAvailableException;
 import ro.esolutions.cineflix.exceptions.User.UserNotFoundException;
@@ -144,20 +146,28 @@ public class MovieService {
         }
     }
 
-    public String[] getRentedBy(UUID id) {
+    public Optional<String> getRentedBy(UUID id) {
         MovieHistory movieHistory = movieHistoryRepository.findMovieHistoryByRentedUntilMostRecent(id);
-        String firstName=movieHistory.getRentedBy().getFirstName();
-        String lastName=movieHistory.getRentedBy().getLastName();
-        return new String[]{firstName + " " +lastName};
+        Optional<UserCineflix> user = Optional.ofNullable(movieHistory.getRentedBy());
+        UserCineflix userCineflix = user.get();
+        if (user.isPresent()) {
+            String firstName = userCineflix.getFirstName();
+            String lastName = userCineflix.getLastName();
+            return Optional.of(firstName + " " + lastName);
+        }
+        return Optional.empty();
     }
 
     public void deleteMovieIfNotRented(UUID id) {
         Movie movieFound = movieRepository.findById(id)
                 .orElseThrow(() -> new MovieNotFoundException("Movie to be deleted does not exist"));
         if (!movieFound.isAvailable()) {
-            String[] userName = getRentedBy(id);
-            throw new MovieNotAvailableException("Movie is being watched by :" + Arrays.toString(userName)
-                    + " You will be able to delete it after it's been returned");
+            Optional<String> userName = getRentedBy(id);
+            if (userName.isPresent()) {
+                throw new MovieNotAvailableException("Movie is being watched by: " + userName + " You will be able to delete it after it's been returned");
+            } else {
+                throw new MovieIsNotRented("Entry in MovieHistory table without existing user");
+            }
         }
         movieHistoryRepository.deleteMovieHistoryByMovie_Id(id);
         movieRepository.deleteById(id);
