@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Button } from "@mui/material";
 import ViewMovieDetailsModalWindow from "./ViewMovieDetailsModalWindow.jsx";
+
 function RentedMovie({
   id,
   title,
@@ -17,10 +18,11 @@ function RentedMovie({
 }) {
   const [detailsModalOpen, setDetailsModalOpen] = useState(false);
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
-  let handleDetailsOpen = () => setDetailsModalOpen(true);
-  let handleDetailsClose = () => setDetailsModalOpen(false);
-  let handleDeleteOpen = () => setDeleteModalOpen(true);
-  let handleDeleteClose = () => setDeleteModalOpen(false);
+  const handleDetailsOpen = () => setDetailsModalOpen(true);
+  const handleDetailsClose = () => setDetailsModalOpen(false);
+  const handleDeleteOpen = () => setDeleteModalOpen(true);
+  const handleDeleteClose = () => setDeleteModalOpen(false);
+  
   return (
     <tr key={title}>
       <td className={classes}>

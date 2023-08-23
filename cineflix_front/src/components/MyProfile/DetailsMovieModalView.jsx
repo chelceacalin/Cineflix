@@ -303,7 +303,6 @@ function DetailsMovieModalView({
           </div>
         </DialogContent>
       </div>
-      <ToastContainer />
     </Dialog>
   );
 }

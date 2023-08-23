@@ -15,17 +15,17 @@ import { UserLoginContext } from "../../utils/context/LoginProvider";
 import { input } from "@material-tailwind/react";
 
 function MovieFilter({ filterInput }) {
-  let [title, setTitle] = useState("");
-  let [director, setDirector] = useState("");
-  let [category, setCategory] = useState("");
-  let [available, setAvailable] = useState(true);
-  let [unavailable, setUnavailable] = useState(true);
-  let [rentedUntil, setRentedUntil] = useState("");
-  let [rentedDate,setRentedDate]=useState("")
-  let [rentedBy, setRentedBy] = useState("");
-  let [url, setUrl] = useState("");
+  const [title, setTitle] = useState("");
+  const [director, setDirector] = useState("");
+  const [category, setCategory] = useState("");
+  const [available, setAvailable] = useState(true);
+  const [unavailable, setUnavailable] = useState(true);
+  const [rentedUntil, setRentedUntil] = useState("");
+  const [rentedDate,setRentedDate]=useState("")
+  const [rentedBy, setRentedBy] = useState("");
   const [usersWhoRented, setUsersWhoRented] = useState([]);
   const { username } = useContext(UserLoginContext);
+  let [url, setUrl] = useState("");
 
   useEffect(() => {
     url = `/movies?owner_username=${username}`;
@@ -43,9 +43,9 @@ function MovieFilter({ filterInput }) {
   };
 
   useEffect(() => {
-    let rentedUntilField = rentedUntil ? convertDate(rentedUntil) : "";
-    let rentedDateField=rentedDate?convertDate(rentedDate):"";
-    let array = [];
+    const rentedUntilField = rentedUntil ? convertDate(rentedUntil) : "";
+    const rentedDateField=rentedDate?convertDate(rentedDate):"";
+    const array = [];
     if (
       (available === true && unavailable === true) ||
       (available === false && unavailable === false)

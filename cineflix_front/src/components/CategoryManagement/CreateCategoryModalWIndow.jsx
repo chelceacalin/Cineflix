@@ -111,7 +111,6 @@ function CreateCategoryModalWindow({
           </Button>
         </div>
       </DialogContent>
-      <ToastContainer />
     </Dialog>
   );
 }

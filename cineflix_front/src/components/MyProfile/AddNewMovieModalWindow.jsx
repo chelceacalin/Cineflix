@@ -264,7 +264,6 @@ function AddNewMovieModalWindow({
           </div>
         </DialogContent>
       </div>
-      <ToastContainer />
     </Dialog>
   );
 }

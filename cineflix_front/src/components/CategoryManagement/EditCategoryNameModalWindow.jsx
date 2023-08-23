@@ -82,7 +82,6 @@ function EditRoleModalWindow({ isModalOpen, closeModal, id, name, updateCategory
                     </FormControl>
                 </div>
             </DialogContent>
-            <ToastContainer />
         </Dialog>
     );
 }

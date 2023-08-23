@@ -25,12 +25,11 @@ function Movies() {
   const [isAvailable, setIsAvailable] = useState("");
   const [rentedUntil, setRentedUntil] = useState("");
   const [rentedBy, setRentedBy] = useState("");
-  const [rentedDate, setrentedDate] = useState("");
-  let [newUrl, setNewUrl] = useState("");
-  let [pageNo, setPageNo] = useState(1);
-  let [pageSize, setPageSize] = useState(15);
-  let [totalPages, setTotalPages] = useState("");
-  let [totalMovies, setTotalMovies] = useState(0);
+  const [rentedDate, setRentedDate] = useState("");
+  const [pageNo, setPageNo] = useState(1);
+  const [pageSize, setPageSize] = useState(15);
+  const [totalPages, setTotalPages] = useState("");
+  const [totalMovies, setTotalMovies] = useState(0);
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -38,15 +37,9 @@ function Movies() {
   const { username } = useContext(UserLoginContext);
   const [direction, setDirection] = useState(true);
   const [sortField, setSortField] = useState("title");
-  let [ownerUsername, setOwnerUsername] = useState("");
-  let [lastClicked, setLastClicked] = useState("");
+  const [ownerUsername, setOwnerUsername] = useState("");
+  const [lastClicked, setLastClicked] = useState("");
 
-  let handleClick = (fieldName) => {
-    if (lastClicked === fieldName) {
-      setDirection(!direction);
-    }
-    setLastClicked(fieldName);
-  };
 
   useEffect(() => {
     const buildUrl = () => {
@@ -79,7 +72,6 @@ function Movies() {
     };
 
     const url = buildUrl();
-
     axios.get(url).then((elems) => {
       if (elems.data.content.length === 0 && pageNo > 1) {
         updatePageNumber(pageNo - 1);
@@ -107,7 +99,6 @@ function Movies() {
   ]);
 
 
-
   let getFilterInput = (params) => {
     setCategory(params[0]);
     setDirector(params[1]);
@@ -115,7 +106,7 @@ function Movies() {
     setIsAvailable(params[3] === "BOTH" ? "" : params[3]);
     setRentedUntil(params[4]);
     setRentedBy(params[5]);
-    setrentedDate(params[6])
+    setRentedDate(params[6])
   };
 
   const handleSelectChange = (event) => {

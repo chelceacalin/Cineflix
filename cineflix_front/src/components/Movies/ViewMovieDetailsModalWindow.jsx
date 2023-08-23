@@ -9,9 +9,9 @@ import {DatePicker} from '@mui/x-date-pickers/DatePicker';
 
 
 function ViewMovieDetailsModalWindow({isModalOpen, closeModal}) {
-    var status="available";
+    const status="available";
     const AVAILABLE = "available";
-    var isAvailable = false;
+    let isAvailable = false;
     if(status == AVAILABLE) {
         isAvailable = true;
     } else {
