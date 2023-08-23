@@ -123,136 +123,141 @@ function MyProfile() {
 
   return (
     <>
-    <MyProfileFilterComponent filterInput={getFilterInput}/>
-    <div className="bg-grey-texture w-full">
-    <div className="w-full h-full px-10 py-5">
-        <table className="w-full min-w-max bg-white border-2 table-auto text-left">
-          <thead className="bg-basic-red text-white">
-            <tr>
-              {TABLE_HEAD.slice(0, TABLE_HEAD.length - 1).map((elem) => {
-                return (
-                  <th
-                    key={elem}
-                    className="border-b-white p-4 hover cursor-pointer"
-                    onClick={(e) => {
-                      e.preventDefault();
+    <div className="h-screen border-r-2">
+      <MyProfileFilterComponent filterInput={getFilterInput}/>
+    </div>
+    <div className="bg-grey-texture w-full h-screen px-10 py-10 ">
+      <div className="w-full h-full flex flex-col bg-white justify-between border-2">
+        <div className="overflow-y-auto">
+          <table className="w-full min-w-max bg-white border-b-2 table-auto text-left">
+            <thead className="bg-basic-red text-white">
+              <tr>
+                {TABLE_HEAD.slice(0, TABLE_HEAD.length - 1).map((elem) => {
+                  return (
+                    <th
+                      key={elem}
+                      className="border-b-white p-4 hover cursor-pointer"
+                      onClick={(e) => {
+                        e.preventDefault();
 
-                      if (e.target.textContent !== "Status") {
-                        if (e.target.textContent === "Title") {
-                          setSortField("title");
-                          setDirection(!direction);
-                        } else if (e.target.textContent === "Director") {
-                          if (
-                            title.length > 0 ||
-                            director.length > 0 ||
-                            category.length > 0
-                          ) {
+                        if (e.target.textContent !== "Status") {
+                          if (e.target.textContent === "Title") {
+                            setSortField("title");
                             setDirection(!direction);
-                          }
-                          setSortField("director");
-                          handleClick(e.target.textContent.toLowerCase());
-                        } else if (e.target.textContent === "Category") {
-                          if (
-                            title.length > 0 ||
-                            director.length > 0 ||
-                            category.length > 0
-                          ) 
-                           setDirection(!direction);
-                          setSortField("category");
-                          handleClick(e.target.textContent.toLowerCase());
-                        } else if (e.target.textContent === "Rented Until") {
-                          if (
-                            title.length > 0 ||
-                            director.length > 0 ||
-                            category.length > 0
-                          ) {
+                          } else if (e.target.textContent === "Director") {
+                            if (
+                              title.length > 0 ||
+                              director.length > 0 ||
+                              category.length > 0
+                            ) {
+                              setDirection(!direction);
+                            }
+                            setSortField("director");
+                            handleClick(e.target.textContent.toLowerCase());
+                          } else if (e.target.textContent === "Category") {
+                            if (
+                              title.length > 0 ||
+                              director.length > 0 ||
+                              category.length > 0
+                            ) 
                             setDirection(!direction);
+                            setSortField("category");
+                            handleClick(e.target.textContent.toLowerCase());
+                          } else if (e.target.textContent === "Rented Until") {
+                            if (
+                              title.length > 0 ||
+                              director.length > 0 ||
+                              category.length > 0
+                            ) {
+                              setDirection(!direction);
+                            }
+                            setSortField("rentedUntil");
+                            handleClick(e.target.textContent.toLowerCase());
+                          } else if (e.target.textContent === "Rented By") {
+                            if (
+                              title.length > 0 ||
+                              director.length > 0 ||
+                              category.length > 0
+                            ) {
+                              setDirection(!direction);
+                            }
+                            setSortField("rentedBy");
+                            handleClick(e.target.textContent.toLowerCase());
                           }
-                          setSortField("rentedUntil");
-                          handleClick(e.target.textContent.toLowerCase());
-                        } else if (e.target.textContent === "Rented By") {
-                          if (
-                            title.length > 0 ||
-                            director.length > 0 ||
-                            category.length > 0
-                          ) {
-                            setDirection(!direction);
-                          }
-                          setSortField("rentedBy");
-                          handleClick(e.target.textContent.toLowerCase());
                         }
-                      }
-                    }}
-                  >
-                    <div className="">
-                      {elem}
-                      <svg
-                        data-column={elem}
-                        style={{ display: "inline-block" }}
-                        width="16"
-                        height="16"
-                        viewBox="0 0 16 16"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
-                        onClick={(e) => {
-                          setDirection(!direction);
-                          handleClick(e.currentTarget.getAttribute("data-column").toLowerCase());
-                        }}
-                      >
-                        {elem != "Status" && (
-                          <SortIcon />
-                        )}
-                      </svg>
-                    </div>
-                  </th>
+                      }}
+                    >
+                      <div className="">
+                        {elem}
+                        <svg
+                          data-column={elem}
+                          style={{ display: "inline-block" }}
+                          width="16"
+                          height="16"
+                          viewBox="0 0 16 16"
+                          fill="none"
+                          xmlns="http://www.w3.org/2000/svg"
+                          onClick={(e) => {
+                            setDirection(!direction);
+                            handleClick(e.currentTarget.getAttribute("data-column").toLowerCase());
+                          }}
+                        >
+                          {elem != "Status" && (
+                            <SortIcon />
+                          )}
+                        </svg>
+                      </div>
+                    </th>
+                  );
+                })}
+                <th className="border-b-white p-4 ">
+                  <div>Actions</div>
+                </th>
+                <th className="border-b-white p-2">
+                  <button onClick={handleOpen} className="bg-basic-red text-white border border-white hover:border-hover-cream hover:text-hover-cream py-2 px-6">
+                    Add New
+                  </button>
+                  <AddNewMovieModalWindow
+                    isModalOpen={open}
+                    closeModal={handleClose}
+                    title={title}
+                    director={director}
+                    category={category}
+                    addMovie={addMovie}
+                    triggerRefresh={triggerRefresh}
+                    setTriggerRefresh={setTriggerRefresh}
+                  />
+                </th>
+              </tr>
+            </thead>
+            <tbody className="text-blue-marine">
+            {movies.map(({ category, director, title, isAvailable, rentedUntil, rentedBy, id }, index) => {
+                const isLast = index === movies.length - 1;
+                const classes = isLast
+                  ? "px-4 py-2"
+                  : "px-4 py-2 border-b border-blue-gray-50";
+                return (
+                  <Movie
+                    id={id}
+                    title={title}
+                    category={category}
+                    director={director}                  
+                    isAvailable={isAvailable}
+                    rentedUntil={rentedUntil}
+                    rentedBy={rentedBy}
+                    key={index}
+                    classes={classes}
+                    triggerRefresh={triggerRefresh}
+                    setTriggerRefresh={setTriggerRefresh}
+                    />
                 );
               })}
-              <th className="border-b-white p-4 ">
-                <div>Actions</div>
-              </th>
-              <th className="border-b-white p-2">
-                <button onClick={handleOpen} className="bg-basic-red text-white border border-white hover:border-hover-cream hover:text-hover-cream py-2 px-6">
-                  Add New
-                </button>
-                <AddNewMovieModalWindow
-                  isModalOpen={open}
-                  closeModal={handleClose}
-                  title={title}
-                  director={director}
-                  category={category}
-                  addMovie={addMovie}
-                  triggerRefresh={triggerRefresh}
-                  setTriggerRefresh={setTriggerRefresh}
-                />
-              </th>
-            </tr>
-          </thead>
-          <tbody className="text-blue-marine">
-          {movies.map(({ category, director, title, isAvailable, rentedUntil, rentedBy, id }, index) => {
-              const isLast = index === movies.length - 1;
-              const classes = isLast
-                ? "px-4 py-2"
-                : "px-4 py-2 border-b border-blue-gray-50";
-              return (
-                <Movie
-                  id={id}
-                  title={title}
-                  category={category}
-                  director={director}                  
-                  isAvailable={isAvailable}
-                  rentedUntil={rentedUntil}
-                  rentedBy={rentedBy}
-                  key={index}
-                  classes={classes}
-                  triggerRefresh={triggerRefresh}
-                  setTriggerRefresh={setTriggerRefresh}
-                  />
-              );
-            })}
-          </tbody>
-        </table>
-        <span className="w-full bg-basic-red flex justify-between flex-wrap py-3 mb-4 border-2">
-          <span className=" inline-flex marginResizable">
+            </tbody>
+          </table>
+        </div>
+        { !movies.length && (<p className="text-center text-2xl">No matching results found</p> )}
+        <div className="w-full bg-basic-red flex justify-between flex-wrap py-3 border-2">
+          <div className=" inline-flex marginResizable">
             <p className="text-white font-normal">
               Results per page:{" "}
             </p>
@@ -266,7 +271,7 @@ function MyProfile() {
                 <option value="5">5</option>
               </select>
             </p>
-          </span>
+          </div>
           <div className="justify-center items-center">
             <Pagination
               pageNo={pageNo}
@@ -277,7 +282,7 @@ function MyProfile() {
               nrCurrentMovies={movies.length}
             />
           </div>
-        </span>
+        </div>
       </div>
       </div>
     </>

@@ -10,13 +10,14 @@ function FilterCategory({ filterInput }) {
     filterInput(array);
   }, [name]);
   return (
-    <div className="space-y-4 ml-6 mr-6">
+    <div className="space-y-4 ml-7 mr-7">
       <div className="mt-10">
         <TextField
           id="outlined-search"
           name="name"
           label="Search name"
           type="search"
+          className="w-48"
           onChange={(e) => setName(e.target.value)}
           InputLabelProps={{
             style: { fontFamily: "Sanchez" }

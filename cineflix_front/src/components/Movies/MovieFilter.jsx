@@ -66,13 +66,14 @@ function MovieFilter({ filterInput }) {
   ]);
 
   return (
-    <div className="space-y-4 ml-6">
-      <div className="mt-10 mr-6">
+    <div className="space-y-4 ml-7 mr-1">
+      <div className="mt-10">
         <TextField
           id="outlined-search"
           name="title"
           label="Search title"
           type="search"
+          className="w-48"
           onChange={(e) => setTitle(e.target.value)}
           InputProps={{
             style: { fontFamily: "Sanchez" }
@@ -82,12 +83,13 @@ function MovieFilter({ filterInput }) {
           }}
         />
       </div>
-      <div className="mt-10 mr-6">
+      <div className="mt-10">
         <TextField
           id="outlined-search"
           name="director"
           label="Search director"
           type="search"
+          className="w-48"
           onChange={(e) => setDirector(e.target.value)}
           InputProps={{
             style: { fontFamily: "Sanchez" }
@@ -97,12 +99,13 @@ function MovieFilter({ filterInput }) {
           }}
         />
       </div>
-      <div className="mt-10 mr-6">
+      <div className="mt-10">
         <TextField
           id="outlined-search"
           name="category"
           label="Search category"
           type="search"
+          className="w-48"
           onChange={(e) => setCategory(e.target.value)}
           InputProps={{
             style: { fontFamily: "Sanchez" }
