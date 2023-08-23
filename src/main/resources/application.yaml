@@ -2,9 +2,9 @@ server:
   port: 8081
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5433/cineflix
-    username: cineflix
-    password: cineflix
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5433/cineflix}
+    username: ${SPRING_DATASOURCE_USERNAME:cineflix}
+    password: ${SPRING_DATASOURCE_PASSWORD:cineflix}
   servlet:
     multipart:
       max-file-size: 2MB
@@ -31,3 +31,7 @@ spring:
       resourceserver:
         jwt:
           issuer-uri: https://keycloak-internship.kdev2.esolutions.ro/auth/realms/esolutions
+
+custom:
+  frontend:
+    app-url: ${FRONTEND_URL:http://localhost:3000}
