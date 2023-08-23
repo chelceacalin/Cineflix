@@ -266,7 +266,6 @@ function Movies() {
                       classes={classes}
                       triggerRefresh={triggerRefresh}
                       setTriggerRefresh={setTriggerRefresh}
-                      owner={owner_username}
                     />
                   );
                 }

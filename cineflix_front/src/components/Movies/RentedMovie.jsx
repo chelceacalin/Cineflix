@@ -15,7 +15,6 @@ function RentedMovie({
   triggerRefresh,
   setTriggerRefresh,
   rentedOn,
-  owner,
   rentedDate,
   owner_username
 }) {
@@ -23,8 +22,6 @@ function RentedMovie({
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const handleDetailsOpen = () => setDetailsModalOpen(true);
   const handleDetailsClose = () => setDetailsModalOpen(false);
-  const handleDeleteOpen = () => setDeleteModalOpen(true);
-  const handleDeleteClose = () => setDeleteModalOpen(false);
 
   const [isRentModalOpen, setRentModalOpen] = useState(false);
 
@@ -108,7 +105,7 @@ function RentedMovie({
           closeRentModal={handleCloseRentModal}
           title={title}
           director={director}
-          owner={owner}
+          owner={owner_username}
         />
       </td>
     </tr>

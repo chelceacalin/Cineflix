@@ -9,11 +9,10 @@ import {
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import axios from "axios";
 import {AdapterDayjs} from '@mui/x-date-pickers/AdapterDayjs';
-import { DateTime, Settings } from 'luxon';
-import { AdapterLuxon } from '@mui/x-date-pickers/AdapterLuxon';
 import {LocalizationProvider} from '@mui/x-date-pickers/LocalizationProvider';
 import {DatePicker} from '@mui/x-date-pickers/DatePicker';
 import dayjs from "dayjs";
+import updateLocale from "dayjs/plugin/updateLocale";
 axios.defaults.withCredentials = true;
 
 function RentMovieModalView({
@@ -23,6 +22,10 @@ function RentMovieModalView({
   director,
   owner,
 }) {
+    dayjs.extend(updateLocale)
+    dayjs.updateLocale('en', {
+        weekStart: 1
+    })
   return (
     <Dialog
       fullWidth
@@ -34,19 +37,19 @@ function RentMovieModalView({
         className="closeModalWindowButton"
         icon={faTimes}
         onClick={closeRentModal}
-        transform="right-380 up-25"
-        size="6x"
+        transform="right-630 grow-6"
       ></FontAwesomeIcon>
       <DialogContent>
-        You are renting {title} directed by {director} from {owner}. 
-        <p>Please fill
-        in the return date below and go pick up your movie from the physical
-        shelf or the owner.</p>
-        <div className="">
-          <LocalizationProvider dateAdapter={AdapterLuxon}>
+      <p className="text-center">
+        You are renting <span className="font-bold"> {title} </span>
+        directed by <span className="font-bold"> {director} </span> from 
+        <span className="font-bold"> {owner}</span>.</p> 
+        <p className="text-center">Please fill in the return date below and go pick up your movie from the physical shelf or the owner.</p>
+        <div className = "text-center pt-14">
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
             <DatePicker
               label={<span style={{ fontFamily: "Sanchez" }}>Return date</span>}
-              defaultValue={DateTime.fromISO({ zone: 'UTC' })}
+              defaultValue={dayjs('2022-04-17')}
               slotProps={{
                 textField: {
                   inputProps: {
@@ -61,15 +64,8 @@ function RentMovieModalView({
             />
           </LocalizationProvider>
         </div>
-        <div className="mt-4">
-          <FormControl fullWidth>
-            <div className="mt-2 mb-2">
-              <Button className="contained-button w-full" variant="contained">
-                {" "}
-                Rent
-              </Button>
-            </div>
-            <div className="mb-2">
+        <div className="pt-14 flex w-full">
+            <div className="px-2 w-1/2">
               <Button
                 className="outlined-button w-full"
                 variant="outlined"
@@ -78,7 +74,12 @@ function RentMovieModalView({
                 Cancel
               </Button>
             </div>
-          </FormControl>
+            <div className="px-2 w-1/2">
+              <Button className="contained-button w-full" variant="contained">
+                {" "}
+                Rent
+              </Button>
+            </div>
         </div>
       </DialogContent>
     </Dialog>
