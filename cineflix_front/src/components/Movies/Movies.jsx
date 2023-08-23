@@ -48,7 +48,6 @@ function Movies() {
     const buildUrl = () => {
       const normalizedSortField = sortField || "title";
       let params = [
-        `owner_username=${username}`,
         `sortField=${normalizedSortField}`,
         `direction=${direction ? "ASC" : "DESC"}`,
         `title=${title}`,

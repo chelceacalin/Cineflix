@@ -21,12 +21,16 @@ function MyProfileFilterComponent({ filterInput }) {
   let [rentedBy, setRentedBy] = useState("");
   let [url, setUrl] = useState("");
   const [usersWhoRented, setUsersWhoRented] = useState([]);
+  let [filteredUsers,setFilteredUsers]=useState([])
   const { username } = useContext(UserLoginContext);
 
   useEffect(() => {
     url = `/movies?owner_username=${username}`;
     axios.get(url).then((elems) => {
       setUsersWhoRented(elems.data.content);
+      const filteredElems= elems.data.content.filter((elem)=>elem.rentedBy!=="available")
+      const arrayUniqueByKey = [...new Map(filteredElems.map(item =>[item.rentedBy, item])).values()];
+      setFilteredUsers( arrayUniqueByKey  )      
     });
   }, [url]);
 
@@ -165,14 +169,10 @@ function MyProfileFilterComponent({ filterInput }) {
           }}
         >
           <option value="">Select Rented By</option>
-          {usersWhoRented &&
-            usersWhoRented.map((elem, index) => (
-              elem.rentedBy !== "available"
-                ? <option key={index} value={elem.rentedBy}>
-                  {elem.rentedBy}
-                </option>
-                : ""
-            ))}
+
+          {filteredUsers.map((movie, index) => (
+            <option key={index}>{movie.rentedBy}</option>
+          ))}
         </select>
       </div>
     </div>

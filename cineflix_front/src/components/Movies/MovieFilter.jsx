@@ -12,7 +12,6 @@ import axios from "axios";
 import "react-datepicker/dist/react-datepicker.css";
 import DatePicker from "react-datepicker";
 import { UserLoginContext } from "../../utils/context/LoginProvider";
-import { input } from "@material-tailwind/react";
 
 function MovieFilter({ filterInput }) {
   const [title, setTitle] = useState("");
@@ -25,12 +24,16 @@ function MovieFilter({ filterInput }) {
   const [rentedBy, setRentedBy] = useState("");
   const [usersWhoRented, setUsersWhoRented] = useState([]);
   const { username } = useContext(UserLoginContext);
+  let [filteredUsers,setFilteredUsers]=useState([])
   let [url, setUrl] = useState("");
 
   useEffect(() => {
-    url = `/movies?owner_username=${username}`;
+    url = `/movies`;
     axios.get(url).then((elems) => {
       setUsersWhoRented(elems.data.content);
+      const filteredElems= elems.data.content.filter((elem)=>elem.rentedBy!=="available")
+      const arrayUniqueByKey = [...new Map(filteredElems.map(item =>[item.rentedBy, item])).values()];
+      setFilteredUsers( arrayUniqueByKey  )      
     });
   }, [url]);
 
@@ -78,10 +81,10 @@ function MovieFilter({ filterInput }) {
           type="search"
           onChange={(e) => setTitle(e.target.value)}
           InputProps={{
-            style: { fontFamily: "Sanchez" }
+            style: { fontFamily: "Sanchez" },
           }}
           InputLabelProps={{
-            style: { fontFamily: "Sanchez" }
+            style: { fontFamily: "Sanchez" },
           }}
         />
       </div>
@@ -93,10 +96,10 @@ function MovieFilter({ filterInput }) {
           type="search"
           onChange={(e) => setDirector(e.target.value)}
           InputProps={{
-            style: { fontFamily: "Sanchez" }
+            style: { fontFamily: "Sanchez" },
           }}
           InputLabelProps={{
-            style: { fontFamily: "Sanchez" }
+            style: { fontFamily: "Sanchez" },
           }}
         />
       </div>
@@ -108,10 +111,10 @@ function MovieFilter({ filterInput }) {
           type="search"
           onChange={(e) => setCategory(e.target.value)}
           InputProps={{
-            style: { fontFamily: "Sanchez" }
+            style: { fontFamily: "Sanchez" },
           }}
           InputLabelProps={{
-            style: { fontFamily: "Sanchez" }
+            style: { fontFamily: "Sanchez" },
           }}
         />
       </div>
@@ -143,17 +146,15 @@ function MovieFilter({ filterInput }) {
         </div>
       </div>
       <div className="mt-10 mr-6">
-
-      <label>Rented Date:</label>
+        <label>Rented On:</label>
         <DatePicker
-          selected={rentedUntil}
+          selected={rentedDate}
           placeholderText={"Select the date"}
           onChange={(date) => {
             setRentedDate(date);
           }}
           className="rounded-lg w-52 border-2 border-gray-500 pl-1 mt-2 mb-2"
         />
-
 
         <label>Rented Until:</label>
         <DatePicker
@@ -166,18 +167,18 @@ function MovieFilter({ filterInput }) {
         />
         <div className="mt-2 mb-10">
           <Button
-            className="font-normal contained-button"
+            className="font-normal contained-button mt-4"
             onClick={(e) => {
               e.preventDefault();
               setRentedUntil("");
-              setRentedDate("")
+              setRentedDate("");
             }}
           >
             Reset date
           </Button>
         </div>
       </div>
-      <div className="mt-2 mr-6">
+      <div className="mr-6">
         <label className="block">Rented by:</label>
         <select
           className="input-field mt-2"
@@ -186,16 +187,10 @@ function MovieFilter({ filterInput }) {
           }}
         >
           <option value="">Select Rented By</option>
-          {usersWhoRented &&
-            usersWhoRented.map((elem, index) =>
-              elem.rentedBy !== "available" ? (
-                <option key={index} value={elem.rentedBy}>
-                  {elem.rentedBy}
-                </option>
-              ) : (
-                ""
-              )
-            )}
+
+          {filteredUsers.map((movie, index) => (
+            <option key={index}>{movie.rentedBy}</option>
+          ))}
         </select>
       </div>
     </div>
