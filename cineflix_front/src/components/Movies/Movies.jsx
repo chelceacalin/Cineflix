@@ -192,7 +192,8 @@ function Movies() {
               </tr>
             </thead>
             <tbody className="text-blue-marine">
-              {movies.map(
+              {
+              movies.map(
                 (
                   {
                     category,
@@ -203,6 +204,7 @@ function Movies() {
                     rentedBy,
                     id,
                     rentedDate,
+                    owner_username
                   },
                   index
                 ) => {
@@ -225,6 +227,7 @@ function Movies() {
                       classes={classes}
                       triggerRefresh={triggerRefresh}
                       setTriggerRefresh={setTriggerRefresh}
+                      owner={owner_username}
                     />
                   );
                 }

@@ -14,6 +14,7 @@ function RentedMovie({
   triggerRefresh,
   setTriggerRefresh,
   rentedOn,
+  owner,
 }) {
   const [detailsModalOpen, setDetailsModalOpen] = useState(false);
   const [isRentModalOpen, setRentModalOpen] = useState(false);
@@ -91,8 +92,11 @@ function RentedMovie({
           Rent Movie
         </Button>
         <RentMovieModalView
-                  isRentModalOpen={isRentModalOpen}
-                  closeRentModal={handleCloseRentModal}
+          isRentModalOpen={isRentModalOpen}
+          closeRentModal={handleCloseRentModal}
+          title={title}
+          director={director}
+          owner={owner}
         />
       </td>
     </tr>
