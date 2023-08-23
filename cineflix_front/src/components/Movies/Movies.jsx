@@ -233,11 +233,8 @@ function Movies() {
               <p className="text-white font-normal">Results per page: </p>
               <p className="ml-5">
                 <select
-                  name="cars"
-                  id="cars"
-                  form="carform"
+                  className="bg-basic-red cursor-pointer text-white font-bold border-2 p-1"
                   onChange={handleSelectChange}
-                  className="cursor-pointer"
                 >
                   <option value="15">15</option>
                   <option value="10">10</option>

@@ -187,6 +187,7 @@ function CategoryManagement() {
                   name="sizes"
                   id="sizes"
                   form="sizesform"
+                  className="bg-basic-red cursor-pointer text-white font-bold border-2 p-1"
                   onChange={handleSelectChange}
                 >
                   <option value="15">15</option>
