@@ -1,12 +1,10 @@
 import React, { useContext, useState, useEffect } from "react";
 import axios from "axios";
-import Button from "@mui/material/Button";
 import Pagination from "../RoleManagement/Pagination";
 import RentedMovie from "./RentedMovie";
 import { UserLoginContext } from "../../utils/context/LoginProvider";
 import MovieFilter from "./MovieFilter";
 import SortIcon from "../../utils/icon/SortIcon";
-import RentMovieModalView from './RentMovieModalView';
 
 axios.defaults.withCredentials = true;
 
@@ -44,7 +42,6 @@ function Movies() {
   const [sortField, setSortField] = useState("title");
   let [ownerUsername, setOwnerUsername] = useState("");
   let [lastClicked, setLastClicked] = useState("");
-  const [isRentModalOpen, setRentModalOpen] = useState(false);
 
   let handleClick = (fieldName) => {
     if (lastClicked === fieldName) {
@@ -121,15 +118,6 @@ function Movies() {
 
   const updatePageNumber = (pgNo) => {
     setPageNo(pgNo);
-  };
-
-  const handleOpenRentModal = () => {
-      console.log("hello")
-      setRentModalOpen(true);
-  };
-
-  const handleCloseRentModal = () => {
-      setRentModalOpen(false);
   };
 
   return (
@@ -240,13 +228,6 @@ function Movies() {
             )}
           </tbody>
         </table>
-          <div className='ml-1'>
-              <Button onClick={handleOpenRentModal}>Rent Movie</Button>
-              <RentMovieModalView
-                  isRentModalOpen={isRentModalOpen}
-                  closeRentModal={handleCloseRentModal}
-              />
-          </div>
         <span className="w-full bg-basic-red flex flex-wrap py-3 mb-4">
           <span className=" inline-flex marginResizable">
             <p className="text-white font-normal">Results per page: </p>

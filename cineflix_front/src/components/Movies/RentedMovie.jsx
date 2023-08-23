@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Button } from "@mui/material";
+import RentMovieModalView from "./RentMovieModalView";
 function RentedMovie({
   id,
   title,
@@ -14,11 +15,20 @@ function RentedMovie({
   rentedOn,
 }) {
   const [detailsModalOpen, setDetailsModalOpen] = useState(false);
-  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [isRentModalOpen, setRentModalOpen] = useState(false);
   let handleDetailsOpen = () => setDetailsModalOpen(true);
   let handleDetailsClose = () => setDetailsModalOpen(false);
-  let handleDeleteOpen = () => setDeleteModalOpen(true);
-  let handleDeleteClose = () => setDeleteModalOpen(false);
+
+
+  const handleOpenRentModal = () => {
+    setRentModalOpen(true);
+  };
+
+  const handleCloseRentModal = () => {
+    setRentModalOpen(false);
+  };
+
+
   return (
     <tr key={title}>
       <td className={classes}>
@@ -69,12 +79,16 @@ function RentedMovie({
         </button>
       </td>
       <td>
-        <button
-          onClick={handleDeleteOpen}
-          className="inline-block rounded px-3 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-white contained-button"
+        <Button
+          onClick={handleOpenRentModal}
+          className="contained-button font-normal w-full" variant="contained"
         >
           Rent Movie
-        </button>
+        </Button>
+        <RentMovieModalView
+                  isRentModalOpen={isRentModalOpen}
+                  closeRentModal={handleCloseRentModal}
+        />
       </td>
     </tr>
   );
