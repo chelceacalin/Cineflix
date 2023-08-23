@@ -73,16 +73,12 @@ public class MovieService {
     }
 
     private static Pageable getPageable(int pageNo, int pageSize, String sortField, Sort.Direction sortDirection) {
-        Pageable pageable;
-        switch (sortField) {
-            case RENTED_BY -> pageable = PageRequest.of(pageNo, pageSize, Sort.by(sortDirection, USERNAME));
-            case RENTED_UNTIL ->
-                    pageable = PageRequest.of(pageNo, pageSize, Sort.by(sortDirection, MOVIE_HISTORIES_RENTED_UNTIL));
-            case RENTED_DATE ->
-                    pageable = PageRequest.of(pageNo, pageSize, Sort.by(sortDirection, MOVIE_HISTORIES_RENTED_DATE));
-            default -> pageable = PageRequest.of(pageNo, pageSize, Sort.by(sortDirection, sortField));
-        }
-        return pageable;
+        return switch (sortField) {
+            case RENTED_BY -> PageRequest.of(pageNo, pageSize, Sort.by(sortDirection, USERNAME));
+            case RENTED_UNTIL -> PageRequest.of(pageNo, pageSize, Sort.by(sortDirection, MOVIE_HISTORIES_RENTED_UNTIL));
+            case RENTED_DATE -> PageRequest.of(pageNo, pageSize, Sort.by(sortDirection, MOVIE_HISTORIES_RENTED_DATE));
+            default -> PageRequest.of(pageNo, pageSize, Sort.by(sortDirection, sortField));
+        };
     }
 
     private Specification<Movie> getSpecification(MovieFilterDTO movieFilter) {
