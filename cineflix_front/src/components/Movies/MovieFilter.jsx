@@ -24,12 +24,16 @@ function MovieFilter({ filterInput }) {
   const [rentedBy, setRentedBy] = useState("");
   const [usersWhoRented, setUsersWhoRented] = useState([]);
   const { username } = useContext(UserLoginContext);
+  let [filteredUsers,setFilteredUsers]=useState([])
   let [url, setUrl] = useState("");
 
   useEffect(() => {
     url = `/movies`;
     axios.get(url).then((elems) => {
       setUsersWhoRented(elems.data.content);
+      const filteredElems= elems.data.content.filter((elem)=>elem.rentedBy!=="available")
+      const arrayUniqueByKey = [...new Map(filteredElems.map(item =>[item.rentedBy, item])).values()];
+      setFilteredUsers( arrayUniqueByKey  )      
     });
   }, [url]);
 
@@ -77,10 +81,10 @@ function MovieFilter({ filterInput }) {
           type="search"
           onChange={(e) => setTitle(e.target.value)}
           InputProps={{
-            style: { fontFamily: "Sanchez" }
+            style: { fontFamily: "Sanchez" },
           }}
           InputLabelProps={{
-            style: { fontFamily: "Sanchez" }
+            style: { fontFamily: "Sanchez" },
           }}
         />
       </div>
@@ -92,10 +96,10 @@ function MovieFilter({ filterInput }) {
           type="search"
           onChange={(e) => setDirector(e.target.value)}
           InputProps={{
-            style: { fontFamily: "Sanchez" }
+            style: { fontFamily: "Sanchez" },
           }}
           InputLabelProps={{
-            style: { fontFamily: "Sanchez" }
+            style: { fontFamily: "Sanchez" },
           }}
         />
       </div>
@@ -107,10 +111,10 @@ function MovieFilter({ filterInput }) {
           type="search"
           onChange={(e) => setCategory(e.target.value)}
           InputProps={{
-            style: { fontFamily: "Sanchez" }
+            style: { fontFamily: "Sanchez" },
           }}
           InputLabelProps={{
-            style: { fontFamily: "Sanchez" }
+            style: { fontFamily: "Sanchez" },
           }}
         />
       </div>
@@ -142,8 +146,7 @@ function MovieFilter({ filterInput }) {
         </div>
       </div>
       <div className="mt-10 mr-6">
-
-      <label>Rented On:</label>
+        <label>Rented On:</label>
         <DatePicker
           selected={rentedDate}
           placeholderText={"Select the date"}
@@ -152,7 +155,6 @@ function MovieFilter({ filterInput }) {
           }}
           className="rounded-lg w-52 border-2 border-gray-500 pl-1 mt-2 mb-2"
         />
-
 
         <label>Rented Until:</label>
         <DatePicker
@@ -169,7 +171,7 @@ function MovieFilter({ filterInput }) {
             onClick={(e) => {
               e.preventDefault();
               setRentedUntil("");
-              setRentedDate("")
+              setRentedDate("");
             }}
           >
             Reset date
@@ -185,14 +187,10 @@ function MovieFilter({ filterInput }) {
           }}
         >
           <option value="">Select Rented By</option>
-          {usersWhoRented &&
-            usersWhoRented.map((elem, index) => (
-              elem.rentedBy !== "available"
-                ? <option key={index} value={elem.rentedBy}>
-                  {elem.rentedBy}
-                </option>
-                : ""
-            ))}
+
+          {filteredUsers.map((movie, index) => (
+            <option key={index}>{movie.rentedBy}</option>
+          ))}
         </select>
       </div>
     </div>
