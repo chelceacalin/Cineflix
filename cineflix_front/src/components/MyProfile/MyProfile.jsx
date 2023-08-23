@@ -272,14 +272,15 @@ function MyProfile() {
             </p>
           </div>
           <div className="justify-center items-center">
-            <Pagination
-              pageNo={pageNo}
-              pageSize={pageSize}
-              totalPages={totalPages}
-              updatePageNumber={updatePageNumber}
-              responseLength={totalMovies}
-              nrCurrentMovies={movies.length}
-            />
+            { movies.length > 0 && ( 
+              <Pagination
+                pageNo={pageNo}
+                pageSize={pageSize}
+                totalPages={totalPages}
+                updatePageNumber={updatePageNumber}
+                responseLength={totalMovies}
+                nrCurrentMovies={movies.length}
+              /> )}
           </div>
         </div>
       </div>

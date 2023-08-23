@@ -233,8 +233,8 @@ function Movies() {
             </table>
           </div>
           { !movies.length && (<p className="text-center text-2xl">No matching results found</p> )}
-          <span className="w-full bg-basic-red flex justify-between flex-wrap py-3">
-            <span className=" inline-flex marginResizable">
+          <div className="w-full bg-basic-red flex justify-between flex-wrap py-3">
+            <div className=" inline-flex marginResizable">
               <p className="text-white font-normal">Results per page: </p>
               <p className="ml-5">
                 <select
@@ -246,8 +246,9 @@ function Movies() {
                   <option value="5">5</option>
                 </select>
               </p>
-            </span>
+            </div>
             <div className="justify-center items-center">
+            { movies.length > 0 && ( 
               <Pagination
                 pageNo={pageNo}
                 pageSize={pageSize}
@@ -255,9 +256,9 @@ function Movies() {
                 updatePageNumber={updatePageNumber}
                 responseLength={totalMovies}
                 nrCurrentMovies={movies.length}
-              />
+              />  )}
             </div>
-          </span>
+          </div>
         </div>
       </div>
     </>

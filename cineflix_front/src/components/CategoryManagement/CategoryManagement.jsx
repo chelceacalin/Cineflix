@@ -200,14 +200,15 @@ function CategoryManagement() {
               </p>
             </div>
             <div className="justify-center items-center">
-              <Pagination
-                pageNo={pageNo}
-                pageSize={pageSize}
-                totalPages={totalPages}
-                updatePageNumber={updatePageNumber}
-                responseLength={totalCategories}
-                nrCurrentUsers={categories.length}
-              />
+              { categories.length > 0 && ( 
+                <Pagination
+                  pageNo={pageNo}
+                  pageSize={pageSize}
+                  totalPages={totalPages}
+                  updatePageNumber={updatePageNumber}
+                  responseLength={totalCategories}
+                  nrCurrentUsers={categories.length}
+                /> )}
             </div>
           </div>
         </div>

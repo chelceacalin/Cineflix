@@ -91,7 +91,7 @@ function RoleManagement() {
       <div className="bg-grey-texture w-full h-screen px-10 py-10">
       <div className="w-full h-full flex flex-col bg-white justify-between border-2">
         <div className="overflow-y-auto">
-        <table className="w-full text-left bg-white">
+        <table className="w-full text-left bg-white border-b-2">
           <thead className="bg-basic-red sticky top-0 z-30 text-white">
             <tr>
               {TABLE_HEAD.slice(0, TABLE_HEAD.length - 2).map((elem) => {
@@ -205,14 +205,15 @@ function RoleManagement() {
             </p>
           </div>
           <div className="justify-center items-center">
-            <Pagination
-              pageNo={pageNo}
-              pageSize={pageSize}
-              totalPages={totalPages}
-              updatePageNumber={updatePageNumber}
-              responseLength={totalUsers}
-              nrCurrentUsers={users.length}
-            />
+          { users.length > 0 && ( 
+              <Pagination
+                pageNo={pageNo}
+                pageSize={pageSize}
+                totalPages={totalPages}
+                updatePageNumber={updatePageNumber}
+                responseLength={totalUsers}
+                nrCurrentUsers={users.length}
+              /> )}
           </div>
         </div>
       </div>
