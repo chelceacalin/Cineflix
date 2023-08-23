@@ -8,8 +8,12 @@ import axios from "axios";
 import "./css/MyProfileFilterComponent.css";
 import "react-datepicker/dist/react-datepicker.css";
 import { useContext, useEffect, useState } from "react";
-import DatePicker from "react-datepicker";
 import { UserLoginContext } from "../../utils/context/LoginProvider";
+import {LocalizationProvider} from "@mui/x-date-pickers/LocalizationProvider";
+import {AdapterDayjs} from "@mui/x-date-pickers/AdapterDayjs";
+import {DatePicker} from "@mui/x-date-pickers/DatePicker";
+import dayjs from "dayjs";
+import DatePickerClear from "../DatePickerClear.jsx";
 
 function MyProfileFilterComponent({ filterInput }) {
   let [title, setTitle] = useState("");
@@ -17,7 +21,7 @@ function MyProfileFilterComponent({ filterInput }) {
   let [category, setCategory] = useState("");
   let [available, setAvailable] = useState(true);
   let [unavailable, setUnavailable] = useState(true);
-  let [rentedUntil, setRentedUntil] = useState("");
+  let [rentedUntil, setRentedUntil] = useState(null);
   let [rentedBy, setRentedBy] = useState("");
   let [url, setUrl] = useState("");
   const [usersWhoRented, setUsersWhoRented] = useState([]);
@@ -31,14 +35,8 @@ function MyProfileFilterComponent({ filterInput }) {
   }, [url]);
 
   useEffect(() => {
-    let date = rentedUntil
-      ? `${rentedUntil.getFullYear()}-${(rentedUntil.getMonth() + 1)
-        .toString()
-        .padStart(2, "0")}-${rentedUntil
-          .getDate()
-          .toString()
-          .padStart(2, "0")}`
-      : "";
+    const date = rentedUntil ? rentedUntil.format('YYYY-MM-DD').toString() : '';
+
     let array = [];
     if (
       (available == true && unavailable == true) ||
@@ -136,24 +134,14 @@ function MyProfileFilterComponent({ filterInput }) {
         </div>
       </div>
       <div className="mt-10 mr-6">
-        <label>Rented Until:</label>
-        <DatePicker
-          selected={rentedUntil}
-          placeholderText={"Select the date"}
-          onChange={(date) => setRentedUntil(date)}
-          className="rounded-lg w-52 border-2 border-gray-500 pl-1 mt-2"
-        />
-        <div className="mt-2 mb-10">
-          <Button
-            className="font-normal contained-button"
-            onClick={(e) => {
-              e.preventDefault();
-              setRentedUntil("");
-            }}
-          >
-            Reset date
-          </Button>
-        </div>
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <DatePickerClear
+              labelString={"Rented until"}
+              value={rentedUntil}
+              onClear={() => setRentedUntil(null)}
+              onChange={(newDate) => setRentedUntil(newDate)}
+          />
+        </LocalizationProvider>
       </div>
       <div className="mt-10 mr-6">
         <label className="block">Rented by:</label>
