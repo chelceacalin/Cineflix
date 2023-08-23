@@ -21,6 +21,7 @@ function MovieFilter({ filterInput }) {
   let [available, setAvailable] = useState(true);
   let [unavailable, setUnavailable] = useState(true);
   let [rentedUntil, setRentedUntil] = useState("");
+  let [rentedDate,setRentedDate]=useState("")
   let [rentedBy, setRentedBy] = useState("");
   let [url, setUrl] = useState("");
   const [usersWhoRented, setUsersWhoRented] = useState([]);
@@ -42,18 +43,19 @@ function MovieFilter({ filterInput }) {
   };
 
   useEffect(() => {
-    let date = rentedUntil ? convertDate(rentedUntil) : "";
+    let rentedUntilField = rentedUntil ? convertDate(rentedUntil) : "";
+    let rentedDateField=rentedDate?convertDate(rentedDate):"";
     let array = [];
     if (
       (available === true && unavailable === true) ||
       (available === false && unavailable === false)
     ) {
-      array.push(category, director, title, "BOTH", date, rentedBy);
+      array.push(category, director, title, "BOTH", rentedUntilField, rentedBy,rentedDateField);
     } else if (available === true && unavailable === false) {
-      array.push(category, director, title, "true", date, rentedBy);
+      array.push(category, director, title, "true", rentedUntilField, rentedBy,rentedDateField);
     } else if (available === false && unavailable == true) {
-      array.push(category, director, title, "false", date, rentedBy);
-    } else array.push(category, director, title, "", date, rentedBy);
+      array.push(category, director, title, "false", rentedUntilField, rentedBy,rentedDateField);
+    } else array.push(category, director, title, "", rentedUntilField, rentedBy,rentedDateField);
     filterInput(array);
   }, [
     category,
@@ -63,6 +65,7 @@ function MovieFilter({ filterInput }) {
     unavailable,
     rentedUntil,
     rentedBy,
+    rentedDate
   ]);
 
   return (
@@ -140,6 +143,18 @@ function MovieFilter({ filterInput }) {
         </div>
       </div>
       <div className="mt-10 mr-6">
+
+      <label>Rented Date:</label>
+        <DatePicker
+          selected={rentedUntil}
+          placeholderText={"Select the date"}
+          onChange={(date) => {
+            setRentedDate(date);
+          }}
+          className="rounded-lg w-52 border-2 border-gray-500 pl-1 mt-2 mb-2"
+        />
+
+
         <label>Rented Until:</label>
         <DatePicker
           selected={rentedUntil}
@@ -155,13 +170,14 @@ function MovieFilter({ filterInput }) {
             onClick={(e) => {
               e.preventDefault();
               setRentedUntil("");
+              setRentedDate("")
             }}
           >
             Reset date
           </Button>
         </div>
       </div>
-      <div className="mt-4 mr-6">
+      <div className="mt-2 mr-6">
         <label className="block">Rented by:</label>
         <select
           className="input-field mt-2"

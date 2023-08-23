@@ -9,7 +9,7 @@ import {DatePicker} from '@mui/x-date-pickers/DatePicker';
 
 
 function ViewMovieDetailsModalWindow({isModalOpen, closeModal}) {
-    var status;
+    var status="available";
     const AVAILABLE = "available";
     var isAvailable = false;
     if(status == AVAILABLE) {
@@ -17,6 +17,8 @@ function ViewMovieDetailsModalWindow({isModalOpen, closeModal}) {
     } else {
         isAvailable = false;
     }
+
+    
     return (
         <Dialog fullWidth maxWidth={'md'} open={isModalOpen} onClose={closeModal}>
             <FontAwesomeIcon className="closeModalWindowButton" icon={faTimes} onClick={closeModal}

@@ -11,6 +11,7 @@ function Movies() {
     "Director",
     "Category",
     "Status",
+    "Owner",
     "Rented On",
     "Rented Until",
     "Rented By",
@@ -66,6 +67,10 @@ function Movies() {
         params.push(`rentedUntil=${rentedUntil}`);
       }
 
+      if(rentedDate){
+        params.push(`rentedDate=${rentedDate}`)
+      }
+
       if (rentedBy) {
         params.push(`rentedBy=${rentedBy}`);
       }
@@ -92,6 +97,7 @@ function Movies() {
     category,
     isAvailable,
     rentedUntil,
+    rentedDate,
     rentedBy,
     ownerUsername,
     pageSize,
@@ -99,6 +105,9 @@ function Movies() {
     pageNo,
     movies.length,
   ]);
+
+
+
   let getFilterInput = (params) => {
     setCategory(params[0]);
     setDirector(params[1]);
@@ -106,6 +115,7 @@ function Movies() {
     setIsAvailable(params[3] === "BOTH" ? "" : params[3]);
     setRentedUntil(params[4]);
     setRentedBy(params[5]);
+    setrentedDate(params[6])
   };
 
   const handleSelectChange = (event) => {
@@ -157,6 +167,14 @@ function Movies() {
                             setSortField("rentedBy");
                             setDirection(!direction);
                           }
+                          else if (e.target.textContent === "Rented On") {
+                            setSortField("rentedDate");
+                            setDirection(!direction);
+                          } 
+                          else if (e.target.textContent === "Owner") {
+                            setSortField("owner_username");
+                            setDirection(!direction);
+                          } 
                         }
                       }}
                     >
@@ -173,11 +191,40 @@ function Movies() {
                           onClick={(e) => {
                             e.stopPropagation();
                             setDirection(!direction);
-                            handleClick(
-                              e.currentTarget
-                                .getAttribute("data-column")
-                                .toLowerCase()
-                            );
+                           
+                            let column=e.currentTarget.getAttribute("data-column");
+                            if (column !== "Status") {
+                              if (column === "Title") {
+                                setSortField("title");
+                              } else if (column === "Director") {
+                                setSortField("director");
+                              } else if (column=== "Category") {
+                                setSortField("category");
+                              }
+                              if (
+                                sortField === column.toLowerCase()
+                              ) {
+                                setDirection(!direction);
+                              } else {
+                                setDirection(true);
+                              }
+    
+                              if (column === "Rented Until") {
+                                setSortField("rentedUntil");
+                                setDirection(!direction);
+                              } else if (column === "Rented By") {
+                                setSortField("rentedBy");
+                                setDirection(!direction);
+                              }
+                              else if (column === "Rented On") {
+                                setSortField("rentedDate");
+                                setDirection(!direction);
+                              } 
+                              else if (column === "Owner") {
+                                setSortField("owner_username");
+                                setDirection(!direction);
+                              } 
+                            }
                           }}
                         >
                           {elem != "Status" && elem.length > 2 && <SortIcon />}
@@ -200,6 +247,7 @@ function Movies() {
                     rentedBy,
                     id,
                     rentedDate,
+                    owner_username
                   },
                   index
                 ) => {
@@ -216,6 +264,7 @@ function Movies() {
                       director={director}
                       isAvailable={isAvailable}
                       rentedUntil={rentedUntil}
+                      owner_username={owner_username}
                       rentedDate={rentedDate}
                       rentedBy={rentedBy}
                       key={index}

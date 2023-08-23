@@ -12,7 +12,8 @@ function RentedMovie({
   classes,
   triggerRefresh,
   setTriggerRefresh,
-  rentedOn,
+  rentedDate,
+  owner_username
 }) {
   const [detailsModalOpen, setDetailsModalOpen] = useState(false);
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
@@ -48,7 +49,13 @@ function RentedMovie({
       </td>
       <td className={classes}>
         <div variant="small" color="blue-gray" className="font-normal">
-          {rentedOn}
+          {owner_username}
+        </div>
+      </td>
+      
+      <td className={classes}>
+        <div variant="small" color="blue-gray" className="font-normal">
+          {rentedDate}
         </div>
       </td>
       <td className={classes}>
