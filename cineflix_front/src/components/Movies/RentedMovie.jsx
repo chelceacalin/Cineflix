@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Button } from "@mui/material";
 import ViewMovieDetailsModalWindow from "./ViewMovieDetailsModalWindow.jsx";
+import RentMovieModalView from "./RentMovieModalView";
 
 function RentedMovie({
   id,
@@ -13,6 +14,7 @@ function RentedMovie({
   classes,
   triggerRefresh,
   setTriggerRefresh,
+  rentedOn,
   rentedDate,
   owner_username
 }) {
@@ -20,9 +22,18 @@ function RentedMovie({
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const handleDetailsOpen = () => setDetailsModalOpen(true);
   const handleDetailsClose = () => setDetailsModalOpen(false);
-  const handleDeleteOpen = () => setDeleteModalOpen(true);
-  const handleDeleteClose = () => setDeleteModalOpen(false);
-  
+
+  const [isRentModalOpen, setRentModalOpen] = useState(false);
+
+  const handleOpenRentModal = () => {
+    setRentModalOpen(true);
+  };
+
+  const handleCloseRentModal = () => {
+    setRentModalOpen(false);
+  };
+
+
   return (
     <tr key={title}>
       <td className={classes}>
@@ -54,7 +65,7 @@ function RentedMovie({
           {owner_username}
         </div>
       </td>
-      
+
       <td className={classes}>
         <div variant="small" color="blue-gray" className="font-normal">
           {rentedDate}
@@ -83,12 +94,19 @@ function RentedMovie({
           />
       </td>
       <td>
-        <button
-          onClick={handleDeleteOpen}
-          className="inline-block rounded px-3 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-white contained-button"
+        <Button
+          onClick={handleOpenRentModal}
+          className="contained-button font-normal w-full" variant="contained"
         >
           Rent Movie
-        </button>
+        </Button>
+        <RentMovieModalView
+          isRentModalOpen={isRentModalOpen}
+          closeRentModal={handleCloseRentModal}
+          title={title}
+          director={director}
+          owner={owner_username}
+        />
       </td>
     </tr>
   );

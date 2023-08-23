@@ -5,6 +5,9 @@ import RentedMovie from "./RentedMovie";
 import { UserLoginContext } from "../../utils/context/LoginProvider";
 import MovieFilter from "./MovieFilter";
 import SortIcon from "../../utils/icon/SortIcon";
+
+axios.defaults.withCredentials = true;
+
 function Movies() {
   const TABLE_HEAD = [
     "Title",
@@ -229,7 +232,8 @@ function Movies() {
               </tr>
             </thead>
             <tbody className="text-blue-marine">
-              {movies.map(
+              {
+              movies.map(
                 (
                   {
                     category,
