@@ -4,7 +4,6 @@ import {
   BrowserRouter as Router,
   Routes,
   Route,
-  useLocation,
 } from "react-router-dom";
 import { useEffect } from "react";
 import MyProfile from "./components/MyProfile/MyProfile";
@@ -15,7 +14,7 @@ import NotFound from "./components/NotFound/NotFound";
 import LoginProvider from "./utils/context/LoginProvider.jsx";
 import AdminRoute from "./utils/protectedRoutes/AdminRoute";
 import {UserLoginContext} from "./utils/context/LoginProvider.jsx";
-import { useContext,useState } from "react";
+import { useContext } from "react";
 import axios from "axios";
 import Authenticated from "./utils/protectedRoutes/Authenticated";
 import ProfileRoute from "./utils/protectedRoutes/ProfileRoute";

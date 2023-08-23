@@ -5,8 +5,6 @@ import FilterCategory from "./FilterCategory";
 import "./css/CategoryManagement.css";
 import axios from "axios";
 import CreateCategoryModalWindow from "./CreateCategoryModalWIndow.jsx";
-import category from "./Category";
-import { faL } from "@fortawesome/free-solid-svg-icons";
 import Pagination from "../RoleManagement/Pagination";
 import SortIcon from "../../utils/icon/SortIcon";
 axios.defaults.withCredentials = true;

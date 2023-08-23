@@ -1,10 +1,6 @@
 import {
   Checkbox,
-  FormControlLabel,
-  FormGroup,
   TextField,
-  InputLabel,
-  NativeSelect,
   Button,
 } from "@mui/material";
 import React, { useContext, useEffect, useState } from "react";
@@ -12,7 +8,6 @@ import axios from "axios";
 import "react-datepicker/dist/react-datepicker.css";
 import DatePicker from "react-datepicker";
 import { UserLoginContext } from "../../utils/context/LoginProvider";
-import { input } from "@material-tailwind/react";
 
 function MovieFilter({ filterInput }) {
   let [title, setTitle] = useState("");

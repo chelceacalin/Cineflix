@@ -5,14 +5,11 @@ import {
   Button,
   Dialog,
   DialogContent,
-  FormControl,
-  InputLabel,
-  NativeSelect,
   TextField,
 } from "@mui/material";
 import { Autocomplete } from "@mui/material";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faL, faTimes } from "@fortawesome/free-solid-svg-icons";
+import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import "./css/AddNewMovieModalWindow.css";
 import axios from "axios";
 import { UserLoginContext } from "../../utils/context/LoginProvider";
