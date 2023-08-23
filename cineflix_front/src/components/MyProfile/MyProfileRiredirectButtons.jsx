@@ -15,23 +15,22 @@ function MyProfileRiredirectButtons() {
     ? "aBackgroundClick text-white"
     : "";
   return (
-    <div>
-      <button
-        className={`p-4 w-60 border text-black ${myMoviesClass}  mt-8 ml-4 `}
-        onClick={(e) => {
-          e.preventDefault();
-           navigate(`/myprofile/${username}`)
-        }}
-      >
-        {" "}
-        My Movies
-      </button>
+      <div >
+        <button
+          className={`p-4 w-60 border text-black ${myMoviesClass} mt-8`}
+          onClick={(e) => {
+            e.preventDefault();
+            //  navigate(`/myprofile/${username}`)
+          }}
+        >
+          {" "}
+          My Movies
+        </button>
 
-      <button
-        className={`p-4  w-60 border text-black ${myRentedMoviesClass} mt-8 `}
-        onClick={(e) => {
-          e.preventDefault();
-          navigate(`/myprofile/myRentedMovies/${username}`);
+        <button className={`p-4  w-60 border text-black ${myRentedMoviesClass} mt-8`}
+        onClick={(e)=>{
+          e.preventDefault()
+          //navigate('/roleManagement')
         }}
       >
         {" "}

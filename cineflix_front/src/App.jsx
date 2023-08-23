@@ -4,7 +4,6 @@ import {
   BrowserRouter as Router,
   Routes,
   Route,
-  useLocation,
 } from "react-router-dom";
 import { useEffect } from "react";
 import MyProfile from "./components/MyProfile/MyProfile";
@@ -17,7 +16,7 @@ import LoginProvider from "./utils/context/LoginProvider.jsx";
 import AdminRoute from "./utils/protectedRoutes/AdminRoute";
 import MyRentedMoviesRoute from "./utils/protectedRoutes/MyRentedMoviesRoute";
 import {UserLoginContext} from "./utils/context/LoginProvider.jsx";
-import { useContext,useState } from "react";
+import { useContext, useState } from "react";
 import axios from "axios";
 import Authenticated from "./utils/protectedRoutes/Authenticated";
 import ProfileRoute from "./utils/protectedRoutes/ProfileRoute";
@@ -38,6 +37,7 @@ function App() {
   );
 
   function MainContent() {
+    const [initialized,setInitialized]=useState(false)
     const { isAdmin, setIsAdmin, username, setUsername, token, setToken, isLoggedIn, setIsLoggedIn } = useContext(UserLoginContext);
     useEffect(() => {
       axios.get(`/userInfo`)
@@ -55,6 +55,7 @@ function App() {
             setIsLoggedIn(true);
             sessionStorage.setItem('isLoggedIn',true)
         }
+        setInitialized(true)
       })
       .catch(error => {
         setIsAdmin(false);
@@ -62,12 +63,18 @@ function App() {
         setToken(null);
         setIsLoggedIn(false);
         console.error("Error fetching userInfo:", error);
+        setInitialized(true)
       });
-    }, [])
+    }, []);
+
+   if(!initialized) return;
+
     if (isLoggedIn) {
       return (
         <>
-          <Navbar />
+          <div className="h-screen">
+            <Navbar />
+          </div>
           <Routes>
             <Route element={<Authenticated />}>
 

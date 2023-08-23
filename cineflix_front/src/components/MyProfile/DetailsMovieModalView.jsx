@@ -6,7 +6,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import "./css/DetailsMovieModalView.css";
 import "./css/AddNewMovieModalWindow.css";
-
 import axios from "axios";
 import { Autocomplete } from "@mui/material";
 axios.defaults.withCredentials = true;
@@ -28,7 +27,6 @@ function DetailsMovieModalView({
   const [director, setDirector] = useState(defaultDirector);
   const [description, setDescription] = useState("");
   const [category, setCategory] = useState(defaultCategory);
-
 
   const fetchMovieImage = async () => {
     try {
@@ -173,7 +171,7 @@ function DetailsMovieModalView({
   };
 
   return (
-    <Dialog fullWidth maxWidth={"sm"} open={isModalOpen} onClose={closeModal}>
+    <Dialog fullWidth maxWidth={"md"} open={isModalOpen} onClose={closeModal}>
       <div className="modal-content wider-modal">
         <div className="header-container">
           <FontAwesomeIcon
@@ -187,34 +185,42 @@ function DetailsMovieModalView({
           </div>
         </div>
         <DialogContent className="modal-body ml-2 mr-2">
-          <div className="field-group">
-            <TextField
-              label="Title"
-              variant="outlined"
-              className="input-field w-full"
-              value={title}
-              onChange={(e) => {
-                setTitle(e.target.value);
-              }}
-              InputLabelProps={{
-                style: { fontFamily: "Sanchez" },
-              }}
-            />
-          </div>
-          <div className="field-group">
-            <TextField
-              label="Director"
-              variant="outlined"
-              fullWidth
-              className="input-field"
-              defaultValue={director}
-              onChange={(e) => {
-                setDirector(e.target.value);
-              }}
-              InputLabelProps={{
-                style: { fontFamily: "Sanchez" },
-              }}
-            />
+          <div className="flex gap-x-2">
+            <div className="field-group flex-1">
+              <TextField
+                label="Title"
+                variant="outlined"
+                className="input-field w-full"
+                defaultValue={title}
+                onChange={(e) => {
+                  setTitle(e.target.value);
+                }}
+                InputProps={{
+                  style: { fontFamily: "Sanchez" },
+                }}
+                InputLabelProps={{
+                  style: { fontFamily: "Sanchez" }
+                }}
+              />
+            </div>
+            <div className="field-group flex-1">
+              <TextField
+                label="Director"
+                variant="outlined"
+                fullWidth
+                className="input-field"
+                defaultValue={director}
+                onChange={(e) => {
+                  setDirector(e.target.value);
+                }}
+                InputProps={{
+                  style: { fontFamily: "Sanchez" },
+                }}
+                InputLabelProps={{
+                  style: { fontFamily: "Sanchez" },
+                }}
+              />
+            </div>
           </div>
           <div className="w-full">
             <Autocomplete
@@ -233,13 +239,13 @@ function DetailsMovieModalView({
             />
           </div>
           <div className="field-group mt-4">
-            <label>Description</label>
-            <textarea
+            <TextField
               placeholder=" Write a description for the movie..."
-              required
-              rows="3"
+              label="Description"
+              multiline={true}
               className="textarea-field w-full border-2 p-2"
-              defaultValue={description}
+              value={description}
+              rows={6}
               onChange={(e) => {
                 setDescription(e.target.value);
               }}
@@ -297,6 +303,7 @@ function DetailsMovieModalView({
           </div>
         </DialogContent>
       </div>
+      <ToastContainer />
     </Dialog>
   );
 }

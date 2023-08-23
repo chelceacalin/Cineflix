@@ -45,7 +45,6 @@ function Movies() {
     const buildUrl = () => {
       const normalizedSortField = sortField || "title";
       let params = [
-        `owner_username=${username}`,
         `sortField=${normalizedSortField}`,
         `direction=${direction ? "ASC" : "DESC"}`,
         `title=${title}`,
@@ -120,36 +119,39 @@ function Movies() {
 
   return (
     <>
-      <MovieFilter filterInput={getFilterInput} />
-      <div className="bg-grey-texture w-full">
-        <div className="w-full h-full px-10 py-5">
-          <table className="w-full min-w-max table-auto text-left border-2">
-            <thead className="bg-basic-red text-white">
-              <tr>
-                {TABLE_HEAD.slice(0, TABLE_HEAD.length).map((elem) => {
-                  return (
-                    <th
-                      key={elem}
-                      className={`border-b-white p-4 ${
-                        elem.length > 2 ? "hover" : ""
-                      } cursor-pointer`}
-                      onClick={(e) => {
-                        e.preventDefault();
-                        if (e.target.textContent !== "Status") {
-                          if (e.target.textContent === "Title") {
-                            setSortField("title");
-                          } else if (e.target.textContent === "Director") {
-                            setSortField("director");
-                          } else if (e.target.textContent === "Category") {
-                            setSortField("category");
-                          }
-                          if (
-                            sortField === e.target.textContent.toLowerCase()
-                          ) {
-                            setDirection(!direction);
-                          } else {
-                            setDirection(true);
-                          }
+      <div className="filterContainer h-screen border-r-2">
+        <MovieFilter filterInput={getFilterInput} />
+      </div>
+      <div className="bg-grey-texture w-full h-screen px-10 py-10 ">
+        <div className="w-full h-full flex flex-col bg-white justify-between border-2">
+          <div className="overflow-y-auto">
+            <table className="w-full min-w-max table-auto text-left border-b-2">
+              <thead className="bg-basic-red sticky top-0 z-30 text-white">
+                <tr>
+                  {TABLE_HEAD.slice(0, TABLE_HEAD.length).map((elem) => {
+                    return (
+                      <th
+                        key={elem}
+                        className={`border-b-white p-4 ${
+                          elem.length > 2 ? "hover" : ""
+                        } cursor-pointer`}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          if (e.target.textContent !== "Status") {
+                            if (e.target.textContent === "Title") {
+                              setSortField("title");
+                            } else if (e.target.textContent === "Director") {
+                              setSortField("director");
+                            } else if (e.target.textContent === "Category") {
+                              setSortField("category");
+                            }
+                            if (
+                              sortField === e.target.textContent.toLowerCase()
+                            ) {
+                              setDirection(!direction);
+                            } else {
+                              setDirection(true);
+                            }
 
                           if (e.target.textContent === "Rented Until") {
                             setSortField("rentedUntil");
@@ -161,11 +163,11 @@ function Movies() {
                           else if (e.target.textContent === "Rented On") {
                             setSortField("rentedDate");
                             setDirection(!direction);
-                          } 
+                          }
                           else if (e.target.textContent === "Owner") {
                             setSortField("owner_username");
                             setDirection(!direction);
-                          } 
+                          }
                         }
                       }}
                     >
@@ -182,7 +184,7 @@ function Movies() {
                           onClick={(e) => {
                             e.stopPropagation();
                             setDirection(!direction);
-                           
+
                             let column=e.currentTarget.getAttribute("data-column");
                             if (column !== "Status") {
                               if (column === "Title") {
@@ -199,7 +201,7 @@ function Movies() {
                               } else {
                                 setDirection(true);
                               }
-    
+
                               if (column === "Rented Until") {
                                 setSortField("rentedUntil");
                                 setDirection(!direction);
@@ -210,11 +212,11 @@ function Movies() {
                               else if (column === "Rented On") {
                                 setSortField("rentedDate");
                                 setDirection(!direction);
-                              } 
+                              }
                               else if (column === "Owner") {
                                 setSortField("owner_username");
                                 setDirection(!direction);
-                              } 
+                              }
                             }
                           }}
                         >
@@ -268,24 +270,24 @@ function Movies() {
               )}
             </tbody>
           </table>
-          <span className="w-full bg-basic-red flex flex-wrap py-3 mb-4">
-            <span className=" inline-flex marginResizable">
+          </div>
+          { !movies.length && (<p className="text-center text-2xl">No matching results found</p> )}
+          <div className="w-full bg-basic-red flex justify-between flex-wrap py-3 border-2">
+            <div className=" inline-flex marginResizable">
               <p className="text-white font-normal">Results per page: </p>
               <p className="ml-5">
                 <select
-                  name="cars"
-                  id="cars"
-                  form="carform"
+                  className="bg-basic-red cursor-pointer text-white font-bold border-2 p-1"
                   onChange={handleSelectChange}
-                  className="cursor-pointer"
                 >
                   <option value="15">15</option>
                   <option value="10">10</option>
                   <option value="5">5</option>
                 </select>
               </p>
-            </span>
-            <div className="ml-10 justify-center w-1/2 items-center">
+            </div>
+            <div className="justify-center items-center">
+            { movies.length > 0 && (
               <Pagination
                 pageNo={pageNo}
                 pageSize={pageSize}
@@ -293,9 +295,9 @@ function Movies() {
                 updatePageNumber={updatePageNumber}
                 responseLength={totalMovies}
                 nrCurrentMovies={movies.length}
-              />
+              />  )}
             </div>
-          </span>
+          </div>
         </div>
       </div>
     </>

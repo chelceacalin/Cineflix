@@ -5,8 +5,6 @@ import FilterCategory from "./FilterCategory";
 import "./css/CategoryManagement.css";
 import axios from "axios";
 import CreateCategoryModalWindow from "./CreateCategoryModalWIndow.jsx";
-import category from "./Category";
-import { faL } from "@fortawesome/free-solid-svg-icons";
 import Pagination from "../RoleManagement/Pagination";
 import SortIcon from "../../utils/icon/SortIcon";
 axios.defaults.withCredentials = true;
@@ -96,89 +94,94 @@ function CategoryManagement() {
 
   return (
     <>
-      <FilterCategory filterInput={getFilterInput} />
-      <div className="bg-grey-texture w-full">
-        <div className="w-full h-full px-10 py-5">
-          <table className="cater w-full text-left bg-white border-2">
-            <thead className="bg-basic-red text-white">
-              <tr>
-                {TABLE_HEAD.slice(0, TABLE_HEAD.length - 1).map((elem) => {
+      <div className="filterContainer h-screen border-r-2">
+        <FilterCategory filterInput={getFilterInput} />
+      </div>
+      <div className="bg-grey-texture w-full h-screen px-10 py-10 ">
+        <div className="w-full h-full flex flex-col bg-white justify-between border-2">
+          <div className="overflow-y-auto">
+            <table className="cater w-full text-left bg-white border-b-2">
+              <thead className="bg-basic-red sticky top-0 z-30 text-white">
+                <tr>
+                  {TABLE_HEAD.slice(0, TABLE_HEAD.length - 1).map((elem) => {
+                    return (
+                      <th
+                        key={elem}
+                        className={`border-b-white p-4 ${elem !== 'Actions' ? 'hover' : ''}`}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          if (e.target.textContent === "Category") {
+                            setDirection(!direction);
+                          }
+                        }}
+                      >
+                        <div className="">
+                          {elem}
+                          <svg
+                            data-column={elem}
+                            style={{ display: "inline-block" }}
+                            width="16"
+                            height="16"
+                            viewBox="0 0 16 16"
+                            fill="none"
+                            xmlns="http://www.w3.org/2000/svg"
+                            onClick={(e) => {
+                              const columnName =
+                                e.currentTarget.getAttribute("data-column");
+                              handleClick(columnName.toLowerCase());
+                            }}
+                          >
+                            {elem != "Actions" && (
+                              <SortIcon />
+                            )}
+                          </svg>
+                        </div>
+                      </th>
+                    );
+                  })}
+                  <th className="border-b-white p-4">
+                    <div>
+                      <Button onClick={handleOpen}
+                        className="white-outlined-button"
+                        variant="outlined"
+                      >
+                        Add new
+                      </Button>
+                      <CreateCategoryModalWindow
+                        isModalOpen={open}
+                        closeModal={handleClose}
+                        signal={signal}
+                        setErrorMessage={setErrorMessage}
+                        errorMessage={errorMessage}
+                      />
+                    </div>
+                  </th>
+                </tr>
+              </thead>
+              <tbody className="text-blue-marine">
+                {categories.map(({ name, id }, index) => {
+                  const isLast = index === categories.length - 1;
+                  const classes = isLast ? "px-4 py-2" : "px-4 py-2 border-b-2";
+
                   return (
-                    <th
-                      key={elem}
-                      className={`border-b-white p-4 ${elem !== 'Actions' ? 'hover' : ''}`}
-                      onClick={(e) => {
-                        e.preventDefault();
-                        if (e.target.textContent === "Category") {
-                          setDirection(!direction);
-                        }
-                      }}
-                    >
-                      <div className="">
-                        {elem}
-                        <svg
-                          data-column={elem}
-                          style={{ display: "inline-block" }}
-                          width="16"
-                          height="16"
-                          viewBox="0 0 16 16"
-                          fill="none"
-                          xmlns="http://www.w3.org/2000/svg"
-                          onClick={(e) => {
-                            const columnName =
-                              e.currentTarget.getAttribute("data-column");
-                            handleClick(columnName.toLowerCase());
-                          }}
-                        >
-                          {elem != "Actions" && (
-                            <SortIcon />
-                          )}
-                        </svg>
-                      </div>
-                    </th>
-                  );
-                })}
-                <th className="border-b-white p-4">
-                  <div>
-                    <Button onClick={handleOpen}
-                      className="white-outlined-button"
-                      variant="outlined"
-                    >
-                      Add new
-                    </Button>
-                    <CreateCategoryModalWindow
-                      isModalOpen={open}
-                      closeModal={handleClose}
+                    <Category
+                      id={id}
+                      name={name}
+                      classes={classes}
+                      updateCategory={updateCategory}
+                      key={name}
                       signal={signal}
                       setErrorMessage={setErrorMessage}
                       errorMessage={errorMessage}
                     />
-                  </div>
-                </th>
-              </tr>
-            </thead>
-            <tbody className="text-blue-marine">
-              {categories.map(({ name, id }, index) => {
-                const isLast = index === categories.length - 1;
-                const classes = isLast ? "px-4 py-2" : "px-4 py-2 border-b-2";
-
-                return (
-                  <Category
-                    id={id}
-                    name={name}
-                    classes={classes}
-                    updateCategory={updateCategory}
-                    key={name}
-                    signal={signal}
-                    setErrorMessage={setErrorMessage}
-                    errorMessage={errorMessage}
-                  />
-                );
-              })}
-            </tbody>
-          </table>
-          <span className="bg-basic-red flex flex-wrap py-3 mb-4 border-2">
-            <span className=" inline-flex marginResizable">
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+          { !categories.length && (<p className="text-center text-2xl">No matching results found</p> )}
+          <div className="bg-basic-red flex justify-between flex-wrap py-3 border-2">
+            <div className=" inline-flex marginResizable">
               <p className="text-white font-normal">
                 Results per page:{" "}
               </p>
@@ -187,6 +190,7 @@ function CategoryManagement() {
                   name="sizes"
                   id="sizes"
                   form="sizesform"
+                  className="bg-basic-red cursor-pointer text-white font-bold border-2 p-1"
                   onChange={handleSelectChange}
                 >
                   <option value="15">15</option>
@@ -194,18 +198,19 @@ function CategoryManagement() {
                   <option value="5">5</option>
                 </select>
               </p>
-            </span>
-            <div className="ml-10 justify-center w-1/2 items-center">
-              <Pagination
-                pageNo={pageNo}
-                pageSize={pageSize}
-                totalPages={totalPages}
-                updatePageNumber={updatePageNumber}
-                responseLength={totalCategories}
-                nrCurrentUsers={categories.length}
-              />
             </div>
-          </span>
+            <div className="justify-center items-center">
+              { categories.length > 0 && ( 
+                <Pagination
+                  pageNo={pageNo}
+                  pageSize={pageSize}
+                  totalPages={totalPages}
+                  updatePageNumber={updatePageNumber}
+                  responseLength={totalCategories}
+                  nrCurrentUsers={categories.length}
+                /> )}
+            </div>
+          </div>
         </div>
       </div>
     </>
