@@ -27,7 +27,7 @@ function Navbar() {
 
   const handleItemClick = (item, color) => {
     if (selectedItem === item) {
-      setSelectedItem(null); // Deselect the item if it's clicked again
+      setSelectedItem(null); 
     } else {
       setSelectedItem(item);
       setSelectedColor(color);
@@ -92,7 +92,7 @@ function Navbar() {
                   onClick={(e) => {
                     e.preventDefault();
                     handleItemClick("profile", "red");
-                    navigate("/myprofile/1");
+                    navigate(`/myprofile/${username}`);
                   }}
                 >
                   <svg

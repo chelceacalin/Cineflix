@@ -192,9 +192,6 @@ function AddNewMovieModalWindow({
             value={category}
             options={availableCategories.map((c) => c.name)}
             renderInput={(params) => <TextField {...params} label="Category"
-            InputProps={{
-              style: { fontFamily: "Sanchez" }
-            }}
             InputLabelProps={{
               style: { fontFamily: "Sanchez" }
             }}
@@ -267,7 +264,6 @@ function AddNewMovieModalWindow({
           </div>
         </DialogContent>
       </div>
-      <ToastContainer />
     </Dialog>
   );
 }
