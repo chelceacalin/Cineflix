@@ -85,11 +85,14 @@ function RoleManagement() {
 
   return (
     <>
-      <FilterComponent filterInput={getFilterInput} />
-      <div className="bg-grey-texture w-full">
-      <div className="w-full h-full px-10 py-5">
-        <table className="w-full text-left bg-white border-2">
-          <thead className="bg-basic-red text-white">
+      <div className="filterContainer h-screen border-r-2">
+        <FilterComponent filterInput={getFilterInput} />
+      </div>
+      <div className="bg-grey-texture w-full h-screen px-10 py-10">
+      <div className="w-full h-full flex flex-col bg-white justify-between border-2">
+        <div className="overflow-y-auto">
+        <table className="w-full text-left bg-white">
+          <thead className="bg-basic-red sticky top-0 z-30 text-white">
             <tr>
               {TABLE_HEAD.slice(0, TABLE_HEAD.length - 2).map((elem) => {
                 return (
@@ -183,8 +186,10 @@ function RoleManagement() {
             })}
           </tbody>
         </table>
-        <span className="bg-basic-red flex justify-between flex-wrap py-3 mb-4 border-2">
-          <span className=" inline-flex marginResizable">
+        </div>
+        {!users.length && (<p className="text-center text-2xl">No matching results found</p> )}
+        <div className="bg-basic-red flex justify-between flex-wrap py-3 border-2">
+          <div className=" inline-flex marginResizable">
             <p className="text-white font-normal">
               Results per page:{" "}
             </p>
@@ -198,7 +203,7 @@ function RoleManagement() {
                 <option value="5">5</option>
               </select>
             </p>
-          </span>
+          </div>
           <div className="justify-center items-center">
             <Pagination
               pageNo={pageNo}
@@ -209,7 +214,7 @@ function RoleManagement() {
               nrCurrentUsers={users.length}
             />
           </div>
-        </span>
+        </div>
       </div>
       </div>
     </>

@@ -23,7 +23,6 @@ function CategoryManagement() {
   let [totalPages, setTotalPages] = useState("");
   let [totalCategories, setTotalCategories] = useState(0);
   let [signalCall, setSignalCall] = useState(false);
-  let noCategoriesFound = false;
 
   useEffect(() => {
     axios.get(`/category`).then((data) => {
