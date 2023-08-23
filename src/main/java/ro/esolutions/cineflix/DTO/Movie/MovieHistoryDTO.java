@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import ro.esolutions.cineflix.validators.RentDateConstraint;
+import ro.esolutions.cineflix.validators.RentForTwoWeeksConstraint;
 
 import java.time.LocalDate;
 import java.util.UUID;
@@ -12,8 +14,11 @@ import java.util.UUID;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@RentForTwoWeeksConstraint
 public class MovieHistoryDTO {
+    @RentDateConstraint
     private LocalDate rentedDate;
+
     private LocalDate rentedUntil;
     private Integer rating;
     private String description;

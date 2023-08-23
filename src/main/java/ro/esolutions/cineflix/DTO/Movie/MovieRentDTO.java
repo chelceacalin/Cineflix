@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class MovieRentMessageDTO {
+public class MovieRentDTO {
     private String title;
     private String director;
     private String ownerUsername;

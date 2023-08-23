@@ -2,7 +2,7 @@ package ro.esolutions.cineflix.mapper;
 
 import ro.esolutions.cineflix.DTO.Movie.MovieAddDTO;
 import ro.esolutions.cineflix.DTO.Movie.MovieDTO;
-import ro.esolutions.cineflix.DTO.Movie.MovieRentMessageDTO;
+import ro.esolutions.cineflix.DTO.Movie.MovieRentDTO;
 import ro.esolutions.cineflix.DTO.UserCineflix.UserDTO;
 import ro.esolutions.cineflix.entities.Category;
 import ro.esolutions.cineflix.entities.Movie;
@@ -46,8 +46,8 @@ public class MovieMapper {
                 .build();
     }
 
-    public static MovieRentMessageDTO toMovieRentMessageDto(Movie movie) {
-        return MovieRentMessageDTO.builder()
+    public static MovieRentDTO toMovieRentMessageDto(Movie movie) {
+        return MovieRentDTO.builder()
                 .title(movie.getTitle())
                 .director(movie.getDirector())
                 .ownerUsername(movie.getOwner().getUsername())
