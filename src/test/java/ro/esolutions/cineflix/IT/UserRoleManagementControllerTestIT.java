@@ -81,6 +81,8 @@ public class UserRoleManagementControllerTestIT {
        assertEquals(UserCineflix.Role.ADMIN, userCineflixResponseEntity.getBody().getRole());
        assertEquals(HttpStatus.OK,userCineflixResponseEntity.getStatusCode());
     }
+
+
     @Test
     @DisplayName("Test filter data all users")
     @SqlGroup({

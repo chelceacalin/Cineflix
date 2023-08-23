@@ -26,7 +26,7 @@ public class ParameterNameValidationFilter implements Filter, jakarta.servlet.Fi
         String[] parameterNames = request.getParameterMap().keySet().toArray(new String[0]);
         for (String paramName : parameterNames) {
             if (!allowedParameterNames.contains(paramName)) {
-                throw new RuntimeException("PAramers with "+paramName+" not found");
+              return;
             }
         }
         chain.doFilter(request, response);
