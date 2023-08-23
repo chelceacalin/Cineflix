@@ -57,27 +57,9 @@ public class MovieService {
     public static final String TITLE = "title";
 
     public Page<MovieDTO> findUserMovies(MovieFilterDTO movieFilter, int pageNo, int pageSize) {
-
         Specification<Movie> specification = getSpecification(movieFilter);
-
         Sort.Direction sortDirection = Sort.Direction.fromString(movieFilter.getDirection());
-
-        String sortField = movieFilter.getSortField();
-
-        Pageable pageable;
-
-        switch (sortField) {
-            case RENTED_BY -> pageable = PageRequest.of(pageNo, pageSize, Sort.by(sortDirection, USERNAME));
-            case RENTED_UNTIL -> {
-                sortField = MOVIE_HISTORIES_RENTED_UNTIL;
-                pageable = PageRequest.of(pageNo, pageSize, Sort.by(sortDirection, sortField));
-            }
-            case RENTED_DATE -> {
-                sortField = MOVIE_HISTORIES_RENTED_DATE;
-                pageable = PageRequest.of(pageNo, pageSize, Sort.by(sortDirection, sortField));
-            }
-            default -> pageable = PageRequest.of(pageNo, pageSize, Sort.by(sortDirection, sortField));
-        }
+        Pageable pageable = getPageable(pageNo, pageSize, movieFilter.getSortField(), sortDirection);
 
         Page<Movie> moviesPage = movieRepository.findAll(specification, pageable);
         List<MovieDTO> movies = moviesPage.getContent().stream()
@@ -88,6 +70,19 @@ public class MovieService {
                 .collect(Collectors.toList());
 
         return new PageImpl<>(movies, pageable, moviesPage.getTotalElements());
+    }
+
+    private static Pageable getPageable(int pageNo, int pageSize, String sortField, Sort.Direction sortDirection) {
+        Pageable pageable;
+        switch (sortField) {
+            case RENTED_BY -> pageable = PageRequest.of(pageNo, pageSize, Sort.by(sortDirection, USERNAME));
+            case RENTED_UNTIL ->
+                    pageable = PageRequest.of(pageNo, pageSize, Sort.by(sortDirection, MOVIE_HISTORIES_RENTED_UNTIL));
+            case RENTED_DATE ->
+                    pageable = PageRequest.of(pageNo, pageSize, Sort.by(sortDirection, MOVIE_HISTORIES_RENTED_DATE));
+            default -> pageable = PageRequest.of(pageNo, pageSize, Sort.by(sortDirection, sortField));
+        }
+        return pageable;
     }
 
     private Specification<Movie> getSpecification(MovieFilterDTO movieFilter) {

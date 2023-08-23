@@ -27,7 +27,7 @@ function MovieFilter({ filterInput }) {
   let [url, setUrl] = useState("");
 
   useEffect(() => {
-    url = `/movies?owner_username=${username}`;
+    url = `/movies`;
     axios.get(url).then((elems) => {
       setUsersWhoRented(elems.data.content);
     });
@@ -186,15 +186,13 @@ function MovieFilter({ filterInput }) {
         >
           <option value="">Select Rented By</option>
           {usersWhoRented &&
-            usersWhoRented.map((elem, index) =>
-              elem.rentedBy !== "available" ? (
-                <option key={index} value={elem.rentedBy}>
+            usersWhoRented.map((elem, index) => (
+              elem.rentedBy !== "available"
+                ? <option key={index} value={elem.rentedBy}>
                   {elem.rentedBy}
                 </option>
-              ) : (
-                ""
-              )
-            )}
+                : ""
+            ))}
         </select>
       </div>
     </div>

@@ -36,6 +36,7 @@ function App() {
   );
 
   function MainContent() {
+    const [initialized,setInitialized]=useState(false)
     const { isAdmin, setIsAdmin, username, setUsername, token, setToken, isLoggedIn, setIsLoggedIn } = useContext(UserLoginContext);
     useEffect(() => {
       axios.get(`/userInfo`)
@@ -53,6 +54,7 @@ function App() {
             setIsLoggedIn(true);
             sessionStorage.setItem('isLoggedIn',true)
         }
+        setInitialized(true)
       })
       .catch(error => {
         setIsAdmin(false);
@@ -60,8 +62,12 @@ function App() {
         setToken(null);
         setIsLoggedIn(false);
         console.error("Error fetching userInfo:", error);
+        setInitialized(true)
       });
-    }, [])
+    }, []);
+
+   if(!initialized) return;
+
     if (isLoggedIn) {
       return (
         <>
