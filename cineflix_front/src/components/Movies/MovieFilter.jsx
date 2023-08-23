@@ -12,7 +12,6 @@ import axios from "axios";
 import "react-datepicker/dist/react-datepicker.css";
 import DatePicker from "react-datepicker";
 import { UserLoginContext } from "../../utils/context/LoginProvider";
-import { input } from "@material-tailwind/react";
 
 function MovieFilter({ filterInput }) {
   const [title, setTitle] = useState("");
@@ -144,9 +143,9 @@ function MovieFilter({ filterInput }) {
       </div>
       <div className="mt-10 mr-6">
 
-      <label>Rented Date:</label>
+      <label>Rented On:</label>
         <DatePicker
-          selected={rentedUntil}
+          selected={rentedDate}
           placeholderText={"Select the date"}
           onChange={(date) => {
             setRentedDate(date);
@@ -166,7 +165,7 @@ function MovieFilter({ filterInput }) {
         />
         <div className="mt-2 mb-10">
           <Button
-            className="font-normal contained-button"
+            className="font-normal contained-button mt-4"
             onClick={(e) => {
               e.preventDefault();
               setRentedUntil("");
@@ -177,7 +176,7 @@ function MovieFilter({ filterInput }) {
           </Button>
         </div>
       </div>
-      <div className="mt-2 mr-6">
+      <div className="mr-6">
         <label className="block">Rented by:</label>
         <select
           className="input-field mt-2"

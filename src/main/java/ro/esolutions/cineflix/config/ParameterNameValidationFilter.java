@@ -6,6 +6,7 @@ import jakarta.servlet.ServletRequest;
 import jakarta.servlet.ServletResponse;
 
 import java.io.IOException;
+import java.rmi.server.ExportException;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
@@ -25,7 +26,7 @@ public class ParameterNameValidationFilter implements Filter, jakarta.servlet.Fi
         String[] parameterNames = request.getParameterMap().keySet().toArray(new String[0]);
         for (String paramName : parameterNames) {
             if (!allowedParameterNames.contains(paramName)) {
-                return;
+                throw new RuntimeException("PAramers with "+paramName+" not found");
             }
         }
         chain.doFilter(request, response);

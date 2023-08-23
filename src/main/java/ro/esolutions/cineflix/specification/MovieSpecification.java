@@ -40,6 +40,18 @@ public class MovieSpecification {
         };
     }
 
+    public static <T> Specification<T> rentedDate(LocalDate rentedDate) {
+        return (root, query, criteriaBuilder) -> {
+            Join<Movie,MovieHistory> movieHistoryJoin=root.join(MOVIE_HISTORIES);
+            return criteriaBuilder.equal(movieHistoryJoin.get("rentedDate"),rentedDate);
+        };
+    }
+    public static <T> Specification<T> rentedDateFieldEquals(LocalDate rentedDateField,String column) {
+        return (root, query, criteriaBuilder) -> {
+            Join<Movie,MovieHistory> movieHistoryJoin=root.join(MOVIE_HISTORIES);
+            return criteriaBuilder.equal(movieHistoryJoin.get(column),rentedDateField);
+        };
+    }
     public static <T> Specification<T> getRentedBy(String username) {
         return (root, query, criteriaBuilder) -> {
             Join<Movie, MovieHistory> movieHistoryJoin = root.join(MOVIE_HISTORIES, JoinType.INNER);
