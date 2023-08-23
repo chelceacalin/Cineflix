@@ -271,8 +271,9 @@ function Movies() {
               )}
             </tbody>
           </table>
-          <span className="w-full bg-basic-red flex flex-wrap py-3 mb-4">
-            <span className=" inline-flex marginResizable">
+          </div>
+          <div className="w-full bg-basic-red flex flex-wrap py-3">
+            <div className=" inline-flex marginResizable">
               <p className="text-white font-normal">Results per page: </p>
               <p className="ml-5">
                 <select
