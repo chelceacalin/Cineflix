@@ -68,7 +68,6 @@ function DeleteCategoryModalWindow({ isEditModalOpen, closeEditModal, name, id, 
                     </div>
                 </DialogContent>
             </div>
-            <ToastContainer />
         </Dialog>
     )
 }

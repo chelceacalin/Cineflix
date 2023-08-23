@@ -19,6 +19,9 @@ import axios from "axios";
 import Authenticated from "./utils/protectedRoutes/Authenticated";
 import ProfileRoute from "./utils/protectedRoutes/ProfileRoute";
 import Login from "./components/Login/Login";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 function App() { 
   return (
     <div className="app-container">
@@ -26,6 +29,7 @@ function App() {
         <Router>
           <MainContent />
         </Router>
+        <ToastContainer />
       </LoginProvider>
     </div>
   );

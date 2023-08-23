@@ -1,14 +1,25 @@
 import React, { useContext, useState, useEffect } from "react";
 import axios from "axios";
+import Button from "@mui/material/Button";
 import MyProfileFilterComponent from "./MyProfileFilterComponent";
 import Pagination from "../RoleManagement/Pagination";
 import Movie from "./Movie";
 import AddNewMovieModalWindow from "./AddNewMovieModalWindow";
 import { UserLoginContext } from "../../utils/context/LoginProvider";
 import SortIcon from "../../utils/icon/SortIcon";
+import { useNavigate ,useLocation} from "react-router-dom";
+import MyProfileRiredirectButtons from "./MyProfileRiredirectButtons";
 
 function MyProfile() {
-  const TABLE_HEAD = ["Title", "Director", "Category", "Status", "Rented Until", "Rented By", ""];
+  const TABLE_HEAD = [
+    "Title",
+    "Director",
+    "Category",
+    "Status",
+    "Rented Until",
+    "Rented By",
+    "",
+  ];
   const [movies, setMovies] = useState([]);
   const [category, setCategory] = useState("");
   const [director, setDirector] = useState("");
@@ -16,21 +27,28 @@ function MyProfile() {
   const [isAvailable, setIsAvailable] = useState("");
   const [rentedUntil, setRentedUntil] = useState("");
   const [rentedBy, setRentedBy] = useState("");
-  let [ownerUsername, setOwnerUsername] = useState("");
+  const [ownerUsername, setOwnerUsername] = useState("");
   const [sortField, setSortField] = useState("title");
   const [direction, setDirection] = useState(true);
   const [lastClicked, setLastClicked] = useState(null);
-  let [newUrl, setNewUrl] = useState("");
-  let [pageNo, setPageNo] = useState(1);
-  let [pageSize, setPageSize] = useState(15);
-  let [totalPages, setTotalPages] = useState("");
-  let [totalMovies, setTotalMovies] = useState(0);
-  let [addMovieUrl, setAddMovieUrl] = useState("");
+  const [newUrl, setNewUrl] = useState("");
+  const [pageNo, setPageNo] = useState(1);
+  const [pageSize, setPageSize] = useState(15);
+  const [totalPages, setTotalPages] = useState("");
+  const [totalMovies, setTotalMovies] = useState(0);
+  const [addMovieUrl, setAddMovieUrl] = useState("");
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   const [triggerRefresh, setTriggerRefresh] = useState(false);
   const { username } = useContext(UserLoginContext);
+  const [selectedItem, setSelectedItem] = useState("");
+
+  const navigate=useNavigate()
+  const location = useLocation();
+
+  const [selectedColor,setSelectedColor]=useState("")
+
 
   let handleClick = (fieldName) => {
     if (lastClicked === fieldName) {
@@ -38,6 +56,7 @@ function MyProfile() {
     }
     setLastClicked(fieldName);
   };
+
 
   useEffect(() => {
     const buildUrl = () => {
@@ -53,20 +72,20 @@ function MyProfile() {
         `pageNo=${parseInt(pageNo) - 1}`,
         `pageSize=${pageSize}`,
       ];
-  
+
       if (rentedUntil) {
         params.push(`rentedUntil=${rentedUntil}`);
       }
-  
+
       if (rentedBy) {
         params.push(`rentedBy=${rentedBy}`);
       }
-  
+
       return `/movies?${params.join("&")}`;
     };
-  
+
     const url = buildUrl();
-  
+
     axios.get(url).then((elems) => {
       if (elems.data.content.length === 0 && pageNo > 1) {
         updatePageNumber(pageNo - 1);
@@ -90,7 +109,7 @@ function MyProfile() {
     pageNo,
     movies.length,
   ]);
- 
+
   let getFilterInput = (params) => {
     setCategory(params[0]);
     setDirector(params[1]);
@@ -110,7 +129,7 @@ function MyProfile() {
   };
 
   const addMovie = (addedMovie) => {
-    const addedMovies = movies.map(movie => {
+    const addedMovies = movies.map((movie) => {
       if (movie.title === addedMovie.title) {
         return addedMovie;
       }
@@ -119,14 +138,14 @@ function MyProfile() {
     setMovies(updatedMovie);
   };
 
-
   return (
     <>
     <div className="h-screen border-r-2">
       <MyProfileFilterComponent filterInput={getFilterInput}/>
     </div>
     <div className="bg-grey-texture w-full h-screen px-10 py-10 ">
-      <div className="w-full h-full flex flex-col bg-white justify-between border-2">
+        <MyProfileRiredirectButtons/>
+        <div className="w-full h-full flex flex-col bg-white justify-between border-2">
         <div className="overflow-y-auto">
           <table className="w-full min-w-max bg-white border-b-2 table-auto text-left">
             <thead className="bg-basic-red text-white">
@@ -158,8 +177,8 @@ function MyProfile() {
                               title.length > 0 ||
                               director.length > 0 ||
                               category.length > 0
-                            ) 
-                            setDirection(!direction);
+                            )
+                              setDirection(!direction);
                             setSortField("category");
                             handleClick(e.target.textContent.toLowerCase());
                           } else if (e.target.textContent === "Rented Until") {
@@ -198,12 +217,14 @@ function MyProfile() {
                           xmlns="http://www.w3.org/2000/svg"
                           onClick={(e) => {
                             setDirection(!direction);
-                            handleClick(e.currentTarget.getAttribute("data-column").toLowerCase());
+                            handleClick(
+                              e.currentTarget
+                                .getAttribute("data-column")
+                                .toLowerCase()
+                            );
                           }}
                         >
-                          {elem != "Status" && (
-                            <SortIcon />
-                          )}
+                          {elem != "Status" && <SortIcon />}
                         </svg>
                       </div>
                     </th>
@@ -213,7 +234,10 @@ function MyProfile() {
                   <div>Actions</div>
                 </th>
                 <th className="border-b-white p-2">
-                  <button onClick={handleOpen} className="bg-basic-red text-white border border-white hover:border-hover-cream hover:text-hover-cream py-2 px-6">
+                  <button
+                    onClick={handleOpen}
+                    className="bg-basic-red text-white border border-white hover:border-hover-cream hover:text-hover-cream py-2 px-6"
+                  >
                     Add New
                   </button>
                   <AddNewMovieModalWindow
@@ -230,63 +254,74 @@ function MyProfile() {
               </tr>
             </thead>
             <tbody className="text-blue-marine">
-            {movies.map(({ category, director, title, isAvailable, rentedUntil, rentedBy, id }, index) => {
-                const isLast = index === movies.length - 1;
-                const classes = isLast
-                  ? "px-4 py-2"
-                  : "px-4 py-2 border-b border-blue-gray-50";
-                return (
-                  <Movie
-                    id={id}
-                    title={title}
-                    category={category}
-                    director={director}                  
-                    isAvailable={isAvailable}
-                    rentedUntil={rentedUntil}
-                    rentedBy={rentedBy}
-                    key={index}
-                    classes={classes}
-                    triggerRefresh={triggerRefresh}
-                    setTriggerRefresh={setTriggerRefresh}
+              {movies.map(
+                (
+                  {
+                    category,
+                    director,
+                    title,
+                    isAvailable,
+                    rentedUntil,
+                    rentedBy,
+                    id,
+                  },
+                  index
+                ) => {
+                  const isLast = index === movies.length - 1;
+                  const classes = isLast
+                    ? "px-4 py-2"
+                    : "px-4 py-2 border-b border-blue-gray-50";
+                  return (
+                    <Movie
+                      id={id}
+                      title={title}
+                      category={category}
+                      director={director}
+                      isAvailable={isAvailable}
+                      rentedUntil={rentedUntil}
+                      rentedBy={rentedBy}
+                      key={index}
+                      classes={classes}
+                      triggerRefresh={triggerRefresh}
+                      setTriggerRefresh={setTriggerRefresh}
                     />
-                );
-              })}
+                  );
+                }
+              )}
             </tbody>
           </table>
         </div>
-        { !movies.length && (<p className="text-center text-2xl">No matching results found</p> )}
-        <div className="w-full bg-basic-red flex justify-between flex-wrap py-3 border-2">
-          <div className=" inline-flex marginResizable">
-            <p className="text-white font-normal">
-              Results per page:{" "}
-            </p>
-            <p className="ml-5">
-              <select
-                className="bg-basic-red cursor-pointer text-white font-bold border-2 p-1"
-                onChange={handleSelectChange}
-              >
-                <option value="15">15</option>
-                <option value="10">10</option>
-                <option value="5">5</option>
-              </select>
-            </p>
-          </div>
-          <div className="justify-center items-center">
-            { movies.length > 0 && ( 
-              <Pagination
-                pageNo={pageNo}
-                pageSize={pageSize}
-                totalPages={totalPages}
-                updatePageNumber={updatePageNumber}
-                responseLength={totalMovies}
-                nrCurrentMovies={movies.length}
-              /> )}
+            { !movies.length && (<p className="text-center text-2xl">No matching results found</p> )}
+          <div className="w-full bg-basic-red flex flex-wrap py-3 border-2">
+            <div className=" inline-flex marginResizable">
+              <p className="text-white font-normal">Results per page: </p>
+              <p className="ml-5">
+                <select
+                  onChange={handleSelectChange}
+                  className="bg-basic-red cursor-pointer text-white font-bold border-2 p-1"
+                >
+                  <option value="15">15</option>
+                  <option value="10">10</option>
+                  <option value="5">5</option>
+                </select>
+              </p>
+            </div>
+              <div className="justify-center items-center">
+                  { movies.length > 0 && (
+                      <Pagination
+                          pageNo={pageNo}
+                          pageSize={pageSize}
+                          totalPages={totalPages}
+                          updatePageNumber={updatePageNumber}
+                          responseLength={totalMovies}
+                          nrCurrentMovies={movies.length}
+                      /> )}
+              </div>
           </div>
         </div>
       </div>
-      </div>
     </>
-  )
+  );
 }
 
-export default MyProfile
+export default MyProfile;

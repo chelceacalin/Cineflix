@@ -245,7 +245,7 @@ function AddNewMovieModalWindow({
                 Save
               </Button>
             </div>
-            
+
             <div className="flex-1">
               <Button
                 type="button"

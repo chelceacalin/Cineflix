@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Button } from "@mui/material";
 import ViewMovieDetailsModalWindow from "./ViewMovieDetailsModalWindow.jsx";
+
 function RentedMovie({
   id,
   title,
@@ -12,14 +13,16 @@ function RentedMovie({
   classes,
   triggerRefresh,
   setTriggerRefresh,
-  rentedOn,
+  rentedDate,
+  owner_username
 }) {
   const [detailsModalOpen, setDetailsModalOpen] = useState(false);
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
-  let handleDetailsOpen = () => setDetailsModalOpen(true);
-  let handleDetailsClose = () => setDetailsModalOpen(false);
-  let handleDeleteOpen = () => setDeleteModalOpen(true);
-  let handleDeleteClose = () => setDeleteModalOpen(false);
+  const handleDetailsOpen = () => setDetailsModalOpen(true);
+  const handleDetailsClose = () => setDetailsModalOpen(false);
+  const handleDeleteOpen = () => setDeleteModalOpen(true);
+  const handleDeleteClose = () => setDeleteModalOpen(false);
+  
   return (
     <tr key={title}>
       <td className={classes}>
@@ -48,7 +51,13 @@ function RentedMovie({
       </td>
       <td className={classes}>
         <div variant="small" color="blue-gray" className="font-normal">
-          {rentedOn}
+          {owner_username}
+        </div>
+      </td>
+      
+      <td className={classes}>
+        <div variant="small" color="blue-gray" className="font-normal">
+          {rentedDate}
         </div>
       </td>
       <td className={classes}>
