@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import { Button, Dialog, DialogContent, TextField } from "@mui/material";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import "./css/DetailsMovieModalView.css";
 import "./css/AddNewMovieModalWindow.css";
+
 import axios from "axios";
 import { Autocomplete } from "@mui/material";
 axios.defaults.withCredentials = true;
@@ -26,7 +28,6 @@ function DetailsMovieModalView({
   const [director, setDirector] = useState(defaultDirector);
   const [description, setDescription] = useState("");
   const [category, setCategory] = useState(defaultCategory);
-
 
 
   const fetchMovieImage = async () => {
@@ -53,9 +54,18 @@ function DetailsMovieModalView({
     fetchMovieImage();
   }, []);
   const validationChecks = [
-    { condition: !title, message: "Title should not be empty!" },
-    { condition: !director, message: "Director should not be empty!" },
-    { condition: !description, message: "Description should not be empty!" },
+    {
+      condition: !title || title.length < 2,
+      message: "Title should have at least 2 characters!",
+    },
+    {
+      condition: !director || director.length < 2,
+      message: "Director should have at least 2 characters!",
+    },
+    {
+      condition: !description || description.length < 2,
+      message: "Description should have at least 2 characters!",
+    },
   ];
   const handleImageBrowse = (event) => {
     const file = event.target.files[0];
@@ -77,7 +87,7 @@ function DetailsMovieModalView({
   };
 
   useEffect(() => {
-    let url = `/category`
+    let url = `/category`;
     axios
       .get(url)
       .then((response) => {
@@ -86,9 +96,7 @@ function DetailsMovieModalView({
       .catch((error) => {
         console.error(error);
       });
-  }, [])
-
-
+  }, []);
 
   const validRequest = () => {
     for (const check of validationChecks) {
@@ -100,55 +108,72 @@ function DetailsMovieModalView({
     return true;
   };
 
+  const validFields = () => {
+    let valid = true;
+    if (title.charAt(0) !== title.charAt(0).toUpperCase()) {
+      showToast("Title should start with an uppercase letter!");
+      valid = false;
+    }
+
+    if (director.charAt(0) !== director.charAt(0).toUpperCase()) {
+      showToast("Director should start with an uppercase letter!");
+      valid = false;
+    }
+    return valid;
+  };
+
+
   const handleSave = () => {
     if (validRequest()) {
-      if (!category) {
-        showToast("Category " + category + " does not exist ");
-      } else {
-        let finalCategory = category;
+      if (validFields()) {
+        if (!category) {
+          showToast("Category " + category + " does not exist ");
+        } else {
+          let finalCategory = category;
 
-        if (selectedImageFile) {
-          const formData = new FormData();
+          if (selectedImageFile) {
+            const formData = new FormData();
 
-          formData.append("image", selectedImageFile);
+            formData.append("image", selectedImageFile);
+
+            axios
+              .post(`/images/${id}`, formData)
+              .then((response) => {
+                if (response.status === 200) {
+                  showToast("Image uploaded successfully!", "bg-green-500");
+                } else {
+                  showToast("Failed to upload image.");
+                }
+              })
+              .catch((error) => {
+                showToast("Error uploading image: " + error.message);
+              });
+          }
+
+          let movie = {
+            title: title,
+            director: director,
+            description: description,
+            category: finalCategory,
+          };
 
           axios
-            .post(`/images/${id}`, formData)
+            .post(`/movies/${id}`, movie)
             .then((response) => {
-              if (response.status === 200) {
-                showToast("Image uploaded successfully!", "bg-green-500");
-              } else {
-                showToast("Failed to upload image.");
-              }
+              showToast("Movie edited successfully!", "bg-green-500");
+              setTriggerRefresh(!triggerRefresh);
+              closeModal();
             })
-            .catch((error) => {
-              showToast("Error uploading image: " + error.message);
+            .catch((err) => {
+              showToast("Error editing movie: " + err.message);
             });
         }
-
-        let movie = {
-          title: title,
-          director: director,
-          description: description,
-          category: finalCategory,
-        };
-
-        axios
-          .post(`/movies/${id}`, movie)
-          .then((response) => {
-            showToast("Movie edited successfully!", "bg-green-500");
-            setTriggerRefresh(!triggerRefresh);
-            closeModal();
-          })
-          .catch((err) => {
-            showToast("Error editing movie: " + error.message);
-          });
       }
     }
   };
 
   return (
-    <Dialog fullWidth maxWidth={'sm'} open={isModalOpen} onClose={closeModal}>
+    <Dialog fullWidth maxWidth={"sm"} open={isModalOpen} onClose={closeModal}>
       <div className="modal-content wider-modal">
         <div className="header-container">
           <FontAwesomeIcon
@@ -167,15 +192,12 @@ function DetailsMovieModalView({
               label="Title"
               variant="outlined"
               className="input-field w-full"
-              defaultValue={title}
+              value={title}
               onChange={(e) => {
                 setTitle(e.target.value);
               }}
-              InputProps={{
-                style: { fontFamily: "Sanchez" }
-              }}
               InputLabelProps={{
-                style: { fontFamily: "Sanchez" }
+                style: { fontFamily: "Sanchez" },
               }}
             />
           </div>
@@ -189,11 +211,8 @@ function DetailsMovieModalView({
               onChange={(e) => {
                 setDirector(e.target.value);
               }}
-              InputProps={{
-                style: { fontFamily: "Sanchez" }
-              }}
               InputLabelProps={{
-                style: { fontFamily: "Sanchez" }
+                style: { fontFamily: "Sanchez" },
               }}
             />
           </div>
@@ -202,14 +221,15 @@ function DetailsMovieModalView({
               onChange={(e, value) => setCategory(value)}
               value={category}
               options={availableCategories.map((c) => c.name)}
-              renderInput={(params) => <TextField {...params} label="Category" 
-              InputProps={{
-                style: { fontFamily: "Sanchez" }
-              }}
-              InputLabelProps={{
-                style: { fontFamily: "Sanchez" }
-              }}
-              />}
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  label="Category"
+                  InputLabelProps={{
+                    style: { fontFamily: "Sanchez" },
+                  }}
+                />
+              )}
             />
           </div>
           <div className="field-group mt-4">
@@ -277,7 +297,6 @@ function DetailsMovieModalView({
           </div>
         </DialogContent>
       </div>
-      <ToastContainer />
     </Dialog>
   );
 }

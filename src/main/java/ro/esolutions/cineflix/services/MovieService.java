@@ -7,10 +7,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import ro.esolutions.cineflix.DTO.Movie.*;
 import ro.esolutions.cineflix.DTO.UserCineflix.UserDTO;
-import ro.esolutions.cineflix.entities.Category;
-import ro.esolutions.cineflix.entities.Movie;
-import ro.esolutions.cineflix.entities.MovieHistory;
-import ro.esolutions.cineflix.entities.UserCineflix;
+import ro.esolutions.cineflix.entities.*;
 import ro.esolutions.cineflix.exceptions.Category.CategoryNotFoundException;
 import ro.esolutions.cineflix.exceptions.Movie.MovieIsNotRented;
 import ro.esolutions.cineflix.exceptions.Movie.MovieNotFoundException;
@@ -20,6 +17,7 @@ import ro.esolutions.cineflix.mapper.MovieHistoryMapper;
 import ro.esolutions.cineflix.mapper.MovieMapper;
 import ro.esolutions.cineflix.repositories.CategoryRepository;
 import ro.esolutions.cineflix.repositories.MovieHistoryRepository;
+import ro.esolutions.cineflix.repositories.MovieImageDataRepository;
 import ro.esolutions.cineflix.repositories.MovieRepository;
 import ro.esolutions.cineflix.repositories.UserCineflixRepository;
 import ro.esolutions.cineflix.specification.GenericSpecification;
@@ -47,6 +45,8 @@ public class MovieService {
 
     private final UserCineflixRepository userCineflixRepository;
 
+
+    private final MovieImageDataRepository movieImageDataRepository;
 
     public static final String USERNAME = "movieHistories.rentedBy.username";
     public static final String MOVIE_HISTORIES_RENTED_UNTIL = "movieHistories.rentedUntil";
@@ -158,9 +158,10 @@ public class MovieService {
                 .orElseThrow(() -> new MovieNotFoundException("Movie to be deleted does not exist"));
         if (!movieFound.isAvailable()) {
             String userName = getRentedBy(id);
-            throw new MovieNotAvailableException("Movie is being watched by :" + userName
-                    + "You will be able to delete it after it's been returned");
+            throw new MovieNotAvailableException("Movie is being watched by: " + userName
+                    + ". You will be able to delete it after it's been returned");
         }
+        movieImageDataRepository.deleteByMovie_Id(id);
         movieHistoryRepository.deleteMovieHistoryByMovie_Id(id);
         movieRepository.deleteById(id);
     }

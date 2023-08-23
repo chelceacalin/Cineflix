@@ -191,10 +191,7 @@ function AddNewMovieModalWindow({
             onChange={(e, value) => setCategory(value)}
             value={category}
             options={availableCategories.map((c) => c.name)}
-            renderInput={(params) => <TextField {...params} label="Category" 
-            InputProps={{
-              style: { fontFamily: "Sanchez" }
-            }}
+            renderInput={(params) => <TextField {...params} label="Category"
             InputLabelProps={{
               style: { fontFamily: "Sanchez" }
             }}
@@ -251,7 +248,7 @@ function AddNewMovieModalWindow({
                 Save
               </Button>
             </div>
-            
+
             <div className="flex-1">
               <Button
                 type="button"
@@ -267,7 +264,6 @@ function AddNewMovieModalWindow({
           </div>
         </DialogContent>
       </div>
-      <ToastContainer />
     </Dialog>
   );
 }
