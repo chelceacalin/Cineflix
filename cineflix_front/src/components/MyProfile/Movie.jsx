@@ -62,44 +62,45 @@ function Movie({
         </div>
       </td>
       <td className={classes}>
-        <div>
-          <button
-            onClick={handleDetailsOpen}
-            className="inline-block rounded  px-3 mr-4 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-blue-marine outlined-button"
-          >
-            Details
-          </button>
+        <button
+          onClick={handleDetailsOpen}
+          className="inline-block rounded w-full px-3 mr-4 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-blue-marine outlined-button"
+        >
+          Details
+        </button>
 
-          {detailsModalOpen && (
-            <DetailsMovieModalView
-              isModalOpen={detailsModalOpen}
-              closeModal={handleDetailsClose}
-              defaultTitle={title}
-              defaultDirector={director}
-              defaultCategory={category}
-              id={id}
-              setTriggerRefresh={setTriggerRefresh}
-              triggerRefresh={triggerRefresh}
-            />
-          )}
+        {detailsModalOpen && (
+          <DetailsMovieModalView
+            isModalOpen={detailsModalOpen}
+            closeModal={handleDetailsClose}
+            defaultTitle={title}
+            defaultDirector={director}
+            defaultCategory={category}
+            id={id}
+            setTriggerRefresh={setTriggerRefresh}
+            triggerRefresh={triggerRefresh}
+          />
+        )}
+      </td>
+      <td className={classes}>
+        <button
+          onClick={handleDeleteOpen}
+          className="inline-block w-full rounded px-3 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-white contained-button"
+        >
+          Delete
+        </button>
 
-          <button
-            onClick={handleDeleteOpen}
-            className="inline-block rounded px-3 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-white contained-button"
-          >
-            Delete
-          </button>
-
-          {deleteModalOpen && (
-            <DeleteMovieModalView
-              isModalOpen={deleteModalOpen}
-              closeModal={handleDeleteClose}
-              title={title}
-              category={category}
-              deleteMovie={""}
-            />
-          )}
-        </div>
+        {deleteModalOpen && (
+          <DeleteMovieModalView
+            isModalOpen={deleteModalOpen}
+            closeModal={handleDeleteClose}
+            title={title}
+            category={category}
+            triggerRefresh={triggerRefresh}
+            setTriggerRefresh={setTriggerRefresh}
+            id={id}
+          />
+        )}
       </td>
     </tr>
   );

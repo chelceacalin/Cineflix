@@ -126,7 +126,7 @@ function MyProfile() {
     <MyProfileFilterComponent filterInput={getFilterInput}/>
     <div className="bg-grey-texture w-full">
     <div className="w-full h-full px-10 py-5">
-        <table className="w-full min-w-max bg-white border-2 table-auto text-left">
+        <table className="movi w-full min-w-max bg-white border-2 table-auto text-left">
           <thead className="bg-basic-red text-white">
             <tr>
               {TABLE_HEAD.slice(0, TABLE_HEAD.length - 1).map((elem) => {
@@ -210,8 +210,8 @@ function MyProfile() {
               <th className="border-b-white p-4 ">
                 <div>Actions</div>
               </th>
-              <th className="border-b-white p-2">
-                <button onClick={handleOpen} className="bg-basic-red text-white border border-white hover:border-hover-cream hover:text-hover-cream py-2 px-6">
+              <th className="border-b-white p-4">
+                <button onClick={handleOpen} className="white-outlined-button py-2 px-3">
                   Add New
                 </button>
                 <AddNewMovieModalWindow
