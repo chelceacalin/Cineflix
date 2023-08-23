@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Button } from "@mui/material";
+import ViewMovieDetailsModalWindow from "./ViewMovieDetailsModalWindow.jsx";
 import RentMovieModalView from "./RentMovieModalView";
 function RentedMovie({
   id,
@@ -71,12 +72,16 @@ function RentedMovie({
         </div>
       </td>
       <td className={classes}>
-        <button
+        <Button
           onClick={handleDetailsOpen}
           className="inline-block rounded  px-3 mr-4 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-blue-marine outlined-button"
         >
           Details
-        </button>
+        </Button>
+          <ViewMovieDetailsModalWindow
+              isModalOpen={detailsModalOpen}
+              closeModal={handleDetailsClose}
+          />
       </td>
       <td>
         <Button
