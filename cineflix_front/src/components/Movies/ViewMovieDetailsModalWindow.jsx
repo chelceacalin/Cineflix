@@ -13,8 +13,8 @@ function ViewMovieDetailsModalWindow({isModalOpen, closeModal,title,
                                          category,
                                          director,isAvailable, rentedUntil, rentedBy, rentedOn, rentedDate, id}) {
 
-    const STATUS_AVAILABLE = 'AVAILABLE';
-    const STATUS_UNAVAILABLE = 'UNAVAILABLE';
+    const STATUS_AVAILABLE = 'Available';
+    const STATUS_UNAVAILABLE = 'Unavailable';
     var status;
 
     if(isAvailable) {
