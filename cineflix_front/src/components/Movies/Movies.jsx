@@ -271,7 +271,8 @@ function Movies() {
             </tbody>
           </table>
           </div>
-          <div className="w-full bg-basic-red flex flex-wrap py-3">
+          { !movies.length && (<p className="text-center text-2xl">No matching results found</p> )}
+          <div className="w-full bg-basic-red flex justify-between flex-wrap py-3 border-2">
             <div className=" inline-flex marginResizable">
               <p className="text-white font-normal">Results per page: </p>
               <p className="ml-5">

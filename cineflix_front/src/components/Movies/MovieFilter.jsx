@@ -152,7 +152,7 @@ function MovieFilter({ filterInput }) {
           onChange={(date) => {
             setRentedDate(date);
           }}
-          className="rounded-lg w-52 border-2 border-gray-500 pl-1 mt-2 mb-2"
+          className="rounded-lg w-48 border-2 border-gray-500 pl-1 mt-2 mb-2"
         />
 
         <label>Rented Until:</label>
