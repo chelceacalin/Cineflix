@@ -27,37 +27,40 @@ function FilterComponent({ filterInput }) {
   }, [firstName, lastName, email, admin, user]);
 
   return (
-    <div className="filterContainer border-r-2 space-y-4 ml-6">
-      <div className="mt-10 mr-6">
+    <div className="space-y-4 ml-7 mr-7">
+      <div className="mt-10">
         <TextField
           id="outlined-search"
           name="firstName"
           label="Search first name"
           type="search"
+          className="w-48"
           onChange={(e) => setFirstName(e.target.value)}
           InputLabelProps={{
             style: { fontFamily: "Sanchez" }
           }}
         />
       </div>
-      <div className="mt-10 mr-6">
+      <div className="mt-10">
         <TextField
           id="outlined-search"
           name="lastName"
           label="Search last name"
           type="search"
+          className="w-48"
           onChange={(e) => setLastName(e.target.value)}
           InputLabelProps={{
             style: { fontFamily: "Sanchez" }
           }}
         />
       </div>
-      <div className="mt-4 mr-6">
+      <div className="mt-4">
         <TextField
           id="outlined-search"
           name="email"
           label="Search email"
           type="search"
+          className="w-48"
           onChange={(e) => setEmail(e.target.value)}
           InputLabelProps={{
             style: { fontFamily: "Sanchez" }

@@ -5,14 +5,11 @@ import {
   Button,
   Dialog,
   DialogContent,
-  FormControl,
-  InputLabel,
-  NativeSelect,
   TextField,
 } from "@mui/material";
 import { Autocomplete } from "@mui/material";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faL, faTimes } from "@fortawesome/free-solid-svg-icons";
+import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import "./css/AddNewMovieModalWindow.css";
 import axios from "axios";
 import { UserLoginContext } from "../../utils/context/LoginProvider";
@@ -191,7 +188,7 @@ function AddNewMovieModalWindow({
             onChange={(e, value) => setCategory(value)}
             value={category}
             options={availableCategories.map((c) => c.name)}
-            renderInput={(params) => <TextField {...params} label="Category"
+            renderInput={(params) => <TextField {...params} label="Category" 
             InputLabelProps={{
               style: { fontFamily: "Sanchez" }
             }}
@@ -264,6 +261,7 @@ function AddNewMovieModalWindow({
           </div>
         </DialogContent>
       </div>
+      <ToastContainer />
     </Dialog>
   );
 }
