@@ -26,6 +26,8 @@ function RentMovieModalView({
     dayjs.updateLocale('en', {
         weekStart: 1
     })
+    const today = dayjs();
+    const maxDate = today.add(14, "day");
   return (
     <Dialog
       fullWidth
@@ -49,7 +51,9 @@ function RentMovieModalView({
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <DatePicker
               label={<span style={{ fontFamily: "Sanchez" }}>Return date</span>}
-              defaultValue={dayjs('2022-04-17')}
+              defaultValue={dayjs()}
+              minDate={today}
+              maxDate={maxDate}
               slotProps={{
                 textField: {
                   inputProps: {
