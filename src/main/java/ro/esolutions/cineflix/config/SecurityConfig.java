@@ -18,7 +18,6 @@ import org.springframework.security.oauth2.core.oidc.OidcUserInfo;
 import org.springframework.security.oauth2.core.oidc.user.OidcUserAuthority;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
-import org.springframework.web.client.RestTemplate;
 import ro.esolutions.cineflix.entities.UserCineflix;
 import ro.esolutions.cineflix.services.UserCineflixService;
 
@@ -42,7 +41,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.OPTIONS).permitAll()
                         .requestMatchers("/users/").hasRole("ADMIN")
                         .requestMatchers("/users/update/**").hasRole("ADMIN")
-//                        .requestMatchers("/movies/**").hasAnyRole("USER", "ADMIN")
+                        .requestMatchers("/movies/**").hasAnyRole("USER", "ADMIN")
                         .requestMatchers("/category/**").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )
