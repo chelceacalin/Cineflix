@@ -89,26 +89,28 @@ function CreateCategoryModalWindow({
             }}
           />
         </div>
-        <div className="mt-2 mb-2">
-          <Button
-            className="contained-button w-full"
-            variant="contained"
-            onClick={createCategory}
-          >
-            Add
-          </Button>
-        </div>
-        <div className="mb-2">
-          <Button
-            className="outlined-button w-full"
-            variant="outlined"
-            onClick={() => {
-              setCategoryDTO("");
-              closeModal();
-            }}
-          >
-            Cancel
-          </Button>
+        <div className='flex gap-x-2 mt-6'>
+          <div className="flex-1">
+            <Button
+              className="contained-button w-full"
+              variant="contained"
+              onClick={createCategory}
+            >
+              Add
+            </Button>
+          </div>
+          <div className="flex-1">
+            <Button
+              className="outlined-button w-full"
+              variant="outlined"
+              onClick={() => {
+                setCategoryDTO("");
+                closeModal();
+              }}
+            >
+              Cancel
+            </Button>
+          </div>
         </div>
       </DialogContent>
       <ToastContainer />
