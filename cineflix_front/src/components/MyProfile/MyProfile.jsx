@@ -43,7 +43,7 @@ function MyProfile() {
   const [triggerRefresh, setTriggerRefresh] = useState(false);
   const { username } = useContext(UserLoginContext);
   const [selectedItem, setSelectedItem] = useState("");
- 
+
   const navigate=useNavigate()
   const location = useLocation();
 
@@ -140,11 +140,14 @@ function MyProfile() {
 
   return (
     <>
-      <MyProfileFilterComponent filterInput={getFilterInput} />
-      <div className="bg-grey-texture w-full">
+    <div className="h-screen border-r-2">
+      <MyProfileFilterComponent filterInput={getFilterInput}/>
+    </div>
+    <div className="bg-grey-texture w-full h-screen px-10">
         <MyProfileRiredirectButtons/>
-        <div className="w-full h-full px-4 ">
-          <table className="w-full min-w-max bg-white border-2 table-auto text-left">
+        <div className="w-full h-[840px] flex flex-col bg-white justify-between border-2">
+        <div className="overflow-y-auto">
+          <table className="w-full min-w-max bg-white border-b-2 table-auto text-left">
             <thead className="bg-basic-red text-white">
               <tr>
                 {TABLE_HEAD.slice(0, TABLE_HEAD.length - 1).map((elem) => {
@@ -287,34 +290,34 @@ function MyProfile() {
               )}
             </tbody>
           </table>
-          <span className="w-full bg-basic-red flex flex-wrap py-3 mb-4 border-2">
-            <span className=" inline-flex marginResizable">
+        </div>
+            { !movies.length && (<p className="text-center text-2xl">No matching results found</p> )}
+          <div className="w-full bg-basic-red flex justify-between flex-wrap py-3 border-2">
+            <div className=" inline-flex marginResizable">
               <p className="text-white font-normal">Results per page: </p>
               <p className="ml-5">
                 <select
-                  name="cars"
-                  id="cars"
-                  form="carform"
                   onChange={handleSelectChange}
-                  className="cursor-pointer"
+                  className="bg-basic-red cursor-pointer text-white font-bold border-2 p-1"
                 >
                   <option value="15">15</option>
                   <option value="10">10</option>
                   <option value="5">5</option>
                 </select>
               </p>
-            </span>
-            <div className="ml-10 justify-center w-1/2 items-center">
-              <Pagination
-                pageNo={pageNo}
-                pageSize={pageSize}
-                totalPages={totalPages}
-                updatePageNumber={updatePageNumber}
-                responseLength={totalMovies}
-                nrCurrentMovies={movies.length}
-              />
             </div>
-          </span>
+              <div className="justify-center items-center">
+                  { movies.length > 0 && (
+                      <Pagination
+                          pageNo={pageNo}
+                          pageSize={pageSize}
+                          totalPages={totalPages}
+                          updatePageNumber={updatePageNumber}
+                          responseLength={totalMovies}
+                          nrCurrentMovies={movies.length}
+                      /> )}
+              </div>
+          </div>
         </div>
       </div>
     </>
