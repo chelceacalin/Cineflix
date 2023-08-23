@@ -44,10 +44,10 @@ function MyProfile() {
   const { username } = useContext(UserLoginContext);
   const [selectedItem, setSelectedItem] = useState("");
  
-  const navigate=useNavigate()
+  const navigate = useNavigate();
   const location = useLocation();
 
-  const [selectedColor,setSelectedColor]=useState("")
+  const [selectedColor, setSelectedColor] = useState("");
 
 
   let handleClick = (fieldName) => {

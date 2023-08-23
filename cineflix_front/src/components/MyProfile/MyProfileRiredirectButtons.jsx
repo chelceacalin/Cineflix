@@ -1,33 +1,43 @@
-import React from "react";
+import React, { useContext } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import './css/MyProfileFilterComponent.css'
+import "./css/MyProfileFilterComponent.css";
+import { UserLoginContext } from "../../utils/context/LoginProvider";
+
 function MyProfileRiredirectButtons() {
   const location = useLocation();
-  const navigate=useNavigate();
+  const navigate = useNavigate();
+  const { username } = useContext(UserLoginContext);
 
-
-  const myMoviesClass=location.pathname.includes('myprofile')?'aBackgroundClick text-white':"";
-  const myRentedMoviesClass=location.pathname.includes('myrentedMovies')?'aBackgroundClick text-white':"";
+  const myMoviesClass = location.pathname.includes("myprofile")&&!location.pathname.includes("myRentedMovies")
+    ? "aBackgroundClick text-white"
+    : "";
+  const myRentedMoviesClass = location.pathname.includes("myRentedMovies")
+    ? "aBackgroundClick text-white"
+    : "";
   return (
-      <div >
-        <button
-          className={`p-4 w-60 border text-black ${myMoviesClass}  mt-8 ml-4 `}
-          onClick={(e) => {
-            e.preventDefault();
-            //  navigate(`/myprofile/${username}`)
-          }}
-        >
-          {" "}
-          My Movies
-        </button>
-
-        <button className={`p-4  w-60 border text-black ${myRentedMoviesClass} mt-8 `}
-        onClick={(e)=>{
-          e.preventDefault()
-          //navigate('/roleManagement')
+    <div>
+      <button
+        className={`p-4 w-60 border text-black ${myMoviesClass}  mt-8 ml-4 `}
+        onClick={(e) => {
+          e.preventDefault();
+           navigate(`/myprofile/${username}`)
         }}
-        > My Rented Movies</button>
-      </div>
+      >
+        {" "}
+        My Movies
+      </button>
+
+      <button
+        className={`p-4  w-60 border text-black ${myRentedMoviesClass} mt-8 `}
+        onClick={(e) => {
+          e.preventDefault();
+          navigate(`/myprofile/myRentedMovies/${username}`);
+        }}
+      >
+        {" "}
+        My Rented Movies
+      </button>
+    </div>
   );
 }
 
