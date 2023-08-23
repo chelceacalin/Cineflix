@@ -114,14 +114,14 @@ function DetailsMovieModalView({
       showToast("Title should start with an uppercase letter!");
       valid = false;
     }
-  
+
     if (director.charAt(0) !== director.charAt(0).toUpperCase()) {
       showToast("Director should start with an uppercase letter!");
       valid = false;
     }
     return valid;
   };
-  
+
 
   const handleSave = () => {
     if (validRequest()) {
@@ -196,9 +196,6 @@ function DetailsMovieModalView({
               onChange={(e) => {
                 setTitle(e.target.value);
               }}
-              InputProps={{
-                style: { fontFamily: "Sanchez" },
-              }}
               InputLabelProps={{
                 style: { fontFamily: "Sanchez" },
               }}
@@ -213,9 +210,6 @@ function DetailsMovieModalView({
               defaultValue={director}
               onChange={(e) => {
                 setDirector(e.target.value);
-              }}
-              InputProps={{
-                style: { fontFamily: "Sanchez" },
               }}
               InputLabelProps={{
                 style: { fontFamily: "Sanchez" },
@@ -309,6 +303,7 @@ function DetailsMovieModalView({
 
 const showToast = (message, color = "bg-red-500") => {
   const toastType = color === "bg-green-500" ? toast.success : toast.error;
+
   toastType(message, {
     className: `${color} text-black p-4 rounded-lg`,
     position: "top-right",
