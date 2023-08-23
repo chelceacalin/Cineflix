@@ -4,7 +4,6 @@ import {
   Button,
   Dialog,
   DialogContent,
-  FormControl,
 } from "@mui/material";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import axios from "axios";
@@ -80,7 +79,6 @@ function RentMovieModalView({
             </div>
             <div className="px-2 w-1/2">
               <Button className="contained-button w-full" variant="contained">
-                {" "}
                 Rent
               </Button>
             </div>
