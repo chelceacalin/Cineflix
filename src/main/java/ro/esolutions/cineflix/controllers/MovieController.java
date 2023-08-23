@@ -1,16 +1,21 @@
 package ro.esolutions.cineflix.controllers;
 
+import jakarta.validation.Valid;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
-import ro.esolutions.cineflix.DTO.Movie.MovieAddDTO;
-import ro.esolutions.cineflix.DTO.Movie.MovieDTO;
-import ro.esolutions.cineflix.DTO.Movie.MovieFilterDTO;
-import ro.esolutions.cineflix.entities.Movie;
+import ro.esolutions.cineflix.DTO.Movie.*;
 import ro.esolutions.cineflix.services.MovieService;
 
+import javax.naming.Binding;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @RestController
@@ -47,5 +52,32 @@ public class MovieController {
     @GetMapping("/{id}")
     public MovieAddDTO findMovieById(@PathVariable UUID id) {
         return movieService.findMovieByID(id);
+    }
+
+    @GetMapping("/rent/{id}")
+    public MovieRentDTO findMovieToRent(@PathVariable UUID id) {
+        return movieService.findMovieToRent(id);
+    }
+
+    @PostMapping("/history")
+    public ResponseEntity<?> addMovieHistory(@Valid @RequestBody MovieHistoryDTO movieHistoryDTO, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            List<String> validationErrors = new ArrayList<>();
+
+            for (FieldError error : bindingResult.getFieldErrors()) {
+                validationErrors.add(error.getDefaultMessage());
+            }
+
+            return new ResponseEntity<>(validationErrors, HttpStatus.BAD_REQUEST);
+        }
+
+        Optional<String> errorOptional = movieService.validateMovieHistory(movieHistoryDTO);
+
+        if (errorOptional.isEmpty()) {
+            movieService.addMovieHistory(movieHistoryDTO);
+            return new ResponseEntity<>(movieHistoryDTO, HttpStatus.CREATED);
+        } else {
+            return new ResponseEntity<>(errorOptional.get(), HttpStatus.BAD_REQUEST);
+        }
     }
 }
