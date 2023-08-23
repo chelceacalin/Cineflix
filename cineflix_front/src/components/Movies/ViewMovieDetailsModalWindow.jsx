@@ -9,8 +9,8 @@ import {DatePicker} from '@mui/x-date-pickers/DatePicker';
 
 
 function ViewMovieDetailsModalWindow({isModalOpen, closeModal}) {
-    var status;
-    const AVAILABLE = "available";
+    var status = "unavailable";
+    const AVAILABLE = "unavailable";
     var isAvailable = false;
     if(status == AVAILABLE) {
         isAvailable = true;
@@ -203,38 +203,6 @@ function ViewMovieDetailsModalWindow({isModalOpen, closeModal}) {
                             )}
 
                     </Grid>
-                </Grid>
-                <Grid container spacing={47}>
-                    <Grid item xs={1}>
-                        <div className='mt-6 ml-24 mb-20'>
-                        <Button disabled={!isAvailable}
-                            className="outlined-button w-full"
-                            variant="outlined"
-                            sx={{
-                                width: { md: 260 },
-                            }}
-
-                        >
-                            Rent movie
-                        </Button>
-                        </div>
-                    </Grid>
-
-                    <Grid item xs={1}>
-                        <div className='mt-6 ml-28 mb-20'>
-                            <Button
-                                className="contained-button"
-                                variant="contained"
-                                sx={{
-                                    width: { md: 260 },
-                                }}
-
-                            >
-                                Add to wishlist
-                            </Button>
-                        </div>
-                    </Grid>
-
                 </Grid>
             </DialogContent>
         </Dialog>
