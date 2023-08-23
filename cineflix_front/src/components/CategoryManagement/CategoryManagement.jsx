@@ -23,6 +23,7 @@ function CategoryManagement() {
   let [totalPages, setTotalPages] = useState("");
   let [totalCategories, setTotalCategories] = useState(0);
   let [signalCall, setSignalCall] = useState(false);
+  let noCategoriesFound = false;
 
   useEffect(() => {
     axios.get(`/category`).then((data) => {
@@ -96,88 +97,93 @@ function CategoryManagement() {
 
   return (
     <>
-      <FilterCategory filterInput={getFilterInput} />
-      <div className="bg-grey-texture w-full">
-        <div className="w-full h-full px-10 py-5">
-          <table className="cater w-full text-left bg-white border-2">
-            <thead className="bg-basic-red text-white">
-              <tr>
-                {TABLE_HEAD.slice(0, TABLE_HEAD.length - 1).map((elem) => {
+      <div className="filterContainer h-screen border-r-2">
+        <FilterCategory filterInput={getFilterInput} />
+      </div>
+      <div className="bg-grey-texture w-full h-screen px-10 py-10 ">
+        <div className="w-full h-full flex flex-col bg-white justify-between border-2">
+          <div className="overflow-y-auto">
+            <table className="cater w-full text-left bg-white border-b-2">
+              <thead className="bg-basic-red sticky top-0 z-30 text-white">
+                <tr>
+                  {TABLE_HEAD.slice(0, TABLE_HEAD.length - 1).map((elem) => {
+                    return (
+                      <th
+                        key={elem}
+                        className={`border-b-white p-4 ${elem !== 'Actions' ? 'hover' : ''}`}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          if (e.target.textContent === "Category") {
+                            setDirection(!direction);
+                          }
+                        }}
+                      >
+                        <div className="">
+                          {elem}
+                          <svg
+                            data-column={elem}
+                            style={{ display: "inline-block" }}
+                            width="16"
+                            height="16"
+                            viewBox="0 0 16 16"
+                            fill="none"
+                            xmlns="http://www.w3.org/2000/svg"
+                            onClick={(e) => {
+                              const columnName =
+                                e.currentTarget.getAttribute("data-column");
+                              handleClick(columnName.toLowerCase());
+                            }}
+                          >
+                            {elem != "Actions" && (
+                              <SortIcon />
+                            )}
+                          </svg>
+                        </div>
+                      </th>
+                    );
+                  })}
+                  <th className="border-b-white p-4">
+                    <div>
+                      <Button onClick={handleOpen}
+                        className="white-outlined-button"
+                        variant="outlined"
+                      >
+                        Add new
+                      </Button>
+                      <CreateCategoryModalWindow
+                        isModalOpen={open}
+                        closeModal={handleClose}
+                        signal={signal}
+                        setErrorMessage={setErrorMessage}
+                        errorMessage={errorMessage}
+                      />
+                    </div>
+                  </th>
+                </tr>
+              </thead>
+              <tbody className="text-blue-marine">
+                {categories.map(({ name, id }, index) => {
+                  const isLast = index === categories.length - 1;
+                  const classes = isLast ? "px-4 py-2" : "px-4 py-2 border-b-2";
+
                   return (
-                    <th
-                      key={elem}
-                      className={`border-b-white p-4 ${elem !== 'Actions' ? 'hover' : ''}`}
-                      onClick={(e) => {
-                        e.preventDefault();
-                        if (e.target.textContent === "Category") {
-                          setDirection(!direction);
-                        }
-                      }}
-                    >
-                      <div className="">
-                        {elem}
-                        <svg
-                          data-column={elem}
-                          style={{ display: "inline-block" }}
-                          width="16"
-                          height="16"
-                          viewBox="0 0 16 16"
-                          fill="none"
-                          xmlns="http://www.w3.org/2000/svg"
-                          onClick={(e) => {
-                            const columnName =
-                              e.currentTarget.getAttribute("data-column");
-                            handleClick(columnName.toLowerCase());
-                          }}
-                        >
-                          {elem != "Actions" && (
-                            <SortIcon />
-                          )}
-                        </svg>
-                      </div>
-                    </th>
-                  );
-                })}
-                <th className="border-b-white p-4">
-                  <div>
-                    <Button onClick={handleOpen}
-                      className="white-outlined-button"
-                      variant="outlined"
-                    >
-                      Add new
-                    </Button>
-                    <CreateCategoryModalWindow
-                      isModalOpen={open}
-                      closeModal={handleClose}
+                    <Category
+                      id={id}
+                      name={name}
+                      classes={classes}
+                      updateCategory={updateCategory}
+                      key={name}
                       signal={signal}
                       setErrorMessage={setErrorMessage}
                       errorMessage={errorMessage}
                     />
-                  </div>
-                </th>
-              </tr>
-            </thead>
-            <tbody className="text-blue-marine">
-              {categories.map(({ name, id }, index) => {
-                const isLast = index === categories.length - 1;
-                const classes = isLast ? "px-4 py-2" : "px-4 py-2 border-b-2";
-
-                return (
-                  <Category
-                    id={id}
-                    name={name}
-                    classes={classes}
-                    updateCategory={updateCategory}
-                    key={name}
-                    signal={signal}
-                    setErrorMessage={setErrorMessage}
-                    errorMessage={errorMessage}
-                  />
-                );
-              })}
-            </tbody>
-          </table>
-          <div className="bg-basic-red flex justify-between flex-wrap py-3 mb-4 border-2">
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+          { !categories.length && (<p className="text-center text-2xl">No matching results found</p> )}
+          <div className="bg-basic-red flex justify-between flex-wrap py-3 border-2">
             <div className=" inline-flex marginResizable">
               <p className="text-white font-normal">
                 Results per page:{" "}

@@ -10,8 +10,8 @@ function FilterCategory({ filterInput }) {
     filterInput(array);
   }, [name]);
   return (
-    <div className="filterContainer space-y-4 ml-6 border-r-2">
-      <div className="mt-10 mr-6">
+    <div className="space-y-4 ml-6 mr-6">
+      <div className="mt-10">
         <TextField
           id="outlined-search"
           name="name"

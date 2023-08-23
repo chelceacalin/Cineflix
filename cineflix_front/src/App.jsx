@@ -61,7 +61,9 @@ function App() {
     if (isLoggedIn) {
       return (
         <>
-          <Navbar />
+          <div className="h-screen">
+            <Navbar />
+          </div>
           <Routes>
             <Route element={<Authenticated />}>
 
