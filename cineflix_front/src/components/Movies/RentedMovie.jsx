@@ -13,6 +13,7 @@ function RentedMovie({
   triggerRefresh,
   setTriggerRefresh,
   rentedOn,
+    rentedDate
 }) {
   const [detailsModalOpen, setDetailsModalOpen] = useState(false);
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
@@ -78,6 +79,8 @@ function RentedMovie({
               rentedUntil={rentedUntil}
               rentedOn={rentedOn}
               rentedBy={rentedBy}
+              rentedDate={rentedDate}
+              id={id}
           />
       </td>
       <td>

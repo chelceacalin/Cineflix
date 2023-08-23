@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useEffect, useState} from 'react'
 import {Box, Button, Card, CardMedia, Dialog, DialogContent, Grid, TextField} from "@mui/material";
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {faTimes} from '@fortawesome/free-solid-svg-icons';
@@ -6,11 +6,50 @@ import dayjs from "dayjs";
 import {AdapterDayjs} from '@mui/x-date-pickers/AdapterDayjs';
 import {LocalizationProvider} from '@mui/x-date-pickers/LocalizationProvider';
 import {DatePicker} from '@mui/x-date-pickers/DatePicker';
+import axios from "axios";
 
 
 function ViewMovieDetailsModalWindow({isModalOpen, closeModal,title,
                                          category,
-                                         director,isAvailable, rentedUntil, rentedBy, rentedOn}) {
+                                         director,isAvailable, rentedUntil, rentedBy, rentedOn, rentedDate, id}) {
+
+    const STATUS_AVAILABLE = 'AVAILABLE';
+    const STATUS_UNAVAILABLE = 'UNAVAILABLE';
+    var status;
+
+    if(isAvailable) {
+        status = STATUS_AVAILABLE;
+    } else {
+        status = STATUS_UNAVAILABLE;
+    }
+    const [selectedImage, setSelectedImage] = useState(null);
+    const [description, setDescription] = useState("");
+    const [owner, setOwner] = useState("");
+    const fetchMovieImage = async () => {
+        try {
+            const response = await axios.get(`/imagesByMovieID/${id}`, {
+                responseType: "blob",
+            });
+
+            const blob = new Blob([response.data], { type: "image/png" });
+            const avatarUrl = URL.createObjectURL(blob);
+
+            setSelectedImage(avatarUrl);
+        } catch (error) {
+            console.error(error);
+        }
+    };
+    useEffect(() => {
+        axios.get(`/movies/${id}`).then((data) => {
+            if (data.data.description.length > 0) {
+                setDescription(data.data.description);
+            }
+            setOwner(data.data.owner_username)
+        });
+        fetchMovieImage();
+    }, []);
+
+
 
     return (
         <Dialog fullWidth maxWidth={'md'} open={isModalOpen} onClose={closeModal}>
@@ -77,7 +116,7 @@ function ViewMovieDetailsModalWindow({isModalOpen, closeModal,title,
                             <TextField
                                 id="outlined-read-only-input"
                                 label="Description"
-                                defaultValue="Description"
+                                defaultValue={description}
                                 multiline={true}
                                 sx={{
                                     width: { md: 300 },
@@ -92,14 +131,14 @@ function ViewMovieDetailsModalWindow({isModalOpen, closeModal,title,
                                 }}
                             />
                         </div>
-                        <div className='mt-6 ml-20'>
+                        <div className='mt-6 ml-20 mb-24'>
                             <TextField
                                 id="outlined-read-only-input"
                                 label="Status"
                                 sx={{
                                     width: { md: 300 },
                                 }}
-                                defaultValue="Status"
+                                defaultValue={status}
                                 InputProps={{
                                     readOnly: true,
                                     style: { fontFamily: "Sanchez" }
@@ -115,7 +154,7 @@ function ViewMovieDetailsModalWindow({isModalOpen, closeModal,title,
                             <TextField
                                 id="outlined-read-only-input"
                                 label="Owner"
-                                defaultValue="Owner"
+                                defaultValue={owner}
                                 sx={{
                                     width: { md: 300 },
                                 }}
@@ -143,17 +182,17 @@ function ViewMovieDetailsModalWindow({isModalOpen, closeModal,title,
                                     sx={{ height: '100%',
                                         backgroundSize: 'contain'
                                 }}
-                                    image="https://media.istockphoto.com/id/911590226/vector/movie-time-vector-illustration-cinema-poster-concept-on-red-round-background-composition-with.jpg?s=612x612&w=0&k=20&c=QMpr4AHrBgHuOCnv2N6mPUQEOr5Mo8lE7TyWaZ4r9oo="
+                                 image = {selectedImage}
                                 />
                             </Card>
                         </div>
-                        { isAvailable && (
+                        { !isAvailable && (
                         <div className='mt-6 ml-28'>
                             <LocalizationProvider dateAdapter={AdapterDayjs}>
                                 <DatePicker
                                     label={<span style={{ fontFamily: "Sanchez" }}>Rented on</span>}
 
-                                    defaultValue={dayjs('2022-04-17')}
+                                    defaultValue={dayjs(rentedDate)}
                                     slotProps={{textField: { inputProps: {
                                                 style: { fontFamily: "Sanchez" },
                                                 }}
@@ -169,12 +208,12 @@ function ViewMovieDetailsModalWindow({isModalOpen, closeModal,title,
                             </LocalizationProvider>
                         </div>
                             )}
-                        { isAvailable && (
+                        { !isAvailable && (
                         <div className='mt-6 ml-28'>
                             <LocalizationProvider dateAdapter={AdapterDayjs}>
                                 <DatePicker
                                     label={<span style={{ fontFamily: "Sanchez" }}>Rented until</span>}
-                                    defaultValue={dayjs('2024-01-17')}
+                                    defaultValue={dayjs(rentedUntil)}
                                     slotProps={{textField: { inputProps: {
                                                 style: { fontFamily: "Sanchez" },
                                             }}
@@ -188,8 +227,8 @@ function ViewMovieDetailsModalWindow({isModalOpen, closeModal,title,
                             </LocalizationProvider>
                         </div>
                         )}
-                        { isAvailable && (
-                        <div className='mt-6 ml-28 mb-24'>
+                        { !isAvailable && (
+                        <div className='mt-6 ml-28'>
                             <TextField
                                 id="outlined-read-only-input"
                                 label="Rented by"
