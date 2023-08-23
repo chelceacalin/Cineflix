@@ -198,7 +198,7 @@ public class MovieService {
         Optional<Movie> movie = movieRepository.findById(id);
 
         return movieRepository.findById(id)
-                .map(MovieMapper::toMovieRentMessageDto)
+                .map(MovieMapper::toMovieRentDto)
                 .orElseThrow(() -> new MovieNotFoundException("Movie not found"));
     }
 

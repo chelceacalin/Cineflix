@@ -46,7 +46,7 @@ public class MovieMapper {
                 .build();
     }
 
-    public static MovieRentDTO toMovieRentMessageDto(Movie movie) {
+    public static MovieRentDTO toMovieRentDto(Movie movie) {
         return MovieRentDTO.builder()
                 .title(movie.getTitle())
                 .director(movie.getDirector())
