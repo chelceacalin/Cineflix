@@ -1,17 +1,20 @@
 import {
   Checkbox,
+  FormControlLabel,
+  FormGroup,
   TextField,
+  InputLabel,
+  NativeSelect,
   Button,
 } from "@mui/material";
-import React from "react";
+import React, { useContext, useEffect, useState } from "react";
 import axios from "axios";
-import "./css/MyProfileFilterComponent.css";
 import "react-datepicker/dist/react-datepicker.css";
-import { useContext, useEffect, useState } from "react";
 import DatePicker from "react-datepicker";
 import { UserLoginContext } from "../../utils/context/LoginProvider";
+import { input } from "@material-tailwind/react";
 
-function MyProfileFilterComponent({ filterInput }) {
+function MovieFilter({ filterInput }) {
   let [title, setTitle] = useState("");
   let [director, setDirector] = useState("");
   let [category, setCategory] = useState("");
@@ -30,25 +33,25 @@ function MyProfileFilterComponent({ filterInput }) {
     });
   }, [url]);
 
-    let convertDate=(input)=>{
-        const inputDate = new Date(input);
-        const year = inputDate.getFullYear();
-        const month = ('0' + (inputDate.getMonth() + 1)).slice(-2);
-        const day = ('0' + inputDate.getDate()).slice(-2);
-        return `${year}-${month}-${day}`;
-    }
+  let convertDate = (input) => {
+    const inputDate = new Date(input);
+    const year = inputDate.getFullYear();
+    const month = ("0" + (inputDate.getMonth() + 1)).slice(-2);
+    const day = ("0" + inputDate.getDate()).slice(-2);
+    return `${year}-${month}-${day}`;
+  };
 
   useEffect(() => {
-    let date = rentedUntil?convertDate(rentedUntil):"";
+    let date = rentedUntil ? convertDate(rentedUntil) : "";
     let array = [];
     if (
-      (available == true && unavailable == true) ||
-      (available == false && unavailable == false)
+      (available === true && unavailable === true) ||
+      (available === false && unavailable === false)
     ) {
       array.push(category, director, title, "BOTH", date, rentedBy);
-    } else if (available == true && unavailable == false) {
+    } else if (available === true && unavailable === false) {
       array.push(category, director, title, "true", date, rentedBy);
-    } else if (available == false && unavailable == true) {
+    } else if (available === false && unavailable == true) {
       array.push(category, director, title, "false", date, rentedBy);
     } else array.push(category, director, title, "", date, rentedBy);
     filterInput(array);
@@ -141,7 +144,9 @@ function MyProfileFilterComponent({ filterInput }) {
         <DatePicker
           selected={rentedUntil}
           placeholderText={"Select the date"}
-          onChange={(date) => setRentedUntil(date)}
+          onChange={(date) => {
+            setRentedUntil(date);
+          }}
           className="rounded-lg w-52 border-2 border-gray-500 pl-1 mt-2"
         />
         <div className="mt-2 mb-10">
@@ -156,7 +161,7 @@ function MyProfileFilterComponent({ filterInput }) {
           </Button>
         </div>
       </div>
-      <div className="mt-10 mr-6">
+      <div className="mt-4 mr-6">
         <label className="block">Rented by:</label>
         <select
           className="input-field mt-2"
@@ -166,17 +171,19 @@ function MyProfileFilterComponent({ filterInput }) {
         >
           <option value="">Select Rented By</option>
           {usersWhoRented &&
-            usersWhoRented.map((elem, index) => (
-              elem.rentedBy !== "available"
-                ? <option key={index} value={elem.rentedBy}>
+            usersWhoRented.map((elem, index) =>
+              elem.rentedBy !== "available" ? (
+                <option key={index} value={elem.rentedBy}>
                   {elem.rentedBy}
                 </option>
-                : ""
-            ))}
+              ) : (
+                ""
+              )
+            )}
         </select>
       </div>
     </div>
   );
 }
 
-export default MyProfileFilterComponent;
+export default MovieFilter;

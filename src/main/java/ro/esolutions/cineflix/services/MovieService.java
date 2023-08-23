@@ -12,7 +12,9 @@ import ro.esolutions.cineflix.entities.Movie;
 import ro.esolutions.cineflix.entities.MovieHistory;
 import ro.esolutions.cineflix.entities.UserCineflix;
 import ro.esolutions.cineflix.exceptions.Category.CategoryNotFoundException;
+import ro.esolutions.cineflix.exceptions.Movie.MovieIsNotRented;
 import ro.esolutions.cineflix.exceptions.Movie.MovieNotFoundException;
+import ro.esolutions.cineflix.exceptions.MovieNotAvailableException;
 import ro.esolutions.cineflix.exceptions.User.UserNotFoundException;
 import ro.esolutions.cineflix.mapper.MovieHistoryMapper;
 import ro.esolutions.cineflix.mapper.MovieMapper;
@@ -44,6 +46,7 @@ public class MovieService {
     private final CategoryRepository categoryRepository;
 
     private final UserCineflixRepository userCineflixRepository;
+
 
     public static final String USERNAME = "movieHistories.rentedBy.username";
     public static final String MOVIE_HISTORIES_RENTED_UNTIL = "movieHistories.rentedUntil";
@@ -140,6 +143,26 @@ public class MovieService {
         } else {
             throw new MovieNotFoundException("Movie Not Found");
         }
+    }
+
+    public String getRentedBy(UUID id) {
+        MovieHistory movieHistory = movieHistoryRepository.findMovieHistoryByRentedUntilMostRecent(id);
+        UserCineflix userCineflix = movieHistory.getRentedBy();
+        String firstName = userCineflix.getFirstName();
+        String lastName = userCineflix.getLastName();
+        return firstName + " " + lastName;
+    }
+
+    public void deleteMovieIfNotRented(UUID id) {
+        Movie movieFound = movieRepository.findById(id)
+                .orElseThrow(() -> new MovieNotFoundException("Movie to be deleted does not exist"));
+        if (!movieFound.isAvailable()) {
+            String userName = getRentedBy(id);
+            throw new MovieNotAvailableException("Movie is being watched by :" + userName
+                    + "You will be able to delete it after it's been returned");
+        }
+        movieHistoryRepository.deleteMovieHistoryByMovie_Id(id);
+        movieRepository.deleteById(id);
     }
 
     public MovieAddDTO findMovieByID(UUID id) {

@@ -13,4 +13,7 @@ public interface MovieHistoryRepository  extends JpaRepository<MovieHistory, UUI
             "WHERE mh.movie.id = :id order by mh.rentedUntil desc limit 1")
     MovieHistory findMovieHistoryByRentedUntilMostRecent(UUID id);
 
+    void deleteMovieHistoryByMovie_Id(UUID uuid);
+
+
 }

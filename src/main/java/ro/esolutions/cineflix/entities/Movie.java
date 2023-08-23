@@ -47,4 +47,18 @@ public class Movie {
     @OneToMany(mappedBy = "movie")
     List<MovieHistory> movieHistories;
 
+    @Override
+    public String toString() {
+        return "Movie{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", director='" + director + '\'' +
+                ", description='" + description + '\'' +
+                ", isAvailable=" + isAvailable +
+                ", category=" + category +
+                ", owner=" + owner +
+                ", photo=" + photo +
+                ", movieHistories=" + movieHistories +
+                '}';
+    }
 }
