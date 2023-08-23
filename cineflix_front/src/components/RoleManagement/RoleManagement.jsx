@@ -183,7 +183,7 @@ function RoleManagement() {
             })}
           </tbody>
         </table>
-        <span className="bg-basic-red flex flex-wrap py-3 mb-4 border-2">
+        <span className="bg-basic-red flex justify-between flex-wrap py-3 mb-4 border-2">
           <span className=" inline-flex marginResizable">
             <p className="text-white font-normal">
               Results per page:{" "}
@@ -199,7 +199,7 @@ function RoleManagement() {
               </select>
             </p>
           </span>
-          <div className="ml-10 justify-center w-1/2 items-center">
+          <div className="justify-center items-center">
             <Pagination
               pageNo={pageNo}
               pageSize={pageSize}

@@ -228,7 +228,7 @@ function Movies() {
               )}
             </tbody>
           </table>
-          <span className="w-full bg-basic-red flex flex-wrap py-3 mb-4">
+          <span className="w-full bg-basic-red flex justify-between flex-wrap py-3 mb-4">
             <span className=" inline-flex marginResizable">
               <p className="text-white font-normal">Results per page: </p>
               <p className="ml-5">
@@ -242,7 +242,7 @@ function Movies() {
                 </select>
               </p>
             </span>
-            <div className="ml-10 justify-center w-1/2 items-center">
+            <div className="justify-center items-center">
               <Pagination
                 pageNo={pageNo}
                 pageSize={pageSize}
