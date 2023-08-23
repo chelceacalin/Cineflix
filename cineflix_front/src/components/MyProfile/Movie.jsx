@@ -82,7 +82,7 @@ function Movie({
           />
         )}
       </td>
-      <td>
+      <td className={classes}>
         <button
           onClick={handleDeleteOpen}
           className="inline-block w-full rounded px-3 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-white contained-button"

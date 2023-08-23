@@ -27,14 +27,14 @@
     }
 }
 
-table.cater tr th:nth-child(7),
-table.cater tr td:nth-child(7){
+table.movi tr th:nth-child(7),
+table.movi tr td:nth-child(7){
     max-width: 20px;
     text-align: center;
 }
 
-table.cater tr th:nth-child(8),
-table.cater tr td:nth-child(8){
+table.movi tr th:nth-child(8),
+table.movi tr td:nth-child(8){
     max-width: 20px;
     text-align: center;
 }
