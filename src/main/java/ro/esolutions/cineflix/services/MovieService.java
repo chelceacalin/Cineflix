@@ -5,9 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.*;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
-import ro.esolutions.cineflix.DTO.Movie.MovieAddDTO;
-import ro.esolutions.cineflix.DTO.Movie.MovieDTO;
-import ro.esolutions.cineflix.DTO.Movie.MovieFilterDTO;
+import ro.esolutions.cineflix.DTO.Movie.*;
 import ro.esolutions.cineflix.DTO.UserCineflix.UserDTO;
 import ro.esolutions.cineflix.entities.Category;
 import ro.esolutions.cineflix.entities.Movie;
@@ -17,11 +15,9 @@ import ro.esolutions.cineflix.exceptions.Category.CategoryNotFoundException;
 import ro.esolutions.cineflix.exceptions.Movie.MovieNotFoundException;
 import ro.esolutions.cineflix.exceptions.MovieNotAvailableException;
 import ro.esolutions.cineflix.exceptions.User.UserNotFoundException;
+import ro.esolutions.cineflix.mapper.MovieHistoryMapper;
 import ro.esolutions.cineflix.mapper.MovieMapper;
-import ro.esolutions.cineflix.repositories.CategoryRepository;
-import ro.esolutions.cineflix.repositories.MovieHistoryRepository;
-import ro.esolutions.cineflix.repositories.MovieImageDataRepository;
-import ro.esolutions.cineflix.repositories.MovieRepository;
+import ro.esolutions.cineflix.repositories.*;
 import ro.esolutions.cineflix.specification.GenericSpecification;
 import ro.esolutions.cineflix.specification.MovieSpecification;
 
@@ -44,6 +40,9 @@ public class MovieService {
     private final UserCineflixService userCineflixService;
 
     private final CategoryRepository categoryRepository;
+
+    private final UserCineflixRepository userCineflixRepository;
+
 
     private final MovieImageDataRepository movieImageDataRepository;
 
@@ -191,5 +190,34 @@ public class MovieService {
         } else {
             throw new UserNotFoundException("User not found");
         }
+    }
+
+    public MovieRentDTO findMovieToRent(UUID id) {
+
+        Optional<Movie> movie = movieRepository.findById(id);
+
+        return movieRepository.findById(id)
+                .map(MovieMapper::toMovieRentDto)
+                .orElseThrow(() -> new MovieNotFoundException("Movie not found"));
+    }
+
+    @Transactional
+    public void addMovieHistory(MovieHistoryDTO movieHistoryDTO) {
+        MovieHistory movieHistory = MovieHistoryMapper.toMovieHistory(movieHistoryDTO);
+        movieHistoryRepository.save(movieHistory);
+    }
+
+    public Optional<String> validateMovieHistory(MovieHistoryDTO movieHistoryDTO) {
+        Optional<Movie> movie = movieRepository.findById(movieHistoryDTO.getMovieId());
+        if (movie.isEmpty()) {
+            return Optional.of("Movie not found");
+        }
+
+        Optional<UserCineflix> userCineflix = userCineflixRepository.findById(String.valueOf(movieHistoryDTO.getUserId()));
+        if (userCineflix.isEmpty()) {
+            return Optional.of("User not found");
+        }
+
+        return Optional.empty();
     }
 }
