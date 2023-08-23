@@ -14,6 +14,7 @@ function Movies() {
     "Director",
     "Category",
     "Status",
+    "Owner",
     "Rented On",
     "Rented Until",
     "Rented By",
@@ -27,12 +28,11 @@ function Movies() {
   const [isAvailable, setIsAvailable] = useState("");
   const [rentedUntil, setRentedUntil] = useState("");
   const [rentedBy, setRentedBy] = useState("");
-  const [rentedDate, setrentedDate] = useState("");
-  let [newUrl, setNewUrl] = useState("");
-  let [pageNo, setPageNo] = useState(1);
-  let [pageSize, setPageSize] = useState(15);
-  let [totalPages, setTotalPages] = useState("");
-  let [totalMovies, setTotalMovies] = useState(0);
+  const [rentedDate, setRentedDate] = useState("");
+  const [pageNo, setPageNo] = useState(1);
+  const [pageSize, setPageSize] = useState(15);
+  const [totalPages, setTotalPages] = useState("");
+  const [totalMovies, setTotalMovies] = useState(0);
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -40,15 +40,9 @@ function Movies() {
   const { username } = useContext(UserLoginContext);
   const [direction, setDirection] = useState(true);
   const [sortField, setSortField] = useState("title");
-  let [ownerUsername, setOwnerUsername] = useState("");
-  let [lastClicked, setLastClicked] = useState("");
+  const [ownerUsername, setOwnerUsername] = useState("");
+  const [lastClicked, setLastClicked] = useState("");
 
-  let handleClick = (fieldName) => {
-    if (lastClicked === fieldName) {
-      setDirection(!direction);
-    }
-    setLastClicked(fieldName);
-  };
 
   useEffect(() => {
     const buildUrl = () => {
@@ -69,6 +63,10 @@ function Movies() {
         params.push(`rentedUntil=${rentedUntil}`);
       }
 
+      if(rentedDate){
+        params.push(`rentedDate=${rentedDate}`)
+      }
+
       if (rentedBy) {
         params.push(`rentedBy=${rentedBy}`);
       }
@@ -77,7 +75,6 @@ function Movies() {
     };
 
     const url = buildUrl();
-
     axios.get(url).then((elems) => {
       if (elems.data.content.length === 0 && pageNo > 1) {
         updatePageNumber(pageNo - 1);
@@ -95,6 +92,7 @@ function Movies() {
     category,
     isAvailable,
     rentedUntil,
+    rentedDate,
     rentedBy,
     ownerUsername,
     pageSize,
@@ -102,6 +100,8 @@ function Movies() {
     pageNo,
     movies.length,
   ]);
+
+
   let getFilterInput = (params) => {
     setCategory(params[0]);
     setDirector(params[1]);
@@ -109,6 +109,7 @@ function Movies() {
     setIsAvailable(params[3] === "BOTH" ? "" : params[3]);
     setRentedUntil(params[4]);
     setRentedBy(params[5]);
+    setRentedDate(params[6])
   };
 
   const handleSelectChange = (event) => {
@@ -160,6 +161,14 @@ function Movies() {
                             setSortField("rentedBy");
                             setDirection(!direction);
                           }
+                          else if (e.target.textContent === "Rented On") {
+                            setSortField("rentedDate");
+                            setDirection(!direction);
+                          } 
+                          else if (e.target.textContent === "Owner") {
+                            setSortField("owner_username");
+                            setDirection(!direction);
+                          } 
                         }
                       }}
                     >
@@ -176,11 +185,40 @@ function Movies() {
                           onClick={(e) => {
                             e.stopPropagation();
                             setDirection(!direction);
-                            handleClick(
-                              e.currentTarget
-                                .getAttribute("data-column")
-                                .toLowerCase()
-                            );
+                           
+                            let column=e.currentTarget.getAttribute("data-column");
+                            if (column !== "Status") {
+                              if (column === "Title") {
+                                setSortField("title");
+                              } else if (column === "Director") {
+                                setSortField("director");
+                              } else if (column=== "Category") {
+                                setSortField("category");
+                              }
+                              if (
+                                sortField === column.toLowerCase()
+                              ) {
+                                setDirection(!direction);
+                              } else {
+                                setDirection(true);
+                              }
+    
+                              if (column === "Rented Until") {
+                                setSortField("rentedUntil");
+                                setDirection(!direction);
+                              } else if (column === "Rented By") {
+                                setSortField("rentedBy");
+                                setDirection(!direction);
+                              }
+                              else if (column === "Rented On") {
+                                setSortField("rentedDate");
+                                setDirection(!direction);
+                              } 
+                              else if (column === "Owner") {
+                                setSortField("owner_username");
+                                setDirection(!direction);
+                              } 
+                            }
                           }}
                         >
                           {elem != "Status" && elem.length > 2 && <SortIcon />}
@@ -221,6 +259,7 @@ function Movies() {
                       director={director}
                       isAvailable={isAvailable}
                       rentedUntil={rentedUntil}
+                      owner_username={owner_username}
                       rentedDate={rentedDate}
                       rentedBy={rentedBy}
                       key={index}
