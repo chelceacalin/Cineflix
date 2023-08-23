@@ -8,15 +8,10 @@ import {LocalizationProvider} from '@mui/x-date-pickers/LocalizationProvider';
 import {DatePicker} from '@mui/x-date-pickers/DatePicker';
 
 
-function ViewMovieDetailsModalWindow({isModalOpen, closeModal}) {
-    var status = "unavailable";
-    const AVAILABLE = "unavailable";
-    var isAvailable = false;
-    if(status == AVAILABLE) {
-        isAvailable = true;
-    } else {
-        isAvailable = false;
-    }
+function ViewMovieDetailsModalWindow({isModalOpen, closeModal,title,
+                                         category,
+                                         director,isAvailable, rentedUntil, rentedBy, rentedOn}) {
+
     return (
         <Dialog fullWidth maxWidth={'md'} open={isModalOpen} onClose={closeModal}>
             <FontAwesomeIcon className="closeModalWindowButton" icon={faTimes} onClick={closeModal}
@@ -31,7 +26,7 @@ function ViewMovieDetailsModalWindow({isModalOpen, closeModal}) {
                             <TextField
                                 id="outlined-read-only-input"
                                 label="Movie title"
-                                defaultValue="Movie title"
+                                defaultValue={title}
                                 sx={{
                                     width: { md: 300 },
                                 }}
@@ -48,7 +43,7 @@ function ViewMovieDetailsModalWindow({isModalOpen, closeModal}) {
                             <TextField
                                 id="outlined-read-only-input"
                                 label="Director"
-                                defaultValue="Director"
+                                defaultValue={director}
                                 sx={{
                                     width: { md: 300 },
                                 }}
@@ -65,7 +60,7 @@ function ViewMovieDetailsModalWindow({isModalOpen, closeModal}) {
                             <TextField
                                 id="outlined-read-only-input"
                                 label="Category"
-                                defaultValue="Category"
+                                defaultValue={category}
                                 sx={{
                                     width: { md: 300 },
                                 }}
@@ -198,7 +193,7 @@ function ViewMovieDetailsModalWindow({isModalOpen, closeModal}) {
                             <TextField
                                 id="outlined-read-only-input"
                                 label="Rented by"
-                                defaultValue="Rented by"
+                                defaultValue={rentedBy}
                                 sx={{
                                     width: { md: 300 },
                                 }}
