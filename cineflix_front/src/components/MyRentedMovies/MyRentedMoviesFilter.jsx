@@ -21,11 +21,14 @@ function MyRentedMoviesFilter({ filterInput }) {
   let [url, setUrl] = useState("");
   const [usersWhoRented, setUsersWhoRented] = useState([]);
   const { username } = useContext(UserLoginContext);
-
+  let [filteredUsers,setFilteredUsers]=useState([])
   useEffect(() => {
     url = `/movies?owner_username=${username}`;
     axios.get(url).then((elems) => {
       setUsersWhoRented(elems.data.content);
+      const filteredElems= elems.data.content.filter((elem)=>elem.rentedBy!=="available")
+      const arrayUniqueByKey = [...new Map(filteredElems.map(item =>[item.rentedBy, item])).values()];
+      setFilteredUsers( arrayUniqueByKey  ) 
     });
   }, [url]);
 
@@ -103,22 +106,11 @@ function MyRentedMoviesFilter({ filterInput }) {
       <div className="mt-7 mr-6">
         <label>Rented Date:</label>
         <DatePicker
-          selected={rentedUntil}
+          selected={rentedOn}
           placeholderText={"Select the date"}
           onChange={(date) => setRentedOn(date)}
           className="rounded-lg w-52 border-2 border-gray-500 pl-1 mt-2"
         />
-        <div className="mt-2 mb-7">
-          <Button
-            className="font-normal contained-button"
-            onClick={(e) => {
-              e.preventDefault();
-              setRentedOn("");
-            }}
-          >
-            Reset date
-          </Button>
-        </div>
       </div>
       <div className="mt-10 mr-6">
         <label>Rented Until:</label>
@@ -134,6 +126,7 @@ function MyRentedMoviesFilter({ filterInput }) {
             onClick={(e) => {
               e.preventDefault();
               setRentedUntil("");
+              setRentedOn("");
             }}
           >
             Reset date
@@ -145,18 +138,14 @@ function MyRentedMoviesFilter({ filterInput }) {
         <select
           className="input-field mt-2"
           onChange={(e) => {
-            setOwner(e.target.value);
+            setRentedBy(e.target.value);
           }}
         >
           <option value="">Select Rented By</option>
-          {usersWhoRented &&
-            usersWhoRented.map((elem, index) => (
-              elem.rentedBy !== "available"
-                ? <option key={index} value={elem.rentedBy}>
-                  {elem.rentedBy}
-                </option>
-                : ""
-            ))}
+
+          {filteredUsers.map((movie, index) => (
+            <option key={index}>{movie.rentedBy}</option>
+          ))}
         </select>
       </div>
     </div>

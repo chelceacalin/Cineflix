@@ -4,6 +4,7 @@ import MyProfileRiredirectButtons from "../MyProfile/MyProfileRiredirectButtons"
 import MyRentedMoviesFilter from "./MyRentedMoviesFilter";
 import Movie_MyRentedMovies from "./Movie_MyRentedMovies";
 import SortIcon from "../../utils/icon/SortIcon";
+import Pagination from "../RoleManagement/Pagination";
 import { UserLoginContext } from "../../utils/context/LoginProvider";
 
 function MyRentedMovies() {
@@ -108,12 +109,21 @@ function MyRentedMovies() {
     setMovieOwner(params[5]);
   };
 
+  const handleSelectChange = (event) => {
+    const value = event.target.value;
+    setPageSize(value);
+  };
+
+  const updatePageNumber = (pgNo) => {
+    setPageNo(pgNo);
+  };
+
   return (
     <>
       <MyRentedMoviesFilter filterInput={getFilterInput} />
       <div className="bg-grey-texture w-full">
         <MyProfileRiredirectButtons />
-        <div className="w-full h-full px-4 ">
+        <div className="w-full h-full px-4 ml-6 ">
           <table className="w-full min-w-max bg-white border-2 table-auto text-left">
             <thead className="bg-basic-red text-white">
               <tr>
@@ -249,6 +259,34 @@ function MyRentedMovies() {
               )}
             </tbody>
           </table>
+          <span className="w-full bg-basic-red flex flex-wrap py-3 mb-4 border-2">
+            <span className=" inline-flex marginResizable">
+              <p className="text-white font-normal">Results per page: </p>
+              <p className="ml-5">
+                <select
+                  name="cars"
+                  id="cars"
+                  form="carform"
+                  onChange={handleSelectChange}
+                  className="cursor-pointer"
+                >
+                  <option value="15">15</option>
+                  <option value="10">10</option>
+                  <option value="5">5</option>
+                </select>
+              </p>
+            </span>
+            <div className="ml-10 justify-center w-1/2 items-center">
+              <Pagination
+                pageNo={pageNo}
+                pageSize={pageSize}
+                totalPages={totalPages}
+                updatePageNumber={updatePageNumber}
+                responseLength={totalMovies}
+                nrCurrentMovies={movies.length}
+              />
+            </div>
+          </span>
         </div>
       </div>
     </>

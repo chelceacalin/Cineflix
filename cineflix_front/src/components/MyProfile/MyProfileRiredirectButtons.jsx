@@ -20,7 +20,7 @@ function MyProfileRiredirectButtons() {
           className={`p-4 w-60 border text-black ${myMoviesClass} mt-8`}
           onClick={(e) => {
             e.preventDefault();
-            //  navigate(`/myprofile/${username}`)
+             navigate(`/myprofile/${username}`)
           }}
         >
           {" "}
@@ -30,7 +30,7 @@ function MyProfileRiredirectButtons() {
         <button className={`p-4  w-60 border text-black ${myRentedMoviesClass} mt-8`}
         onClick={(e)=>{
           e.preventDefault()
-          //navigate('/roleManagement')
+          navigate(`/myprofile/myRentedMovies/${username}`)
         }}
       >
         {" "}
