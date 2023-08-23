@@ -22,15 +22,15 @@ spring:
       client:
         registration:
           keycloak:
-            client-id: cineflix
+            client-id: ${CLIENT_ID:cineflix}
             authorization-grant-type: authorization_code
             scope: openid
         provider:
           keycloak:
-            issuer-uri: https://keycloak-internship.kdev2.esolutions.ro/auth/realms/esolutions
+            issuer-uri: ${KEYCLOAK_URL:https://keycloak-internship.kdev2.esolutions.ro/auth/realms/esolutions}
       resourceserver:
         jwt:
-          issuer-uri: https://keycloak-internship.kdev2.esolutions.ro/auth/realms/esolutions
+          issuer-uri: ${KEYCLOAK_URL:https://keycloak-internship.kdev2.esolutions.ro/auth/realms/esolutions}
 
 custom:
   frontend:
