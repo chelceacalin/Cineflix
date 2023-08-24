@@ -49,7 +49,7 @@ function EditRoleModalWindow({ isModalOpen, closeModal, name, firstName, lastNam
                 'email': email,
                 'role': selectedOption
             }));
-            const response = axios.post(url, userDTO).then(() => {
+            axios.post(url, userDTO).then(() => {
 
                 updateUser(userDTO);
                 closeModal();
