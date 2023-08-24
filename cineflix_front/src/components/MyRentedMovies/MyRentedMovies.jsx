@@ -77,17 +77,17 @@ function MyRentedMovies() {
 
     const url = buildUrl();
 
-    axios.get(url).then((elems) => {
-      if (elems.data.content.length === 0 && pageNo > 1) {
-        updatePageNumber(pageNo - 1);
-      } else {
-        setMovies(elems.data.content);
-        setTotalPages(elems.data.totalPages);
-      }
-      setInitialized(true);
-    }).catch(error => {
-      setInitialized(true);
-    });
+    // axios.get(url).then((elems) => {
+    //   if (elems.data.content.length === 0 && pageNo > 1) {
+    //     updatePageNumber(pageNo - 1);
+    //   } else {
+    //     setMovies(elems.data.content);
+    //     setTotalPages(elems.data.totalPages);
+    //   }
+    //   setInitialized(true);
+    // }).catch(error => {
+    //   setInitialized(true);
+    // });
   }, [
     triggerRefresh,
     sortField,
@@ -237,7 +237,7 @@ function MyRentedMovies() {
                     rentedDate,
                     rentedUntil,
                     rentedBy,
-                    ownerUsername,
+                    owner_username,
                     id,
                   },
                   index
@@ -255,7 +255,7 @@ function MyRentedMovies() {
                       rentedUntil={rentedUntil}
                       rentedDate={rentedDate}
                       rentedBy={rentedBy}
-                      owner={ownerUsername}
+                      owner={movieOwner}
                       key={index}
                       classes={classes}
                       triggerRefresh={triggerRefresh}
