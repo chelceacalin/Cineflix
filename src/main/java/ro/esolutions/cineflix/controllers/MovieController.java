@@ -60,13 +60,7 @@ public class MovieController {
     @PostMapping("/history")
     public ResponseEntity<?> addMovieHistory(@Valid @RequestBody MovieHistoryDTO movieHistoryDTO, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            List<String> validationErrors = new ArrayList<>();
-
-            for (FieldError error : bindingResult.getFieldErrors()) {
-                validationErrors.add(error.getDefaultMessage());
-            }
-
-            return new ResponseEntity<>(validationErrors, HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(bindingResult.getAllErrors().get(0).getDefaultMessage(), HttpStatus.BAD_REQUEST);
         }
 
         Optional<String> errorOptional = movieService.validateMovieHistory(movieHistoryDTO);
