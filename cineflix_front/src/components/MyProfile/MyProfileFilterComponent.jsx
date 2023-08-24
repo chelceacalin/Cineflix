@@ -26,16 +26,16 @@ function MyProfileFilterComponent({ filterInput }) {
   let [rentedBy, setRentedBy] = useState(null);
   let [url, setUrl] = useState("");
   const [usersWhoRented, setUsersWhoRented] = useState([]);
-  let [filteredUsers,setFilteredUsers]=useState([])
+  let [filteredUsers, setFilteredUsers] = useState([]);
   const { username } = useContext(UserLoginContext);
 
   useEffect(() => {
     url = `/movies?owner_username=${username}`;
     axios.get(url).then((elems) => {
       setUsersWhoRented(elems.data.content);
-      const filteredElems= elems.data.content.filter((elem)=>elem.rentedBy!=="available")
+      const filteredElems= elems.data.content.filter((elem)=>elem.rentedBy!=="available");
       const arrayUniqueByKey = [...new Map(filteredElems.map(item =>[item.rentedBy, item])).values()];
-      setFilteredUsers( arrayUniqueByKey  )
+      setFilteredUsers(arrayUniqueByKey);
     });
   }, [url]);
 

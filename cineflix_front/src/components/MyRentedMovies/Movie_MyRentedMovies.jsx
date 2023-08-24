@@ -60,8 +60,7 @@ function Movie_MyRentedMovies({
           Return movie
         </button>
 
-        {deleteModalOpen && (
-          <ReturnMovieModal
+        <ReturnMovieModal
             isModalOpen={returnModalOpen}
             closeModal={handleReturnClose}
             title={title}
@@ -69,7 +68,6 @@ function Movie_MyRentedMovies({
             setTriggerRefresh={setTriggerRefresh}
             id={id}
           />
-        )}
       </td>
     </tr>
   );

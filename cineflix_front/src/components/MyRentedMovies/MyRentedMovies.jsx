@@ -53,41 +53,52 @@ function MyRentedMovies() {
     const buildUrl = () => {
       const normalizedSortField = sortField || "title";
       let params = [
-        `owner_username=${username}`,
+        // `rentUsername=${username}`
         `sortField=${normalizedSortField}`,
         `direction=${direction ? "ASC" : "DESC"}`,
         `title=${title}`,
         `director=${director}`,
         `category=${category}`,
-        `rentedOn=${rentedDate}`,
         `pageNo=${parseInt(pageNo) - 1}`,
         `pageSize=${pageSize}`,
       ];
+
+      if (username) {
+        params.push(`rentUsername=${username}`);
+      }
 
       if (rentedUntil) {
         params.push(`rentedUntil=${rentedUntil}`);
       }
 
-      if (rentedBy) {
-        params.push(`rentedBy=${rentedBy}`);
+      if (movieOwner) {
+        params.push(`owner_username=${movieOwner}`);
+      }
+      
+      if (rentedUntil) {
+        params.push(`rentedDate=${rentedDate}`);
       }
 
-      return `/movies?${params.join("&")}`;
+      if (rentedBy) {
+        params.push(`rentedBy=${ownerUsername}`);
+      }
+
+      return `/movies/rented?${params.join("&")}`;
     };
 
     const url = buildUrl();
 
-    // axios.get(url).then((elems) => {
-    //   if (elems.data.content.length === 0 && pageNo > 1) {
-    //     updatePageNumber(pageNo - 1);
-    //   } else {
-    //     setMovies(elems.data.content);
-    //     setTotalPages(elems.data.totalPages);
-    //   }
-    //   setInitialized(true);
-    // }).catch(error => {
-    //   setInitialized(true);
-    // });
+    axios.get(url).then((elems) => {
+      if (elems.data.content.length === 0 && pageNo > 1) {
+        updatePageNumber(pageNo - 1);
+      } else {
+        setMovies(elems.data.content);
+        setTotalPages(elems.data.totalPages);
+      }
+      setInitialized(true);
+    }).catch(error => {
+      setInitialized(true);
+    });
   }, [
     triggerRefresh,
     sortField,
@@ -132,7 +143,7 @@ function MyRentedMovies() {
         <div className="w-full h-[87vh] flex flex-col bg-white justify-between border-2">
         <div className="overflow-y-auto">
           <table className="w-full min-w-max bg-white border-b-2 table-auto text-left">
-            <thead className="bg-basic-red text-white">
+            <thead className="bg-basic-red sticky top-0 z-30 text-white">
               <tr>
                 {TABLE_HEAD.slice(0, TABLE_HEAD.length - 1).map((elem) => {
                   return (
@@ -172,7 +183,7 @@ function MyRentedMovies() {
                           ) {
                             setDirection(!direction);
                           }
-                          setSortField("rentedOn");
+                          setSortField("rentedDate");
                           handleClick(e.target.textContent.toLowerCase());
                         } else if (e.target.textContent === "Rented Until") {
                           if (
@@ -255,7 +266,7 @@ function MyRentedMovies() {
                       rentedUntil={rentedUntil}
                       rentedDate={rentedDate}
                       rentedBy={rentedBy}
-                      owner={movieOwner}
+                      owner={owner_username}
                       key={index}
                       classes={classes}
                       triggerRefresh={triggerRefresh}
@@ -273,11 +284,8 @@ function MyRentedMovies() {
               <p className="text-white font-normal">Results per page: </p>
               <p className="ml-5">
                 <select
-                  name="cars"
-                  id="cars"
-                  form="carform"
                   onChange={handleSelectChange}
-                  className="cursor-pointer"
+                  className="bg-basic-red cursor-pointer text-white font-bold border-2 p-1"
                 >
                   <option value="15">15</option>
                   <option value="10">10</option>

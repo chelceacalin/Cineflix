@@ -23,22 +23,66 @@ function MyRentedMoviesFilter({ filterInput }) {
   let [category, setCategory] = useState("");
   let [rentedOn, setRentedOn] = useState(null);
   let [rentedUntil, setRentedUntil] = useState(null);
-  let [owner, setOwner] = useState("");
-  let [url, setUrl] = useState("");
-  const [usersWhoRented, setUsersWhoRented] = useState([]);
+  let [owner, setOwner] = useState(null);
+  const [rentedBy, setRentedBy] = useState("");
+  const [movieOwner, setMovieOwner] = useState("");
+  const [sortField, setSortField] = useState("title");
+  const [direction, setDirection] = useState(true);
+  const [pageNo, setPageNo] = useState(1);
+  const [pageSize, setPageSize] = useState(15);
+  const [totalPages, setTotalPages] = useState("");
+  let [newUrl, setNewUrl] = useState("");
+  let [movieOwners, setMovieOwners] = useState([]);
   const { username } = useContext(UserLoginContext);
-  let [filteredUsers,setFilteredUsers]=useState([]);
+  let [filteredUsers, setFilteredUsers] = useState([]);
 
   useEffect(() => {
-    url = `/movies?owner_username=${username}`;
-    axios.get(url).then((elems) => {
-      console.log(elems.data.content);
-      setUsersWhoRented(elems.data.content);
-      const filteredElems = elems.data.content.filter((elem)=>elem.rentedBy!=="available")
-      const arrayUniqueByKey = [...new Map(filteredElems.map(item =>[item.rentedBy, item])).values()];
-      setFilteredUsers( arrayUniqueByKey  ) 
+    const buildUrl = () => {
+      const normalizedSortField = sortField || "title";
+      let params = [
+        // `rentUsername=${username}`
+        `sortField=${normalizedSortField}`,
+        `direction=${direction ? "ASC" : "DESC"}`,
+        `title=${title}`,
+        `director=${director}`,
+        `category=${category}`,
+        `pageNo=${parseInt(pageNo) - 1}`,
+        `pageSize=${pageSize}`,
+      ];
+
+      if (username) {
+        params.push(`rentUsername=${username}`);
+      }
+
+      if (rentedUntil) {
+        params.push(`rentedUntil=${rentedUntil}`);
+      }
+
+      if (movieOwner) {
+        params.push(`owner_username=${movieOwner}`);
+      }
+      
+      if (rentedUntil) {
+        params.push(`rentedDate=${rentedDate}`);
+      }
+
+      if (rentedBy) {
+        params.push(`rentedBy=${ownerUsername}`);
+      }
+
+      return `/movies/rented?${params.join("&")}`;
+    };
+
+    setNewUrl(buildUrl());
+    // console.log(newUrl);
+
+    axios.get(newUrl).then((elems) => {
+      const arrayUniqueByKey = [...new Map(elems.data.content.map(item => [item.owner_username, item])).values()];
+      setFilteredUsers(arrayUniqueByKey);
+    }).catch(error => {
+      // console.log(error);
     });
-  }, [url]);
+  }, [newUrl]);
 
     let convertDate = (input) => {
         const inputDate = new Date(input);
@@ -50,9 +94,10 @@ function MyRentedMoviesFilter({ filterInput }) {
 
   useEffect(() => {
     let date = rentedUntil ? convertDate(rentedUntil) : "";
+    let rendetDate = rentedOn ? rentedOn : "";
     let array = [];
     
-    array.push(category, director, title, date, rentedOn, owner);
+    array.push(category, director, title, date, rendetDate, owner);
 
     filterInput(array);
   }, [
@@ -111,52 +156,6 @@ function MyRentedMoviesFilter({ filterInput }) {
           }}
         />
       </div>
-      {/* <div className="mt-7 mr-6">
-        <label>Rented Date:</label>
-        <DatePicker
-          selected={rentedOn}
-          placeholderText={"Select the date"}
-          onChange={(date) => setRentedOn(date)}
-          className="rounded-lg w-48 border-2 border-gray-500 pl-1 mt-2"
-        />
-      </div> */}
-      {/* <div className="mt-10 mr-6">
-        <label>Rented Until:</label>
-        <DatePicker
-          selected={rentedUntil}
-          placeholderText={"Select the date"}
-          onChange={(date) => setRentedUntil(date)}
-          className="rounded-lg w-48 border-2 border-gray-500 pl-1 mt-2"
-        />
-        <div className="mt-2 mb-7">
-          <Button
-            className="font-normal contained-button"
-            onClick={(e) => {
-              e.preventDefault();
-              setRentedUntil("");
-              setRentedOn("");
-            }}
-          >
-            Reset date
-          </Button>
-        </div>
-      </div> */}
-      {/* <div className="mt-10 mr-6">
-        <label className="block">Owner:</label>
-        <select
-          className="input-field mt-2"
-          onChange={(e) => {
-            setRentedBy(e.target.value);
-          }}
-        >
-          <option value="">Select Rented By</option>
-
-          {filteredUsers.map((movie, index) => (
-            <option key={index}>{movie.rentedBy}</option>
-          ))}
-        </select>
-      </div> */}
-
       <div className="mt-10 mr-6">
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <DatePickerClear
@@ -177,17 +176,17 @@ function MyRentedMoviesFilter({ filterInput }) {
           />
         </LocalizationProvider>
       </div>
-      {/* <div className="mt-10 mr-6">
+      <div className="mt-10 mr-6">
         <Autocomplete
             sx={{ fontFamily: "Sanchez" }}
-            value={rentedBy}
+            value={owner}
             onChange={(e, value) => {
-              setRentedBy(value);
+              setOwner(value);
             }}
             ListboxProps={{
                 style:{ fontFamily: "Sanchez" }
             }}
-            options={filteredUsers.map(m => m.rentedBy)}
+            options={filteredUsers.map(m => m.owner_username)}
             renderInput={(params) =>
                 <TextField
                     {...params}
@@ -199,9 +198,9 @@ function MyRentedMoviesFilter({ filterInput }) {
                     style: { fontFamily: "Sanchez" }
                 }}
                     sx={{ fontFamily: "Sanchez" }}
-                label="Rented by"/>}
+                label="Owner"/>}
         />
-      </div> */}
+      </div>
     </div>
   );
 }

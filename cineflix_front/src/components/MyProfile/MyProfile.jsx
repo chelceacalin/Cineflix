@@ -152,7 +152,7 @@ function MyProfile() {
         <div className="w-full h-[87vh] flex flex-col bg-white justify-between border-2">
         <div className="overflow-y-auto">
           <table className="w-full min-w-max bg-white border-b-2 table-auto text-left">
-            <thead className="bg-basic-red text-white">
+            <thead className="bg-basic-red sticky top-0 z-30 text-white">
               <tr>
                 {TABLE_HEAD.slice(0, TABLE_HEAD.length - 1).map((elem) => {
                   return (

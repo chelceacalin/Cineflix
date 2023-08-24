@@ -12,17 +12,16 @@ axios.defaults.withCredentials = true
 function ReturnMovieModal({ isModalOpen, closeModal, title, id, setTriggerRefresh, triggerRefresh}) {
     const [requestError, setRequestError] = useState(false);
 
-    const deleteMovie = () => {
-        // let url = `/movies/delete/${id}`;
+    const updateMovieStatus = () => {
+        let url = `/movies/updateStatus/${id}`;
 
-        //     axios.post(url).then(() => {
-        //         setTriggerRefresh(!triggerRefresh);
-        //         closeModal();
-        //         setRequestError(false);
-        //     })
-        //     .catch((error) => {
-        //         showToastError(error.response.data)                
-        //     })
+            axios.post(url).then(() => {
+                setTriggerRefresh(!triggerRefresh);
+                closeModal();
+            })
+            .catch((error) => {
+                showToastError(error.response.data)                
+            })
     }
 
     const showToastError = (message) => {
@@ -47,11 +46,13 @@ function ReturnMovieModal({ isModalOpen, closeModal, title, id, setTriggerRefres
                     <p> Please note that you need to return the movie to the owner!</p>
                 </div>
                 
-                <div className="mt-2 mb-2 pl-5 pr-5">
-                    <Button className="contained-button w-full" variant="contained" onClick={deleteMovie}>Ok</Button>
-                </div>
-                <div className="mb-2 pl-5 pr-5">
-                    <Button className="outlined-button w-full" variant="outlined" onClick={closeModal} >Cancel</Button>
+                <div className='flex gap-x-2'>
+                    <div className="flex-1">
+                        <Button className="contained-button w-full" variant="contained" onClick={updateMovieStatus}>Ok</Button>
+                    </div>
+                    <div className="flex-1">
+                        <Button className="outlined-button w-full" variant="outlined" onClick={closeModal}>Cancel</Button>
+                    </div>
                 </div>
                 </DialogContent>
             </div>            
