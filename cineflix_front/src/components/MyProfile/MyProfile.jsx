@@ -234,16 +234,19 @@ function MyProfile() {
                     </th>
                   );
                 })}
-                <th className="border-b-white p-4 ">
+                <th className="border-b-white p-4 text-center">
                   <div>Actions</div>
                 </th>
-                <th className="border-b-white p-2">
-                  <button
-                    onClick={handleOpen}
-                    className="bg-basic-red text-white border border-white hover:border-hover-cream hover:text-hover-cream py-2 px-6"
-                  >
-                    Add New
-                  </button>
+                <th className="border-b-white p-4">
+                  <div className="flex items-center justify-center">
+                    <Button
+                      onClick={handleOpen}
+                      className="white-outlined-button"
+                      variant="outlined"
+                    >
+                      Add New
+                    </Button>
+                    </div>
                   <AddNewMovieModalWindow
                     isModalOpen={open}
                     closeModal={handleClose}
