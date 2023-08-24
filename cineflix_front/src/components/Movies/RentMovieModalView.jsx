@@ -12,7 +12,6 @@ import {LocalizationProvider} from '@mui/x-date-pickers/LocalizationProvider';
 import {DatePicker} from '@mui/x-date-pickers/DatePicker';
 import dayjs from "dayjs";
 import updateLocale from "dayjs/plugin/updateLocale";
-axios.defaults.withCredentials = true;
 
 function RentMovieModalView({
   isRentModalOpen,

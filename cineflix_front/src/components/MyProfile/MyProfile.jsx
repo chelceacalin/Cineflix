@@ -43,12 +43,9 @@ function MyProfile() {
   const handleClose = () => setOpen(false);
   const [triggerRefresh, setTriggerRefresh] = useState(false);
   const { username } = useContext(UserLoginContext);
-  const [selectedItem, setSelectedItem] = useState("");
 
   const navigate=useNavigate()
   const location = useLocation();
-
-  const [selectedColor,setSelectedColor]=useState("")
 
 
   let handleClick = (fieldName) => {

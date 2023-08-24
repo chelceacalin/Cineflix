@@ -9,12 +9,12 @@ import axios from "axios";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { showError,showSuccess } from "../../service/ToastService";
-axios.defaults.withCredentials = true;
 
 function CreateCategoryModalWindow({
   isModalOpen,
   closeModal,
-  signal,
+  setSignalCall,
+  signalCall
 }) {
   const [categoryDTO, setCategoryDTO] = useState("");
 
@@ -30,7 +30,7 @@ function CreateCategoryModalWindow({
           name: categoryDTO,
         })
         .then(() => {
-          signal();
+          setSignalCall(!signalCall)
           closeModal();
           showSuccess("Category added successfully!", "bg-green-500");
           setCategoryDTO("");

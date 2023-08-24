@@ -1,15 +1,14 @@
 import { Button } from '@mui/material'
 import DeleteCategoryModalWindow from "./DeleteCategoryModalWindow";
 import React from 'react'
-
 import EditCategoryNameModalWindow from "./EditCategoryNameModalWindow";
 
-function Category({id, name, classes, updateCategory, signal, setErrorMessage, errorMessage}) {
+function Category({id, name, classes, updateCategory, setErrorMessage, errorMessage,signalCall,setSignalCall}) {
     const [open, setOpen] = React.useState(false);
     const [isEditModalOpen, setEditModalOpen] = React.useState(false);
     const closeEditModal = () => {
         setEditModalOpen(false);
-        signal();
+        setSignalCall(!signalCall)
     }
     const openEditModal = () => setEditModalOpen(true);
 
@@ -51,7 +50,8 @@ function Category({id, name, classes, updateCategory, signal, setErrorMessage, e
             closeEditModal={closeEditModal}
             name={name}
             id={id}
-            signal={signal}
+            setSignalCall={setSignalCall}
+            signalCall={signalCall}
             />
         </td>
     </tr>

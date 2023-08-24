@@ -6,7 +6,6 @@ import "./css/DeleteMovieModalView.css";
 import axios from 'axios';
 import { showError,showSuccess } from '../../service/ToastService';
 
-axios.defaults.withCredentials = true
 
 function DeleteMovieModalView({ isModalOpen, closeModal, title, category, id, rentedBy, setTriggerRefresh, triggerRefresh}) {
     const [requestError, setRequestError] = useState(false);

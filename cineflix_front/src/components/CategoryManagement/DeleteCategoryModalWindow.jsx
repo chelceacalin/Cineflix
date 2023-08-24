@@ -5,16 +5,15 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { showSuccess,showError } from '../../service/ToastService';
 
-axios.defaults.withCredentials = true
 
-function DeleteCategoryModalWindow({ isEditModalOpen, closeEditModal, name, id, signal }) {
+function DeleteCategoryModalWindow({ isEditModalOpen, closeEditModal, name, id, setSignalCall,signalCall }) {
 
     const deleteCategory = () => {
         let url = '/category/delete/' + id;
 
             axios.post(url).then(() => {
                 showSuccess("Category deleted successfully!", "bg-green-500");
-                signal();
+                setSignalCall(!signalCall)
                 closeEditModal();
             })
             .catch((error) => {

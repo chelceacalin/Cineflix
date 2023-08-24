@@ -13,7 +13,6 @@ import axios from 'axios';
 import * as moreClasses from "react-dom/test-utils";
 import { showSuccess,showError } from '../../service/ToastService';
 
-axios.defaults.withCredentials = true
 
 function EditRoleModalWindow({ isModalOpen, closeModal, name, firstName, lastName, role, email, username, updateUser }) {
     const fullName = `${name}`;

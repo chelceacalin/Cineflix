@@ -7,7 +7,6 @@ import "./css/AddNewMovieModalWindow.css";
 import axios from "axios";
 import { Autocomplete } from "@mui/material";
 import { showError,showSuccess } from "../../service/ToastService";
-axios.defaults.withCredentials = true;
 
 function DetailsMovieModalView({
   isModalOpen,

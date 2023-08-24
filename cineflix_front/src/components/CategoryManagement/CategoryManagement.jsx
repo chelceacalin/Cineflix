@@ -7,7 +7,6 @@ import axios from "axios";
 import CreateCategoryModalWindow from "./CreateCategoryModalWIndow.jsx";
 import Pagination from "../RoleManagement/Pagination";
 import SortIcon from "../../utils/icon/SortIcon";
-axios.defaults.withCredentials = true;
 
 function CategoryManagement() {
   const TABLE_HEAD = ["Category", "Actions", ""];
@@ -17,11 +16,13 @@ function CategoryManagement() {
   const [direction, setDirection] = useState(true);
   const [lastClicked, setLastClicked] = useState(null);
   let [newUrl, setNewUrl] = useState("");
-  let [pageNo, setPageNo] = useState(1);
-  let [pageSize, setPageSize] = useState(15);
-  let [totalPages, setTotalPages] = useState("");
-  let [totalCategories, setTotalCategories] = useState(0);
-  let [signalCall, setSignalCall] = useState(false);
+  const [pageNo, setPageNo] = useState(1);
+  const [pageSize, setPageSize] = useState(15);
+  const [totalPages, setTotalPages] = useState("");
+  const [totalCategories, setTotalCategories] = useState(0);
+  const [signalCall, setSignalCall] = useState(false);
+  const [open, setOpen] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
   useEffect(() => {
     axios.get(`/category`).then((data) => {
@@ -38,10 +39,6 @@ function CategoryManagement() {
     }
     setLastClicked(fieldName);
   };
-
-  let signal = () => {
-    setSignalCall(!signalCall);
-  }
 
   useEffect(() => {
     newUrl = `/category?direction=${direction ? "ASC" : "DESC"
@@ -63,8 +60,6 @@ function CategoryManagement() {
     setPageNo(pgNo);
   };
 
-  const [open, setOpen] = React.useState(false);
-  const [errorMessage, setErrorMessage] = useState("");
   const handleOpen = () => {
     setErrorMessage("");
     setOpen(true);
@@ -76,7 +71,7 @@ function CategoryManagement() {
   }
 
 
-  let getFilterInput = (params) => {
+  const getFilterInput = (params) => {
     setName(params[0]);
   };
 
@@ -154,7 +149,8 @@ function CategoryManagement() {
                       <CreateCategoryModalWindow
                         isModalOpen={open}
                         closeModal={handleClose}
-                        signal={signal}
+                        setSignalCall={setSignalCall}
+                        signalCall={signalCall}
                         setErrorMessage={setErrorMessage}
                         errorMessage={errorMessage}
                       />
@@ -174,7 +170,8 @@ function CategoryManagement() {
                       classes={classes}
                       updateCategory={updateCategory}
                       key={name}
-                      signal={signal}
+                      setSignalCall={setSignalCall}
+                      signalCall={signalCall}
                       setErrorMessage={setErrorMessage}
                       errorMessage={errorMessage}
                     />

@@ -6,7 +6,6 @@ import "../RoleManagement/css/EditRoleModalWindow.css";
 import axios from 'axios';
 import { showSuccess,showError } from '../../service/ToastService';
 
-axios.defaults.withCredentials = true
 
 function EditRoleModalWindow({ isModalOpen, closeModal, id, name, updateCategory, setErrorMessage, errorMessage }) {
     const newNameRef = useRef();

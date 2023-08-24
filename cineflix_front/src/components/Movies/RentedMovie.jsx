@@ -12,18 +12,15 @@ function RentedMovie({
   rentedUntil,
   rentedBy,
   classes,
-  triggerRefresh,
-  setTriggerRefresh,
   rentedOn,
   rentedDate,
   owner_username
 }) {
   const [detailsModalOpen, setDetailsModalOpen] = useState(false);
-  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [isRentModalOpen, setRentModalOpen] = useState(false);
+
   const handleDetailsOpen = () => setDetailsModalOpen(true);
   const handleDetailsClose = () => setDetailsModalOpen(false);
-
-  const [isRentModalOpen, setRentModalOpen] = useState(false);
 
   const handleOpenRentModal = () => {
     setRentModalOpen(true);
@@ -89,19 +86,21 @@ function RentedMovie({
         >
           Details
         </Button>
-          <ViewMovieDetailsModalWindow
-              isModalOpen={detailsModalOpen}
-              closeModal={handleDetailsClose}
-              title={title}
-              category={category}
-              director={director}
-              isAvailable={isAvailable}
-              rentedUntil={rentedUntil}
-              rentedOn={rentedOn}
-              rentedBy={rentedBy}
-              rentedDate={rentedDate}
-              id={id}
-          />
+        {detailsModalOpen&&
+         <ViewMovieDetailsModalWindow
+         isModalOpen={detailsModalOpen}
+         closeModal={handleDetailsClose}
+         title={title}
+         category={category}
+         director={director}
+         isAvailable={isAvailable}
+         rentedUntil={rentedUntil}
+         rentedOn={rentedOn}
+         rentedBy={rentedBy}
+         rentedDate={rentedDate}
+         id={id}
+     />}
+         
       </td>
       <td>
         <Button
