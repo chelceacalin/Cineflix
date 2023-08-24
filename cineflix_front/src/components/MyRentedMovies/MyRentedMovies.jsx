@@ -136,7 +136,7 @@ function MyRentedMovies() {
   return (
     <>
       <div className="h-screen border-r-2">
-        <MyRentedMoviesFilter filterInput={getFilterInput} />
+        {/* <MyRentedMoviesFilter filterInput={getFilterInput} /> */}
       </div>
       <div className="bg-grey-texture w-full h-screen px-10">
         <MyProfileRiredirectButtons />
