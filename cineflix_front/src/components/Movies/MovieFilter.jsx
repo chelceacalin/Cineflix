@@ -72,7 +72,7 @@ function MovieFilter({ filterInput }) {
   ]);
 
   return (
-    <div className="space-y-4 ml-7 mr-7">
+    <div className="space-y-4 ml-7 mr-1">
       <div className="mt-10">
         <TextField
           id="outlined-search"
@@ -152,6 +152,7 @@ function MovieFilter({ filterInput }) {
       <div className="mt-10 mr-6">
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <DatePickerClear
+              className="w-48"
               value={rentedDate}
               labelString={"Rented on"}
               onClear={() => setRentedDate(null)}

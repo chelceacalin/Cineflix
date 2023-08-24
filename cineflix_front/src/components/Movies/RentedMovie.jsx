@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Button } from "@mui/material";
 import ViewMovieDetailsModalWindow from "./ViewMovieDetailsModalWindow.jsx";
 import RentMovieModalView from "./RentMovieModalView";
+import "./css/RentedMovies.css"
 
 function RentedMovie({
   id,
@@ -38,12 +39,12 @@ function RentedMovie({
   return (
     <tr key={title}>
       <td className={classes}>
-        <div variant="small" color="blue-gray" className="font-normal max-w-[150px] break-words">
+        <div variant="small" color="blue-gray" className="font-normal max-w-[100px] break-words">
           {title}
         </div>
       </td>
       <td className={classes}>
-        <div variant="small" color="blue-gray" className="font-normal max-w-[200px]">
+        <div variant="small" color="blue-gray" className="font-normal max-w-[90px] break-words">
           {director}
         </div>
       </td>
@@ -111,7 +112,7 @@ function RentedMovie({
       <td className={classes}>
         <Button
           onClick={handleOpenRentModal}
-          className="contained-button font-normal"
+          className="Button font-normal"
           variant="contained" disabled={!isAvailable}
         >
           Rent Movie
