@@ -5,6 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import "./css/ReturnMovieModal.css";
 import "react-toastify/dist/ReactToastify.css";
+import { showSuccess } from '../../service/ToastService';
 import axios from 'axios';
 
 axios.defaults.withCredentials = true
@@ -16,6 +17,7 @@ function ReturnMovieModal({ isModalOpen, closeModal, title, id, setTriggerRefres
         let url = `/movies/updateStatus/${id}`;
 
             axios.post(url).then(() => {
+                showSuccess("The movie has been returned!")
                 setTriggerRefresh(!triggerRefresh);
                 closeModal();
             })
