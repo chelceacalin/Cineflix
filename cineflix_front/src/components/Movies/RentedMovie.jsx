@@ -14,7 +14,8 @@ function RentedMovie({
   classes,
   rentedOn,
   rentedDate,
-  owner_username
+  owner_username,
+  signal
 }) {
   const [detailsModalOpen, setDetailsModalOpen] = useState(false);
   const [isRentModalOpen, setRentModalOpen] = useState(false);
@@ -28,6 +29,7 @@ function RentedMovie({
 
   const handleCloseRentModal = () => {
     setRentModalOpen(false);
+    signal();
   };
 
 
@@ -105,17 +107,19 @@ function RentedMovie({
       <td>
         <Button
           onClick={handleOpenRentModal}
-          className="contained-button font-normal" 
-          variant="contained"
+          className="contained-button font-normal"
+          variant="contained" disabled={!isAvailable}
         >
           Rent Movie
-        </Button> 
+        </Button>
         <RentMovieModalView
           isRentModalOpen={isRentModalOpen}
           closeRentModal={handleCloseRentModal}
           title={title}
           director={director}
           owner={owner_username}
+          id={id}
+          signal={signal}
         />
       </td>
     </tr>

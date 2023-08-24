@@ -20,7 +20,8 @@ function DeleteMovieModalView({ isModalOpen, closeModal, title, category, id, re
                 setRequestError(false);
             })
             .catch((error) => {
-                showError(error.response.data)                
+                showError(error.response.data) ;
+                closeModal();
             })
     }
 
@@ -40,7 +41,7 @@ function DeleteMovieModalView({ isModalOpen, closeModal, title, category, id, re
                     <Button className="outlined-button w-full" variant="outlined" onClick={closeModal} >Cancel</Button>
                 </div>
                 </DialogContent>
-            </div>            
+            </div>
         </Dialog>
     );
 }
