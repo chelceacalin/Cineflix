@@ -15,7 +15,8 @@ function RentedMovie({
   rentedOn,
   rentedDate,
   owner_username,
-  signal
+  setTriggerRefresh,
+  triggerRefresh
 }) {
   const [detailsModalOpen, setDetailsModalOpen] = useState(false);
   const [isRentModalOpen, setRentModalOpen] = useState(false);
@@ -119,7 +120,8 @@ function RentedMovie({
           director={director}
           owner={owner_username}
           id={id}
-          signal={signal}
+          setTriggerRefresh={setTriggerRefresh}
+          triggerRefresh={triggerRefresh}
         />
       </td>
     </tr>
