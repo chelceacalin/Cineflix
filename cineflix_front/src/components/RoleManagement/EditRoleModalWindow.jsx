@@ -1,5 +1,15 @@
 import React, { useState, useEffect } from 'react'
-import { Button, Dialog, DialogContent, FormControl, InputLabel, NativeSelect, TextField } from '@mui/material';
+import {
+    Button,
+    Dialog,
+    DialogContent,
+    FormControl,
+    InputLabel,
+    MenuItem,
+    NativeSelect,
+    Select,
+    TextField
+} from '@mui/material';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import "./css/EditRoleModalWindow.css";
@@ -94,16 +104,26 @@ function EditRoleModalWindow({ isModalOpen, closeModal, name, firstName, lastNam
                 </div>
                 <div className='mt-6'>
                     <FormControl fullWidth>
-                        <InputLabel 
-                            variant="standard" 
-                            htmlFor="uncontrolled-native"> Role </InputLabel>
-                        <NativeSelect defaultValue={role}
-                            onChange={(e) => setSelectedOption(e.target.value)}
-                            placeholder=''
+                        <InputLabel
+                            sx={{ fontFamily: "Sanchez" }}
+                            id="role-label-id"
                         >
-                            <option value="USER">User</option>
-                            <option value="ADMIN">Admin</option>
-                        </NativeSelect>
+                        Role
+                        </InputLabel>
+                        <Select
+                            labelId="role-label-id"
+                            label="Role"
+                            value={selectedOption}
+                            onChange={(e) => setSelectedOption(e.target.value)}
+                            style = {{ fontFamily: "Sanchez" }}
+                        >
+                            <MenuItem
+                                sx={{ fontFamily: "Sanchez" }}
+                                value="USER">User</MenuItem>
+                            <MenuItem
+                                sx={{ fontFamily: "Sanchez" }}
+                                value="ADMIN">Admin</MenuItem>
+                        </Select>
                         <div className='flex gap-x-2 mt-6'>
                             <div className="flex-1">
                                 <Button className="contained-button w-full" variant="contained" onClick={editUserRole}>Save</Button>
