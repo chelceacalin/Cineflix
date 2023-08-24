@@ -16,6 +16,7 @@ public class MyRentedMoviesRequestDTO {
     private String rentUsername;
 
     private String title;
+
     private String director;
 
     private String category;

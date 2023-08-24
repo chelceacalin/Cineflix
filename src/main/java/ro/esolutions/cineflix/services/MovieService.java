@@ -44,7 +44,6 @@ public class MovieService {
 
     private final UserCineflixRepository userCineflixRepository;
 
-
     private final MovieImageDataRepository movieImageDataRepository;
 
     public static final String USERNAME = "movieHistories.rentedBy.username";
@@ -57,7 +56,11 @@ public class MovieService {
     public static final String DIRECTOR = "director";
     public static final String OWNER = "owner_username";
     public static final String TITLE = "title";
-
+    public static final String RENTED_BY_USERNAME = "rentedBy.username";
+    public static final String MOVIE_OWNER_USERNAME = "movie.owner.username";
+    public static final String MOVIE_DIRECTOR = "movie.director";
+    public static final String MOVIE_CATEGORY_NAME = "movie.category.name";
+    public static final String MOVIE_TITLE = "movie.title";
 
     public Page<MovieDTO> findUserMovies(MovieFilterDTO movieFilter, int pageNo, int pageSize) {
         Specification<Movie> specification = getSpecification(movieFilter);
@@ -197,9 +200,6 @@ public class MovieService {
     }
 
     public MovieRentDTO findMovieToRent(UUID id) {
-
-        Optional<Movie> movie = movieRepository.findById(id);
-
         return movieRepository.findById(id)
                 .map(MovieMapper::toMovieRentDto)
                 .orElseThrow(() -> new MovieNotFoundException("Movie not found"));
@@ -230,26 +230,23 @@ public class MovieService {
         Sort.Direction sortDirection = Sort.Direction.fromString(myRentedMoviesDTO.getDirection());
         Pageable pageable = getPageableRented(pageNo, pageSize, myRentedMoviesDTO.getSortField(), sortDirection);
 
-        Page<MovieHistory> mh = movieHistoryRepository.findAllByRentedBy_Id(userCineflix.getId(), pageable);
-        List<MovieDTO> rentedMovies = mh.getContent().stream()
+        Page<MovieHistory> movieHistories = movieHistoryRepository.findAllByRentedBy_Id(userCineflix.getId(), pageable);
+        List<MovieDTO> rentedMovies = movieHistories.getContent().stream()
                 .map(history -> MovieMapper.toDto(history.getMovie(), history))
                 .collect(Collectors.toList());
-        return new PageImpl<>(rentedMovies, pageable, mh.getTotalElements());
+        return new PageImpl<>(rentedMovies, pageable, movieHistories.getTotalElements());
 
     }
-
     private static Pageable getPageableRented(int pageNo, int pageSize, String sortField, Sort.Direction sortDirection) {
         return switch (sortField) {
-            case TITLE -> PageRequest.of(pageNo, pageSize, Sort.by(sortDirection, "movie.title"));
-            case CATEGORY -> PageRequest.of(pageNo, pageSize, Sort.by(sortDirection, "movie.category.name"));
-            case DIRECTOR -> PageRequest.of(pageNo, pageSize, Sort.by(sortDirection, "movie.director"));
-            case OWNER -> PageRequest.of(pageNo, pageSize, Sort.by(sortDirection, "movie.owner.username"));
-            case RENTED_BY -> PageRequest.of(pageNo, pageSize, Sort.by(sortDirection, "rentedBy.username"));
-            case RENTED_UNTIL -> PageRequest.of(pageNo, pageSize, Sort.by(sortDirection, "rentedUntil"));
-            case RENTED_DATE -> PageRequest.of(pageNo, pageSize, Sort.by(sortDirection, "rentedDate"));
+            case TITLE -> PageRequest.of(pageNo, pageSize, Sort.by(sortDirection, MOVIE_TITLE));
+            case CATEGORY -> PageRequest.of(pageNo, pageSize, Sort.by(sortDirection, MOVIE_CATEGORY_NAME));
+            case DIRECTOR -> PageRequest.of(pageNo, pageSize, Sort.by(sortDirection, MOVIE_DIRECTOR));
+            case OWNER -> PageRequest.of(pageNo, pageSize, Sort.by(sortDirection, MOVIE_OWNER_USERNAME));
+            case RENTED_BY -> PageRequest.of(pageNo, pageSize, Sort.by(sortDirection, RENTED_BY_USERNAME));
+            case RENTED_UNTIL -> PageRequest.of(pageNo, pageSize, Sort.by(sortDirection, RENTED_UNTIL));
+            case RENTED_DATE -> PageRequest.of(pageNo, pageSize, Sort.by(sortDirection, RENTED_DATE));
             default -> PageRequest.of(pageNo, pageSize, Sort.by(sortDirection, sortField));
         };
     }
-
-
 }
