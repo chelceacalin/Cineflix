@@ -7,6 +7,7 @@ import "./css/AddNewMovieModalWindow.css";
 import axios from "axios";
 import { Autocomplete } from "@mui/material";
 import { showError,showSuccess } from "../../service/ToastService";
+import * as moreClasses from "react-dom/test-utils";
 
 function DetailsMovieModalView({
   isModalOpen,
@@ -183,12 +184,12 @@ function DetailsMovieModalView({
           </div>
         </div>
         <DialogContent className="modal-body ml-2 mr-2">
-          <div className="flex gap-x-2">
-            <div className="field-group flex-1">
+            <div>
               <TextField
                 label="Title"
-                variant="outlined"
-                className="input-field w-full"
+                sx={{
+                  width: { md: 835 },
+                }}
                 defaultValue={title}
                 onChange={(e) => {
                   setTitle(e.target.value);
@@ -201,12 +202,12 @@ function DetailsMovieModalView({
                 }}
               />
             </div>
-            <div className="field-group flex-1">
+            <div className='mt-6'>
               <TextField
                 label="Director"
-                variant="outlined"
-                fullWidth
-                className="input-field"
+                sx={{
+                  width: { md: 835 },
+                }}
                 defaultValue={director}
                 onChange={(e) => {
                   setDirector(e.target.value);
@@ -218,40 +219,51 @@ function DetailsMovieModalView({
                   style: { fontFamily: "Sanchez" },
                 }}
               />
-            </div>
           </div>
-          <div className="w-full">
+          <div className='mt-6'>
             <Autocomplete
               onChange={(e, value) => setCategory(value)}
               value={category}
+              sx={{
+                width: { md: 835 },
+              }}
               options={availableCategories.map((c) => c.name)}
-              renderInput={(params) => (
-                <TextField
-                  {...params}
-                  label="Category"
-                  InputLabelProps={{
-                    style: { fontFamily: "Sanchez" },
-                  }}
-                />
-              )}
+              renderInput={(params) =>
+                  <TextField
+                      {...params}
+                      InputLabelProps={{
+                        style: { fontFamily: "Sanchez" }
+                      }}
+                      InputProps={{
+                        ...params.InputProps, ...moreClasses.input,
+                        style: { fontFamily: "Sanchez" }
+                      }}
+                      sx={{ fontFamily: "Sanchez" }}
+                      label="Category"/>}
             />
           </div>
-          <div className="field-group mt-4">
+          <div className='mt-6'>
             <TextField
               placeholder=" Write a description for the movie..."
               label="Description"
               multiline={true}
               className="textarea-field w-full border-2 p-2"
               value={description}
-              rows={6}
+              rows={4}
               onChange={(e) => {
                 setDescription(e.target.value);
+              }}
+              InputProps={{
+                style: { fontFamily: "Sanchez" }
+              }}
+              InputLabelProps={{
+                style: { fontFamily: "Sanchez" }
               }}
             />
           </div>
 
           <div className="field-group image-upload-field">
-            <div className="">
+            <div className='mt-6'>
               <h2 className="text-xl font-bold mb-4">Image Upload</h2>
               <div
                 className="border-2 border-gray-400 p-4 rounded-lg mb-4"

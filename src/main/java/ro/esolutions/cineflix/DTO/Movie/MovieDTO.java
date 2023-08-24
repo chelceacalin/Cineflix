@@ -19,6 +19,7 @@ public class MovieDTO {
     private String owner_username;
 
     private String title;
+
     private String director;
 
     private String category;

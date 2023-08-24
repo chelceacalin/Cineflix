@@ -25,7 +25,9 @@ function Category({id, name, classes, updateCategory, setErrorMessage, errorMess
   return (
     <tr className='z-0'>
         <td className={classes}>
-            {name}
+            <div variant="small" color="blue-gray" className="font-normal max-w-[200px]">
+                {name}
+            </div>
         </td>
         <td className={classes}>
             <Button onClick={handleOpen} className="outlined-button font-normal w-full" variant="outlined">
