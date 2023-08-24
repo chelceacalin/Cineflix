@@ -62,12 +62,13 @@ function Movie({
         </div>
       </td>
       <td className={classes}>
-        <button
+        <Button
           onClick={handleDetailsOpen}
-          className="inline-block rounded w-full px-3 mr-4 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-blue-marine outlined-button"
+          className="outlined-button w-full font-normal"
+          variant="outlined"
         >
           Details
-        </button>
+        </Button>
 
         {detailsModalOpen && (
           <DetailsMovieModalView
@@ -83,12 +84,13 @@ function Movie({
         )}
       </td>
       <td className={classes}>
-        <button
+        <Button
           onClick={handleDeleteOpen}
-          className="inline-block w-full rounded px-3 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-white contained-button"
+          className="contained-button font-normal w-full"
+          variant="contained"
         >
           Delete
-        </button>
+        </Button>
 
         {deleteModalOpen && (
           <DeleteMovieModalView
