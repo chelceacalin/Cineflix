@@ -9,7 +9,7 @@ import "react-toastify/dist/ReactToastify.css";
 
 axios.defaults.withCredentials = true
 
-function EditRoleModalWindow({ isModalOpen, closeModal, id, name, updateCategory, setErrorMessage, errorMessage }) {
+function EditCategoryNameModalWindow({ isModalOpen, closeModal, id, name, updateCategory, setErrorMessage, errorMessage }) {
     const newNameRef = useRef();
     const editCategoryName = () => {
         let url = '/category/update/' + id;
@@ -101,4 +101,4 @@ function EditRoleModalWindow({ isModalOpen, closeModal, id, name, updateCategory
     );
 }
 
-export default EditRoleModalWindow
+export default EditCategoryNameModalWindow
