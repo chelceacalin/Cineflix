@@ -186,6 +186,7 @@ function ViewMovieDetailsModalWindow({isModalOpen, closeModal,title,
                                  component='div'
                                 />
                             </Card>
+
                         </div>
                         { !isAvailable && (
                         <div className='mt-6 ml-28'>
