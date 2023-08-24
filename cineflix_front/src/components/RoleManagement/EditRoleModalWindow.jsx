@@ -1,13 +1,21 @@
-import React, { useState, useEffect } from 'react'
-import { Button, Dialog, DialogContent, FormControl, InputLabel, NativeSelect, TextField } from '@mui/material';
+import { useState, useEffect } from 'react'
+import {
+    Autocomplete,
+    Button,
+    Dialog,
+    DialogContent,
+    TextField
+} from '@mui/material';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import "./css/EditRoleModalWindow.css";
 import axios from 'axios';
 import { ToastContainer, toast } from "react-toastify";
+import * as moreClasses from "react-dom/test-utils";
 
 axios.defaults.withCredentials = true
 
+// eslint-disable-next-line react/prop-types
 function EditRoleModalWindow({ isModalOpen, closeModal, name, firstName, lastName, role, email, username, updateUser }) {
     const fullName = `${name}`;
     const [roles, setRole] = useState(role);
@@ -20,6 +28,10 @@ function EditRoleModalWindow({ isModalOpen, closeModal, name, firstName, lastNam
         email: '',
         role: ''
     });
+
+    const role_type=[
+        'ADMIN','USER'
+    ]
 
     useEffect(() => {
         setUserDTO(() => ({
@@ -96,26 +108,38 @@ function EditRoleModalWindow({ isModalOpen, closeModal, name, firstName, lastNam
                     />
                 </div>
                 <div className='mt-6'>
-                    <FormControl fullWidth>
-                        <InputLabel 
-                            variant="standard" 
-                            htmlFor="uncontrolled-native"> Role </InputLabel>
-                        <NativeSelect defaultValue={role}
-                            onChange={(e) => setSelectedOption(e.target.value)}
-                            placeholder=''
-                        >
-                            <option value="USER">User</option>
-                            <option value="ADMIN">Admin</option>
-                        </NativeSelect>
-                        <div className='flex gap-x-2 mt-6'>
-                            <div className="flex-1">
-                                <Button className="contained-button w-full" variant="contained" onClick={editUserRole}>Save</Button>
-                            </div>
-                            <div className="flex-1">
-                                <Button className="outlined-button w-full" variant="outlined" onClick={closeModal} >Cancel</Button>
-                            </div>
-                        </div>
-                    </FormControl>
+                    <Autocomplete
+                        sx={{ fontFamily: "Sanchez" }}
+                        value={selectedOption}
+                        onChange={(e, value) => {
+                            setSelectedOption(value)
+                        }
+                    }
+                        ListboxProps={{
+                            style:{ fontFamily: "Sanchez" }
+                        }}
+                        options={role_type}
+                        renderInput={(params) =>
+                            <TextField
+                                {...params}
+                                InputLabelProps={{
+                                    style: { fontFamily: "Sanchez" }
+                                }}
+                                InputProps={{
+                                    ...params.InputProps, ...moreClasses.input,
+                                    style: { fontFamily: "Sanchez" }
+                                }}
+                                sx={{ fontFamily: "Sanchez" }}
+                                label="Role"/>}
+                    />
+                <div className='flex gap-x-2 mt-6'>
+                    <div className="flex-1">
+                        <Button className="contained-button w-full" variant="contained" onClick={editUserRole}>Save</Button>
+                    </div>
+                    <div className="flex-1">
+                        <Button className="outlined-button w-full" variant="outlined" onClick={closeModal} >Cancel</Button>
+                    </div>
+                </div>
                 </div>
             </DialogContent>
         </Dialog>
