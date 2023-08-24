@@ -183,6 +183,7 @@ function ViewMovieDetailsModalWindow({isModalOpen, closeModal,title,
                                         backgroundSize: 'contain'
                                 }}
                                  image = {selectedImage}
+                                 component='div'
                                 />
                             </Card>
                         </div>
