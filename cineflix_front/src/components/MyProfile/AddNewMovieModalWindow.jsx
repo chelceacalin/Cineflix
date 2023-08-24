@@ -1,6 +1,4 @@
 import React, { useContext, useState, useEffect } from "react";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import {
   Button,
   Dialog,
@@ -13,6 +11,8 @@ import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import "./css/AddNewMovieModalWindow.css";
 import axios from "axios";
 import { UserLoginContext } from "../../utils/context/LoginProvider";
+import {showError,showSuccess} from '../../service/ToastService';
+import * as moreClasses from "react-dom/test-utils";
 
 
 function AddNewMovieModalWindow({
@@ -24,7 +24,7 @@ function AddNewMovieModalWindow({
   const [title, setTitle] = useState("");
   const [director, setDirector] = useState("");
   const [description, setDescription] = useState("");
-  const [category, setCategory] = useState("");
+  const [category, setCategory] = useState(null);
   const [categorySelect, setCategorySelect] = useState("");
   const [selectedImage, setSelectedImage] = useState(null);
   const [availableCategories, setAvailableCategories] = useState([]);
@@ -48,7 +48,6 @@ function AddNewMovieModalWindow({
         setAvailableCategories(response.data.content);
       })
       .catch((error) => {
-        console.error(error);
       });
   }, [category]);
 
@@ -66,24 +65,25 @@ function AddNewMovieModalWindow({
   const validRequest = () => {
     for (const check of validationChecks) {
       if (check.condition) {
-        showToast(check.message);
+        showError(check.message);
         return false;
       }
     }
+
+    if (title.charAt(0) !== title.charAt(0).toUpperCase()) {
+      showError("Title should start with an uppercase letter!");
+      return false;
+    }
+
+    if (director.charAt(0) !== director.charAt(0).toUpperCase()) {
+      showError("Director should start with an uppercase letter!");
+      return false;
+    }
+
     return true;
   };
   const handleSave = () => {
     if (validRequest()) {
-      if (title.charAt(0) !== title.charAt(0).toUpperCase()) {
-        showToast("Title should start with an uppercase letter!");
-        return;
-      }
-
-      if (director.charAt(0) !== director.charAt(0).toUpperCase()) {
-        showToast("Director should start with an uppercase letter!");
-        return;
-      }
-
       let urlAddMovie = `/movies`;
 
       let movie = {
@@ -106,24 +106,21 @@ function AddNewMovieModalWindow({
               axios
                 .post(urlAddMovieImage, formData)
                 .then((response) => {
-                  showToast("Movie added successfully!", "bg-green-500");
+                  showSuccess("Movie added successfully!", "bg-green-500");
                  })
                 .catch((error) => {
-                  console.error("Error " + error);
                 });
             } else {
-              console.error("Movie does not exist");
             }
             setTriggerRefresh(!triggerRefresh);
             resetForm();
           })
           .catch((err) => {
-            console.error(err);
           });
 
         closeModal();
       } else {
-        showToast("Image should not be empty!");
+        showError("Image should not be empty!");
       }
     }
   };
@@ -152,12 +149,10 @@ function AddNewMovieModalWindow({
           </div>
         </div>
         <DialogContent className="modal-body ml-2 mr-2">
-          <div className="field-group">
+          <div>
             <TextField
               label="Title"
-              variant="outlined"
               fullWidth
-              className="input-field"
               onChange={(e) => {
                 setTitle(e.target.value);
               }}
@@ -169,12 +164,10 @@ function AddNewMovieModalWindow({
               }}
             />
           </div>
-          <div className="field-group">
+          <div className='mt-6'>
             <TextField
               label="Director"
-              variant="outlined"
               fullWidth
-              className="input-field"
               onChange={(e) => {
                 setDirector(e.target.value);
               }}
@@ -186,26 +179,47 @@ function AddNewMovieModalWindow({
               }}
             />
           </div>
+          <div className='mt-6'>
           <Autocomplete
+            sx={{ fontFamily: "Sanchez" }}
             onChange={(e, value) => setCategory(value)}
             value={category}
-            options={availableCategories.map((c) => c.name)}
-            renderInput={(params) => <TextField {...params} label="Category" 
-            InputLabelProps={{
-              style: { fontFamily: "Sanchez" }
+            ListboxProps={{
+              style:{ fontFamily: "Sanchez" }
             }}
-            />}
+            options={availableCategories.map((c) => c.name)}
+            renderInput={(params) =>
+                <TextField
+                    {...params}
+                    InputLabelProps={{
+                      style: { fontFamily: "Sanchez" }
+                    }}
+                    InputProps={{
+                      ...params.InputProps, ...moreClasses.input,
+                      style: { fontFamily: "Sanchez" }
+                    }}
+                    sx={{ fontFamily: "Sanchez" }}
+                    label="Category"/>}
           />
+          </div>
           <div className="field-group mt-4">
-            <label className="mb-4">Description</label>
-            <textarea
-              placeholder=" Write a description for the movie..."
-              required
-              rows="3"
-              className="textarea-field w-full border-2 p-2"
-              onChange={(e) => {
-                setDescription(e.target.value);
-              }}
+            <TextField
+                id="outlined-read-only-input"
+                label="Description"
+                multiline={true}
+                onChange={(e) => {
+                  setDescription(e.target.value);
+                }}
+                sx={{
+                  width: { md: 537 },
+                }}
+                rows={4}
+                InputProps={{
+                  style: { fontFamily: "Sanchez" }
+                }}
+                InputLabelProps={{
+                  style: { fontFamily: "Sanchez" }
+                }}
             />
           </div>
 
@@ -263,24 +277,10 @@ function AddNewMovieModalWindow({
           </div>
         </DialogContent>
       </div>
-      <ToastContainer />
     </Dialog>
   );
 }
 
-const showToast = (message, color = "bg-red-500") => {
-  const toastType = color === "bg-green-500" ? toast.success : toast.error;
 
-  toastType(message, {
-    className: `${color} text-black p-4 rounded-lg`,
-    position: "top-right",
-    autoClose: 2500,
-    hideProgressBar: false,
-    closeOnClick: true,
-    pauseOnHover: true,
-    draggable: true,
-    progress: undefined,
-  });
-};
 
 export default AddNewMovieModalWindow;

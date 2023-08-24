@@ -13,12 +13,12 @@ function UserCineflix({ name, firstName, lastName, role, email, username, classe
   return (
     <tr key={name}>
       <td className={classes}>
-        <div variant="small" color="blue-gray" className="font-normal">
+        <div variant="small" color="blue-gray" className="font-normal max-w-[200px]">
           {name}
         </div>
       </td>
       <td className={classes}>
-        <div variant="small" color="blue-gray" className="font-normal">
+        <div variant="small" color="blue-gray" className="font-normal max-w-[200px]">
               <span value="User" className="font-bold">{role}</span>
         </div>
       </td>

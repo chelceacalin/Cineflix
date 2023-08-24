@@ -6,8 +6,6 @@ import { UserLoginContext } from "../../utils/context/LoginProvider";
 import MovieFilter from "./MovieFilter";
 import SortIcon from "../../utils/icon/SortIcon";
 
-axios.defaults.withCredentials = true;
-
 function Movies() {
   const TABLE_HEAD = [
     "Title",
@@ -34,15 +32,11 @@ function Movies() {
   const [pageSize, setPageSize] = useState(15);
   const [totalPages, setTotalPages] = useState("");
   const [totalMovies, setTotalMovies] = useState(0);
-  const [open, setOpen] = useState(false);
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
   const [triggerRefresh, setTriggerRefresh] = useState(false);
   const { username } = useContext(UserLoginContext);
   const [direction, setDirection] = useState(true);
   const [sortField, setSortField] = useState("title");
   const [ownerUsername, setOwnerUsername] = useState("");
-  const [lastClicked, setLastClicked] = useState("");
 
 
   useEffect(() => {
@@ -242,6 +236,7 @@ function Movies() {
                   {
                     category,
                     director,
+                    description,
                     title,
                     isAvailable,
                     rentedUntil,
@@ -269,6 +264,7 @@ function Movies() {
                       rentedDate={rentedDate}
                       rentedBy={rentedBy}
                       key={index}
+                      description={description}
                       classes={classes}
                       triggerRefresh={triggerRefresh}
                       setTriggerRefresh={setTriggerRefresh}
