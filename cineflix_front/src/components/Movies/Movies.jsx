@@ -236,6 +236,7 @@ function Movies() {
                   {
                     category,
                     director,
+                    description,
                     title,
                     isAvailable,
                     rentedUntil,
@@ -263,6 +264,7 @@ function Movies() {
                       rentedDate={rentedDate}
                       rentedBy={rentedBy}
                       key={index}
+                      description={description}
                       classes={classes}
                       triggerRefresh={triggerRefresh}
                       setTriggerRefresh={setTriggerRefresh}
