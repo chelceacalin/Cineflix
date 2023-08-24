@@ -203,6 +203,8 @@ public class MovieService {
 
     @Transactional
     public void addMovieHistory(MovieHistoryDTO movieHistoryDTO) {
+        Optional<Movie> movieOptional = movieRepository.findById(movieHistoryDTO.getMovieId());
+        movieOptional.ifPresent(movie -> {movie.setAvailable(false); movieRepository.save(movie);});
         MovieHistory movieHistory = MovieHistoryMapper.toMovieHistory(movieHistoryDTO);
         movieHistoryRepository.save(movieHistory);
     }
@@ -212,7 +214,9 @@ public class MovieService {
         if (movie.isEmpty()) {
             return Optional.of("Movie not found");
         }
-
+        if(!movie.get().isAvailable()){
+            return Optional.of("Movie is not available");
+        }
         Optional<UserCineflix> userCineflix = userCineflixRepository.findById(String.valueOf(movieHistoryDTO.getUserId()));
         if (userCineflix.isEmpty()) {
             return Optional.of("User not found");

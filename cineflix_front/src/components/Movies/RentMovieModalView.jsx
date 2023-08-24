@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState, useEffect} from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   Button,
@@ -20,6 +20,9 @@ function RentMovieModalView({
   title,
   director,
   owner,
+  id,
+  signal,
+
 }) {
     dayjs.extend(updateLocale)
     dayjs.updateLocale('en', {
@@ -27,6 +30,32 @@ function RentMovieModalView({
     })
     const today = dayjs();
     const maxDate = today.add(14, "day");
+
+    const [idUser, setIdUser] = useState("");
+    const [date, setDate] = useState(new Date());
+
+    useEffect(() => {
+      const url = '/users/' + owner;
+      axios.get(url).then((elems) => {
+        setIdUser(elems.data.id);
+      });
+  
+    }, []);
+
+
+    const rentMovie = () =>{
+      const url = '/movies/history';
+      axios.post(url, {
+        rentedDate: today,
+        rentedUntil: date,
+        movieId: id,
+        userId: idUser
+      }).then(response =>{
+        signal();
+        closeRentModal();
+      });
+    };
+
   return (
     <Dialog
       fullWidth
@@ -64,6 +93,8 @@ function RentMovieModalView({
                 width: { md: 259 },
               }}
               disabled={false}
+              selected={date} 
+              onChange={date => setDate(date)}
             />
           </LocalizationProvider>
         </div>
@@ -78,7 +109,7 @@ function RentMovieModalView({
               </Button>
             </div>
             <div className="px-2 w-1/2">
-              <Button className="contained-button w-full" variant="contained">
+              <Button className="contained-button w-full" variant="contained" onClick={rentMovie}>
                 Rent
               </Button>
             </div>

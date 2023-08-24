@@ -42,7 +42,11 @@ function Movies() {
   const [sortField, setSortField] = useState("title");
   const [ownerUsername, setOwnerUsername] = useState("");
   const [lastClicked, setLastClicked] = useState("");
+  let [signalCall, setSignalCall] = useState(false);
 
+  let signal = () => {
+    setSignalCall(!signalCall);
+  }
 
   useEffect(() => {
     const buildUrl = () => {
@@ -98,6 +102,7 @@ function Movies() {
     rentedDate,
     pageNo,
     movies.length,
+    signalCall
   ]);
 
 
@@ -268,6 +273,7 @@ function Movies() {
                       classes={classes}
                       triggerRefresh={triggerRefresh}
                       setTriggerRefresh={setTriggerRefresh}
+                      signal={signal}
                     />
                   );
                 }
