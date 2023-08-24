@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState, useEffect} from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   Button,
@@ -12,6 +12,7 @@ import {LocalizationProvider} from '@mui/x-date-pickers/LocalizationProvider';
 import {DatePicker} from '@mui/x-date-pickers/DatePicker';
 import dayjs from "dayjs";
 import updateLocale from "dayjs/plugin/updateLocale";
+import { ToastContainer, toast } from "react-toastify";
 axios.defaults.withCredentials = true;
 
 function RentMovieModalView({
@@ -20,6 +21,9 @@ function RentMovieModalView({
   title,
   director,
   owner,
+  id,
+  signal,
+
 }) {
     dayjs.extend(updateLocale)
     dayjs.updateLocale('en', {
@@ -27,6 +31,53 @@ function RentMovieModalView({
     })
     const today = dayjs();
     const maxDate = today.add(14, "day");
+
+    const [idUser, setIdUser] = useState("");
+    const [date, setDate] = useState(new Date());
+
+    const showToast = (message, color = "bg-red-500") => {
+      const toastType = color === "bg-green-500" ? toast.success : toast.error;
+    
+      toastType(message, {
+        className: `${color} text-black p-4 rounded-lg`,
+        position: "top-right",
+        autoClose: 2500,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+    };
+
+    useEffect(() => {
+      const url = '/users/' + owner;
+      axios.get(url).then((elems) => {
+        setIdUser(elems.data.id);
+      });
+  
+    }, []);
+
+
+    const rentMovie = () =>{
+      const url = '/movies/history';
+      axios.post(url, {
+        rentedDate: today,
+        rentedUntil: date,
+        movieId: id,
+        userId: idUser
+      }).then(response =>{
+        signal();
+        closeRentModal();
+      }).catch((error) => {
+        if(error.response){
+          const message = JSON.stringify(error.response.data).replace('"', '').replace('"', '');
+          showToast(message);
+          closeRentModal();
+        }
+    })
+    };
+
   return (
     <Dialog
       fullWidth
@@ -64,6 +115,8 @@ function RentMovieModalView({
                 width: { md: 259 },
               }}
               disabled={false}
+              selected={date} 
+              onChange={date => setDate(date)}
             />
           </LocalizationProvider>
         </div>
@@ -78,7 +131,7 @@ function RentMovieModalView({
               </Button>
             </div>
             <div className="px-2 w-1/2">
-              <Button className="contained-button w-full" variant="contained">
+              <Button className="contained-button w-full" variant="contained" onClick={rentMovie}>
                 Rent
               </Button>
             </div>

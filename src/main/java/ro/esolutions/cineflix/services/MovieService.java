@@ -1,5 +1,4 @@
 package ro.esolutions.cineflix.services;
-
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.*;
@@ -20,17 +19,15 @@ import ro.esolutions.cineflix.mapper.MovieMapper;
 import ro.esolutions.cineflix.repositories.*;
 import ro.esolutions.cineflix.specification.GenericSpecification;
 import ro.esolutions.cineflix.specification.MovieSpecification;
-
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
-
 import static java.util.Objects.nonNull;
-
 @Service
 @Transactional
 @RequiredArgsConstructor
+
 public class MovieService {
 
     private final MovieRepository movieRepository;
@@ -43,17 +40,23 @@ public class MovieService {
 
     private final UserCineflixRepository userCineflixRepository;
 
-
     private final MovieImageDataRepository movieImageDataRepository;
 
     public static final String USERNAME = "movieHistories.rentedBy.username";
+    public static final String CATEGORY = "category";
     public static final String MOVIE_HISTORIES_RENTED_UNTIL = "movieHistories.rentedUntil";
     public static final String MOVIE_HISTORIES_RENTED_DATE = "movieHistories.rentedDate";
     public static final String RENTED_BY = "rentedBy";
     public static final String RENTED_UNTIL = "rentedUntil";
     public static final String RENTED_DATE = "rentedDate";
     public static final String DIRECTOR = "director";
+    public static final String OWNER = "owner_username";
     public static final String TITLE = "title";
+    public static final String RENTED_BY_USERNAME = "rentedBy.username";
+    public static final String MOVIE_OWNER_USERNAME = "movie.owner.username";
+    public static final String MOVIE_DIRECTOR = "movie.director";
+    public static final String MOVIE_CATEGORY_NAME = "movie.category.name";
+    public static final String MOVIE_TITLE = "movie.title";
 
     public Page<MovieDTO> findUserMovies(MovieFilterDTO movieFilter, int pageNo, int pageSize) {
         Specification<Movie> specification = getSpecification(movieFilter);
@@ -193,9 +196,6 @@ public class MovieService {
     }
 
     public MovieRentDTO findMovieToRent(UUID id) {
-
-        Optional<Movie> movie = movieRepository.findById(id);
-
         return movieRepository.findById(id)
                 .map(MovieMapper::toMovieRentDto)
                 .orElseThrow(() -> new MovieNotFoundException("Movie not found"));
@@ -203,6 +203,8 @@ public class MovieService {
 
     @Transactional
     public void addMovieHistory(MovieHistoryDTO movieHistoryDTO) {
+        Optional<Movie> movieOptional = movieRepository.findById(movieHistoryDTO.getMovieId());
+        movieOptional.ifPresent(movie -> {movie.setAvailable(false); movieRepository.save(movie);});
         MovieHistory movieHistory = MovieHistoryMapper.toMovieHistory(movieHistoryDTO);
         movieHistoryRepository.save(movieHistory);
     }
@@ -212,7 +214,9 @@ public class MovieService {
         if (movie.isEmpty()) {
             return Optional.of("Movie not found");
         }
-
+        if(!movie.get().isAvailable()){
+            return Optional.of("Movie is not available, was rented by another user");
+        }
         Optional<UserCineflix> userCineflix = userCineflixRepository.findById(String.valueOf(movieHistoryDTO.getUserId()));
         if (userCineflix.isEmpty()) {
             return Optional.of("User not found");
@@ -220,4 +224,16 @@ public class MovieService {
 
         return Optional.empty();
     }
+
+    public Page<MovieDTO> findRentedMoviesForUser(MyRentedMoviesRequestDTO myRentedMoviesDTO, int pageNo, int pageSize) {
+        UserDTO userCineflix = userCineflixService.findUserByUsername(myRentedMoviesDTO.getRentUsername());
+        Pageable pageable = myRentedMoviesDTO.getPageableRented(pageNo, pageSize);
+
+        Page<MovieHistory> movieHistories = movieHistoryRepository.findAllByRentedBy_Id(userCineflix.getId(), pageable);
+        List<MovieDTO> rentedMovies = movieHistories.getContent().stream()
+                .map(history -> MovieMapper.toDto(history.getMovie(), history))
+                .collect(Collectors.toList());
+        return new PageImpl<>(rentedMovies, pageable, movieHistories.getTotalElements());
+    }
+
 }
