@@ -66,7 +66,7 @@ function AddNewMovieModalWindow({
   const validRequest = () => {
     for (const check of validationChecks) {
       if (check.condition) {
-        showToastError(check.message);
+        showToast(check.message);
         return false;
       }
     }
@@ -75,12 +75,12 @@ function AddNewMovieModalWindow({
   const handleSave = () => {
     if (validRequest()) {
       if (title.charAt(0) !== title.charAt(0).toUpperCase()) {
-        showToastError("Title should start with an uppercase letter!");
+        showToast("Title should start with an uppercase letter!");
         return;
       }
 
       if (director.charAt(0) !== director.charAt(0).toUpperCase()) {
-        showToastError("Director should start with an uppercase letter!");
+        showToast("Director should start with an uppercase letter!");
         return;
       }
 
@@ -105,7 +105,9 @@ function AddNewMovieModalWindow({
               formData.append("image", selectedImage);
               axios
                 .post(urlAddMovieImage, formData)
-                .then((response) => { })
+                .then((response) => {
+                  showToast("Movie added successfully!", "bg-green-500");
+                 })
                 .catch((error) => {
                   console.error("Error " + error);
                 });
@@ -121,7 +123,7 @@ function AddNewMovieModalWindow({
 
         closeModal();
       } else {
-        showToastError("Image should not be empty!");
+        showToast("Image should not be empty!");
       }
     }
   };
@@ -266,11 +268,13 @@ function AddNewMovieModalWindow({
   );
 }
 
-const showToastError = (message) => {
-  toast.error(message, {
-    className: "bg-red-500 text-black p-4 rounded-lg",
+const showToast = (message, color = "bg-red-500") => {
+  const toastType = color === "bg-green-500" ? toast.success : toast.error;
+
+  toastType(message, {
+    className: `${color} text-black p-4 rounded-lg`,
     position: "top-right",
-    autoClose: 3500,
+    autoClose: 2500,
     hideProgressBar: false,
     closeOnClick: true,
     pauseOnHover: true,

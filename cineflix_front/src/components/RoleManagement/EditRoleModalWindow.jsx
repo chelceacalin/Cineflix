@@ -4,6 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import "./css/EditRoleModalWindow.css";
 import axios from 'axios';
+import { ToastContainer, toast } from "react-toastify";
 
 axios.defaults.withCredentials = true
 
@@ -33,21 +34,23 @@ function EditRoleModalWindow({ isModalOpen, closeModal, name, firstName, lastNam
     const editUserRole = () => {
         let url = '/users/update/' + selectedOption;
 
-        try {
-            setUserDTO(() => ({
-                'username': username,
-                'firstName': firstName,
-                'lastName': lastName,
-                'email': email,
-                'role': selectedOption
-            }));
-            const response = axios.post(url, userDTO).then(() => {
-
+        setUserDTO(() => ({
+            'username': username,
+            'firstName': firstName,
+            'lastName': lastName,
+            'email': email,
+            'role': selectedOption
+        }));
+        axios
+            .post(url, userDTO)
+            .then(() => {
+                showToast("User edited successfully!", "bg-green-500");
                 updateUser(userDTO);
                 closeModal();
-            });
-        } catch (error) {
-        }
+        })
+        .catch (error => {
+            showToast("Error editing user: " + error.message);
+        })
     };
 
     return (
@@ -118,5 +121,20 @@ function EditRoleModalWindow({ isModalOpen, closeModal, name, firstName, lastNam
         </Dialog>
     );
 }
+
+const showToast = (message, color = "bg-red-500") => {
+  const toastType = color === "bg-green-500" ? toast.success : toast.error;
+
+  toastType(message, {
+    className: `${color} text-black p-4 rounded-lg`,
+    position: "top-right",
+    autoClose: 3500,
+    hideProgressBar: false,
+    closeOnClick: true,
+    pauseOnHover: true,
+    draggable: true,
+    progress: undefined,
+  });
+};
 
 export default EditRoleModalWindow

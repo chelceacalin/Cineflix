@@ -17,26 +17,29 @@ function DeleteMovieModalView({ isModalOpen, closeModal, title, category, id, re
 
             axios.post(url).then(() => {
                 setTriggerRefresh(!triggerRefresh);
+                showToast("Movie deleted successfully!", "bg-green-500");
                 closeModal();
                 setRequestError(false);
             })
             .catch((error) => {
-                showToastError(error.response.data)                
+                showToast(error.response.data)                
             })
     }
 
-    const showToastError = (message) => {
-        toast.error(message, {
-          className: "bg-red-500 text-black p-4 rounded-lg mr-4 w-98",
+    const showToast = (message, color = "bg-red-500") => {
+        const toastType = color === "bg-green-500" ? toast.success : toast.error;
+      
+        toastType(message, {
+          className: `${color} text-black p-4 rounded-lg`,
           position: "top-right",
-          autoClose: 3500,
+          autoClose: 2500,
           hideProgressBar: false,
           closeOnClick: true,
           pauseOnHover: true,
           draggable: true,
           progress: undefined,
         });
-    };
+      };
 
     return (
         <Dialog open={isModalOpen} onClose={closeModal} fullWidth maxWidth={'sm'}>
