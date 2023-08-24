@@ -21,7 +21,7 @@ function MovieFilter({ filterInput }) {
   const [unavailable, setUnavailable] = useState(true);
   const [rentedUntil, setRentedUntil] = useState(null);
   const [rentedDate,setRentedDate]=useState(null)
-  const [rentedBy, setRentedBy] = useState("");
+  const [rentedBy, setRentedBy] = useState(null);
   const [usersWhoRented, setUsersWhoRented] = useState([]);
   const { username } = useContext(UserLoginContext);
   let [filteredUsers,setFilteredUsers]=useState([])
