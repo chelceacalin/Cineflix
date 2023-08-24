@@ -29,7 +29,7 @@ function EditRoleModalWindow({ isModalOpen, closeModal, name, firstName, lastNam
         role: ''
     });
 
-    const roles=[
+    const role_type=[
         'ADMIN','USER'
     ]
 
@@ -118,7 +118,7 @@ function EditRoleModalWindow({ isModalOpen, closeModal, name, firstName, lastNam
                         ListboxProps={{
                             style:{ fontFamily: "Sanchez" }
                         }}
-                        options={roles}
+                        options={role_type}
                         renderInput={(params) =>
                             <TextField
                                 {...params}
