@@ -121,46 +121,8 @@ function Navbar() {
                     {" "}
                     Profile
                   </span>
-            
                 </a>
               </li>
-              <li className="rounded-sm">
-  <a
-    href="#"
-    className={`flex items-center p-2 space-x-3 rounded-md ${
-      selectedItem === "rentedMovies"
-        ? "aBackgroundClick"
-        : "aBackgroundRelease"
-    }`}
-    onClick={(e) => {
-      e.preventDefault();
-      handleItemClick("rentedMovies", "red");
-      // Navigate to the appropriate route for rented movies
-      navigate("/myrentedmovies");
-    }}
-  >
-    {/* Replace this SVG with your rented movies icon */}
-    <svg
-      width="25"
-      height="27"
-      viewBox="0 0 25 27"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-    >
-      {/* Your SVG path here */}
-    </svg>
-
-    <span
-      style={{ fontSize: 16 }}
-      className={`${
-        selectedItem === "rentedMovies" ? "spanClick" : "spanRelease"
-      }`}
-    >
-      My Rented Movies
-    </span>
-  </a>
-</li>
-
               <li className="rounded-sm">
                 {isAdmin && (
                   <a

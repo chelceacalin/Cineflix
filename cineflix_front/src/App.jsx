@@ -13,25 +13,16 @@ import RoleManagement from "./components/RoleManagement/RoleManagement";
 import NotFound from "./components/NotFound/NotFound";
 import LoginProvider from "./utils/context/LoginProvider.jsx";
 import AdminRoute from "./utils/protectedRoutes/AdminRoute";
-<<<<<<< Updated upstream
 import {UserLoginContext} from "./utils/context/LoginProvider.jsx";
-=======
-import { UserLoginContext } from "./utils/context/LoginProvider.jsx";
->>>>>>> Stashed changes
 import { useContext, useState } from "react";
 import axios from "axios";
 import Authenticated from "./utils/protectedRoutes/Authenticated";
 import ProfileRoute from "./utils/protectedRoutes/ProfileRoute";
 import Login from "./components/Login/Login";
-<<<<<<< Updated upstream
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 function App() { 
-=======
-import ViewRentedMoviesByCurrentUser from "./components/RentedMovies/ViewRentedMoviesByCurrentUser";
-function App() {
->>>>>>> Stashed changes
   return (
     <div className="app-container">
       <LoginProvider>
@@ -48,9 +39,9 @@ function App() {
     const { isAdmin, setIsAdmin, username, setUsername, token, setToken, isLoggedIn, setIsLoggedIn } = useContext(UserLoginContext);
     useEffect(() => {
       axios.get(`/userInfo`)
-        .then((response) => {
-          if (response.status === 200) {
-            const userInfo = response.data;
+      .then((response) => {
+        if (response.status === 200) {
+          const userInfo = response.data;
             if (userInfo.role === "ADMIN") {
               setIsAdmin(true);
             }
@@ -60,7 +51,6 @@ function App() {
             setUsername(userInfo.username);
             setToken(userInfo.token);
             setIsLoggedIn(true);
-<<<<<<< Updated upstream
             sessionStorage.setItem('isLoggedIn',true)
         }
         setInitialized(true)
@@ -77,19 +67,6 @@ function App() {
 
    if(!initialized) return;
 
-=======
-            sessionStorage.setItem('isLoggedIn', true)
-          }
-        })
-        .catch(error => {
-          setIsAdmin(false);
-          setUsername(null);
-          setToken(null);
-          setIsLoggedIn(false);
-          console.error("Error fetching userInfo:", error);
-        });
-    }, [])
->>>>>>> Stashed changes
     if (isLoggedIn) {
       return (
         <>
@@ -101,8 +78,6 @@ function App() {
 
               <Route index path="/" element={<Movies />} />
 
-              <Route path="/myrentedmovies" element={<ViewRentedMoviesByCurrentUser />}/>  
-                         
               <Route element={<ProfileRoute />}>
                 <Route path="/myprofile/:id" element={<MyProfile />} />
               </Route>

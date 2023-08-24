@@ -6,14 +6,10 @@ import Pagination from "../RoleManagement/Pagination";
 import Movie from "./Movie";
 import AddNewMovieModalWindow from "./AddNewMovieModalWindow";
 import { UserLoginContext } from "../../utils/context/LoginProvider";
-<<<<<<< Updated upstream
 import SortIcon from "../../utils/icon/SortIcon";
 import { useNavigate ,useLocation} from "react-router-dom";
 import MyProfileRiredirectButtons from "./MyProfileRiredirectButtons";
 
-=======
-axios.defaults.withCredentials=true;
->>>>>>> Stashed changes
 function MyProfile() {
   const TABLE_HEAD = [
     "Title",
