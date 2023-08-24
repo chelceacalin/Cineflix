@@ -38,7 +38,8 @@ public class MyRentedMoviesRequestDTO {
         this.direction="ASC";
         this.sortField="title";
     }
-    public  Pageable getPageableRented(int pageNo, int pageSize, String sortField) {
+
+    public  Pageable getPageableRented(int pageNo, int pageSize) {
         Sort.Direction sortDirection = Sort.Direction.fromString(this.getDirection());
         return switch (sortField) {
             case TITLE -> PageRequest.of(pageNo, pageSize, Sort.by(sortDirection, MOVIE_TITLE));
@@ -48,7 +49,7 @@ public class MyRentedMoviesRequestDTO {
             case RENTED_BY -> PageRequest.of(pageNo, pageSize, Sort.by(sortDirection, RENTED_BY_USERNAME));
             case RENTED_UNTIL -> PageRequest.of(pageNo, pageSize, Sort.by(sortDirection, RENTED_UNTIL));
             case RENTED_DATE -> PageRequest.of(pageNo, pageSize, Sort.by(sortDirection, RENTED_DATE));
-            default -> PageRequest.of(pageNo, pageSize, Sort.by(sortDirection, sortField));
+            default -> PageRequest.of(pageNo, pageSize, Sort.by(sortDirection, this.sortField));
         };
     }
 

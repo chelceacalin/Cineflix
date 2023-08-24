@@ -223,7 +223,7 @@ public class MovieService {
 
     public Page<MovieDTO> findRentedMoviesForUser(MyRentedMoviesRequestDTO myRentedMoviesDTO, int pageNo, int pageSize) {
         UserDTO userCineflix = userCineflixService.findUserByUsername(myRentedMoviesDTO.getRentUsername());
-        Pageable pageable = myRentedMoviesDTO.getPageableRented(pageNo, pageSize, myRentedMoviesDTO.getSortField());
+        Pageable pageable = myRentedMoviesDTO.getPageableRented(pageNo, pageSize);
 
         Page<MovieHistory> movieHistories = movieHistoryRepository.findAllByRentedBy_Id(userCineflix.getId(), pageable);
         List<MovieDTO> rentedMovies = movieHistories.getContent().stream()
