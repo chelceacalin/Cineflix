@@ -48,7 +48,6 @@ function AddNewMovieModalWindow({
         setAvailableCategories(response.data.content);
       })
       .catch((error) => {
-        console.error(error);
       });
   }, [category]);
 
@@ -110,16 +109,13 @@ function AddNewMovieModalWindow({
                   showSuccess("Movie added successfully!", "bg-green-500");
                  })
                 .catch((error) => {
-                  console.error("Error " + error);
                 });
             } else {
-              console.error("Movie does not exist");
             }
             setTriggerRefresh(!triggerRefresh);
             resetForm();
           })
           .catch((err) => {
-            console.error(err);
           });
 
         closeModal();

@@ -9,6 +9,7 @@ import { showSuccess,showError } from '../../service/ToastService';
 
 function EditCategoryNameModalWindow({ isModalOpen, closeModal, id, name, updateCategory, setErrorMessage, errorMessage }) {
     const newNameRef = useRef();
+   
     const editCategoryName = () => {
         let url = '/category/update/' + id;
 
@@ -17,8 +18,9 @@ function EditCategoryNameModalWindow({ isModalOpen, closeModal, id, name, update
             return;
         } 
 
-        if (newNameRef.current.value.length == 1) {
+        if (newNameRef.current.value.length < 2) {
             showError("Name should have at least 2 characters!")
+            return;
         }
 
         axios.post(url, {
