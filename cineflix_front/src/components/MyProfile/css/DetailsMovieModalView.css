@@ -45,4 +45,22 @@ body {
     border-radius: 4px;
   }
   
- 
+
+.Button:disabled {
+    color: white;
+    background-color: rgba(211, 206, 206, 0.44);
+    border-color: #1E1D5B !important;
+    border-radius: 0 !important;
+
+  }
+.Button:enabled{
+    background-color: #1E1D5B;
+    color:white;
+    border-color: #1E1D5B !important;
+    border-radius: 0 !important;
+  }
+
+.Button:hover {
+    background-color: #E0812E !important;
+    border-color: #E0812E !important;
+}

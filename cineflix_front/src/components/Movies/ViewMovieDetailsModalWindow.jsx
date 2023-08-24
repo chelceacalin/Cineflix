@@ -11,7 +11,7 @@ import axios from "axios";
 
 function ViewMovieDetailsModalWindow({isModalOpen, closeModal,title,
                                          category,
-                                         director,isAvailable, rentedUntil, rentedBy, rentedOn, rentedDate, id}) {
+                                         director,isAvailable, rentedUntil, rentedBy, rentedDate, id}) {
 
     const STATUS_AVAILABLE = 'Available';
     const STATUS_UNAVAILABLE = 'Unavailable';
@@ -78,6 +78,8 @@ function ViewMovieDetailsModalWindow({isModalOpen, closeModal,title,
                                 InputLabelProps={{
                                     style: { fontFamily: "Sanchez" }
                                 }}
+                                disabled={!isAvailable}
+
                             />
                         </div>
                         <div className='mt-6 ml-20'>
@@ -95,6 +97,7 @@ function ViewMovieDetailsModalWindow({isModalOpen, closeModal,title,
                                 InputLabelProps={{
                                     style: { fontFamily: "Sanchez" }
                                 }}
+                                disabled={!isAvailable}
                             />
                         </div>
                         <div className='mt-6 ml-20'>
@@ -112,6 +115,7 @@ function ViewMovieDetailsModalWindow({isModalOpen, closeModal,title,
                                 InputLabelProps={{
                                     style: { fontFamily: "Sanchez" }
                                 }}
+                                disabled={!isAvailable}
                             />
                         </div>
                         <div className='mt-6 ml-20'>
@@ -131,6 +135,7 @@ function ViewMovieDetailsModalWindow({isModalOpen, closeModal,title,
                                 InputLabelProps={{
                                     style: { fontFamily: "Sanchez" }
                                 }}
+                                disabled={!isAvailable}
                             />
                         </div>
                         <div className='mt-6 ml-20 mb-24'>
@@ -148,6 +153,7 @@ function ViewMovieDetailsModalWindow({isModalOpen, closeModal,title,
                                 InputLabelProps={{
                                     style: { fontFamily: "Sanchez" }
                                 }}
+                                disabled={!isAvailable}
                             />
                         </div>
                     </Grid>
@@ -167,6 +173,7 @@ function ViewMovieDetailsModalWindow({isModalOpen, closeModal,title,
                                 InputLabelProps={{
                                     style: { fontFamily: "Sanchez" }
                                 }}
+                                disabled={!isAvailable}
                             />
                         </div>
                         <div className='mt-6 ml-28'>
@@ -249,6 +256,7 @@ function ViewMovieDetailsModalWindow({isModalOpen, closeModal,title,
                                 InputLabelProps={{
                                     style: { fontFamily: "Sanchez" }
                                 }}
+                                disabled={!isAvailable}
                             />
                         </div>
                             )}

@@ -8,7 +8,6 @@ import {useRef, useState} from "react";
 
 const DatePickerClear = (props) => {
     const [open, setOpen] = useState(false);
-    // eslint-disable-next-line react/prop-types
     const { onClear, labelString } = props;
     const handleOnClear = () => {
         onClear();
@@ -27,7 +26,7 @@ const DatePickerClear = (props) => {
                         },
                     }
                 }}
-                format="DD-MM-YYYY"
+                format="YYYY-MM-DD"
                 slots={{
                     textField: (params) => (
                         <div style={{ position: "relative", display: "inline-block" }} >

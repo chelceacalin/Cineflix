@@ -76,6 +76,12 @@ function DetailsMovieModalView({
 
   const handleImageDrop = (event) => {
     event.preventDefault();
+
+    if(!isAvailable)
+    {
+      showError("You cannot change the image of a rented movie");
+      return;
+    }
     const file = event.dataTransfer.files[0];
     if (file) {
       const imageUrl = URL.createObjectURL(file);
@@ -122,7 +128,6 @@ function DetailsMovieModalView({
 
 
   const handleSave = () => {
-
     if (validRequest()) {
       if (validFields()) {
         if (!category) {
@@ -202,6 +207,7 @@ function DetailsMovieModalView({
                 InputLabelProps={{
                   style: { fontFamily: "Sanchez" }
                 }}
+                disabled={!isAvailable}
               />
             </div>
             <div className='mt-6'>
@@ -220,6 +226,7 @@ function DetailsMovieModalView({
                 InputLabelProps={{
                   style: { fontFamily: "Sanchez" },
                 }}
+                disabled={!isAvailable}
               />
           </div>
           <div className='mt-6'>
@@ -242,6 +249,7 @@ function DetailsMovieModalView({
                       }}
                       sx={{ fontFamily: "Sanchez" }}
                       label="Category"/>}
+                      disabled={!isAvailable}
             />
           </div>
           <div className='mt-6'>
@@ -261,6 +269,7 @@ function DetailsMovieModalView({
               InputLabelProps={{
                 style: { fontFamily: "Sanchez" }
               }}
+              disabled={!isAvailable}
             />
           </div>
 
@@ -271,6 +280,7 @@ function DetailsMovieModalView({
                 className="border-2 border-gray-400 p-4 rounded-lg mb-4"
                 onDrop={handleImageDrop}
                 onDragOver={(event) => event.preventDefault()}
+                disabled={!isAvailable}
               >
                 {selectedImage ? (
                   <img
@@ -279,7 +289,7 @@ function DetailsMovieModalView({
                     className="w-40 h-40 object-cover rounded-lg"
                   />
                 ) : (
-                  <div className="text-gray-500">
+                  <div className="text-gray-500"  >
                     Drop or Browse to select an image
                   </div>
                 )}
@@ -289,6 +299,7 @@ function DetailsMovieModalView({
                 accept="image/*"
                 onChange={handleImageBrowse}
                 className="mb-4 w-full"
+                disabled={!isAvailable}
               />
             </div>
           </div>
@@ -297,7 +308,8 @@ function DetailsMovieModalView({
               <Button
                 type="button"
                 onClick={handleSave}
-                className="contained-button w-full"
+                 className="Button w-full"
+                 disabled={!isAvailable}
               >
                 Save
               </Button>

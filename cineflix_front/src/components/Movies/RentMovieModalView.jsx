@@ -53,7 +53,7 @@ function RentMovieModalView({
         userId: idUser
       }).then(response =>{
         setTriggerRefresh(!triggerRefresh)
-        showSuccess("You have rented the movie "+title);
+        showSucces("You have rented the movie "+title);
         closeRentModal();
       }).catch((error) => {
         if(error.response){
