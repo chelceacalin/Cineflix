@@ -3,13 +3,10 @@ package ro.esolutions.cineflix.mapper;
 import ro.esolutions.cineflix.DTO.Movie.MovieAddDTO;
 import ro.esolutions.cineflix.DTO.Movie.MovieDTO;
 import ro.esolutions.cineflix.DTO.Movie.MovieRentDTO;
-import ro.esolutions.cineflix.DTO.Movie.MyRentedMoviesRequestDTO;
 import ro.esolutions.cineflix.DTO.UserCineflix.UserDTO;
 import ro.esolutions.cineflix.entities.Category;
 import ro.esolutions.cineflix.entities.Movie;
 import ro.esolutions.cineflix.entities.MovieHistory;
-import java.util.ArrayList;
-import java.util.List;
 
 public class MovieMapper {
     public static MovieDTO toDto(Movie m, MovieHistory mh) {
