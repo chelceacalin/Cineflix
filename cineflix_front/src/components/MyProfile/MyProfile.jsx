@@ -22,6 +22,7 @@ function MyProfile() {
   ];
   const [movies, setMovies] = useState([]);
   const [category, setCategory] = useState("");
+  const [initialized, setInitialized] = useState(false);
   const [director, setDirector] = useState("");
   const [title, setTitle] = useState("");
   const [isAvailable, setIsAvailable] = useState("");
@@ -93,6 +94,9 @@ function MyProfile() {
         setMovies(elems.data.content);
         setTotalPages(elems.data.totalPages);
       }
+      setInitialized(true);
+    }).catch(error => {
+      setInitialized(true);
     });
   }, [
     triggerRefresh,
@@ -291,7 +295,7 @@ function MyProfile() {
             </tbody>
           </table>
         </div>
-            { !movies.length && (<p className="text-center text-2xl">No matching results found</p> )}
+            { !movies.length && initialized && (<p className="text-center text-2xl">No matching results found</p> )}
           <div className="w-full bg-basic-red flex justify-between flex-wrap py-3 border-2">
             <div className=" inline-flex marginResizable">
               <p className="text-white font-normal">Results per page: </p>
