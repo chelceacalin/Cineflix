@@ -10,31 +10,43 @@ body {
     cursor: pointer;
   }
   
-  .save,
-  .cancel {
+  .closeModalWindowButton {
+    position: relative;
+    top: 20px;
+    right: -230px;
+    width: 20px;
+    cursor: pointer;
+}
+
+.contained-button,
+.outlined-button {
     margin-top: 10px;
-    margin-left: 5px;
-  }
-  
-  .save {
-    background-color: #1e1d5b;
-  }
-  
-  .save:hover {
-    background-color: #e0812e;
-  }
-  
-  .cancel {
-    background-color: white;
-    color: #1e1d5b;
-    border-color: #1e1d5b;
-  }
-  
-  .cancel:hover {
-    color: #e0812e;
-    border-color: #e0812e;
-  }
-  
+}
+
+.contained-button {
+    background-color: #1E1D5B !important;
+    border-radius: 0 !important;
+    color: white !important;
+    border: 1px solid #1E1D5B !important;
+}
+
+.contained-button:hover {
+    background-color: #E0812E !important;
+    border-color: #E0812E !important;
+}
+
+.outlined-button {
+    background-color: white !important;
+    color: #1E1D5B !important;
+    border-color: #1E1D5B !important;
+    border-radius: 0 !important;
+}
+
+.outlined-button:hover {
+    color: #E0812E !important;
+    border-color: #E0812E !important;
+}
+
   .modal-content {
     margin-top: 9px;
   }
@@ -45,9 +57,9 @@ body {
   }
   
   .header-title {
-    margin: 0;
     font-size: 1.2em;
     font-weight: bold;
+    text-align: center;
   }
   
   .modal-body {
@@ -61,10 +73,7 @@ body {
   .field-group {
     margin-bottom: 20px;
   }
-  
-  .modal-content.wider-modal {
-    width: 500px;
-  }
+
 
   .outlined-button {
     background-color: white !important;
@@ -95,6 +104,5 @@ body {
 
   .field-group input {
     border: 1px solid #ccc;
-    padding: 8px;
     border-radius: 4px;
   }

@@ -4,6 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import "./css/EditRoleModalWindow.css";
 import axios from 'axios';
+import { ToastContainer, toast } from "react-toastify";
 
 axios.defaults.withCredentials = true
 
@@ -33,50 +34,72 @@ function EditRoleModalWindow({ isModalOpen, closeModal, name, firstName, lastNam
     const editUserRole = () => {
         let url = '/users/update/' + selectedOption;
 
-        try {
-            setUserDTO(() => ({
-                'username': username,
-                'firstName': firstName,
-                'lastName': lastName,
-                'email': email,
-                'role': selectedOption
-            }));
-            const response = axios.post(url, userDTO).then(()=>{
-
+        setUserDTO(() => ({
+            'username': username,
+            'firstName': firstName,
+            'lastName': lastName,
+            'email': email,
+            'role': selectedOption
+        }));
+        axios
+            .post(url, userDTO)
+            .then(() => {
+                showToast("User edited successfully!", "bg-green-500");
                 updateUser(userDTO);
                 closeModal();
-            });
-        } catch (error) {
-        }
+        })
+        .catch (error => {
+            showToast("Error editing user: " + error.message);
+        })
     };
 
     return (
-        <Dialog open={isModalOpen} onClose={closeModal}>
-            <FontAwesomeIcon className="closeModalWindowButton" icon={faTimes} onClick={closeModal} />
+        <Dialog fullWidth maxWidth={'sm'} open={isModalOpen} onClose={closeModal}>
+            <FontAwesomeIcon
+                className="absolute top-4 right-4 cursor-pointer"
+                icon={faTimes}
+                size="xl"
+                onClick={closeModal}
+            />
+            <div className="w-full">
+                <h2 className="header-title ml-6 mt-10">Edit user role</h2>
+            </div>
             <DialogContent>
-                <div className='mt-6'>
+                <div className='mt-5'>
                     <TextField
                         id="outlined-read-only-input"
+                        className="w-full"
                         label="Name"
                         defaultValue={fullName}
                         InputProps={{
                             readOnly: true,
+                            style: { fontFamily: "Sanchez" }
                         }}
+                        InputLabelProps={{
+                            style: { fontFamily: "Sanchez" }
+                          }}
                     />
                 </div>
-                <div className='mt-4'>
+                <div className='mt-4 mb-4'>
                     <TextField
                         id="outlined-read-only-input"
+                        className="w-full"
                         label="Email"
                         defaultValue={email}
                         InputProps={{
                             readOnly: true,
+                            style: { fontFamily: "Sanchez" }
                         }}
+                        InputLabelProps={{
+                            style: { fontFamily: "Sanchez" }
+                          }}
                     />
                 </div>
-                <div className='mt-4'>
+                <div className='mt-6'>
                     <FormControl fullWidth>
-                        <InputLabel variant="standard" htmlFor="uncontrolled-native">Role</InputLabel>
+                        <InputLabel 
+                            variant="standard" 
+                            htmlFor="uncontrolled-native"> Role </InputLabel>
                         <NativeSelect defaultValue={role}
                             onChange={(e) => setSelectedOption(e.target.value)}
                             placeholder=''
@@ -84,11 +107,13 @@ function EditRoleModalWindow({ isModalOpen, closeModal, name, firstName, lastNam
                             <option value="USER">User</option>
                             <option value="ADMIN">Admin</option>
                         </NativeSelect>
-                        <div className="mt-2 mb-2">
-                        <Button className="contained-button w-full" variant="contained" onClick={editUserRole}>Save</Button>
-                        </div>
-                        <div className="mb-2">
-                            <Button className="outlined-button w-full" variant="outlined" onClick={closeModal} >Cancel</Button>
+                        <div className='flex gap-x-2 mt-6'>
+                            <div className="flex-1">
+                                <Button className="contained-button w-full" variant="contained" onClick={editUserRole}>Save</Button>
+                            </div>
+                            <div className="flex-1">
+                                <Button className="outlined-button w-full" variant="outlined" onClick={closeModal} >Cancel</Button>
+                            </div>
                         </div>
                     </FormControl>
                 </div>
@@ -96,5 +121,20 @@ function EditRoleModalWindow({ isModalOpen, closeModal, name, firstName, lastNam
         </Dialog>
     );
 }
+
+const showToast = (message, color = "bg-red-500") => {
+  const toastType = color === "bg-green-500" ? toast.success : toast.error;
+
+  toastType(message, {
+    className: `${color} text-black p-4 rounded-lg`,
+    position: "top-right",
+    autoClose: 3500,
+    hideProgressBar: false,
+    closeOnClick: true,
+    pauseOnHover: true,
+    draggable: true,
+    progress: undefined,
+  });
+};
 
 export default EditRoleModalWindow

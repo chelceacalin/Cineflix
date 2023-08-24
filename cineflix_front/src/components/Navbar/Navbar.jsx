@@ -10,7 +10,7 @@ function Navbar() {
   const [selectedColor, setSelectedColor] = useState("");
   const { isAdmin, setIsAdmin, username, setUsername, token, setToken, isLoggedIn, setIsLoggedIn } = useContext(UserLoginContext);
   const location = useLocation();
-
+  const url = import.meta.env.VITE_BACKEND_URL;
   
   useEffect(() => {
     if (location.pathname === "/") {
@@ -27,7 +27,7 @@ function Navbar() {
 
   const handleItemClick = (item, color) => {
     if (selectedItem === item) {
-      setSelectedItem(null); // Deselect the item if it's clicked again
+      setSelectedItem(null); 
     } else {
       setSelectedItem(item);
       setSelectedColor(color);
@@ -92,7 +92,7 @@ function Navbar() {
                   onClick={(e) => {
                     e.preventDefault();
                     handleItemClick("profile", "red");
-                    navigate("/myprofile/1");
+                    navigate(`/myprofile/${username}`);
                   }}
                 >
                   <svg
@@ -276,7 +276,7 @@ function Navbar() {
                     setIsLoggedIn(false);
                     setUsername(null);
                     setToken(null);
-                    window.location.href="http://localhost:8081/logout";
+                    window.location.href=url+"/logout";
                   }}
                 >
                   <svg

@@ -19,6 +19,7 @@ body {
 .contained-button {
     background-color: #1E1D5B !important;
     border-radius: 0 !important;
+    color: white !important;
 }
 
 .contained-button:hover {

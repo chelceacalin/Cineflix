@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import Button from "@mui/material/Button";
 import DetailsMovieModalView from "./DetailsMovieModalView";
 import DeleteMovieModalView from "./DeleteMovieModalView";
-import './css/Movie.css'
+import "./css/Movie.css";
 
 function Movie({
   title,
@@ -16,9 +16,8 @@ function Movie({
   updateMovie,
   id,
   triggerRefresh,
-  setTriggerRefresh
+  setTriggerRefresh,
 }) {
-
   const [detailsModalOpen, setDetailsModalOpen] = React.useState(false);
   const [deleteModalOpen, setDeleteModalOpen] = React.useState(false);
   const handleDetailsOpen = () => setDetailsModalOpen(true);
@@ -63,13 +62,14 @@ function Movie({
         </div>
       </td>
       <td className={classes}>
-      <div>
-        <button 
-          onClick={handleDetailsOpen} 
-          className="inline-block rounded  px-3 mr-4 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-blue-marine outlined-button" >
+        <Button
+          onClick={handleDetailsOpen}
+          className="outlined-button w-full font-normal"
+          variant="outlined"
+        >
           Details
-        </button>
-        
+        </Button>
+
         {detailsModalOpen && (
           <DetailsMovieModalView
             isModalOpen={detailsModalOpen}
@@ -82,12 +82,15 @@ function Movie({
             triggerRefresh={triggerRefresh}
           />
         )}
-
-        <button 
-          onClick={handleDeleteOpen} 
-          className="inline-block rounded px-3 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-white contained-button">
+      </td>
+      <td className={classes}>
+        <Button
+          onClick={handleDeleteOpen}
+          className="contained-button font-normal w-full"
+          variant="contained"
+        >
           Delete
-        </button>
+        </Button>
 
         {deleteModalOpen && (
           <DeleteMovieModalView
@@ -95,11 +98,12 @@ function Movie({
             closeModal={handleDeleteClose}
             title={title}
             category={category}
-            deleteMovie={""}
+            triggerRefresh={triggerRefresh}
+            setTriggerRefresh={setTriggerRefresh}
+            id={id}
           />
         )}
-      </div>
-    </td>
+      </td>
     </tr>
   );
 }

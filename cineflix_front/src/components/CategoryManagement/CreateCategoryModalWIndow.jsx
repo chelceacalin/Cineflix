@@ -3,7 +3,6 @@ import {
   Button,
   Dialog,
   DialogContent,
-  makeStyles,
   TextField,
 } from "@mui/material";
 import axios from "axios";
@@ -24,9 +23,9 @@ function CreateCategoryModalWindow({
 
   const createCategory = () => {
     if (categoryDTO.length < 2) {
-      showToastError("Category should have more than 2 characters!");
-    } else if (categoryDTO.charAt(0)!==categoryDTO.charAt(0).toUpperCase()) {
-      showToastError("Category should start with an uppercase letter!");
+      showToast("Category should have more than 2 characters!");
+    } else if (categoryDTO.charAt(0) !== categoryDTO.charAt(0).toUpperCase()) {
+      showToast("Category should start with an uppercase letter!");
     } else {
       let url = "/category/create";
       axios
@@ -36,73 +35,86 @@ function CreateCategoryModalWindow({
         .then(() => {
           signal();
           closeModal();
+          showToast("Category added successfully!", "bg-green-500");
           setCategoryDTO("");
         })
         .catch((error) => {
           if (error.response) {
-            setErrorMessage(error.response.data);
+            const message = JSON.stringify(error.response.data).replace('"', '').replace('"', '');
+            showToast(message);
           }
         });
     }
   };
 
-  const showToastError = (message) => {
-    toast.error(message, {
-      className: "bg-red-500 text-black p-4 rounded-lg",
-      position: "top-right",
-      autoClose: 3500,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-    });
-  };
+  const showToast = (message, color = "bg-red-500") => {
+      const toastType = color === "bg-green-500" ? toast.success : toast.error;
+    
+      toastType(message, {
+        className: `${color} text-black p-4 rounded-lg`,
+        position: "top-right",
+        autoClose: 2500,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+    };
 
   return (
-    <Dialog open={isModalOpen} onClose={closeModal}>
+    <Dialog fullWidth maxWidth={'sm'} open={isModalOpen} onClose={closeModal}>
       <FontAwesomeIcon
-        className="closeModalWindowButton"
+        className="absolute top-4 right-4 cursor-pointer"
         icon={faTimes}
+        size="xl"
         onClick={closeModal}
       />
+      <div className="w-full">
+        <h2 className="header-title ml-6 mt-10">Add new category</h2>
+      </div>
       <DialogContent>
-        <div className="mt-6">
+        <div className="mt-5">
           <TextField
+            className="w-full"
             id="outlined-read-only-input"
             label="Name"
             defaultValue=""
             onChange={(e) => {
               setCategoryDTO(e.target.value);
             }}
+            InputProps={{
+              style: { fontFamily: "Sanchez" }
+            }}
+            InputLabelProps={{
+              style: { fontFamily: "Sanchez" }
+            }}
           />
         </div>
-        <div className="text-basic-red font-bold w-52 text-center">
-          {errorMessage}
-        </div>
-        <div className="mt-2 mb-2">
-          <Button
-            className="contained-button w-full"
-            variant="contained"
-            onClick={createCategory}
-          >
-            Add
-          </Button>
-        </div>
-        <div className="mb-2">
-          <Button
-            className="outlined-button w-full"
-            variant="outlined"
-            onClick={() => {
-              setCategoryDTO("");
-              closeModal();
-            }}
-          >
-            Cancel
-          </Button>
+        <div className='flex gap-x-2 mt-6'>
+          <div className="flex-1">
+            <Button
+              className="contained-button w-full"
+              variant="contained"
+              onClick={createCategory}
+            >
+              Add
+            </Button>
+          </div>
+          <div className="flex-1">
+            <Button
+              className="outlined-button w-full"
+              variant="outlined"
+              onClick={() => {
+                setCategoryDTO("");
+                closeModal();
+              }}
+            >
+              Cancel
+            </Button>
+          </div>
         </div>
       </DialogContent>
-      <ToastContainer />
     </Dialog>
   );
 }

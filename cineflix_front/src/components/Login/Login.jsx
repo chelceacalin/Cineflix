@@ -1,19 +1,45 @@
+import { Button } from "@mui/material";
 import React from "react";
-import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
+
 function Login() {
+  const url = import.meta.env.VITE_BACKEND_URL;
+
+  useEffect(() => {
+    document.body.style.background="#C64432";
+
+    return () => {
+      document.body.style.background="white";
+    };
+  }, []);
 
   return (
-    <>
-      <div>Login</div>
-      <button
-        onClick={(e) => {
-          e.preventDefault();
-          window.location.href = "http://localhost:8081";
-        }}
-      >
-        Go to login
-      </button>
-    </>
+      <div className="login-bg" style={{
+        position: "absolute",
+        left: "50%",
+        top: "45%",
+        transform: "translate(-50%, -50%)",
+        maxWidth: "100%",
+        maxHeight: "100%",
+      }}>
+        <img
+          src="./Images/LoginImage.png"
+          alt="Login Image"
+        />
+
+        <Button
+          onClick={(e) => {
+            e.preventDefault();
+            window.location.href = url;
+          }}
+
+          className="contained-button font-normal w-full "
+          variant="contained"
+        >
+          LOG IN WITH KEYCLOAK
+        </Button>
+      </div>   
+
   );
 }
 

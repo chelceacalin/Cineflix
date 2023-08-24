@@ -22,3 +22,7 @@ spring:
     open-in-view: 'true'
     hibernate:
       ddl-auto: create
+
+custom:
+  frontend:
+    app-url: ${FRONTEND_URL:http://localhost:3000}

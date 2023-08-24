@@ -15,7 +15,7 @@ function FilterComponent({ filterInput }) {
 
   useEffect(() => {
     let array = [];
-    if ((admin == true && user == true) || (admin == false && user == false)){
+    if ((admin == true && user == true) || (admin == false && user == false)) {
       array.push(firstName, lastName, email, "BOTH");
     } else if (admin == true && user == false) {
       array.push(firstName, lastName, email, "ADMIN");
@@ -27,40 +27,50 @@ function FilterComponent({ filterInput }) {
   }, [firstName, lastName, email, admin, user]);
 
   return (
-    <div className="border-r-2 space-y-4 ml-6">
-      <div className="mt-10 mr-6">
-        <label>First Name:</label>
+    <div className="space-y-4 ml-7 mr-7">
+      <div className="mt-10">
         <TextField
           id="outlined-search"
           name="firstName"
+          label="Search first name"
           type="search"
+          className="w-48"
           onChange={(e) => setFirstName(e.target.value)}
+          InputLabelProps={{
+            style: { fontFamily: "Sanchez" }
+          }}
         />
       </div>
-      <div className="mt-10 mr-6">
-        <label>Last Name:</label>
+      <div className="mt-10">
         <TextField
           id="outlined-search"
           name="lastName"
+          label="Search last name"
           type="search"
+          className="w-48"
           onChange={(e) => setLastName(e.target.value)}
+          InputLabelProps={{
+            style: { fontFamily: "Sanchez" }
+          }}
         />
       </div>
-      <div className="mt-4 mr-6">
-        <label>Email:</label>
+      <div className="mt-4">
         <TextField
           id="outlined-search"
           name="email"
-          slabel="Search email"
+          label="Search email"
           type="search"
+          className="w-48"
           onChange={(e) => setEmail(e.target.value)}
+          InputLabelProps={{
+            style: { fontFamily: "Sanchez" }
+          }}
         />
       </div>
       <div className="p-1">
-        <div className="mb-2">Role: </div>
-        <div className="flex gap-2">
+        <div className="mb-1 mt-4">Role: </div>
+        <div>
           <div>
-            <label name="user">User</label>
             <Checkbox
               name="type"
               label="User"
@@ -69,9 +79,9 @@ function FilterComponent({ filterInput }) {
                 setUser(e.target.checked);
               }}
             />
+            <label name="user">User</label>
           </div>
           <div>
-            <label name="admin">Admin</label>
             <Checkbox
               name="type"
               label="Admin"
@@ -80,6 +90,7 @@ function FilterComponent({ filterInput }) {
                 setAdmin(e.target.checked);
               }}
             />
+            <label name="admin">Admin</label>
           </div>
         </div>
       </div>

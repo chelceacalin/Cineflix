@@ -2,6 +2,7 @@
 package ro.esolutions.cineflix.config;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -18,7 +19,6 @@ import org.springframework.security.oauth2.core.oidc.OidcUserInfo;
 import org.springframework.security.oauth2.core.oidc.user.OidcUserAuthority;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
-import org.springframework.web.client.RestTemplate;
 import ro.esolutions.cineflix.entities.UserCineflix;
 import ro.esolutions.cineflix.services.UserCineflixService;
 
@@ -30,6 +30,8 @@ import java.util.Set;
 @EnableMethodSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
+    @Value("${custom.frontend.app-url}")
+    private String frontendAppUrl;
 
     private final ClientRegistrationRepository clientRegistrationRepository;
     private final UserCineflixService userCineflixService;
@@ -40,10 +42,10 @@ public class SecurityConfig {
                 .authorizeHttpRequests(registry -> registry
 
                         .requestMatchers(HttpMethod.OPTIONS).permitAll()
-                        .requestMatchers("/users/").hasRole("ADMIN")
-                        .requestMatchers("/users/update/**").hasRole("ADMIN")
+                        .requestMatchers("/users/*").hasRole("ADMIN")
                         .requestMatchers("/movies/**").hasAnyRole("USER", "ADMIN")
-                        .requestMatchers("/category/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.POST,"/category/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET,"/category/**").hasAnyRole("ADMIN","USER")
                         .anyRequest().authenticated()
                 )
                 .csrf(csrf -> csrf.disable())
@@ -52,7 +54,7 @@ public class SecurityConfig {
                             userInfo.userAuthoritiesMapper(this.userAuthoritiesMapper());
                         })
                         .successHandler((request, response, authentication) -> {
-                            response.sendRedirect("http://localhost:3000");
+                            response.sendRedirect(frontendAppUrl);
                         })
                         .permitAll()
                 )

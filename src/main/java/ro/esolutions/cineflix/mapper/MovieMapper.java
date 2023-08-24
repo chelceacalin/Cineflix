@@ -2,11 +2,12 @@ package ro.esolutions.cineflix.mapper;
 
 import ro.esolutions.cineflix.DTO.Movie.MovieAddDTO;
 import ro.esolutions.cineflix.DTO.Movie.MovieDTO;
+import ro.esolutions.cineflix.DTO.Movie.MovieRentDTO;
 import ro.esolutions.cineflix.DTO.UserCineflix.UserDTO;
 import ro.esolutions.cineflix.entities.Category;
 import ro.esolutions.cineflix.entities.Movie;
 import ro.esolutions.cineflix.entities.MovieHistory;
-import ro.esolutions.cineflix.entities.UserCineflix;
+
 public class MovieMapper {
     public static MovieDTO toDto(Movie m, MovieHistory mh) {
         return MovieDTO.builder()
@@ -42,6 +43,14 @@ public class MovieMapper {
                 .owner_username(movie.getOwner().getUsername())
                 .isAvailable(movie.isAvailable())
                 .id(movie.getId())
+                .build();
+    }
+
+    public static MovieRentDTO toMovieRentDto(Movie movie) {
+        return MovieRentDTO.builder()
+                .title(movie.getTitle())
+                .director(movie.getDirector())
+                .ownerUsername(movie.getOwner().getUsername())
                 .build();
     }
 }
