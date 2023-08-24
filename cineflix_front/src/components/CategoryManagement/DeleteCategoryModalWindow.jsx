@@ -14,22 +14,29 @@ function DeleteCategoryModalWindow({ isEditModalOpen, closeEditModal, name, id, 
         let url = '/category/delete/' + id;
 
             axios.post(url).then(() => {
+                showToast("Category deleted successfully!", "bg-green-500");
                 signal();
                 closeEditModal();
             })
             .catch((error) => {
                 if (error.response) {
-                    const message = JSON.stringify(error.response.data).replace('"', '').replace('"', '');
-                    showToastError(message);
+                    if (error.response.status == 404) {
+                        const message = JSON.stringify(error.response.data).replace('"', '').replace('"', '');
+                        showToast(message);
+                    } else if (error.response.status == 500) {
+                        showToast("Found a movie, can not delete the category");
+                    }
                 }
             })
     }
 
-    const showToastError = (message) => {
-        toast.error(message, {
-          className: "bg-red-500 text-black p-4 rounded-lg",
+    const showToast = (message, color = "bg-red-500") => {
+        const toastType = color === "bg-green-500" ? toast.success : toast.error;
+      
+        toastType(message, {
+          className: `${color} text-black p-4 rounded-lg`,
           position: "top-right",
-          autoClose: 3500,
+          autoClose: 2500,
           hideProgressBar: false,
           closeOnClick: true,
           pauseOnHover: true,
