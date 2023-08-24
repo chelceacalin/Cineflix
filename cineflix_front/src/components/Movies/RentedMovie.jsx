@@ -12,19 +12,17 @@ function RentedMovie({
   rentedUntil,
   rentedBy,
   classes,
-  triggerRefresh,
-  setTriggerRefresh,
   rentedOn,
   rentedDate,
   owner_username,
-  signal
+  setTriggerRefresh,
+  triggerRefresh
 }) {
   const [detailsModalOpen, setDetailsModalOpen] = useState(false);
-  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [isRentModalOpen, setRentModalOpen] = useState(false);
+
   const handleDetailsOpen = () => setDetailsModalOpen(true);
   const handleDetailsClose = () => setDetailsModalOpen(false);
-
-  const [isRentModalOpen, setRentModalOpen] = useState(false);
 
   const handleOpenRentModal = () => {
     setRentModalOpen(true);
@@ -39,12 +37,12 @@ function RentedMovie({
   return (
     <tr key={title}>
       <td className={classes}>
-        <div variant="small" color="blue-gray" className="font-normal">
+        <div variant="small" color="blue-gray" className="font-normal max-w-[150px] break-words">
           {title}
         </div>
       </td>
       <td className={classes}>
-        <div variant="small" color="blue-gray" className="font-normal">
+        <div variant="small" color="blue-gray" className="font-normal max-w-[200px]">
           {director}
         </div>
       </td>
@@ -91,21 +89,23 @@ function RentedMovie({
         >
           Details
         </Button>
-          <ViewMovieDetailsModalWindow
-              isModalOpen={detailsModalOpen}
-              closeModal={handleDetailsClose}
-              title={title}
-              category={category}
-              director={director}
-              isAvailable={isAvailable}
-              rentedUntil={rentedUntil}
-              rentedOn={rentedOn}
-              rentedBy={rentedBy}
-              rentedDate={rentedDate}
-              id={id}
-          />
+        {detailsModalOpen&&
+         <ViewMovieDetailsModalWindow
+         isModalOpen={detailsModalOpen}
+         closeModal={handleDetailsClose}
+         title={title}
+         category={category}
+         director={director}
+         isAvailable={isAvailable}
+         rentedUntil={rentedUntil}
+         rentedOn={rentedOn}
+         rentedBy={rentedBy}
+         rentedDate={rentedDate}
+         id={id}
+     />}
+         
       </td>
-      <td>
+      <td className={classes}>
         <Button
           onClick={handleOpenRentModal}
           className="contained-button font-normal"
@@ -120,7 +120,8 @@ function RentedMovie({
           director={director}
           owner={owner_username}
           id={id}
-          signal={signal}
+          setTriggerRefresh={setTriggerRefresh}
+          triggerRefresh={triggerRefresh}
         />
       </td>
     </tr>

@@ -44,7 +44,7 @@ function MyProfile() {
   const [triggerRefresh, setTriggerRefresh] = useState(false);
   const { username } = useContext(UserLoginContext);
   const [selectedItem, setSelectedItem] = useState("");
- 
+
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -237,7 +237,7 @@ function MyProfile() {
                 <th className="border-b-white p-4 text-center">
                   <div>Actions</div>
                 </th>
-                <th className="border-b-white">
+                <th className="border-b-white p-4">
                   <div className="flex items-center justify-center">
                     <Button
                       onClick={handleOpen}

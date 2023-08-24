@@ -87,6 +87,10 @@ public class MovieController {
     ) {
         return movieService.findRentedMoviesForUser(myRentedMoviesRequestDTO, pageNo, pageSize);
     }
+    @PostMapping("/updateStatus/{id}")
+    public void changeRentedMovieStatus (@PathVariable UUID id) {
+        movieService.changeRentedMovieStatus(id);
+    }
 
 
 }
