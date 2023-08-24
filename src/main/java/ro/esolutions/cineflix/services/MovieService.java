@@ -227,8 +227,7 @@ public class MovieService {
 
     public Page<MovieDTO> findRentedMoviesForUser(MyRentedMoviesRequestDTO myRentedMoviesDTO, int pageNo, int pageSize) {
         UserDTO userCineflix = userCineflixService.findUserByUsername(myRentedMoviesDTO.getRentUsername());
-        Sort.Direction sortDirection = Sort.Direction.fromString(myRentedMoviesDTO.getDirection());
-        Pageable pageable = getPageableRented(pageNo, pageSize, myRentedMoviesDTO.getSortField(), sortDirection);
+        Pageable pageable = myRentedMoviesDTO.getPageableRented(pageNo, pageSize, myRentedMoviesDTO.getSortField());
 
         Page<MovieHistory> movieHistories = movieHistoryRepository.findAllByRentedBy_Id(userCineflix.getId(), pageable);
         List<MovieDTO> rentedMovies = movieHistories.getContent().stream()
@@ -237,16 +236,5 @@ public class MovieService {
         return new PageImpl<>(rentedMovies, pageable, movieHistories.getTotalElements());
 
     }
-    private static Pageable getPageableRented(int pageNo, int pageSize, String sortField, Sort.Direction sortDirection) {
-        return switch (sortField) {
-            case TITLE -> PageRequest.of(pageNo, pageSize, Sort.by(sortDirection, MOVIE_TITLE));
-            case CATEGORY -> PageRequest.of(pageNo, pageSize, Sort.by(sortDirection, MOVIE_CATEGORY_NAME));
-            case DIRECTOR -> PageRequest.of(pageNo, pageSize, Sort.by(sortDirection, MOVIE_DIRECTOR));
-            case OWNER -> PageRequest.of(pageNo, pageSize, Sort.by(sortDirection, MOVIE_OWNER_USERNAME));
-            case RENTED_BY -> PageRequest.of(pageNo, pageSize, Sort.by(sortDirection, RENTED_BY_USERNAME));
-            case RENTED_UNTIL -> PageRequest.of(pageNo, pageSize, Sort.by(sortDirection, RENTED_UNTIL));
-            case RENTED_DATE -> PageRequest.of(pageNo, pageSize, Sort.by(sortDirection, RENTED_DATE));
-            default -> PageRequest.of(pageNo, pageSize, Sort.by(sortDirection, sortField));
-        };
-    }
+
 }

@@ -10,13 +10,8 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 import ro.esolutions.cineflix.DTO.Movie.*;
-import ro.esolutions.cineflix.DTO.Movie.MovieAddDTO;
-import ro.esolutions.cineflix.DTO.Movie.MovieDTO;
-import ro.esolutions.cineflix.DTO.Movie.MovieFilterDTO;
-import ro.esolutions.cineflix.DTO.Movie.MyRentedMoviesRequestDTO;
 import ro.esolutions.cineflix.services.MovieService;
 
-import javax.naming.Binding;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -92,5 +87,6 @@ public class MovieController {
     ) {
         return movieService.findRentedMoviesForUser(myRentedMoviesRequestDTO, pageNo, pageSize);
     }
+
 
 }
