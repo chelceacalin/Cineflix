@@ -92,6 +92,15 @@ function RentedMovie({
           <ViewMovieDetailsModalWindow
               isModalOpen={detailsModalOpen}
               closeModal={handleDetailsClose}
+              title={title}
+              category={category}
+              director={director}
+              isAvailable={isAvailable}
+              rentedUntil={rentedUntil}
+              rentedOn={rentedOn}
+              rentedBy={rentedBy}
+              rentedDate={rentedDate}
+              id={id}
           />
       </td>
       <td>
