@@ -1,5 +1,4 @@
 package ro.esolutions.cineflix.services;
-
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.*;
@@ -20,14 +19,11 @@ import ro.esolutions.cineflix.mapper.MovieMapper;
 import ro.esolutions.cineflix.repositories.*;
 import ro.esolutions.cineflix.specification.GenericSpecification;
 import ro.esolutions.cineflix.specification.MovieSpecification;
-
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
-
 import static java.util.Objects.nonNull;
-
 @Service
 @Transactional
 @RequiredArgsConstructor
@@ -234,7 +230,6 @@ public class MovieService {
                 .map(history -> MovieMapper.toDto(history.getMovie(), history))
                 .collect(Collectors.toList());
         return new PageImpl<>(rentedMovies, pageable, movieHistories.getTotalElements());
-
     }
 
 }

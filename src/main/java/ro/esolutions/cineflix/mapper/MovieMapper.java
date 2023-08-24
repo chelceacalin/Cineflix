@@ -56,27 +56,6 @@ public class MovieMapper {
                 .ownerUsername(movie.getOwner().getUsername())
                 .build();
     }
-    public static List<MovieDTO> toDtoList(List<MovieHistory> movieHistoryList) {
-        List<MovieDTO> movieDTOList = new ArrayList<>();
 
-        for (MovieHistory movieHistory : movieHistoryList) {
-            MovieDTO movieDTO = toDto(movieHistory.getMovie(), movieHistory);
-            movieDTOList.add(movieDTO);
-        }
-
-        return movieDTOList;
-    }
-    public static MyRentedMoviesRequestDTO myRentedMoviesDTO(Movie movie, MovieHistory movieHistory) {
-        return MyRentedMoviesRequestDTO.builder()
-               // .id(movie.getId())
-                .rentUsername(movie.getOwner().getUsername())
-                .title(movie.getTitle())
-                .director(movie.getDirector())
-                .category(movie.getCategory() != null ? movie.getCategory().getName() : "DEFAULT")
-                .isAvailable(movie.isAvailable())
-                .rentedStart(movieHistory != null && movieHistory.getRentedDate() != null ? movieHistory.getRentedDate() : null)
-                .rentedUntil(movieHistory != null && movieHistory.getRentedUntil() != null ? movieHistory.getRentedUntil() : null)
-                .build();
-    }
 
 }

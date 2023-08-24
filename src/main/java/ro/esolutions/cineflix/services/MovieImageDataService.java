@@ -1,20 +1,16 @@
 package ro.esolutions.cineflix.services;
 
 import jakarta.transaction.Transactional;
-import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import ro.esolutions.cineflix.entities.Movie;
-import ro.esolutions.cineflix.entities.MovieHistory;
 import ro.esolutions.cineflix.entities.MovieImageData;
 import ro.esolutions.cineflix.exceptions.MovieImageData.MovieImageDataNotFoundException;
 import ro.esolutions.cineflix.mapper.MovieMapper;
 import ro.esolutions.cineflix.repositories.MovieImageDataRepository;
 import ro.esolutions.cineflix.util.MovieImageDataUtil;
-
 import java.util.*;
-
 import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
 
@@ -49,7 +45,6 @@ public class MovieImageDataService {
             throw new MovieImageDataNotFoundException("File type not allowed");
         }
 
-
         Optional<Movie> movieOptional = movieService.findById(movieID);
         boolean shouldUploadImage = movieImageDataRepository.findMovieImageDataByMovieId(movieID).isEmpty() && movieOptional.isPresent();
         if (shouldUploadImage) {
@@ -67,7 +62,6 @@ public class MovieImageDataService {
             throw new MovieImageDataNotFoundException("Error uploading image");
         }
     }
-
 
     public byte[] downloadImage(String fileName) {
         Optional<MovieImageData> data = movieImageDataRepository.findImageDataByName(fileName);
