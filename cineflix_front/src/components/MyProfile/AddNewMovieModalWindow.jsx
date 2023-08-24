@@ -203,7 +203,7 @@ function AddNewMovieModalWindow({
                       style: { fontFamily: "Sanchez" }
                     }}
                     sx={{ fontFamily: "Sanchez" }}
-                    label="Rented by"/>}
+                    label="Category"/>}
           />
           </div>
           <div className="field-group mt-4">
