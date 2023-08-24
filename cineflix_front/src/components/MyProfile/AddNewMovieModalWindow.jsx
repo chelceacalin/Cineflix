@@ -1,6 +1,4 @@
 import React, { useContext, useState, useEffect } from "react";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import {
   Button,
   Dialog,
@@ -13,6 +11,7 @@ import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import "./css/AddNewMovieModalWindow.css";
 import axios from "axios";
 import { UserLoginContext } from "../../utils/context/LoginProvider";
+import {showError,showSuccess} from '../../service/ToastService';
 import * as moreClasses from "react-dom/test-utils";
 
 
@@ -67,24 +66,25 @@ function AddNewMovieModalWindow({
   const validRequest = () => {
     for (const check of validationChecks) {
       if (check.condition) {
-        showToast(check.message);
+        showError(check.message);
         return false;
       }
     }
+
+    if (title.charAt(0) !== title.charAt(0).toUpperCase()) {
+      showError("Title should start with an uppercase letter!");
+      return false;
+    }
+
+    if (director.charAt(0) !== director.charAt(0).toUpperCase()) {
+      showError("Director should start with an uppercase letter!");
+      return false;
+    }
+
     return true;
   };
   const handleSave = () => {
     if (validRequest()) {
-      if (title.charAt(0) !== title.charAt(0).toUpperCase()) {
-        showToast("Title should start with an uppercase letter!");
-        return;
-      }
-
-      if (director.charAt(0) !== director.charAt(0).toUpperCase()) {
-        showToast("Director should start with an uppercase letter!");
-        return;
-      }
-
       let urlAddMovie = `/movies`;
 
       let movie = {
@@ -107,7 +107,7 @@ function AddNewMovieModalWindow({
               axios
                 .post(urlAddMovieImage, formData)
                 .then((response) => {
-                  showToast("Movie added successfully!", "bg-green-500");
+                  showSuccess("Movie added successfully!", "bg-green-500");
                  })
                 .catch((error) => {
                   console.error("Error " + error);
@@ -124,7 +124,7 @@ function AddNewMovieModalWindow({
 
         closeModal();
       } else {
-        showToast("Image should not be empty!");
+        showError("Image should not be empty!");
       }
     }
   };
@@ -281,24 +281,10 @@ function AddNewMovieModalWindow({
           </div>
         </DialogContent>
       </div>
-      <ToastContainer />
     </Dialog>
   );
 }
 
-const showToast = (message, color = "bg-red-500") => {
-  const toastType = color === "bg-green-500" ? toast.success : toast.error;
 
-  toastType(message, {
-    className: `${color} text-black p-4 rounded-lg`,
-    position: "top-right",
-    autoClose: 2500,
-    hideProgressBar: false,
-    closeOnClick: true,
-    pauseOnHover: true,
-    draggable: true,
-    progress: undefined,
-  });
-};
 
 export default AddNewMovieModalWindow;
