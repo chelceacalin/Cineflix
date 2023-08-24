@@ -57,7 +57,7 @@ function MyRentedMoviesFilter({ filterInput }) {
   ]);
 
   return (
-    <div className="filterContainer border-r-2 space-y-4 ml-6">
+    <div className="space-y-4 ml-7">
       <div className="mt-10 mr-6">
         <TextField
           id="outlined-search"
@@ -109,7 +109,7 @@ function MyRentedMoviesFilter({ filterInput }) {
           selected={rentedOn}
           placeholderText={"Select the date"}
           onChange={(date) => setRentedOn(date)}
-          className="rounded-lg w-52 border-2 border-gray-500 pl-1 mt-2"
+          className="rounded-lg w-48 border-2 border-gray-500 pl-1 mt-2"
         />
       </div>
       <div className="mt-10 mr-6">
@@ -118,7 +118,7 @@ function MyRentedMoviesFilter({ filterInput }) {
           selected={rentedUntil}
           placeholderText={"Select the date"}
           onChange={(date) => setRentedUntil(date)}
-          className="rounded-lg w-52 border-2 border-gray-500 pl-1 mt-2"
+          className="rounded-lg w-48 border-2 border-gray-500 pl-1 mt-2"
         />
         <div className="mt-2 mb-7">
           <Button

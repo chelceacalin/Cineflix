@@ -21,6 +21,7 @@ function MyRentedMovies() {
   const [category, setCategory] = useState("");
   const [director, setDirector] = useState("");
   const [title, setTitle] = useState("");
+  const [initialized, setInitialized] = useState(false);
   const [isAvailable, setIsAvailable] = useState("");
   const [rentedDate, setRendedDate] = useState("");
   const [rentedUntil, setRentedUntil] = useState("");
@@ -76,14 +77,17 @@ function MyRentedMovies() {
 
     const url = buildUrl();
 
-    // axios.get(url).then((elems) => {
-    //   if (elems.data.content.length === 0 && pageNo > 1) {
-    //     updatePageNumber(pageNo - 1);
-    //   } else {
-    //     setMovies(elems.data.content);
-    //     setTotalPages(elems.data.totalPages);
-    //   }
-    // });
+    axios.get(url).then((elems) => {
+      if (elems.data.content.length === 0 && pageNo > 1) {
+        updatePageNumber(pageNo - 1);
+      } else {
+        setMovies(elems.data.content);
+        setTotalPages(elems.data.totalPages);
+      }
+      setInitialized(true);
+    }).catch(error => {
+      setInitialized(true);
+    });
   }, [
     triggerRefresh,
     sortField,
@@ -120,11 +124,14 @@ function MyRentedMovies() {
 
   return (
     <>
-      <MyRentedMoviesFilter filterInput={getFilterInput} />
-      <div className="bg-grey-texture w-full">
+      <div className="h-screen border-r-2">
+        <MyRentedMoviesFilter filterInput={getFilterInput} />
+      </div>
+      <div className="bg-grey-texture w-full h-screen px-10">
         <MyProfileRiredirectButtons />
-        <div className="w-full h-full px-4 ml-6 ">
-          <table className="w-full min-w-max bg-white border-2 table-auto text-left">
+        <div className="w-full h-[87vh] flex flex-col bg-white justify-between border-2">
+        <div className="overflow-y-auto">
+          <table className="w-full min-w-max bg-white border-b-2 table-auto text-left">
             <thead className="bg-basic-red text-white">
               <tr>
                 {TABLE_HEAD.slice(0, TABLE_HEAD.length - 1).map((elem) => {
@@ -259,8 +266,10 @@ function MyRentedMovies() {
               )}
             </tbody>
           </table>
-          <span className="w-full bg-basic-red flex flex-wrap py-3 mb-4 border-2">
-            <span className=" inline-flex marginResizable">
+          </div>
+          { !movies.length && initialized && (<p className="text-center text-2xl">No matching results found</p> )}
+          <div className="w-full bg-basic-red flex justify-between flex-wrap py-3 border-2">
+            <div className=" inline-flex marginResizable">
               <p className="text-white font-normal">Results per page: </p>
               <p className="ml-5">
                 <select
@@ -275,18 +284,18 @@ function MyRentedMovies() {
                   <option value="5">5</option>
                 </select>
               </p>
-            </span>
-            <div className="ml-10 justify-center w-1/2 items-center">
-              <Pagination
+            </div>
+            <div className="ml-10 justify-center items-center">
+              { movies.length > 0 && (<Pagination
                 pageNo={pageNo}
                 pageSize={pageSize}
                 totalPages={totalPages}
                 updatePageNumber={updatePageNumber}
                 responseLength={totalMovies}
                 nrCurrentMovies={movies.length}
-              />
+              /> )}
             </div>
-          </span>
+          </div>
         </div>
       </div>
     </>

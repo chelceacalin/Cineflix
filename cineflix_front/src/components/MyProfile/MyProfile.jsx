@@ -149,7 +149,7 @@ function MyProfile() {
     </div>
     <div className="bg-grey-texture w-full h-screen px-10">
         <MyProfileRiredirectButtons/>
-        <div className="w-full h-[840px] flex flex-col bg-white justify-between border-2">
+        <div className="w-full h-[87vh] flex flex-col bg-white justify-between border-2">
         <div className="overflow-y-auto">
           <table className="w-full min-w-max bg-white border-b-2 table-auto text-left">
             <thead className="bg-basic-red text-white">
@@ -237,7 +237,7 @@ function MyProfile() {
                 <th className="border-b-white p-4 text-center">
                   <div>Actions</div>
                 </th>
-                <th className="border-b-white p-4">
+                <th className="border-b-white">
                   <div className="flex items-center justify-center">
                     <Button
                       onClick={handleOpen}
