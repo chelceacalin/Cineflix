@@ -1,6 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import { Button, Dialog, DialogContent, TextField } from "@mui/material";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
@@ -8,8 +6,8 @@ import "./css/DetailsMovieModalView.css";
 import "./css/AddNewMovieModalWindow.css";
 import axios from "axios";
 import { Autocomplete } from "@mui/material";
+import { showError,showSuccess } from "../../service/ToastService";
 import * as moreClasses from "react-dom/test-utils";
-axios.defaults.withCredentials = true;
 
 function DetailsMovieModalView({
   isModalOpen,
@@ -40,7 +38,6 @@ function DetailsMovieModalView({
 
       setSelectedImage(avatarUrl);
     } catch (error) {
-      console.error(error);
     }
   };
 
@@ -93,14 +90,13 @@ function DetailsMovieModalView({
         setAvailableCategories(response.data.content);
       })
       .catch((error) => {
-        console.error(error);
       });
   }, []);
 
   const validRequest = () => {
     for (const check of validationChecks) {
       if (check.condition) {
-        showToast(check.message);
+        showError(check.message);
         return false;
       }
     }
@@ -110,12 +106,12 @@ function DetailsMovieModalView({
   const validFields = () => {
     let valid = true;
     if (title.charAt(0) !== title.charAt(0).toUpperCase()) {
-      showToast("Title should start with an uppercase letter!");
+      showError("Title should start with an uppercase letter!");
       valid = false;
     }
 
     if (director.charAt(0) !== director.charAt(0).toUpperCase()) {
-      showToast("Director should start with an uppercase letter!");
+      showError("Director should start with an uppercase letter!");
       valid = false;
     }
     return valid;
@@ -126,7 +122,7 @@ function DetailsMovieModalView({
     if (validRequest()) {
       if (validFields()) {
         if (!category) {
-          showToast("Category " + category + " does not exist ");
+          showError("Category " + category + " does not exist ");
         } else {
           let finalCategory = category;
 
@@ -139,13 +135,13 @@ function DetailsMovieModalView({
               .post(`/images/${id}`, formData)
               .then((response) => {
                 if (response.status === 200) {
-                  showToast("Image uploaded successfully!", "bg-green-500");
+                  showSuccess("Image uploaded successfully!", "bg-green-500");
                 } else {
-                  showToast("Failed to upload image.");
+                  showError("Failed to upload image.");
                 }
               })
               .catch((error) => {
-                showToast("Error uploading image: " + error.message);
+                showError("Error uploading image: " + error.message);
               });
           }
 
@@ -159,12 +155,12 @@ function DetailsMovieModalView({
           axios
             .post(`/movies/${id}`, movie)
             .then((response) => {
-              showToast("Movie edited successfully!", "bg-green-500");
+              showSuccess("Movie edited successfully!", "bg-green-500");
               setTriggerRefresh(!triggerRefresh);
               closeModal();
             })
             .catch((err) => {
-              showToast("Error editing movie: " + err.message);
+              showError("Error editing movie: " + err.message);
             });
         }
       }
@@ -315,24 +311,8 @@ function DetailsMovieModalView({
           </div>
         </DialogContent>
       </div>
-      <ToastContainer />
     </Dialog>
   );
 }
-
-const showToast = (message, color = "bg-red-500") => {
-  const toastType = color === "bg-green-500" ? toast.success : toast.error;
-
-  toastType(message, {
-    className: `${color} text-black p-4 rounded-lg`,
-    position: "top-right",
-    autoClose: 3500,
-    hideProgressBar: false,
-    closeOnClick: true,
-    pauseOnHover: true,
-    draggable: true,
-    progress: undefined,
-  });
-};
 
 export default DetailsMovieModalView;
