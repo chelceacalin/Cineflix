@@ -1,0 +1,7 @@
+.Button:enabled{
+    background-color:#1E1D5B;
+}
+.Button:hover{
+    background-color: #E0812E;
+    border-color: #E0812E;
+}

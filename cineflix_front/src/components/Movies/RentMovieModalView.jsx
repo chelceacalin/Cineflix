@@ -60,6 +60,7 @@ function RentMovieModalView({
           const message = JSON.stringify(error.response.data).replace('"', '').replace('"', '');
           showError(message);
           if(message.includes('user')){
+            setTriggerRefresh(!triggerRefresh)
             closeRentModal();
           }
         }
