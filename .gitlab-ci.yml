@@ -87,7 +87,7 @@ build-frontend:
   script:
     - cd cineflix_front
     - npm install
-    - VITE_BACKEND_URL=https://cineflix-backend.iship.esol-dev.ro && npm run build
+    - VITE_BACKEND_URL=https://cineflix-backend.iship.esol-dev.ro npm run build
   artifacts:
     paths:
       - cineflix_front/dist/
