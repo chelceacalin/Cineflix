@@ -3,7 +3,7 @@ import React from "react";
 import { useEffect } from "react";
 
 function Login() {
-  const url = "http://localhost:8081";
+  const url = import.meta.env.VITE_BACKEND_URL;
 
   useEffect(() => {
     document.body.style.background="#C64432";
