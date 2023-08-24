@@ -6,7 +6,6 @@ import {
     FormControl,
     InputLabel,
     MenuItem,
-    NativeSelect,
     Select,
     TextField
 } from '@mui/material';
@@ -19,7 +18,6 @@ axios.defaults.withCredentials = true
 
 function EditRoleModalWindow({ isModalOpen, closeModal, name, firstName, lastName, role, email, username, updateUser }) {
     const fullName = `${name}`;
-    const [roles, setRole] = useState(role);
     const [selectedOption, setSelectedOption] = useState(role);
 
     const [userDTO, setUserDTO] = useState({
