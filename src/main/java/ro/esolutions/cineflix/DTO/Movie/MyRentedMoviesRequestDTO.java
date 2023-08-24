@@ -4,19 +4,17 @@ package ro.esolutions.cineflix.DTO.Movie;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
+
 import java.time.LocalDate;
-import java.util.UUID;
 
 @Data
 @Builder
-@NoArgsConstructor
 @AllArgsConstructor
-public class MovieDTO {
 
-    private UUID id;
+public class MyRentedMoviesRequestDTO {
 
-    private String owner_username;
+    private String rentUsername;
+
     private String title;
     private String director;
 
@@ -24,9 +22,14 @@ public class MovieDTO {
 
     private Boolean isAvailable;
 
-    private String rentedBy;
-
-    private LocalDate rentedDate;
+    private LocalDate rentedStart;
 
     private LocalDate rentedUntil;
+    private String direction;
+    private String sortField;
+
+    public MyRentedMoviesRequestDTO(){
+        this.direction="ASC";
+        this.sortField="title";
+    }
 }

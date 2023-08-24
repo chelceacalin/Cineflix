@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import ro.esolutions.cineflix.entities.Movie;
+import ro.esolutions.cineflix.entities.MovieHistory;
 import ro.esolutions.cineflix.entities.MovieImageData;
 import ro.esolutions.cineflix.exceptions.MovieImageData.MovieImageDataNotFoundException;
 import ro.esolutions.cineflix.mapper.MovieMapper;
@@ -25,6 +26,7 @@ public class MovieImageDataService {
     private final MovieImageDataRepository movieImageDataRepository;
     private final MovieImageDataUtil movieImageDataUtil;
     private final MovieService movieService;
+
     private final static Set<String> allowedFormats = new HashSet<>(List.of("image/png", "image/jpeg", "image/jpg"));
 
     @Transactional
