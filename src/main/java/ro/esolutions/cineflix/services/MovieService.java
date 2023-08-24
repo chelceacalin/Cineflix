@@ -215,7 +215,7 @@ public class MovieService {
             return Optional.of("Movie not found");
         }
         if(!movie.get().isAvailable()){
-            return Optional.of("Movie is not available");
+            return Optional.of("Movie is not available, was rented by another user");
         }
         Optional<UserCineflix> userCineflix = userCineflixRepository.findById(String.valueOf(movieHistoryDTO.getUserId()));
         if (userCineflix.isEmpty()) {
