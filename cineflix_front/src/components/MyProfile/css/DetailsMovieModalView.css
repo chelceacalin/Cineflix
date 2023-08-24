@@ -45,4 +45,18 @@ body {
     border-radius: 4px;
   }
   
- 
+
+.Button:enabled{
+    background-color:#1E1D5B;
+    color: white;
+}
+
+.Button:enabled:hover{
+    background-color: #E0812E;
+    border-color: #E0812E;
+}
+
+.Button:hover{
+    background-color: #E0812E;
+    border-color: #E0812E;
+}

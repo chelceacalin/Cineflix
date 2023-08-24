@@ -78,6 +78,7 @@ function Movie({
             defaultDirector={director}
             defaultCategory={category}
             id={id}
+            isAvailable={isAvailable}
             setTriggerRefresh={setTriggerRefresh}
             triggerRefresh={triggerRefresh}
           />
