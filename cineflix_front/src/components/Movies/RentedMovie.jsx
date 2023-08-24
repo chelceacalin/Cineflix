@@ -15,6 +15,7 @@ function RentedMovie({
   rentedOn,
   rentedDate,
   owner_username,
+  description,
   setTriggerRefresh,
   triggerRefresh
 }) {
@@ -96,11 +97,13 @@ function RentedMovie({
          title={title}
          category={category}
          director={director}
+         description={description}
          isAvailable={isAvailable}
          rentedUntil={rentedUntil}
          rentedOn={rentedOn}
          rentedBy={rentedBy}
          rentedDate={rentedDate}
+         owner_username={owner_username}
          id={id}
      />}
          

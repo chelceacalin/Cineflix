@@ -11,7 +11,7 @@ import axios from "axios";
 
 function ViewMovieDetailsModalWindow({isModalOpen, closeModal,title,
                                          category,
-                                         director,isAvailable, rentedUntil, rentedBy, rentedOn, rentedDate, id}) {
+                                         director,isAvailable, rentedUntil, rentedBy, owner_username, rentedDate, id}) {
 
     const STATUS_AVAILABLE = 'Available';
     const STATUS_UNAVAILABLE = 'Unavailable';
@@ -36,7 +36,6 @@ function ViewMovieDetailsModalWindow({isModalOpen, closeModal,title,
 
             setSelectedImage(avatarUrl);
         } catch (error) {
-            console.error(error);
         }
     };
     useEffect(() => {
@@ -44,7 +43,6 @@ function ViewMovieDetailsModalWindow({isModalOpen, closeModal,title,
             if (data.data.description.length > 0) {
                 setDescription(data.data.description);
             }
-            setOwner(data.data.owner_username)
         });
         fetchMovieImage();
     }, []);
@@ -154,7 +152,7 @@ function ViewMovieDetailsModalWindow({isModalOpen, closeModal,title,
                             <TextField
                                 id="outlined-read-only-input"
                                 label="Owner"
-                                defaultValue={owner}
+                                defaultValue={owner_username}
                                 sx={{
                                     width: { md: 300 },
                                 }}
