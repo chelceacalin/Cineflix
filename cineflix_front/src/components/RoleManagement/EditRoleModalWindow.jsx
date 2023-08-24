@@ -10,12 +10,11 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import "./css/EditRoleModalWindow.css";
 import axios from 'axios';
-import { ToastContainer, toast } from "react-toastify";
 import * as moreClasses from "react-dom/test-utils";
+import { showSuccess,showError } from '../../service/ToastService';
 
 axios.defaults.withCredentials = true
 
-// eslint-disable-next-line react/prop-types
 function EditRoleModalWindow({ isModalOpen, closeModal, name, firstName, lastName, role, email, username, updateUser }) {
     const fullName = `${name}`;
     const [roles, setRole] = useState(role);
@@ -56,12 +55,12 @@ function EditRoleModalWindow({ isModalOpen, closeModal, name, firstName, lastNam
         axios
             .post(url, userDTO)
             .then(() => {
-                showToast("User edited successfully!", "bg-green-500");
+                showSuccess("User edited successfully!", "bg-green-500");
                 updateUser(userDTO);
                 closeModal();
         })
         .catch (error => {
-            showToast("Error editing user: " + error.message);
+            showError("Error editing user: " + error.message);
         })
     };
 
@@ -146,19 +145,5 @@ function EditRoleModalWindow({ isModalOpen, closeModal, name, firstName, lastNam
     );
 }
 
-const showToast = (message, color = "bg-red-500") => {
-  const toastType = color === "bg-green-500" ? toast.success : toast.error;
-
-  toastType(message, {
-    className: `${color} text-black p-4 rounded-lg`,
-    position: "top-right",
-    autoClose: 3500,
-    hideProgressBar: false,
-    closeOnClick: true,
-    pauseOnHover: true,
-    draggable: true,
-    progress: undefined,
-  });
-};
 
 export default EditRoleModalWindow

@@ -12,7 +12,6 @@ import "./css/AddNewMovieModalWindow.css";
 import axios from "axios";
 import { UserLoginContext } from "../../utils/context/LoginProvider";
 import {showError,showSuccess} from '../../service/ToastService';
-import { Shower } from "@mui/icons-material";
 
 
 function AddNewMovieModalWindow({

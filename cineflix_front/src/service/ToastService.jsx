@@ -10,6 +10,7 @@ const showToast = (message, type) => {
     pauseOnHover: true,
     draggable: true,
     progress: undefined,
+    theme: "light"
   });
 };
 
@@ -19,4 +20,14 @@ export const showError = (message) => {
 
 export const showSuccess = (message) => {
   showToast(message, "success");
+};
+
+
+export const showInfo = (message) => {
+  showToast(message, "info");
+};
+
+
+export const showWarning = (message) => {
+  showToast(message, "warn");
 };

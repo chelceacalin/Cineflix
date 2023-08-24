@@ -3,8 +3,7 @@ import { Button, Dialog, DialogContent } from '@mui/material'
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import React, { useState } from 'react';
 import axios from 'axios';
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import { showSuccess,showError } from '../../service/ToastService';
 
 axios.defaults.withCredentials = true
 
@@ -14,7 +13,7 @@ function DeleteCategoryModalWindow({ isEditModalOpen, closeEditModal, name, id, 
         let url = '/category/delete/' + id;
 
             axios.post(url).then(() => {
-                showToast("Category deleted successfully!", "bg-green-500");
+                showSuccess("Category deleted successfully!", "bg-green-500");
                 signal();
                 closeEditModal();
             })
@@ -22,28 +21,13 @@ function DeleteCategoryModalWindow({ isEditModalOpen, closeEditModal, name, id, 
                 if (error.response) {
                     if (error.response.status == 404) {
                         const message = JSON.stringify(error.response.data).replace('"', '').replace('"', '');
-                        showToast(message);
+                        showError(message);
                     } else if (error.response.status == 500) {
-                        showToast("Found a movie, can not delete the category");
+                        showError("Found a movie, can not delete the category");
                     }
                 }
             })
     }
-
-    const showToast = (message, color = "bg-red-500") => {
-        const toastType = color === "bg-green-500" ? toast.success : toast.error;
-      
-        toastType(message, {
-          className: `${color} text-black p-4 rounded-lg`,
-          position: "top-right",
-          autoClose: 2500,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        });
-      };
 
     return (
         <Dialog fullWidth maxWidth={'sm'} open={isEditModalOpen} onClose={closeEditModal}>

@@ -8,24 +8,21 @@ import {
 import axios from "axios";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import { showError,showSuccess } from "../../service/ToastService";
 axios.defaults.withCredentials = true;
 
 function CreateCategoryModalWindow({
   isModalOpen,
   closeModal,
   signal,
-  setErrorMessage,
-  errorMessage,
 }) {
   const [categoryDTO, setCategoryDTO] = useState("");
 
   const createCategory = () => {
     if (categoryDTO.length < 2) {
-      showToast("Category should have more than 2 characters!");
+      showError("Category should have more than 2 characters!");
     } else if (categoryDTO.charAt(0) !== categoryDTO.charAt(0).toUpperCase()) {
-      showToast("Category should start with an uppercase letter!");
+      showError("Category should start with an uppercase letter!");
     } else {
       let url = "/category/create";
       axios
@@ -35,32 +32,18 @@ function CreateCategoryModalWindow({
         .then(() => {
           signal();
           closeModal();
-          showToast("Category added successfully!", "bg-green-500");
+          showSuccess("Category added successfully!", "bg-green-500");
           setCategoryDTO("");
         })
         .catch((error) => {
           if (error.response) {
             const message = JSON.stringify(error.response.data).replace('"', '').replace('"', '');
-            showToast(message);
+            showError(message);
           }
         });
     }
   };
 
-  const showToast = (message, color = "bg-red-500") => {
-      const toastType = color === "bg-green-500" ? toast.success : toast.error;
-    
-      toastType(message, {
-        className: `${color} text-black p-4 rounded-lg`,
-        position: "top-right",
-        autoClose: 2500,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-      });
-    };
 
   return (
     <Dialog fullWidth maxWidth={'sm'} open={isModalOpen} onClose={closeModal}>
