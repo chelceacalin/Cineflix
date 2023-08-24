@@ -25,7 +25,7 @@ function AddNewMovieModalWindow({
   const [title, setTitle] = useState("");
   const [director, setDirector] = useState("");
   const [description, setDescription] = useState("");
-  const [category, setCategory] = useState("");
+  const [category, setCategory] = useState(null);
   const [categorySelect, setCategorySelect] = useState("");
   const [selectedImage, setSelectedImage] = useState(null);
   const [availableCategories, setAvailableCategories] = useState([]);
