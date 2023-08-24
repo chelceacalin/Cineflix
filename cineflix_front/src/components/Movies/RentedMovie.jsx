@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { Button } from "@mui/material";
 import ViewMovieDetailsModalWindow from "./ViewMovieDetailsModalWindow.jsx";
+import RentMovieModalView from "./RentMovieModalView";
+
 function RentedMovie({
   id,
   title,
@@ -13,14 +15,25 @@ function RentedMovie({
   triggerRefresh,
   setTriggerRefresh,
   rentedOn,
-    rentedDate
+  rentedDate,
+  owner_username
 }) {
   const [detailsModalOpen, setDetailsModalOpen] = useState(false);
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
-  let handleDetailsOpen = () => setDetailsModalOpen(true);
-  let handleDetailsClose = () => setDetailsModalOpen(false);
-  let handleDeleteOpen = () => setDeleteModalOpen(true);
-  let handleDeleteClose = () => setDeleteModalOpen(false);
+  const handleDetailsOpen = () => setDetailsModalOpen(true);
+  const handleDetailsClose = () => setDetailsModalOpen(false);
+
+  const [isRentModalOpen, setRentModalOpen] = useState(false);
+
+  const handleOpenRentModal = () => {
+    setRentModalOpen(true);
+  };
+
+  const handleCloseRentModal = () => {
+    setRentModalOpen(false);
+  };
+
+
   return (
     <tr key={title}>
       <td className={classes}>
@@ -49,7 +62,13 @@ function RentedMovie({
       </td>
       <td className={classes}>
         <div variant="small" color="blue-gray" className="font-normal">
-          {rentedOn}
+          {owner_username}
+        </div>
+      </td>
+
+      <td className={classes}>
+        <div variant="small" color="blue-gray" className="font-normal">
+          {rentedDate}
         </div>
       </td>
       <td className={classes}>
@@ -84,12 +103,19 @@ function RentedMovie({
           />
       </td>
       <td>
-        <button
-          onClick={handleDeleteOpen}
-          className="inline-block rounded px-3 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-white contained-button"
+        <Button
+          onClick={handleOpenRentModal}
+          className="contained-button font-normal w-full" variant="contained"
         >
           Rent Movie
-        </button>
+        </Button>
+        <RentMovieModalView
+          isRentModalOpen={isRentModalOpen}
+          closeRentModal={handleCloseRentModal}
+          title={title}
+          director={director}
+          owner={owner_username}
+        />
       </td>
     </tr>
   );

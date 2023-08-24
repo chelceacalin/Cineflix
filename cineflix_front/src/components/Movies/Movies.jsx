@@ -5,12 +5,16 @@ import RentedMovie from "./RentedMovie";
 import { UserLoginContext } from "../../utils/context/LoginProvider";
 import MovieFilter from "./MovieFilter";
 import SortIcon from "../../utils/icon/SortIcon";
+
+axios.defaults.withCredentials = true;
+
 function Movies() {
   const TABLE_HEAD = [
     "Title",
     "Director",
     "Category",
     "Status",
+    "Owner",
     "Rented On",
     "Rented Until",
     "Rented By",
@@ -24,12 +28,11 @@ function Movies() {
   const [isAvailable, setIsAvailable] = useState("");
   const [rentedUntil, setRentedUntil] = useState("");
   const [rentedBy, setRentedBy] = useState("");
-  const [rentedDate, setrentedDate] = useState("");
-  let [newUrl, setNewUrl] = useState("");
-  let [pageNo, setPageNo] = useState(1);
-  let [pageSize, setPageSize] = useState(15);
-  let [totalPages, setTotalPages] = useState("");
-  let [totalMovies, setTotalMovies] = useState(0);
+  const [rentedDate, setRentedDate] = useState("");
+  const [pageNo, setPageNo] = useState(1);
+  const [pageSize, setPageSize] = useState(15);
+  const [totalPages, setTotalPages] = useState("");
+  const [totalMovies, setTotalMovies] = useState(0);
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -37,21 +40,14 @@ function Movies() {
   const { username } = useContext(UserLoginContext);
   const [direction, setDirection] = useState(true);
   const [sortField, setSortField] = useState("title");
-  let [ownerUsername, setOwnerUsername] = useState("");
-  let [lastClicked, setLastClicked] = useState("");
+  const [ownerUsername, setOwnerUsername] = useState("");
+  const [lastClicked, setLastClicked] = useState("");
 
-  let handleClick = (fieldName) => {
-    if (lastClicked === fieldName) {
-      setDirection(!direction);
-    }
-    setLastClicked(fieldName);
-  };
 
   useEffect(() => {
     const buildUrl = () => {
       const normalizedSortField = sortField || "title";
       let params = [
-        `owner_username=${username}`,
         `sortField=${normalizedSortField}`,
         `direction=${direction ? "ASC" : "DESC"}`,
         `title=${title}`,
@@ -66,6 +62,10 @@ function Movies() {
         params.push(`rentedUntil=${rentedUntil}`);
       }
 
+      if(rentedDate){
+        params.push(`rentedDate=${rentedDate}`)
+      }
+
       if (rentedBy) {
         params.push(`rentedBy=${rentedBy}`);
       }
@@ -74,7 +74,6 @@ function Movies() {
     };
 
     const url = buildUrl();
-
     axios.get(url).then((elems) => {
       if (elems.data.content.length === 0 && pageNo > 1) {
         updatePageNumber(pageNo - 1);
@@ -92,6 +91,7 @@ function Movies() {
     category,
     isAvailable,
     rentedUntil,
+    rentedDate,
     rentedBy,
     ownerUsername,
     pageSize,
@@ -99,6 +99,8 @@ function Movies() {
     pageNo,
     movies.length,
   ]);
+
+
   let getFilterInput = (params) => {
     setCategory(params[0]);
     setDirector(params[1]);
@@ -106,6 +108,7 @@ function Movies() {
     setIsAvailable(params[3] === "BOTH" ? "" : params[3]);
     setRentedUntil(params[4]);
     setRentedBy(params[5]);
+    setRentedDate(params[6])
   };
 
   const handleSelectChange = (event) => {
@@ -119,140 +122,187 @@ function Movies() {
 
   return (
     <>
-      <MovieFilter filterInput={getFilterInput} />
-      <div className="w-full h-full ml-10 mr-10 mt-5">
-        <table className="w-full min-w-max table-auto text-left">
-          <thead className="bg-basic-red text-white">
-            <tr>
-              {TABLE_HEAD.slice(0, TABLE_HEAD.length).map((elem) => {
-                return (
-                  <th
-                    key={elem}
-                    className={`border-b-white p-4 ${
-                      elem.length > 2 ? "hover" : ""
-                    } cursor-pointer`}
-                    onClick={(e) => {
-                      e.preventDefault();
-                      if (e.target.textContent !== "Status") {
-                        if (e.target.textContent === "Title") {
-                          setSortField("title");
-                        } else if (e.target.textContent === "Director") {
-                          setSortField("director");
-                        } else if (e.target.textContent === "Category") {
-                          setSortField("category");
-                        }
-                        if (sortField === e.target.textContent.toLowerCase()) {
-                          setDirection(!direction);
-                        } else {
-                          setDirection(true);
-                        }
-
-                        if (e.target.textContent === "Rented Until") {
-                          setSortField("rentedUntil");
-                          setDirection(!direction);
-                        } else if (e.target.textContent === "Rented By") {
-                          setSortField("rentedBy");
-                          setDirection(!direction);
-                        }
-                      }
-                    }}
-                  >
-                    <div className="">
-                      {elem}
-                      <svg
-                        data-column={elem}
-                        style={{ display: "inline-block" }}
-                        width="16"
-                        height="16"
-                        viewBox="0 0 16 16"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
+      <div className="filterContainer h-screen border-r-2">
+        <MovieFilter filterInput={getFilterInput} />
+      </div>
+      <div className="bg-grey-texture w-full h-screen px-10 py-10 ">
+        <div className="w-full h-full flex flex-col bg-white justify-between border-2">
+          <div className="overflow-y-auto">
+            <table className="w-full min-w-max table-auto text-left border-b-2">
+              <thead className="bg-basic-red sticky top-0 z-30 text-white">
+                <tr>
+                  {TABLE_HEAD.slice(0, TABLE_HEAD.length).map((elem) => {
+                    return (
+                      <th
+                        key={elem}
+                        className={`border-b-white p-4 ${
+                          elem.length > 2 ? "hover" : ""
+                        } cursor-pointer`}
                         onClick={(e) => {
-                          e.stopPropagation();
-                          setDirection(!direction);
-                          handleClick(
-                            e.currentTarget
-                              .getAttribute("data-column")
-                              .toLowerCase()
-                          );
-                        }}
-                      >
-                        {elem != "Status" && elem.length > 2 && <SortIcon />}
-                      </svg>
-                    </div>
-                  </th>
-                );
-              })}
-            </tr>
-          </thead>
-          <tbody className="text-blue-marine">
-            {movies.map(
-              (
-                {
-                  category,
-                  director,
-                  title,
-                  isAvailable,
-                  rentedUntil,
-                  rentedBy,
-                  id,
-                  rentedDate,
-                },
-                index
-              ) => {
-                const isLast = index === movies.length - 1;
-                const classes = isLast
-                  ? "px-4 py-2"
-                  : "px-4 py-2 border-b border-blue-gray-50";
+                          e.preventDefault();
+                          if (e.target.textContent !== "Status") {
+                            if (e.target.textContent === "Title") {
+                              setSortField("title");
+                            } else if (e.target.textContent === "Director") {
+                              setSortField("director");
+                            } else if (e.target.textContent === "Category") {
+                              setSortField("category");
+                            }
+                            if (
+                              sortField === e.target.textContent.toLowerCase()
+                            ) {
+                              setDirection(!direction);
+                            } else {
+                              setDirection(true);
+                            }
 
-                return (
-                  <RentedMovie
-                    id={id}
-                    title={title}
-                    category={category}
-                    director={director}
-                    isAvailable={isAvailable}
-                    rentedUntil={rentedUntil}
-                    rentedDate={rentedDate}
-                    rentedBy={rentedBy}
-                    key={index}
-                    classes={classes}
-                    triggerRefresh={triggerRefresh}
-                    setTriggerRefresh={setTriggerRefresh}
-                  />
-                );
-              }
-            )}
-          </tbody>
-        </table>
-        <span className="w-full bg-basic-red flex flex-wrap py-3 mb-4">
-          <span className=" inline-flex marginResizable">
-            <p className="text-white font-normal">Results per page: </p>
-            <p className="ml-5">
-              <select
-                name="cars"
-                id="cars"
-                form="carform"
-                onChange={handleSelectChange}
-                className="cursor-pointer"
-              >
-                <option value="15">15</option>
-                <option value="10">10</option>
-                <option value="5">5</option>
-              </select>
-            </p>
-          </span>
-          <div className="ml-10 justify-center w-1/2 items-center">
-            <Pagination
-              pageNo={pageNo}
-              pageSize={pageSize}
-              totalPages={totalPages}
-              updatePageNumber={updatePageNumber}
-              responseLength={totalMovies}
-              nrCurrentMovies={movies.length}
-            />
+                          if (e.target.textContent === "Rented Until") {
+                            setSortField("rentedUntil");
+                            setDirection(!direction);
+                          } else if (e.target.textContent === "Rented By") {
+                            setSortField("rentedBy");
+                            setDirection(!direction);
+                          }
+                          else if (e.target.textContent === "Rented On") {
+                            setSortField("rentedDate");
+                            setDirection(!direction);
+                          }
+                          else if (e.target.textContent === "Owner") {
+                            setSortField("owner_username");
+                            setDirection(!direction);
+                          }
+                        }
+                      }}
+                    >
+                      <div className="">
+                        {elem}
+                        <svg
+                          data-column={elem}
+                          style={{ display: "inline-block" }}
+                          width="16"
+                          height="16"
+                          viewBox="0 0 16 16"
+                          fill="none"
+                          xmlns="http://www.w3.org/2000/svg"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setDirection(!direction);
+
+                            let column=e.currentTarget.getAttribute("data-column");
+                            if (column !== "Status") {
+                              if (column === "Title") {
+                                setSortField("title");
+                              } else if (column === "Director") {
+                                setSortField("director");
+                              } else if (column=== "Category") {
+                                setSortField("category");
+                              }
+                              if (
+                                sortField === column.toLowerCase()
+                              ) {
+                                setDirection(!direction);
+                              } else {
+                                setDirection(true);
+                              }
+
+                              if (column === "Rented Until") {
+                                setSortField("rentedUntil");
+                                setDirection(!direction);
+                              } else if (column === "Rented By") {
+                                setSortField("rentedBy");
+                                setDirection(!direction);
+                              }
+                              else if (column === "Rented On") {
+                                setSortField("rentedDate");
+                                setDirection(!direction);
+                              }
+                              else if (column === "Owner") {
+                                setSortField("owner_username");
+                                setDirection(!direction);
+                              }
+                            }
+                          }}
+                        >
+                          {elem != "Status" && elem.length > 2 && <SortIcon />}
+                        </svg>
+                      </div>
+                    </th>
+                  );
+                })}
+              </tr>
+            </thead>
+            <tbody className="text-blue-marine">
+              {
+              movies.map(
+                (
+                  {
+                    category,
+                    director,
+                    title,
+                    isAvailable,
+                    rentedUntil,
+                    rentedBy,
+                    id,
+                    rentedDate,
+                    owner_username
+                  },
+                  index
+                ) => {
+                  const isLast = index === movies.length - 1;
+                  const classes = isLast
+                    ? "px-4 py-2"
+                    : "px-4 py-2 border-b border-blue-gray-50";
+
+                  return (
+                    <RentedMovie
+                      id={id}
+                      title={title}
+                      category={category}
+                      director={director}
+                      isAvailable={isAvailable}
+                      rentedUntil={rentedUntil}
+                      owner_username={owner_username}
+                      rentedDate={rentedDate}
+                      rentedBy={rentedBy}
+                      key={index}
+                      classes={classes}
+                      triggerRefresh={triggerRefresh}
+                      setTriggerRefresh={setTriggerRefresh}
+                    />
+                  );
+                }
+              )}
+            </tbody>
+          </table>
           </div>
-        </span>
+          { !movies.length && (<p className="text-center text-2xl">No matching results found</p> )}
+          <div className="w-full bg-basic-red flex justify-between flex-wrap py-3 border-2">
+            <div className=" inline-flex marginResizable">
+              <p className="text-white font-normal">Results per page: </p>
+              <p className="ml-5">
+                <select
+                  className="bg-basic-red cursor-pointer text-white font-bold border-2 p-1"
+                  onChange={handleSelectChange}
+                >
+                  <option value="15">15</option>
+                  <option value="10">10</option>
+                  <option value="5">5</option>
+                </select>
+              </p>
+            </div>
+            <div className="justify-center items-center">
+            { movies.length > 0 && (
+              <Pagination
+                pageNo={pageNo}
+                pageSize={pageSize}
+                totalPages={totalPages}
+                updatePageNumber={updatePageNumber}
+                responseLength={totalMovies}
+                nrCurrentMovies={movies.length}
+              />  )}
+            </div>
+          </div>
+        </div>
       </div>
     </>
   );

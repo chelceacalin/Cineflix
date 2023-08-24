@@ -16,4 +16,6 @@ public interface MovieImageDataRepository extends JpaRepository<MovieImageData, 
 
     @Query("select img from MovieImageData img where img.movie.id=:id")
     Optional<MovieImageData> findMovieImageDataByMovieId(UUID id);
+
+    void deleteByMovie_Id(UUID id);
 }

@@ -24,7 +24,7 @@ function Category({id, name, classes, updateCategory, signal, setErrorMessage, e
     }
 
   return (
-    <tr>
+    <tr className='z-0'>
         <td className={classes}>
             {name}
         </td>
