@@ -235,17 +235,16 @@ public class MovieService {
                 .collect(Collectors.toList());
         return new PageImpl<>(rentedMovies, pageable, movieHistories.getTotalElements());
     }
-    public void changeRentedMovieStatus(UUID id) {
-        Optional<MovieHistory> optionalMovieHistory = movieHistoryRepository.findById(id);
 
-        if (optionalMovieHistory.isPresent()) {
-            MovieHistory movieHistory = optionalMovieHistory.get();
-            Movie movie = movieHistory.getMovie();
+    public void changeRentedMovieStatus(UUID id) {
+        Optional<Movie> movieOptional = movieRepository.findById(id);
+
+        if (movieOptional.isPresent()) {
+            Movie movie = movieOptional.get();
             movie.setAvailable(true);
             movieRepository.save(movie);
         } else {
             throw new MovieNotFoundException("Movie is not found");
         }
     }
-
 }
