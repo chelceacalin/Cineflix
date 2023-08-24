@@ -72,7 +72,7 @@ function MovieFilter({ filterInput }) {
   ]);
 
   return (
-    <div className="space-y-4 ml-7 mr-1">
+    <div className="space-y-4 ml-7 mr-7">
       <div className="mt-10">
         <TextField
           id="outlined-search"
