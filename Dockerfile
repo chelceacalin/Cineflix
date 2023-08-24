@@ -8,4 +8,4 @@ USER appuser
 
 COPY target/CineFlix-0.0.1-SNAPSHOT.jar app.jar
 
-ENTRYPOINT exec java -server -Djava.security.egd=file:/dev/./urandom $JAVA_OPTS -jar /app.jar
+ENTRYPOINT exec java -server -Djava.security.egd=file:/dev/./urandom $JAVA_OPTS --debug -jar /app.jar
