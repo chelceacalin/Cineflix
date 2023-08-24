@@ -22,7 +22,8 @@ function DeleteMovieModalView({ isModalOpen, closeModal, title, category, id, re
                 setRequestError(false);
             })
             .catch((error) => {
-                showToast(error.response.data)                
+                showToast(error.response.data);
+                closeModal();         
             })
     }
 
