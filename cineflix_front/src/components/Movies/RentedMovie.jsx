@@ -39,12 +39,12 @@ function RentedMovie({
   return (
     <tr key={title}>
       <td className={classes}>
-        <div variant="small" color="blue-gray" className="font-normal max-w-[150px] break-words">
+        <div variant="small" color="blue-gray" className="font-normal max-w-[100px] break-words">
           {title}
         </div>
       </td>
       <td className={classes}>
-        <div variant="small" color="blue-gray" className="font-normal max-w-[200px]">
+        <div variant="small" color="blue-gray" className="font-normal max-w-[90px] break-words">
           {director}
         </div>
       </td>

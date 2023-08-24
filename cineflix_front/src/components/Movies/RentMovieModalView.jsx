@@ -73,7 +73,9 @@ function RentMovieModalView({
         if(error.response){
           const message = JSON.stringify(error.response.data).replace('"', '').replace('"', '');
           showToast(message);
-          closeRentModal();
+          if(message.includes('user')){
+            closeRentModal();
+          }
         }
     })
     };
