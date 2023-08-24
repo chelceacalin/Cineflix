@@ -1,21 +1,20 @@
-import React, { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import {
+    Autocomplete,
     Button,
     Dialog,
     DialogContent,
-    FormControl,
-    InputLabel,
-    MenuItem,
-    Select,
     TextField
 } from '@mui/material';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import "./css/EditRoleModalWindow.css";
 import axios from 'axios';
+import * as moreClasses from "react-dom/test-utils";
 
 axios.defaults.withCredentials = true
 
+// eslint-disable-next-line react/prop-types
 function EditRoleModalWindow({ isModalOpen, closeModal, name, firstName, lastName, role, email, username, updateUser }) {
     const fullName = `${name}`;
     const [selectedOption, setSelectedOption] = useState(role);
@@ -27,6 +26,10 @@ function EditRoleModalWindow({ isModalOpen, closeModal, name, firstName, lastNam
         email: '',
         role: ''
     });
+
+    const roles=[
+        'ADMIN','USER'
+    ]
 
     useEffect(() => {
         setUserDTO(() => ({
@@ -49,7 +52,7 @@ function EditRoleModalWindow({ isModalOpen, closeModal, name, firstName, lastNam
                 'email': email,
                 'role': selectedOption
             }));
-            const response = axios.post(url, userDTO).then(() => {
+            axios.post(url, userDTO).then(() => {
 
                 updateUser(userDTO);
                 closeModal();
@@ -101,36 +104,38 @@ function EditRoleModalWindow({ isModalOpen, closeModal, name, firstName, lastNam
                     />
                 </div>
                 <div className='mt-6'>
-                    <FormControl fullWidth>
-                        <InputLabel
-                            sx={{ fontFamily: "Sanchez" }}
-                            id="role-label-id"
-                        >
-                        Role
-                        </InputLabel>
-                        <Select
-                            labelId="role-label-id"
-                            label="Role"
-                            value={selectedOption}
-                            onChange={(e) => setSelectedOption(e.target.value)}
-                            style = {{ fontFamily: "Sanchez" }}
-                        >
-                            <MenuItem
+                    <Autocomplete
+                        sx={{ fontFamily: "Sanchez" }}
+                        value={selectedOption}
+                        onChange={(e, value) => {
+                            setSelectedOption(value)
+                        }
+                    }
+                        ListboxProps={{
+                            style:{ fontFamily: "Sanchez" }
+                        }}
+                        options={roles}
+                        renderInput={(params) =>
+                            <TextField
+                                {...params}
+                                InputLabelProps={{
+                                    style: { fontFamily: "Sanchez" }
+                                }}
+                                InputProps={{
+                                    ...params.InputProps, ...moreClasses.input,
+                                    style: { fontFamily: "Sanchez" }
+                                }}
                                 sx={{ fontFamily: "Sanchez" }}
-                                value="USER">User</MenuItem>
-                            <MenuItem
-                                sx={{ fontFamily: "Sanchez" }}
-                                value="ADMIN">Admin</MenuItem>
-                        </Select>
-                        <div className='flex gap-x-2 mt-6'>
-                            <div className="flex-1">
-                                <Button className="contained-button w-full" variant="contained" onClick={editUserRole}>Save</Button>
-                            </div>
-                            <div className="flex-1">
-                                <Button className="outlined-button w-full" variant="outlined" onClick={closeModal} >Cancel</Button>
-                            </div>
-                        </div>
-                    </FormControl>
+                                label="Role"/>}
+                    />
+                <div className='flex gap-x-2 mt-6'>
+                    <div className="flex-1">
+                        <Button className="contained-button w-full" variant="contained" onClick={editUserRole}>Save</Button>
+                    </div>
+                    <div className="flex-1">
+                        <Button className="outlined-button w-full" variant="outlined" onClick={closeModal} >Cancel</Button>
+                    </div>
+                </div>
                 </div>
             </DialogContent>
         </Dialog>

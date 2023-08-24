@@ -1,7 +1,7 @@
 import {
-  Checkbox,
-  TextField,
-  Button,
+    Checkbox,
+    TextField,
+    Autocomplete
 } from "@mui/material";
 import React from "react";
 import axios from "axios";
@@ -14,6 +14,7 @@ import {AdapterDayjs} from "@mui/x-date-pickers/AdapterDayjs";
 import {DatePicker} from "@mui/x-date-pickers/DatePicker";
 import dayjs from "dayjs";
 import DatePickerClear from "../DatePickerClear.jsx";
+import * as moreClasses from "react-dom/test-utils";
 
 function MyProfileFilterComponent({ filterInput }) {
   let [title, setTitle] = useState("");
@@ -22,7 +23,7 @@ function MyProfileFilterComponent({ filterInput }) {
   let [available, setAvailable] = useState(true);
   let [unavailable, setUnavailable] = useState(true);
   let [rentedUntil, setRentedUntil] = useState(null);
-  let [rentedBy, setRentedBy] = useState("");
+  let [rentedBy, setRentedBy] = useState(null);
   let [url, setUrl] = useState("");
   const [usersWhoRented, setUsersWhoRented] = useState([]);
   let [filteredUsers,setFilteredUsers]=useState([])
@@ -151,19 +152,29 @@ function MyProfileFilterComponent({ filterInput }) {
         </LocalizationProvider>
       </div>
       <div className="mt-10 mr-6">
-        <label className="block">Rented by:</label>
-        <select
-          className="input-field mt-2"
-          onChange={(e) => {
-            setRentedBy(e.target.value);
-          }}
-        >
-          <option value="">Select Rented By</option>
-
-          {filteredUsers.map((movie, index) => (
-            <option key={index}>{movie.rentedBy}</option>
-          ))}
-        </select>
+        <Autocomplete
+            sx={{ fontFamily: "Sanchez" }}
+            value={rentedBy}
+            onChange={(e, value) => {
+              setRentedBy(value);
+            }}
+            ListboxProps={{
+                style:{ fontFamily: "Sanchez" }
+            }}
+            options={filteredUsers.map(m => m.rentedBy)}
+            renderInput={(params) =>
+                <TextField
+                    {...params}
+                    InputLabelProps={{
+                    style: { fontFamily: "Sanchez" }
+                    }}
+                    InputProps={{
+                        ...params.InputProps, ...moreClasses.input,
+                    style: { fontFamily: "Sanchez" }
+                }}
+                    sx={{ fontFamily: "Sanchez" }}
+                label="Rented by"/>}
+        />
       </div>
     </div>
   );
