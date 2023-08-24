@@ -10,6 +10,7 @@ import SortIcon from "../../utils/icon/SortIcon";
 function RoleManagement() {
   const TABLE_HEAD = ["Name", "Role", "Email", "Actions", ""];
   const [users, setUsers] = useState([]);
+  const [initialized, setInitialized] = useState(false);
   const [sortField, setSortField] = useState("defaultsort");
   const [direction, setDirection] = useState(true);
   const [lastClicked, setLastClicked] = useState(null);
@@ -64,6 +65,9 @@ function RoleManagement() {
         setUsers(elems.data.content);
         setTotalPages(elems.data.totalPages);
       }
+      setInitialized(true);
+    }).catch(error => {
+      setInitialized(true);
     });
   }, [ sortField,direction, firstName, lastName, email, pageSize, pageNo, filterRole ]);
 
@@ -187,7 +191,7 @@ function RoleManagement() {
           </tbody>
         </table>
         </div>
-        {!users.length && (<p className="text-center text-2xl">No matching results found</p> )}
+        {!users.length && initialized && (<p className="text-center text-2xl">No matching results found</p> )}
         <div className="bg-basic-red flex justify-between flex-wrap py-3 border-2">
           <div className=" inline-flex marginResizable">
             <p className="text-white font-normal">

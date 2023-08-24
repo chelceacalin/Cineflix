@@ -11,10 +11,16 @@ import org.springframework.http.ResponseEntity;
 import ro.esolutions.cineflix.DTO.Category.CategoryDTO;
 import ro.esolutions.cineflix.controllers.CategoryController;
 import ro.esolutions.cineflix.entities.Category;
+import ro.esolutions.cineflix.entities.Movie;
+import ro.esolutions.cineflix.entities.UserCineflix;
+import ro.esolutions.cineflix.exceptions.Category.CategoryContainsMovieException;
 import ro.esolutions.cineflix.exceptions.Category.CategoryNotFoundException;
 import ro.esolutions.cineflix.services.CategoryService;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
@@ -72,5 +78,5 @@ public class CategoryControllerTest {
         ResponseEntity response = categoryController.updateCategory(categoryDTO,category.getId());
         verify(categoryService,times(0)).updateCategory(categoryDTO,category.getId());
         assertEquals(new ResponseEntity<>("Error", HttpStatus.BAD_REQUEST),response);
-       }
+    }
 }

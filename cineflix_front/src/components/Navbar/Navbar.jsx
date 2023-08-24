@@ -10,7 +10,7 @@ function Navbar() {
   const [selectedColor, setSelectedColor] = useState("");
   const { isAdmin, setIsAdmin, username, setUsername, token, setToken, isLoggedIn, setIsLoggedIn } = useContext(UserLoginContext);
   const location = useLocation();
-
+  const url = import.meta.env.VITE_BACKEND_URL;
   
   useEffect(() => {
     if (location.pathname === "/") {
@@ -276,7 +276,7 @@ function Navbar() {
                     setIsLoggedIn(false);
                     setUsername(null);
                     setToken(null);
-                    window.location.href="http://localhost:8081/logout";
+                    window.location.href=url+"/logout";
                   }}
                 >
                   <svg
