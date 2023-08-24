@@ -11,7 +11,7 @@ import axios from "axios";
 
 function ViewMovieDetailsModalWindow({isModalOpen, closeModal,title,
                                          category,
-                                         director,isAvailable, rentedUntil, rentedBy, rentedDate, id}) {
+                                         director,isAvailable, rentedUntil, rentedBy, owner_username, rentedDate, id}) {
 
     const STATUS_AVAILABLE = 'Available';
     const STATUS_UNAVAILABLE = 'Unavailable';
@@ -23,7 +23,6 @@ function ViewMovieDetailsModalWindow({isModalOpen, closeModal,title,
         status = STATUS_UNAVAILABLE;
     }
     const [selectedImage, setSelectedImage] = useState(null);
-    let loaded=false;
     const [description, setDescription] = useState("");
     const [owner, setOwner] = useState("");
     const fetchMovieImage = async () => {
@@ -35,10 +34,8 @@ function ViewMovieDetailsModalWindow({isModalOpen, closeModal,title,
             const blob = new Blob([response.data], { type: "image/png" });
             const avatarUrl = URL.createObjectURL(blob);
 
-            loaded=true;
             setSelectedImage(avatarUrl);
         } catch (error) {
-            console.error(error);
         }
     };
     useEffect(() => {
@@ -46,7 +43,6 @@ function ViewMovieDetailsModalWindow({isModalOpen, closeModal,title,
             if (data.data.description.length > 0) {
                 setDescription(data.data.description);
             }
-            setOwner(data.data.owner_username)
         });
         fetchMovieImage();
     }, []);
@@ -78,8 +74,6 @@ function ViewMovieDetailsModalWindow({isModalOpen, closeModal,title,
                                 InputLabelProps={{
                                     style: { fontFamily: "Sanchez" }
                                 }}
-                                disabled={!isAvailable}
-
                             />
                         </div>
                         <div className='mt-6 ml-20'>
@@ -97,7 +91,6 @@ function ViewMovieDetailsModalWindow({isModalOpen, closeModal,title,
                                 InputLabelProps={{
                                     style: { fontFamily: "Sanchez" }
                                 }}
-                                disabled={!isAvailable}
                             />
                         </div>
                         <div className='mt-6 ml-20'>
@@ -115,7 +108,6 @@ function ViewMovieDetailsModalWindow({isModalOpen, closeModal,title,
                                 InputLabelProps={{
                                     style: { fontFamily: "Sanchez" }
                                 }}
-                                disabled={!isAvailable}
                             />
                         </div>
                         <div className='mt-6 ml-20'>
@@ -135,7 +127,6 @@ function ViewMovieDetailsModalWindow({isModalOpen, closeModal,title,
                                 InputLabelProps={{
                                     style: { fontFamily: "Sanchez" }
                                 }}
-                                disabled={!isAvailable}
                             />
                         </div>
                         <div className='mt-6 ml-20 mb-24'>
@@ -153,7 +144,6 @@ function ViewMovieDetailsModalWindow({isModalOpen, closeModal,title,
                                 InputLabelProps={{
                                     style: { fontFamily: "Sanchez" }
                                 }}
-                                disabled={!isAvailable}
                             />
                         </div>
                     </Grid>
@@ -162,7 +152,7 @@ function ViewMovieDetailsModalWindow({isModalOpen, closeModal,title,
                             <TextField
                                 id="outlined-read-only-input"
                                 label="Owner"
-                                defaultValue={owner}
+                                defaultValue={owner_username}
                                 sx={{
                                     width: { md: 300 },
                                 }}
@@ -173,7 +163,6 @@ function ViewMovieDetailsModalWindow({isModalOpen, closeModal,title,
                                 InputLabelProps={{
                                     style: { fontFamily: "Sanchez" }
                                 }}
-                                disabled={!isAvailable}
                             />
                         </div>
                         <div className='mt-6 ml-28'>
@@ -187,16 +176,15 @@ function ViewMovieDetailsModalWindow({isModalOpen, closeModal,title,
                                     sm: 150,
                                     md: 195
                                 }}}>
-                                    <img src={selectedImage }></img>
-                               {loaded&&
-                               <CardMedia
-                               sx={{ height: '100%',
-                                   backgroundSize: 'contain'
-                           }}
-                            image = {selectedImage}
-                           />
-                               } 
+                                <CardMedia
+                                    sx={{ height: '100%',
+                                        backgroundSize: 'contain'
+                                }}
+                                 image = {selectedImage}
+                                 component='div'
+                                />
                             </Card>
+
                         </div>
                         { !isAvailable && (
                         <div className='mt-6 ml-28'>
@@ -256,7 +244,6 @@ function ViewMovieDetailsModalWindow({isModalOpen, closeModal,title,
                                 InputLabelProps={{
                                     style: { fontFamily: "Sanchez" }
                                 }}
-                                disabled={!isAvailable}
                             />
                         </div>
                             )}

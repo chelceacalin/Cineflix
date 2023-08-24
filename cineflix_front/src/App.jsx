@@ -60,7 +60,6 @@ function App() {
         setUsername(null);
         setToken(null);
         setIsLoggedIn(false);
-        console.error("Error fetching userInfo:", error);
         setInitialized(true)
       });
     }, []);

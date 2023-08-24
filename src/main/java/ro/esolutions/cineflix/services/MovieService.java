@@ -236,4 +236,15 @@ public class MovieService {
         return new PageImpl<>(rentedMovies, pageable, movieHistories.getTotalElements());
     }
 
+    public void changeRentedMovieStatus(UUID id) {
+        Optional<Movie> movieOptional = movieRepository.findById(id);
+
+        if (movieOptional.isPresent()) {
+            Movie movie = movieOptional.get();
+            movie.setAvailable(true);
+            movieRepository.save(movie);
+        } else {
+            throw new MovieNotFoundException("Movie is not found");
+        }
+    }
 }

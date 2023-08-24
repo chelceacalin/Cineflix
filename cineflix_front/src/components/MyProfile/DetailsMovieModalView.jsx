@@ -39,7 +39,6 @@ function DetailsMovieModalView({
 
       setSelectedImage(avatarUrl);
     } catch (error) {
-      console.error(error);
     }
   };
 
@@ -98,7 +97,6 @@ function DetailsMovieModalView({
         setAvailableCategories(response.data.content);
       })
       .catch((error) => {
-        console.error(error);
       });
   }, []);
 

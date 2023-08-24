@@ -236,6 +236,7 @@ function Movies() {
                   {
                     category,
                     director,
+                    description,
                     title,
                     isAvailable,
                     rentedUntil,
@@ -248,8 +249,8 @@ function Movies() {
                 ) => {
                   const isLast = index === movies.length - 1;
                   const classes = isLast
-                    ? "px-4 py-2"
-                    : "px-4 py-2 border-b border-blue-gray-50";
+                    ? "px-2 py-2"
+                    : "px-2 py-2 border-b border-blue-gray-50";
 
                   return (
                     <RentedMovie
@@ -263,6 +264,7 @@ function Movies() {
                       rentedDate={rentedDate}
                       rentedBy={rentedBy}
                       key={index}
+                      description={description}
                       classes={classes}
                       triggerRefresh={triggerRefresh}
                       setTriggerRefresh={setTriggerRefresh}
