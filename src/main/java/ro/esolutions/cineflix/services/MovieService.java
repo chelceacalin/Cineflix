@@ -231,6 +231,7 @@ public class MovieService {
                 .collect(Collectors.toList());
         return new PageImpl<>(rentedMovies, pageable, movieHistories.getTotalElements());
     }
+
     public void changeRentedMovieStatus(UUID id) {
         Optional<Movie> movieOptional = movieRepository.findById(id);
 
@@ -242,5 +243,4 @@ public class MovieService {
             throw new MovieNotFoundException("Movie is not found");
         }
     }
-
 }
