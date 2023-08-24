@@ -84,7 +84,8 @@ function RentedMovie({
       <td className={classes}>
         <Button
           onClick={handleDetailsOpen}
-          className="inline-block rounded  px-3 mr-4 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-blue-marine outlined-button"
+          className="outlined-button w-full font-normal"
+          variant="outlined"
         >
           Details
         </Button>
@@ -105,10 +106,11 @@ function RentedMovie({
       <td>
         <Button
           onClick={handleOpenRentModal}
-          className="contained-button font-normal w-full" variant="contained"
+          className="contained-button font-normal" 
+          variant="contained"
         >
           Rent Movie
-        </Button>
+        </Button> 
         <RentMovieModalView
           isRentModalOpen={isRentModalOpen}
           closeRentModal={handleCloseRentModal}

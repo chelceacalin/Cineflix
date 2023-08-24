@@ -1,61 +1,136 @@
-#image: maven:3-openjdk-17-slim
+default:
+  tags:
+    - esol-runner
 
-# default:
-#   tags:
-#     - esol-runner
-
-# variables:
-#   MAVEN_CLI_OPTS: "-s .m2/settings.xml --batch-mode"
-#   MAVEN_OPTS: "-Dmaven.repo.local=${CI_PROJECT_DIR}/.m2/repository"
-
-# cache:
-#   paths:
-#     - .m2/repository
-
-# stages:
-#   - build
-#   - test
-#   - build-docker-image
-#   - release
-
-# build:
-#   stage: build
-#   script:
-#     - mvn $MAVEN_CLI_OPTS -DskipTests=true package
-#   artifacts:
-#     paths:
-#       - target/*.jar
+stages:
+  # - test-backend
+  - build-backend
+  - build-docker-image-backend
+  - release-new-version-backend
+  - build-frontend
+  - build-docker-image-frontend
+  - release-new-version-frontend
 
 # test:
-#   stage: test
-#   services:
-#     - postgres:15-alpine
-#   variables:
-#     POSTGRES_DB: testingworkshop
-#     POSTGRES_USER: testingworkshop
-#     POSTGRES_PASSWORD: testingworkshop
-#     SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/testingworkshop
-#   dependencies:
-#     - build
-#   script:
-#     - mvn $MAVEN_CLI_OPTS test
+#  image: gitlab.esolutions.ro:5050/internship-2023/test/maven-openjdk-docker:1.0
+#  stage: test
+#  services:
+#    - postgres:15-alpine
+#  variables:
+#    POSTGRES_DB: cineflix
+#    POSTGRES_USER: cineflix
+#    POSTGRES_PASSWORD: cineflix
+#    SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5433/cineflix
+#  dependencies:
+#    - build
+#  script:
+#    - mvn $MAVEN_CLI_OPTS test
 
-# build-docker-image:
-#   image: docker:24.0.2
-#   stage: build-docker-image
-#   services:
-#     - docker:dind
-#   dependencies:
-#     - build
-#   script:
-#     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
-#     - docker build -t $CI_REGISTRY_IMAGE:$CI_COMMIT_SHORT_SHA .
-#     - docker push $CI_REGISTRY_IMAGE:$CI_COMMIT_SHORT_SHA
+build-backend:
+ image: maven:3-openjdk-17-slim
+ rules:
+    - if: $CI_COMMIT_BRANCH == "main"
+ stage: build-backend
+ script:
+   - mvn -DskipTests package
+ artifacts:
+   paths:
+     - target/*.jar
 
-# release:
-#   stage: release
-#   dependencies:
-#     - build-docker-image
-#   script:
-#     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
-#     - docker push $CI_REGISTRY_IMAGE:$CI_COMMIT_SHORT_SHA
+build-docker-image-backend:
+  image: docker:24.0.2
+  rules:
+    - if: $CI_COMMIT_BRANCH == "main"
+  stage: build-docker-image-backend
+  services:
+    - docker:dind
+  variables: 
+    DOCKER_TLS_CERTDIR: ""
+  dependencies:
+    - build-backend
+  script:
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+    - docker build -t $CI_REGISTRY_IMAGE:$CI_COMMIT_SHORT_SHA .
+    - docker push $CI_REGISTRY_IMAGE:$CI_COMMIT_SHORT_SHA
+
+release-new-version-backend:
+  image: bitnami/git
+  stage: release-new-version-backend
+  rules:
+    - if: $CI_COMMIT_BRANCH == "main"
+  needs:
+    - build-docker-image-backend
+  before_script:
+    - git config --global user.email "ci-robot"
+    - git config --global user.name "ci-robot"
+  script:
+    - git clone https://ci-robot:$GIT_ACCESS_TOKEN_BACKEND@$CI_SERVER_HOST/cineflix/cineflix-backend-k8s.git
+    - cd cineflix-backend-k8s
+    # set the new docker image tag
+    # dev
+    - 'sed -i "/^\([[:space:]]*newTag: \).*/s//\1\"${CI_COMMIT_SHORT_SHA}\"/" backoffice/overlays/dev/kustomization.yaml'
+    # prod
+    - 'sed -i "/^\([[:space:]]*newTag: \).*/s//\1\"${CI_COMMIT_SHORT_SHA}\"/" backoffice/overlays/prod/kustomization.yaml'
+    # push changes
+    - git add .
+    - git commit -m "Upgrade deployment with new docker image tag $CI_COMMIT_SHORT_SHA"
+    - git remote set-url origin "https://ci-robot:$GIT_ACCESS_TOKEN_BACKEND@$CI_SERVER_HOST/cineflix/cineflix-backend-k8s.git"
+    - git push -o ci.skip origin HEAD:main
+
+
+
+build-frontend:
+  image: node:20
+  rules:
+    - if: $CI_COMMIT_BRANCH == "main"
+  stage: build-frontend
+  script:
+    - cd cineflix_front
+    - npm install
+    - npm run build
+  artifacts:
+    paths:
+      - cineflix_front/dist/
+
+build-docker-image-frontend:
+  image: docker:24.0.2
+  rules:
+    - if: $CI_COMMIT_BRANCH == "main"
+  stage: build-docker-image-frontend
+  services:
+    - docker:dind
+  variables: 
+    DOCKER_TLS_CERTDIR: ""
+  dependencies:
+    - build-frontend
+  script:
+    - cd cineflix_front
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+    - docker build -t $CI_REGISTRY_IMAGE/frontend:$CI_COMMIT_SHORT_SHA .
+    - docker push $CI_REGISTRY_IMAGE/frontend:$CI_COMMIT_SHORT_SHA
+
+
+
+release-new-version-frontend:
+  image: bitnami/git
+  stage: release-new-version-frontend
+  rules:
+    - if: $CI_COMMIT_BRANCH == "main"
+  needs:
+    - build-docker-image-frontend
+  before_script:
+    - git config --global user.email "ci-robot"
+    - git config --global user.name "ci-robot"
+  script:
+    - git clone https://ci-robot:$GIT_ACCESS_TOKEN_FRONTEND@$CI_SERVER_HOST/cineflix/cineflix-frontend-k8s.git
+    - cd cineflix-frontend-k8s
+    # set the new docker image tag
+    # dev
+    - 'sed -i "/^\([[:space:]]*newTag: \).*/s//\1\"${CI_COMMIT_SHORT_SHA}\"/" backoffice/overlays/dev/kustomization.yaml'
+    # prod
+    - 'sed -i "/^\([[:space:]]*newTag: \).*/s//\1\"${CI_COMMIT_SHORT_SHA}\"/" backoffice/overlays/prod/kustomization.yaml'
+    # push changes
+    - git add .
+    - git commit -m "Upgrade deployment with new docker image tag $CI_COMMIT_SHORT_SHA"
+    - git remote set-url origin "https://ci-robot:$GIT_ACCESS_TOKEN_FRONTEND@$CI_SERVER_HOST/cineflix/cineflix-frontend-k8s.git"
+    - git push -o ci.skip origin HEAD:main

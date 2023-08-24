@@ -8,16 +8,16 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import ro.esolutions.cineflix.DTO.Category.CategoryDTO;
 import ro.esolutions.cineflix.entities.Category;
+import ro.esolutions.cineflix.entities.Movie;
+import ro.esolutions.cineflix.entities.UserCineflix;
+import ro.esolutions.cineflix.exceptions.Category.CategoryContainsMovieException;
 import ro.esolutions.cineflix.exceptions.Category.CategoryNotFoundException;
 import ro.esolutions.cineflix.repositories.CategoryRepository;
 import ro.esolutions.cineflix.services.CategoryService;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static ro.esolutions.cineflix.util.CategoryGenerator.aCategory;
@@ -68,8 +68,8 @@ public class CategoryServiceTest {
     }
 
     @Test
-    @DisplayName("Delete Category Without Exception Thrown Service UT")
-    public void deleteCategoryWithoutExceptionThrown() throws CategoryNotFoundException {
+    @DisplayName("Delete Category")
+    public void deleteCategory() throws CategoryNotFoundException {
         UUID id = UUID.fromString("12f310ee-3cc9-11ee-be56-0242ac120002");
         Category categoryToBeDeleted = Category.builder()
                 .id(id)
@@ -111,7 +111,7 @@ public class CategoryServiceTest {
         CategoryDTO categoryDTO = new CategoryDTO();
         categoryDTO.setName("New Category Name");
 
-        when(categoryRepository.findByNameIgnoreCase(categoryDTO.getName())).thenReturn(Optional.ofNullable(null));
+        when(categoryRepository.findByNameIgnoreCase(categoryDTO.getName())).thenReturn(Optional.empty());
 
         Optional<String> validationResult = categoryService.validateCategory(categoryDTO);
 
@@ -146,6 +146,40 @@ public class CategoryServiceTest {
         assertEquals("You must add a name for the category, it cannot be empty", validationResult.get());
     }
 
+    @Test()
+    @DisplayName("Delete a category that is assigned to a movie should thrown CategoryContainsMovieException")
+    public void deleteCategoryShouldThrownCategoryContainsMovieException(){
+        UUID id = UUID.fromString("12f310ee-3cc9-11ee-be56-0242ac120002");
+        Category categoryToBeDeleted = Category.builder()
+                .id(id)
+                .name("Drama")
+                .movieList(new ArrayList<>())
+                .build();
+        List<Movie> listMovies = createListMoviesWithASpecificCategory(categoryToBeDeleted);
+        categoryToBeDeleted.setMovieList(listMovies);
 
+        when(categoryRepository.findById(id)).thenReturn(Optional.of(categoryToBeDeleted));
+
+        assertThrows(CategoryContainsMovieException.class, () -> categoryService.deleteCategory(id));
+    }
+
+    public List<Movie> createListMoviesWithASpecificCategory(Category category){
+        UserCineflix userCineflix = UserCineflix.builder()
+                .id("1")
+                .firstName("Joe")
+                .lastName("Smith")
+                .email("joe.smith@test.ro")
+                .role(UserCineflix.Role.ADMIN)
+                .username("joe.smith")
+                .build();
+        Movie movie = Movie.builder()
+                .title("Harry Potter")
+                .category(category)
+                .description("Magical movie")
+                .director("JKR")
+                .owner(userCineflix)
+                .build();
+        return List.of(movie);
+    }
 
 }
