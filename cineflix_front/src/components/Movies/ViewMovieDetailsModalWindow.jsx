@@ -23,6 +23,7 @@ function ViewMovieDetailsModalWindow({isModalOpen, closeModal,title,
         status = STATUS_UNAVAILABLE;
     }
     const [selectedImage, setSelectedImage] = useState(null);
+    let loaded=false;
     const [description, setDescription] = useState("");
     const [owner, setOwner] = useState("");
     const fetchMovieImage = async () => {
@@ -34,6 +35,7 @@ function ViewMovieDetailsModalWindow({isModalOpen, closeModal,title,
             const blob = new Blob([response.data], { type: "image/png" });
             const avatarUrl = URL.createObjectURL(blob);
 
+            loaded=true;
             setSelectedImage(avatarUrl);
         } catch (error) {
             console.error(error);
@@ -178,12 +180,15 @@ function ViewMovieDetailsModalWindow({isModalOpen, closeModal,title,
                                     sm: 150,
                                     md: 195
                                 }}}>
-                                <CardMedia
-                                    sx={{ height: '100%',
-                                        backgroundSize: 'contain'
-                                }}
-                                 image = {selectedImage}
-                                />
+                                    <img src={selectedImage }></img>
+                               {loaded&&
+                               <CardMedia
+                               sx={{ height: '100%',
+                                   backgroundSize: 'contain'
+                           }}
+                            image = {selectedImage}
+                           />
+                               } 
                             </Card>
                         </div>
                         { !isAvailable && (

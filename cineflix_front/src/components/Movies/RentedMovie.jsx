@@ -30,7 +30,7 @@ function RentedMovie({
 
   const handleCloseRentModal = () => {
     setRentModalOpen(false);
-    signal();
+    setTriggerRefresh(!triggerRefresh)
   };
 
 
@@ -113,7 +113,9 @@ function RentedMovie({
         >
           Rent Movie
         </Button>
-        <RentMovieModalView
+        {
+          isRentModalOpen&&
+          <RentMovieModalView
           isRentModalOpen={isRentModalOpen}
           closeRentModal={handleCloseRentModal}
           title={title}
@@ -123,6 +125,8 @@ function RentedMovie({
           setTriggerRefresh={setTriggerRefresh}
           triggerRefresh={triggerRefresh}
         />
+        }
+       
       </td>
     </tr>
   );

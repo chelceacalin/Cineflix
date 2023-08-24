@@ -18,6 +18,7 @@ function DetailsMovieModalView({
   id,
   triggerRefresh,
   setTriggerRefresh,
+  isAvailable
 }) {
   const [selectedImage, setSelectedImage] = useState(null);
   const [selectedImageFile, setSelectedImageFile] = useState(null);
@@ -121,6 +122,7 @@ function DetailsMovieModalView({
 
 
   const handleSave = () => {
+
     if (validRequest()) {
       if (validFields()) {
         if (!category) {
