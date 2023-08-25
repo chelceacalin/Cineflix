@@ -6,6 +6,7 @@ import ro.esolutions.cineflix.entities.UserCineflix;
 public class UserInfoMapper {
     static public UserInfoDTO toDTO(UserCineflix u, String t) {
         return UserInfoDTO.builder()
+                .id(u.getId())
                 .username(u.getUsername())
                 .firstName(u.getFirstName())
                 .lastName(u.getLastName())
