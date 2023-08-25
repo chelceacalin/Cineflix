@@ -43,9 +43,12 @@ function MyProfile() {
   const handleClose = () => setOpen(false);
   const [triggerRefresh, setTriggerRefresh] = useState(false);
   const { username } = useContext(UserLoginContext);
+  const [selectedItem, setSelectedItem] = useState("");
 
-  const navigate=useNavigate()
+  const navigate = useNavigate();
   const location = useLocation();
+
+  const [selectedColor, setSelectedColor] = useState("");
 
 
   let handleClick = (fieldName) => {
@@ -146,10 +149,10 @@ function MyProfile() {
     </div>
     <div className="bg-grey-texture w-full h-screen px-10">
         <MyProfileRiredirectButtons/>
-        <div className="w-full h-[840px] flex flex-col bg-white justify-between border-2">
+        <div className="w-full h-[87vh] flex flex-col bg-white justify-between border-2">
         <div className="overflow-y-auto">
           <table className="w-full min-w-max bg-white border-b-2 table-auto text-left">
-            <thead className="bg-basic-red text-white">
+            <thead className="bg-basic-red sticky top-0 z-30 text-white">
               <tr>
                 {TABLE_HEAD.slice(0, TABLE_HEAD.length - 1).map((elem) => {
                   return (
@@ -218,11 +221,37 @@ function MyProfile() {
                           xmlns="http://www.w3.org/2000/svg"
                           onClick={(e) => {
                             setDirection(!direction);
+                            let column = e.currentTarget.getAttribute("data-column");
                             handleClick(
-                              e.currentTarget
-                                .getAttribute("data-column")
-                                .toLowerCase()
+                              column.toLowerCase()
                             );
+
+                            e.stopPropagation();
+                            
+                            if (column !== "Status") {
+                              if (column === "Title") {
+                                setSortField("title");
+                              } else if (column === "Director") {
+                                setSortField("director");
+                              } else if (column=== "Category") {
+                                setSortField("category");
+                              }
+                              if (
+                                sortField === column.toLowerCase()
+                              ) {
+                                setDirection(!direction);
+                              } else {
+                                setDirection(true);
+                              }
+
+                              if (column === "Rented Until") {
+                                setSortField("rentedUntil");
+                                setDirection(!direction);
+                              } else if (column === "Rented By") {
+                                setSortField("rentedBy");
+                                setDirection(!direction);
+                              }
+                            }
                           }}
                         >
                           {elem != "Status" && <SortIcon />}

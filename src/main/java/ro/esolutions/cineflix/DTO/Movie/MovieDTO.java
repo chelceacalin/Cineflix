@@ -24,6 +24,8 @@ public class MovieDTO {
 
     private String category;
 
+    private String description;
+
     private Boolean isAvailable;
 
     private String rentedBy;

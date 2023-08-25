@@ -23,7 +23,8 @@ function RentMovieModalView({
   owner,
   id,
   setTriggerRefresh,
-  triggerRefresh
+  triggerRefresh,
+  description
 }) {
     dayjs.extend(updateLocale)
     dayjs.updateLocale('en', {
@@ -50,11 +51,12 @@ function RentMovieModalView({
         rentedDate: today,
         rentedUntil: date,
         movieId: id,
-        userId: idUser
+        userId: idUser,
+        description: description
       }).then(response =>{
-        setTriggerRefresh(!triggerRefresh)
-        showSucces("You have rented the movie "+title);
+        showSuccess("You have rented the movie "+title);
         closeRentModal();
+        setTriggerRefresh(!triggerRefresh)
       }).catch((error) => {
         if(error.response){
           const message = JSON.stringify(error.response.data).replace('"', '').replace('"', '');
