@@ -1,9 +1,9 @@
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { Button, Dialog, DialogContent } from '@mui/material'
-import { faTimes } from '@fortawesome/free-solid-svg-icons';
-import React, { useState } from 'react';
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
+import {Button, Dialog, DialogContent} from '@mui/material'
+import {faTimes} from '@fortawesome/free-solid-svg-icons';
+import React from 'react';
 import axios from 'axios';
-import { showSuccess,showError } from '../../service/ToastService';
+import {showError, showSuccess} from '../../service/ToastService';
 
 
 function DeleteCategoryModalWindow({ isEditModalOpen, closeEditModal, name, id, setSignalCall,signalCall }) {
@@ -18,10 +18,10 @@ function DeleteCategoryModalWindow({ isEditModalOpen, closeEditModal, name, id, 
             })
             .catch((error) => {
                 if (error.response) {
-                    if (error.response.status == 404) {
+                    if (error.response.status === 404) {
                         const message = JSON.stringify(error.response.data).replace('"', '').replace('"', '');
                         showError(message);
-                    } else if (error.response.status == 500) {
+                    } else if (error.response.status === 500) {
                         showError("Cannot delete a category associated with a movie");
                     }
                 }
