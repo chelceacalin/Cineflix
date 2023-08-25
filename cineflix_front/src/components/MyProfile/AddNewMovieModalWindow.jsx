@@ -21,6 +21,8 @@ function AddNewMovieModalWindow({
   setTriggerRefresh,
   triggerRefresh,
 }) {
+
+  const MAX_FILE_SIZE=1024 * 1024;
   const [title, setTitle] = useState("");
   const [director, setDirector] = useState("");
   const [description, setDescription] = useState("");
@@ -53,14 +55,34 @@ function AddNewMovieModalWindow({
 
   const handleImageBrowse = (event) => {
     const file = event.target.files[0];
-    setSelectedImage(file);
+  
+    if (file.size > MAX_FILE_SIZE) { 
+      showError("Image size should be no more than 1 MB!");
+      setSelectedImage(null);
+    } else if (!["image/jpeg", "image/jpg", "image/png"].includes(file.type)) {
+      showError("Image format should be jpg, jpeg, or png!");
+      setSelectedImage(null);
+    } else {
+      setSelectedImage(file);
+    }
   };
-
+  
   const handleImageDrop = (event) => {
     event.preventDefault();
     const file = event.dataTransfer.files[0];
-    setSelectedImage(file);
+  
+    if (file.size > MAX_FILE_SIZE) { 
+      showError("Image size should be no more than 1 MB!");
+      setSelectedImage(null);
+    } else if (!["image/jpeg", "image/jpg", "image/png"].includes(file.type)) {
+      showError("Image format should be jpg, jpeg, or png!");
+      setSelectedImage(null);
+    } else {
+      setSelectedImage(file);
+    }
   };
+  
+  
 
   const validRequest = () => {
     for (const check of validationChecks) {
