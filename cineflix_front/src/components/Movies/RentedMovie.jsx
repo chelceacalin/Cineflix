@@ -70,17 +70,17 @@ function RentedMovie({
 
       <td className={classes}>
         <div variant="small" color="blue-gray" className="font-normal">
-          {rentedDate}
+          {isAvailable ? "N/A" : rentedDate}
         </div>
       </td>
       <td className={classes}>
         <div variant="small" color="blue-gray" className="font-normal">
-          {rentedUntil}
+          {isAvailable ? "N/A" : rentedUntil}
         </div>
       </td>
       <td className={classes}>
         <div variant="small" color="blue-gray" className="font-normal">
-          {rentedBy === "available" && isAvailable ? "" : rentedBy}
+          {isAvailable ? "N/A" : rentedBy}
         </div>
       </td>
       <td className={classes}>
