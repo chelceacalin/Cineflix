@@ -73,7 +73,17 @@ function Movies() {
       if (elems.data.content.length === 0 && pageNo > 1) {
         updatePageNumber(pageNo - 1);
       } else {
-        setMovies(elems.data.content);
+        let moviesArray = elems.data.content;
+        for (let movie of moviesArray){
+          if (movie.isAvailable == true) {
+            movie.rentedBy = "N/A";
+            movie.rentedDate = "N/A";
+            movie.rentedUntil = "N/A"
+          }
+        }
+        
+        setMovies(moviesArray);
+        console.log(elems.data.content)
         setTotalPages(elems.data.totalPages);
       }
       setInitialized(true);
