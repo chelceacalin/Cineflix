@@ -59,12 +59,14 @@ function AddNewMovieModalWindow({
     if (file.size > MAX_FILE_SIZE) { 
       showError("Image size should be no more than 1 MB!");
       setSelectedImage(null);
+    } else if (!["image/jpeg", "image/jpg", "image/png"].includes(file.type)) {
+      showError("Image format should be jpg, jpeg, or png!");
+      setSelectedImage(null);
     } else {
       setSelectedImage(file);
     }
   };
   
-
   const handleImageDrop = (event) => {
     event.preventDefault();
     const file = event.dataTransfer.files[0];
@@ -72,10 +74,14 @@ function AddNewMovieModalWindow({
     if (file.size > MAX_FILE_SIZE) { 
       showError("Image size should be no more than 1 MB!");
       setSelectedImage(null);
+    } else if (!["image/jpeg", "image/jpg", "image/png"].includes(file.type)) {
+      showError("Image format should be jpg, jpeg, or png!");
+      setSelectedImage(null);
     } else {
       setSelectedImage(file);
     }
   };
+  
   
 
   const validRequest = () => {
