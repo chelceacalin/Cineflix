@@ -49,7 +49,7 @@ function Movie_MyRentedMovies({
         </div>
       </td>
       <td className={classes}>
-        <div variant="small" color="blue-gray" className="font-normal max-w-[100px] break-words">
+        <div variant="small" color="blue-gray" className="font-normal max-w-[200px] break-words">
           {owner}
         </div>
       </td>
