@@ -130,7 +130,7 @@ function RentedMovie({
           triggerRefresh={triggerRefresh}
         />
         }
-       
+     
       </td>
     </tr>
   );

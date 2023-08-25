@@ -87,8 +87,9 @@ function Movie({
       <td className={classes}>
         <Button
           onClick={handleDeleteOpen}
-          className="contained-button font-normal w-full"
+          className="font-normal Button"
           variant="contained"
+          disabled={!isAvailable}
         >
           Delete
         </Button>

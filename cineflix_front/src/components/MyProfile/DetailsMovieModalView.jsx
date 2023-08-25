@@ -14,11 +14,11 @@ function DetailsMovieModalView({
   closeModal,
   defaultTitle,
   defaultDirector,
+  isAvailable,
   defaultCategory,
   id,
   triggerRefresh,
   setTriggerRefresh,
-  isAvailable
 }) {
   const [selectedImage, setSelectedImage] = useState(null);
   const [selectedImageFile, setSelectedImageFile] = useState(null);
@@ -75,12 +75,6 @@ function DetailsMovieModalView({
 
   const handleImageDrop = (event) => {
     event.preventDefault();
-
-    if(!isAvailable)
-    {
-      showError("You cannot change the image of a rented movie");
-      return;
-    }
     const file = event.dataTransfer.files[0];
     if (file) {
       const imageUrl = URL.createObjectURL(file);
@@ -192,6 +186,7 @@ function DetailsMovieModalView({
             <div>
               <TextField
                 label="Title"
+                disabled={!isAvailable}
                 sx={{
                   width: { md: 835 },
                 }}
@@ -205,7 +200,6 @@ function DetailsMovieModalView({
                 InputLabelProps={{
                   style: { fontFamily: "Sanchez" }
                 }}
-                disabled={!isAvailable}
               />
             </div>
             <div className='mt-6'>
@@ -276,18 +270,28 @@ function DetailsMovieModalView({
               <h2 className="text-xl font-bold mb-4">Image Upload</h2>
               <div
                 className="border-2 border-gray-400 p-4 rounded-lg mb-4"
-                onDrop={handleImageDrop}
-                onDragOver={(event) => event.preventDefault()}
-                disabled={!isAvailable}
+                onDrop={()=>{
+                  if(!isAvailable){
+                    showError("You cannot drop images because movie is rented! ");
+                  }
+                  else{
+                    handleImageDrop()
+                  }
+                  }
+                  }
+                onDragOver={(event) => {event.preventDefault();
+                } }
+               
               >
                 {selectedImage ? (
                   <img
                     src={selectedImage}
                     alt="Selected"
                     className="w-40 h-40 object-cover rounded-lg"
+                    disabled={!isAvailable}
                   />
                 ) : (
-                  <div className="text-gray-500"  >
+                  <div className="text-gray-500">
                     Drop or Browse to select an image
                   </div>
                 )}
@@ -306,8 +310,8 @@ function DetailsMovieModalView({
               <Button
                 type="button"
                 onClick={handleSave}
-                 className="Button w-full"
-                 disabled={!isAvailable}
+                className="Button w-full"
+                disabled={!isAvailable}
               >
                 Save
               </Button>
