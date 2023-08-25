@@ -29,7 +29,18 @@ public class CategoryService {
 
     private final CategoryRepository categoryRepository;
 
-    public Optional<String> validateCategory(CategoryDTO categoryDTO) {
+    public Optional<String> validateCategoryCaseInsensitive(CategoryDTO categoryDTO) {
+        if (categoryDTO.getName().isEmpty()) {
+            return Optional.of("You must add a name for the category, it cannot be empty");
+        }
+        Optional<Category> nameCategory = categoryRepository.findByNameIgnoreCase(categoryDTO.getName());
+        if (nameCategory.isPresent()) {
+            return Optional.of("This category already exists");
+        }
+        return Optional.empty();
+    }
+
+    public Optional<String> validateCategoryCaseSensitive(CategoryDTO categoryDTO) {
         if (categoryDTO.getName().isEmpty()) {
             return Optional.of("You must add a name for the category, it cannot be empty");
         }
