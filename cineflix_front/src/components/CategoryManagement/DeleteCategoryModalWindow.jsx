@@ -22,7 +22,7 @@ function DeleteCategoryModalWindow({ isEditModalOpen, closeEditModal, name, id, 
                         const message = JSON.stringify(error.response.data).replace('"', '').replace('"', '');
                         showError(message);
                     } else if (error.response.status == 500) {
-                        showError("Found a movie, can not delete the category");
+                        showError("Cannot delete a category associated with a movie");
                     }
                 }
             })

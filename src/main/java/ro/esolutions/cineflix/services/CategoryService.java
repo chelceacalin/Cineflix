@@ -34,7 +34,7 @@ public class CategoryService {
         if (categoryDTO.getName().isEmpty()) {
             return Optional.of("You must add a name for the category, it cannot be empty");
         }
-        Optional<Category> nameCategory = categoryRepository.findByNameIgnoreCase(categoryDTO.getName());
+        Optional<Category> nameCategory = categoryRepository.findByName(categoryDTO.getName());
         if (nameCategory.isPresent()) {
             return Optional.of("This category already exists");
         }
@@ -86,7 +86,7 @@ public class CategoryService {
 
 
         if(!categoryFound.getMovieList().isEmpty()) {
-            throw new CategoryContainsMovieException("Found a movie, can not delete the category");
+            throw new CategoryContainsMovieException("Cannot delete a category associated with a movie");
         }
         categoryRepository.deleteById(id);
     }
