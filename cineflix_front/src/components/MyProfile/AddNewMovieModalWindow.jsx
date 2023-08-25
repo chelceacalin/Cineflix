@@ -173,6 +173,7 @@ function AddNewMovieModalWindow({
         <DialogContent className="modal-body ml-2 mr-2">
           <div>
             <TextField
+              required
               label="Title"
               fullWidth
               onChange={(e) => {
@@ -188,6 +189,7 @@ function AddNewMovieModalWindow({
           </div>
           <div className='mt-6'>
             <TextField
+              required
               label="Director"
               fullWidth
               onChange={(e) => {
@@ -226,6 +228,7 @@ function AddNewMovieModalWindow({
           </div>
           <div className="field-group mt-4">
             <TextField
+                required
                 id="outlined-read-only-input"
                 label="Description"
                 multiline={true}
