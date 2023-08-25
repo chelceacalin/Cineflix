@@ -113,7 +113,7 @@ public class CategoryServiceTest {
 
         when(categoryRepository.findByNameIgnoreCase(categoryDTO.getName())).thenReturn(Optional.empty());
 
-        Optional<String> validationResult = categoryService.validateCategory(categoryDTO);
+        Optional<String> validationResult = categoryService.validateCategoryCaseInsensitive(categoryDTO);
 
         verify(categoryRepository, times(1)).findByNameIgnoreCase(categoryDTO.getName());
         assertFalse(validationResult.isPresent());
@@ -129,7 +129,7 @@ public class CategoryServiceTest {
 
         when(categoryRepository.findByNameIgnoreCase(categoryDTO.getName())).thenReturn(Optional.of(existingCategory));
 
-        Optional<String> validationResult = categoryService.validateCategory(categoryDTO);
+        Optional<String> validationResult = categoryService.validateCategoryCaseInsensitive(categoryDTO);
 
         assertTrue(validationResult.isPresent());
         assertEquals("This category already exists", validationResult.get());
@@ -140,7 +140,7 @@ public class CategoryServiceTest {
         CategoryDTO categoryDTO = new CategoryDTO();
         categoryDTO.setName("");
 
-        Optional<String> validationResult = categoryService.validateCategory(categoryDTO);
+        Optional<String> validationResult = categoryService.validateCategoryCaseSensitive(categoryDTO);
 
         assertTrue(validationResult.isPresent());
         assertEquals("You must add a name for the category, it cannot be empty", validationResult.get());

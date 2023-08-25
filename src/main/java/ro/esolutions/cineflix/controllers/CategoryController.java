@@ -26,7 +26,7 @@ public class CategoryController {
 
     @PostMapping("/create")
     public ResponseEntity<?> createCategory(@RequestBody final CategoryDTO categoryDTO) {
-        Optional<String> errorOptional = categoryService.validateCategory(categoryDTO);
+        Optional<String> errorOptional = categoryService.validateCategoryCaseInsensitive(categoryDTO);
         if (errorOptional.isEmpty()) {
             return new ResponseEntity<>(categoryService.createCategory(categoryDTO), HttpStatus.OK);
         } else {
@@ -38,7 +38,7 @@ public class CategoryController {
     @PostMapping("/update/{id}")
     public ResponseEntity<?> updateCategory(@RequestBody CategoryDTO categoryDTO,
                                          @PathVariable("id") @NotNull UUID id) {
-        Optional<String> errorOptional = categoryService.validateCategory(categoryDTO);
+        Optional<String> errorOptional = categoryService.validateCategoryCaseSensitive(categoryDTO);
         if (errorOptional.isEmpty()) {
             try {
                 return new ResponseEntity<>(categoryService.updateCategory(categoryDTO, id), HttpStatus.OK);
