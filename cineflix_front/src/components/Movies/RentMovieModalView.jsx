@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from "react";
+import React, {useState, useEffect, useContext} from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   Button,
@@ -13,6 +13,7 @@ import {DatePicker} from '@mui/x-date-pickers/DatePicker';
 import dayjs from "dayjs";
 import updateLocale from "dayjs/plugin/updateLocale";
 import {showError,showSuccess} from '../../service/ToastService'
+import {UserLoginContext} from "../../utils/context/LoginProvider";
 
 
 function RentMovieModalView({
@@ -35,12 +36,10 @@ function RentMovieModalView({
     const [idUser, setIdUser] = useState("");
     const [date, setDate] = useState(new Date());
 
+    
 
     useEffect(() => {
-      const url = '/users/' + owner;
-      axios.get(url).then((elems) => {
-        setIdUser(elems.data.id);
-      });
+      setIdUser(sessionStorage.getItem('id'))
 
     }, []);
 

@@ -23,6 +23,7 @@ import ProfileRoute from "./utils/protectedRoutes/ProfileRoute";
 import Login from "./components/Login/Login";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { setId } from "@material-tailwind/react/components/Tabs/TabsContext";
 
 function App() { 
   return (
@@ -38,7 +39,7 @@ function App() {
 
   function MainContent() {
     const [initialized,setInitialized]=useState(false)
-    const { isAdmin, setIsAdmin, username, setUsername, token, setToken, isLoggedIn, setIsLoggedIn } = useContext(UserLoginContext);
+    const { isAdmin, setIsAdmin, username, setUsername, token, setToken, isLoggedIn, setIsLoggedIn,id ,setID} = useContext(UserLoginContext);
     useEffect(() => {
       axios.get(`/userInfo`)
       .then((response) => {
@@ -50,6 +51,7 @@ function App() {
             else {
               setIsAdmin(false);
             }
+            sessionStorage.setItem("id",userInfo.id)
             setUsername(userInfo.username);
             setToken(userInfo.token);
             setIsLoggedIn(true);
