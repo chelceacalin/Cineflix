@@ -186,6 +186,7 @@ function DetailsMovieModalView({
             <div>
               <TextField
                 label="Title"
+                required
                 disabled={!isAvailable}
                 sx={{
                   width: { md: 835 },
@@ -204,6 +205,7 @@ function DetailsMovieModalView({
             </div>
             <div className='mt-6'>
               <TextField
+                required
                 label="Director"
                 sx={{
                   width: { md: 835 },
@@ -223,6 +225,7 @@ function DetailsMovieModalView({
           </div>
           <div className='mt-6'>
             <Autocomplete
+            
               onChange={(e, value) => setCategory(value)}
               value={category}
               sx={{
@@ -246,6 +249,7 @@ function DetailsMovieModalView({
           </div>
           <div className='mt-6'>
             <TextField
+              required
               placeholder=" Write a description for the movie..."
               label="Description"
               multiline={true}
