@@ -81,7 +81,6 @@ function Movies() {
             movie.rentedUntil = "N/A"
           }
         }
-        
         setMovies(moviesArray);
         setTotalPages(elems.data.totalPages);
       }

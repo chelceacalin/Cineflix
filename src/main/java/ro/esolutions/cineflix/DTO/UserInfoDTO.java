@@ -11,6 +11,7 @@ import ro.esolutions.cineflix.entities.UserCineflix;
 @AllArgsConstructor
 @NoArgsConstructor
 public class UserInfoDTO {
+    private String id;
     private String username;
     private String firstName;
     private String lastName;

@@ -74,13 +74,11 @@ function MyRentedMoviesFilter({ filterInput }) {
     };
 
     setNewUrl(buildUrl());
-    // console.log(newUrl);
 
     axios.get(newUrl).then((elems) => {
       const arrayUniqueByKey = [...new Map(elems.data.content.map(item => [item.owner_username, item])).values()];
       setFilteredUsers(arrayUniqueByKey);
     }).catch(error => {
-      // console.log(error);
     });
   }, [newUrl]);
 

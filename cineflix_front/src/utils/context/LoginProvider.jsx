@@ -8,7 +8,7 @@ function LoginProvider({ children }) {
   let [isAdmin, setIsAdmin] = useState(false);
   let [username, setUsername] = useState("");
   let [token, setToken] = useState("");
-
+  let [id,setID]=useState("")
 
   let loginHandler = (value) => {
     setIsLoggedIn(value)
@@ -25,7 +25,9 @@ function LoginProvider({ children }) {
         token,
         setToken,
         isLoggedIn,
-        setIsLoggedIn:loginHandler
+        setIsLoggedIn:loginHandler,
+        id,
+        setID:{setID}
       }}
     >
       {children}
