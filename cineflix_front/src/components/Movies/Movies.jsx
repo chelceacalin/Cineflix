@@ -83,7 +83,6 @@ function Movies() {
         }
         
         setMovies(moviesArray);
-        console.log(elems.data.content)
         setTotalPages(elems.data.totalPages);
       }
       setInitialized(true);
