@@ -221,11 +221,37 @@ function MyProfile() {
                           xmlns="http://www.w3.org/2000/svg"
                           onClick={(e) => {
                             setDirection(!direction);
+                            let column = e.currentTarget.getAttribute("data-column");
                             handleClick(
-                              e.currentTarget
-                                .getAttribute("data-column")
-                                .toLowerCase()
+                              column.toLowerCase()
                             );
+
+                            e.stopPropagation();
+                            
+                            if (column !== "Status") {
+                              if (column === "Title") {
+                                setSortField("title");
+                              } else if (column === "Director") {
+                                setSortField("director");
+                              } else if (column=== "Category") {
+                                setSortField("category");
+                              }
+                              if (
+                                sortField === column.toLowerCase()
+                              ) {
+                                setDirection(!direction);
+                              } else {
+                                setDirection(true);
+                              }
+
+                              if (column === "Rented Until") {
+                                setSortField("rentedUntil");
+                                setDirection(!direction);
+                              } else if (column === "Rented By") {
+                                setSortField("rentedBy");
+                                setDirection(!direction);
+                              }
+                            }
                           }}
                         >
                           {elem != "Status" && <SortIcon />}

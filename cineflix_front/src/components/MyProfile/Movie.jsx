@@ -33,7 +33,7 @@ function Movie({
         </div>
       </td>
       <td className={classes}>
-        <div variant="small" color="blue-gray" className="font-normal max-w-[200px]">
+        <div variant="small" color="blue-gray" className="font-normal max-w-[100px] break-words">
           {director}
         </div>
       </td>

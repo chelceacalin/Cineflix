@@ -53,7 +53,6 @@ function MyRentedMovies() {
     const buildUrl = () => {
       const normalizedSortField = sortField || "title";
       let params = [
-        // `rentUsername=${username}`
         `sortField=${normalizedSortField}`,
         `direction=${direction ? "ASC" : "DESC"}`,
         `title=${title}`,
@@ -219,12 +218,44 @@ function MyRentedMovies() {
                           fill="none"
                           xmlns="http://www.w3.org/2000/svg"
                           onClick={(e) => {
+                            e.stopPropagation();
                             setDirection(!direction);
+                            
+                            let column = e.currentTarget.getAttribute("data-column");
                             handleClick(
-                              e.currentTarget
-                                .getAttribute("data-column")
-                                .toLowerCase()
+                              column.toLowerCase()
                             );
+
+                            if (column === "Title") {
+                              setSortField("title");
+                            } else if (column === "Director") {
+                              setSortField("director");
+                            } else if (column=== "Category") {
+                              setSortField("category");
+                            }
+                            if (
+                              sortField === column.toLowerCase()
+                            ) {
+                              setDirection(!direction);
+                            } else {
+                              setDirection(true);
+                            }
+
+                            if (column === "Rented Until") {
+                              setSortField("rentedUntil");
+                              setDirection(!direction);
+                            } else if (column === "Rented By") {
+                              setSortField("rentedBy");
+                              setDirection(!direction);
+                            }
+                            else if (column === "Rented On") {
+                              setSortField("rentedDate");
+                              setDirection(!direction);
+                            }
+                            else if (column === "Owner") {
+                              setSortField("owner_username");
+                              setDirection(!direction);
+                            }
                           }}
                         >
                           {<SortIcon />}
@@ -250,6 +281,7 @@ function MyRentedMovies() {
                     rentedBy,
                     owner_username,
                     id,
+                    isAvailable
                   },
                   index
                 ) => {
@@ -267,6 +299,7 @@ function MyRentedMovies() {
                       rentedDate={rentedDate}
                       rentedBy={rentedBy}
                       owner={owner_username}
+                      isAvailableForRenting={isAvailable}
                       key={index}
                       classes={classes}
                       triggerRefresh={triggerRefresh}

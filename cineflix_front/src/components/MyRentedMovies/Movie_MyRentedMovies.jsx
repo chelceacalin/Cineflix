@@ -13,6 +13,7 @@ function Movie_MyRentedMovies({
   owner,
   classes,
   id,
+  isAvailableForRenting,
   triggerRefresh,
   setTriggerRefresh,
 }) {
@@ -23,42 +24,43 @@ function Movie_MyRentedMovies({
   return (
     <tr key={title}>
       <td className={classes}>
-        <div variant="small" color="blue-gray" className="font-normal">
+        <div variant="small" color="blue-gray" className="font-normal max-w-[100px] break-words">
           {title}
         </div>
       </td>
       <td className={classes}>
-        <div variant="small" color="blue-gray" className="font-normal">
+        <div variant="small" color="blue-gray" className="font-normal max-w-[100px] break-words">
           {director}
         </div>
       </td>
       <td className={classes}>
-        <div variant="small" color="blue-gray" className="font-normal">
+        <div variant="small" color="blue-gray" className="font-normal max-w-[100px] break-words">
           {category}
         </div>
       </td>
       <td className={classes}>
-        <div variant="small" color="blue-gray" className="font-normal">
+        <div variant="small" color="blue-gray" className="font-normal max-w-[100px] break-words">
           {!rentedDate ? "N/A" : rentedDate}
         </div>
       </td>
       <td className={classes}>
-        <div variant="small" color="blue-gray" className="font-normal">
+        <div variant="small" color="blue-gray" className="font-normal max-w-[100px] break-words">
           {!rentedUntil ? "N/A" : rentedUntil}
         </div>
       </td>
       <td className={classes}>
-        <div variant="small" color="blue-gray" className="font-normal">
+        <div variant="small" color="blue-gray" className="font-normal max-w-[100px] break-words">
           {owner}
         </div>
       </td>
       <td className={classes}>
-        <button
+        <Button
           onClick={handleReturnOpen}
-          className="inline-block w-full rounded px-3 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-white contained-button"
+          className="Button font-normal w-full"
+          variant="contained"
         >
           Return movie
-        </button>
+        </Button>
 
         <ReturnMovieModal
             isModalOpen={returnModalOpen}
