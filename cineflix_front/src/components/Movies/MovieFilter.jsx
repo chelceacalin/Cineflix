@@ -1,13 +1,17 @@
 import {
   Checkbox,
   TextField,
-  Button,
+  Button, Autocomplete,
 } from "@mui/material";
 import React, { useContext, useEffect, useState } from "react";
 import axios from "axios";
-import "react-datepicker/dist/react-datepicker.css";
-import DatePicker from "react-datepicker";
 import { UserLoginContext } from "../../utils/context/LoginProvider";
+import {LocalizationProvider} from "@mui/x-date-pickers/LocalizationProvider";
+import {AdapterDayjs} from "@mui/x-date-pickers/AdapterDayjs";
+import dayjs from "dayjs";
+import {DatePicker} from '@mui/x-date-pickers/DatePicker';
+import DatePickerClear from "../DatePickerClear.jsx";
+import * as moreClasses from "react-dom/test-utils";
 
 function MovieFilter({ filterInput }) {
   const [title, setTitle] = useState("");
@@ -15,9 +19,9 @@ function MovieFilter({ filterInput }) {
   const [category, setCategory] = useState("");
   const [available, setAvailable] = useState(true);
   const [unavailable, setUnavailable] = useState(true);
-  const [rentedUntil, setRentedUntil] = useState("");
-  const [rentedDate,setRentedDate]=useState("")
-  const [rentedBy, setRentedBy] = useState("");
+  const [rentedUntil, setRentedUntil] = useState(null);
+  const [rentedDate,setRentedDate]=useState(null)
+  const [rentedBy, setRentedBy] = useState(null);
   const [usersWhoRented, setUsersWhoRented] = useState([]);
   const { username } = useContext(UserLoginContext);
   let [filteredUsers,setFilteredUsers]=useState([])
@@ -144,53 +148,53 @@ function MovieFilter({ filterInput }) {
           </div>
         </div>
       </div>
+
       <div className="mt-10 mr-6">
-        <label>Rented On:</label>
-        <DatePicker
-          selected={rentedDate}
-          placeholderText={"Select the date"}
-          onChange={(date) => {
-            setRentedDate(date);
-          }}
-          className="rounded-lg w-48 border-2 border-gray-500 pl-1 mt-2 mb-2"
-        />
-
-        <label>Rented Until:</label>
-        <DatePicker
-          selected={rentedUntil}
-          placeholderText={"Select the date"}
-          onChange={(date) => {
-            setRentedUntil(date);
-          }}
-          className="rounded-lg w-48 border-2 border-gray-500 pl-1 mt-2"
-        />
-        <div className="mt-2 mb-10">
-          <Button
-            className="font-normal contained-button mt-4"
-            onClick={(e) => {
-              e.preventDefault();
-              setRentedUntil("");
-              setRentedDate("");
-            }}
-          >
-            Reset date
-          </Button>
-        </div>
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <DatePickerClear
+              className="w-48"
+              value={rentedDate}
+              labelString={"Rented on"}
+              onClear={() => setRentedDate(null)}
+              onChange={(newDate) => setRentedDate(newDate)}
+          />
+        </LocalizationProvider>
       </div>
-      <div className="mr-6">
-        <label className="block">Rented by:</label>
-        <select
-          className="input-field mt-2"
-          onChange={(e) => {
-            setRentedBy(e.target.value);
-          }}
-        >
-          <option value="">Select Rented By</option>
 
-          {filteredUsers.map((movie, index) => (
-            <option key={index}>{movie.rentedBy}</option>
-          ))}
-        </select>
+      <div className="mt-10 mr-6">
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <DatePickerClear
+              value={rentedUntil}
+              labelString={"Rented until"}
+              onClear={() => setRentedUntil(null)}
+              onChange={(newDate) => setRentedUntil(newDate)}
+          />
+        </LocalizationProvider>
+      </div>
+      <div className="mt-10 mr-6">
+        <Autocomplete
+            sx={{ fontFamily: "Sanchez" }}
+            value={rentedBy}
+            onChange={(e, value) => {
+              setRentedBy(value);
+            }}
+            ListboxProps={{
+              style:{ fontFamily: "Sanchez" }
+            }}
+            options={filteredUsers.map(m => m.rentedBy)}
+            renderInput={(params) =>
+                <TextField
+                    {...params}
+                    InputLabelProps={{
+                      style: { fontFamily: "Sanchez" }
+                    }}
+                    InputProps={{
+                      ...params.InputProps, ...moreClasses.input,
+                      style: { fontFamily: "Sanchez" }
+                    }}
+                    sx={{ fontFamily: "Sanchez" }}
+                    label="Rented by"/>}
+        />
       </div>
     </div>
   );

@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.*;
 import ro.esolutions.cineflix.DTO.Movie.*;
 import ro.esolutions.cineflix.services.MovieService;
 
-import javax.naming.Binding;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -53,7 +52,6 @@ public class MovieController {
     public MovieAddDTO findMovieById(@PathVariable UUID id) {
         return movieService.findMovieByID(id);
     }
-
     @GetMapping("/rent/{id}")
     public MovieRentDTO findMovieToRent(@PathVariable UUID id) {
         return movieService.findMovieToRent(id);
@@ -62,13 +60,7 @@ public class MovieController {
     @PostMapping("/history")
     public ResponseEntity<?> addMovieHistory(@Valid @RequestBody MovieHistoryDTO movieHistoryDTO, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            List<String> validationErrors = new ArrayList<>();
-
-            for (FieldError error : bindingResult.getFieldErrors()) {
-                validationErrors.add(error.getDefaultMessage());
-            }
-
-            return new ResponseEntity<>(validationErrors, HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(bindingResult.getAllErrors().get(0).getDefaultMessage(), HttpStatus.BAD_REQUEST);
         }
 
         Optional<String> errorOptional = movieService.validateMovieHistory(movieHistoryDTO);
@@ -80,4 +72,19 @@ public class MovieController {
             return new ResponseEntity<>(errorOptional.get(), HttpStatus.BAD_REQUEST);
         }
     }
+    @GetMapping("/rented")
+    public Page<MovieDTO> findRentedMoviesForUser(
+            @ModelAttribute MyRentedMoviesRequestDTO myRentedMoviesRequestDTO,
+            @RequestParam(name = "pageNo", defaultValue = "0") int pageNo,
+            @RequestParam(name = "pageSize", defaultValue = "15") int pageSize
+
+    ) {
+        return movieService.findRentedMoviesForUser(myRentedMoviesRequestDTO, pageNo, pageSize);
+    }
+    @PostMapping("/updateStatus/{id}")
+    public void changeRentedMovieStatus (@PathVariable UUID id) {
+        movieService.changeRentedMovieStatus(id);
+    }
+
+
 }

@@ -18,7 +18,7 @@ import java.util.UUID;
 public class MovieHistoryDTO {
     @RentDateConstraint
     private LocalDate rentedDate;
-
+    @RentDateConstraint
     private LocalDate rentedUntil;
     private Integer rating;
     private String description;

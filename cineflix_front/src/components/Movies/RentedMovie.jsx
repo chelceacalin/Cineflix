@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Button } from "@mui/material";
 import ViewMovieDetailsModalWindow from "./ViewMovieDetailsModalWindow.jsx";
 import RentMovieModalView from "./RentMovieModalView";
+import "./css/RentedMovies.css"
 
 function RentedMovie({
   id,
@@ -12,18 +13,18 @@ function RentedMovie({
   rentedUntil,
   rentedBy,
   classes,
-  triggerRefresh,
-  setTriggerRefresh,
   rentedOn,
   rentedDate,
-  owner_username
+  owner_username,
+  description,
+  setTriggerRefresh,
+  triggerRefresh
 }) {
   const [detailsModalOpen, setDetailsModalOpen] = useState(false);
-  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [isRentModalOpen, setRentModalOpen] = useState(false);
+
   const handleDetailsOpen = () => setDetailsModalOpen(true);
   const handleDetailsClose = () => setDetailsModalOpen(false);
-
-  const [isRentModalOpen, setRentModalOpen] = useState(false);
 
   const handleOpenRentModal = () => {
     setRentModalOpen(true);
@@ -31,18 +32,19 @@ function RentedMovie({
 
   const handleCloseRentModal = () => {
     setRentModalOpen(false);
+    setTriggerRefresh(!triggerRefresh)
   };
 
 
   return (
     <tr key={title}>
       <td className={classes}>
-        <div variant="small" color="blue-gray" className="font-normal">
+        <div variant="small" color="blue-gray" className="font-normal max-w-[100px] break-words">
           {title}
         </div>
       </td>
       <td className={classes}>
-        <div variant="small" color="blue-gray" className="font-normal">
+        <div variant="small" color="blue-gray" className="font-normal max-w-[90px] break-words">
           {director}
         </div>
       </td>
@@ -89,35 +91,46 @@ function RentedMovie({
         >
           Details
         </Button>
-          <ViewMovieDetailsModalWindow
-              isModalOpen={detailsModalOpen}
-              closeModal={handleDetailsClose}
-              title={title}
-              category={category}
-              director={director}
-              isAvailable={isAvailable}
-              rentedUntil={rentedUntil}
-              rentedOn={rentedOn}
-              rentedBy={rentedBy}
-              rentedDate={rentedDate}
-              id={id}
-          />
+        {detailsModalOpen&&
+         <ViewMovieDetailsModalWindow
+         isModalOpen={detailsModalOpen}
+         closeModal={handleDetailsClose}
+         title={title}
+         category={category}
+         director={director}
+         description={description}
+         isAvailable={isAvailable}
+         rentedUntil={rentedUntil}
+         rentedOn={rentedOn}
+         rentedBy={rentedBy}
+         rentedDate={rentedDate}
+         owner_username={owner_username}
+         id={id}
+     />}
+         
       </td>
-      <td>
+      <td className={classes}>
         <Button
           onClick={handleOpenRentModal}
-          className="contained-button font-normal" 
-          variant="contained"
+          className="Button font-normal"
+          variant="contained" disabled={!isAvailable}
         >
           Rent Movie
-        </Button> 
-        <RentMovieModalView
+        </Button>
+        {
+          isRentModalOpen&&
+          <RentMovieModalView
           isRentModalOpen={isRentModalOpen}
           closeRentModal={handleCloseRentModal}
           title={title}
           director={director}
           owner={owner_username}
+          id={id}
+          setTriggerRefresh={setTriggerRefresh}
+          triggerRefresh={triggerRefresh}
         />
+        }
+     
       </td>
     </tr>
   );
