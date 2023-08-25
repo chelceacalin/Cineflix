@@ -11,7 +11,7 @@ import axios from "axios";
 
 function ViewMovieDetailsModalWindow({isModalOpen, closeModal,title,
                                          category,
-                                         director,isAvailable, rentedUntil, rentedBy, owner_username, rentedDate, id}) {
+                                         director,isAvailable, rentedUntil, rentedBy, owner_username, rentedDate, id, description}) {
 
     const STATUS_AVAILABLE = 'Available';
     const STATUS_UNAVAILABLE = 'Unavailable';
@@ -23,7 +23,6 @@ function ViewMovieDetailsModalWindow({isModalOpen, closeModal,title,
         status = STATUS_UNAVAILABLE;
     }
     const [selectedImage, setSelectedImage] = useState(null);
-    const [description, setDescription] = useState("");
     const [owner, setOwner] = useState("");
     const fetchMovieImage = async () => {
         try {
@@ -39,11 +38,6 @@ function ViewMovieDetailsModalWindow({isModalOpen, closeModal,title,
         }
     };
     useEffect(() => {
-        axios.get(`/movies/${id}`).then((data) => {
-            if (data.data.description.length > 0) {
-                setDescription(data.data.description);
-            }
-        });
         fetchMovieImage();
     }, []);
 

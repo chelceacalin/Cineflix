@@ -98,7 +98,6 @@ function RentedMovie({
          title={title}
          category={category}
          director={director}
-         description={description}
          isAvailable={isAvailable}
          rentedUntil={rentedUntil}
          rentedOn={rentedOn}
@@ -106,6 +105,7 @@ function RentedMovie({
          rentedDate={rentedDate}
          owner_username={owner_username}
          id={id}
+         description={description}
      />}
          
       </td>
@@ -128,6 +128,7 @@ function RentedMovie({
           id={id}
           setTriggerRefresh={setTriggerRefresh}
           triggerRefresh={triggerRefresh}
+          description={description}
         />
         }
      
