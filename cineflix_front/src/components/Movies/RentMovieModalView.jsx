@@ -47,7 +47,6 @@ function RentMovieModalView({
 
     const rentMovie = () =>{
       const url = '/movies/history';
-      console.log(description);
       axios.post(url, {
         rentedDate: today,
         rentedUntil: date,
