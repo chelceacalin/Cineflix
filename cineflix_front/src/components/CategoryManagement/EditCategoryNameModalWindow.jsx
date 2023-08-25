@@ -4,30 +4,30 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import "../RoleManagement/css/EditRoleModalWindow.css";
 import axios from 'axios';
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import { showSuccess,showError } from '../../service/ToastService';
 
-axios.defaults.withCredentials = true
 
-function EditRoleModalWindow({ isModalOpen, closeModal, id, name, updateCategory, setErrorMessage, errorMessage }) {
+function EditCategoryNameModalWindow({ isModalOpen, closeModal, id, name, updateCategory, setErrorMessage, errorMessage }) {
     const newNameRef = useRef();
+   
     const editCategoryName = () => {
         let url = '/category/update/' + id;
 
         if (newNameRef.current.value.charAt(0) != newNameRef.current.value.charAt(0).toUpperCase()){
-            showToast("Name should start with an uppercase letter!");
+            showError("Name should start with an uppercase letter!");
             return;
         } 
 
-        if (newNameRef.current.value.length == 1) {
-            showToast("Name should have at least 2 characters!")
+        if (newNameRef.current.value.length < 2) {
+            showError("Name should have at least 2 characters!")
+            return;
         }
 
         axios.post(url, {
             id: id,
             name: newNameRef.current.value
         }).then(response => {
-            showToast("Category edited successfully!", "bg-green-500");
+            showSuccess("Category edited successfully!", "bg-green-500");
             updateCategory({
                 id: response.data.id,
                 name: response.data.name,
@@ -36,25 +36,11 @@ function EditRoleModalWindow({ isModalOpen, closeModal, id, name, updateCategory
         }).catch(error => {
             if (error.response) {
                 const message = JSON.stringify(error.response.data).replace('"', '').replace('"', '');
-                showToast(message);
+                showError(message);
             }
         });
     };
 
-    const showToast = (message, color = "bg-red-500") => {
-        const toastType = color === "bg-green-500" ? toast.success : toast.error;
-      
-        toastType(message, {
-          className: `${color} text-black p-4 rounded-lg`,
-          position: "top-right",
-          autoClose: 3500,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        });
-      };
 
 
     return (
@@ -101,4 +87,4 @@ function EditRoleModalWindow({ isModalOpen, closeModal, id, name, updateCategory
     );
 }
 
-export default EditRoleModalWindow
+export default EditCategoryNameModalWindow

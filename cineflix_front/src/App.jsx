@@ -8,11 +8,13 @@ import {
 import { useEffect } from "react";
 import MyProfile from "./components/MyProfile/MyProfile";
 import Movies from "./components/Movies/Movies";
+import MyRentedMovies from "./components/MyRentedMovies/MyRentedMovies";
 import CategoryManagement from "./components/CategoryManagement/CategoryManagement";
 import RoleManagement from "./components/RoleManagement/RoleManagement";
 import NotFound from "./components/NotFound/NotFound";
 import LoginProvider from "./utils/context/LoginProvider.jsx";
 import AdminRoute from "./utils/protectedRoutes/AdminRoute";
+import MyRentedMoviesRoute from "./utils/protectedRoutes/MyRentedMoviesRoute";
 import {UserLoginContext} from "./utils/context/LoginProvider.jsx";
 import { useContext, useState } from "react";
 import axios from "axios";
@@ -60,7 +62,6 @@ function App() {
         setUsername(null);
         setToken(null);
         setIsLoggedIn(false);
-        console.error("Error fetching userInfo:", error);
         setInitialized(true)
       });
     }, []);
@@ -77,6 +78,10 @@ function App() {
             <Route element={<Authenticated />}>
 
               <Route index path="/" element={<Movies />} />
+
+              <Route element={<MyRentedMoviesRoute />}>
+                <Route path="/myprofile/myRentedMovies/:id" element={<MyRentedMovies />} />
+              </Route>
 
               <Route element={<ProfileRoute />}>
                 <Route path="/myprofile/:id" element={<MyProfile />} />

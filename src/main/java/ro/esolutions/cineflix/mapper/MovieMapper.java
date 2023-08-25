@@ -15,6 +15,7 @@ public class MovieMapper {
                 .title(m.getTitle())
                 .director(m.getDirector())
                 .category(m.getCategory() != null ? m.getCategory().getName() : "DEFAULT")
+                .description(m.getDescription())
                 .isAvailable(m.isAvailable())
                 .rentedBy(mh != null && mh.getRentedBy() != null ? mh.getRentedBy().getUsername() : "available")
                 .owner_username(m.getOwner().getUsername())
@@ -53,4 +54,6 @@ public class MovieMapper {
                 .ownerUsername(movie.getOwner().getUsername())
                 .build();
     }
+
+
 }

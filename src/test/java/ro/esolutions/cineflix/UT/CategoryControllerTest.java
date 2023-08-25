@@ -11,16 +11,10 @@ import org.springframework.http.ResponseEntity;
 import ro.esolutions.cineflix.DTO.Category.CategoryDTO;
 import ro.esolutions.cineflix.controllers.CategoryController;
 import ro.esolutions.cineflix.entities.Category;
-import ro.esolutions.cineflix.entities.Movie;
-import ro.esolutions.cineflix.entities.UserCineflix;
-import ro.esolutions.cineflix.exceptions.Category.CategoryContainsMovieException;
 import ro.esolutions.cineflix.exceptions.Category.CategoryNotFoundException;
 import ro.esolutions.cineflix.services.CategoryService;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
@@ -41,7 +35,7 @@ public class CategoryControllerTest {
     public void createCategory() {
         Category category = aCategory();
         CategoryDTO categoryDTO = aCategoryDTO();
-        when(categoryService.validateCategory(categoryDTO)).thenReturn(Optional.empty());
+        when(categoryService.validateCategoryCaseInsensitive(categoryDTO)).thenReturn(Optional.empty());
         when(categoryService.createCategory(categoryDTO)).thenReturn(category);
         ResponseEntity response = categoryController.createCategory(categoryDTO);
         verify(categoryService,times(1)).createCategory(categoryDTO);
@@ -52,7 +46,7 @@ public class CategoryControllerTest {
     @DisplayName("Thrown exception when category already exists or category name is null")
     public void thrownExceptionWhenCategoryAlreadyExistsOrIsNull() {
         CategoryDTO categoryDTO = aCategoryDTO();
-        when(categoryService.validateCategory(categoryDTO)).thenReturn(Optional.of("Error"));
+        when(categoryService.validateCategoryCaseInsensitive(categoryDTO)).thenReturn(Optional.of("Error"));
         ResponseEntity response = categoryController.createCategory(categoryDTO);
         verify(categoryService,times(0)).createCategory(categoryDTO);
         assertEquals(new ResponseEntity<>("Error", HttpStatus.BAD_REQUEST),response);
@@ -63,7 +57,7 @@ public class CategoryControllerTest {
     public void updateCategory() throws CategoryNotFoundException {
         Category category = aCategory();
         CategoryDTO categoryDTO = aCategoryDTO();
-        when(categoryService.validateCategory(categoryDTO)).thenReturn(Optional.empty());
+        when(categoryService.validateCategoryCaseSensitive(categoryDTO)).thenReturn(Optional.empty());
         when(categoryService.updateCategory(categoryDTO,category.getId())).thenReturn(category);
         ResponseEntity response = categoryController.updateCategory(categoryDTO,category.getId());
         verify(categoryService,times(1)).updateCategory(categoryDTO,category.getId());
@@ -74,7 +68,7 @@ public class CategoryControllerTest {
     public void thrownExceptionWhenUpdatingACategoryThatAlreadyExistsOrIsNull() throws CategoryNotFoundException {
         CategoryDTO categoryDTO = aCategoryDTO();
         Category category = aCategory();
-        when(categoryService.validateCategory(categoryDTO)).thenReturn(Optional.of("Error"));
+        when(categoryService.validateCategoryCaseSensitive(categoryDTO)).thenReturn(Optional.of("Error"));
         ResponseEntity response = categoryController.updateCategory(categoryDTO,category.getId());
         verify(categoryService,times(0)).updateCategory(categoryDTO,category.getId());
         assertEquals(new ResponseEntity<>("Error", HttpStatus.BAD_REQUEST),response);

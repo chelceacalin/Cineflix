@@ -6,8 +6,6 @@ import { UserLoginContext } from "../../utils/context/LoginProvider";
 import MovieFilter from "./MovieFilter";
 import SortIcon from "../../utils/icon/SortIcon";
 
-axios.defaults.withCredentials = true;
-
 function Movies() {
   const TABLE_HEAD = [
     "Title",
@@ -34,15 +32,11 @@ function Movies() {
   const [pageSize, setPageSize] = useState(15);
   const [totalPages, setTotalPages] = useState("");
   const [totalMovies, setTotalMovies] = useState(0);
-  const [open, setOpen] = useState(false);
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
   const [triggerRefresh, setTriggerRefresh] = useState(false);
   const { username } = useContext(UserLoginContext);
   const [direction, setDirection] = useState(true);
   const [sortField, setSortField] = useState("title");
   const [ownerUsername, setOwnerUsername] = useState("");
-  const [lastClicked, setLastClicked] = useState("");
 
 
   useEffect(() => {
@@ -79,7 +73,16 @@ function Movies() {
       if (elems.data.content.length === 0 && pageNo > 1) {
         updatePageNumber(pageNo - 1);
       } else {
-        setMovies(elems.data.content);
+        let moviesArray = elems.data.content;
+        for (let movie of moviesArray){
+          if (movie.isAvailable == true) {
+            movie.rentedBy = "N/A";
+            movie.rentedDate = "N/A";
+            movie.rentedUntil = "N/A"
+          }
+        }
+        
+        setMovies(moviesArray);
         setTotalPages(elems.data.totalPages);
       }
       setInitialized(true);
@@ -242,6 +245,7 @@ function Movies() {
                   {
                     category,
                     director,
+                    description,
                     title,
                     isAvailable,
                     rentedUntil,
@@ -254,8 +258,8 @@ function Movies() {
                 ) => {
                   const isLast = index === movies.length - 1;
                   const classes = isLast
-                    ? "px-4 py-2"
-                    : "px-4 py-2 border-b border-blue-gray-50";
+                    ? "px-2 py-2"
+                    : "px-2 py-2 border-b border-blue-gray-50";
 
                   return (
                     <RentedMovie
@@ -269,6 +273,7 @@ function Movies() {
                       rentedDate={rentedDate}
                       rentedBy={rentedBy}
                       key={index}
+                      description={description}
                       classes={classes}
                       triggerRefresh={triggerRefresh}
                       setTriggerRefresh={setTriggerRefresh}

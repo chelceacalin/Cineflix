@@ -1,49 +1,32 @@
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { Button, Dialog, DialogContent } from '@mui/material'
-import { faTimes } from '@fortawesome/free-solid-svg-icons';
-import React, { useState } from 'react';
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
+import {Button, Dialog, DialogContent} from '@mui/material'
+import {faTimes} from '@fortawesome/free-solid-svg-icons';
+import React from 'react';
 import axios from 'axios';
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import {showError, showSuccess} from '../../service/ToastService';
 
-axios.defaults.withCredentials = true
 
-function DeleteCategoryModalWindow({ isEditModalOpen, closeEditModal, name, id, signal }) {
+function DeleteCategoryModalWindow({ isEditModalOpen, closeEditModal, name, id, setSignalCall,signalCall }) {
 
     const deleteCategory = () => {
         let url = '/category/delete/' + id;
 
             axios.post(url).then(() => {
-                showToast("Category deleted successfully!", "bg-green-500");
-                signal();
+                showSuccess("Category deleted successfully!", "bg-green-500");
+                setSignalCall(!signalCall)
                 closeEditModal();
             })
             .catch((error) => {
                 if (error.response) {
-                    if (error.response.status == 404) {
+                    if (error.response.status === 404) {
                         const message = JSON.stringify(error.response.data).replace('"', '').replace('"', '');
-                        showToast(message);
-                    } else if (error.response.status == 500) {
-                        showToast("Found a movie, can not delete the category");
+                        showError(message);
+                    } else if (error.response.status === 500) {
+                        showError("Cannot delete a category associated with a movie");
                     }
                 }
             })
     }
-
-    const showToast = (message, color = "bg-red-500") => {
-        const toastType = color === "bg-green-500" ? toast.success : toast.error;
-      
-        toastType(message, {
-          className: `${color} text-black p-4 rounded-lg`,
-          position: "top-right",
-          autoClose: 2500,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        });
-      };
 
     return (
         <Dialog fullWidth maxWidth={'sm'} open={isEditModalOpen} onClose={closeEditModal}>

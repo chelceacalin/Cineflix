@@ -1,7 +1,14 @@
-body {
-    font-family: 'Sanchez', serif;
+.white-outlined-button {
+    border-radius: 0 !important;
+    border: 1px solid white !important;
+    color: white !important;
+    background-color: transparent !important;
 }
 
+.white-outlined-button:hover {
+    color: #E0812E !important;
+    border-color: #E0812E !important;
+}
 
 .closeModalWindowButton {
     position: relative;
@@ -9,6 +16,10 @@ body {
     right: -230px;
     width: 20px;
     cursor: pointer;
+}
+
+.marginResizable{
+    margin-left: 3rem;
 }
 
 .contained-button,
@@ -40,23 +51,14 @@ body {
     border-color: #E0812E !important;
 }
 
-.field-group input {
-    border: 1px solid #ccc;
-    border-radius: 4px;
+@media only screen and (max-width: 1100px)
+{
+    .marginResizable{
+        margin-left: 2px;
+        margin-right: 4px;
+    }
+}
+
+.wider-toast {
+    width: 400px;
   }
-  
-
-.Button:enabled{
-    background-color:#1E1D5B;
-    color: white;
-}
-
-.Button:enabled:hover{
-    background-color: #E0812E;
-    border-color: #E0812E;
-}
-
-.Button:hover{
-    background-color: #E0812E;
-    border-color: #E0812E;
-}

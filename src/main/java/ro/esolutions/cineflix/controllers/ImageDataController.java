@@ -9,6 +9,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import ro.esolutions.cineflix.entities.MovieHistory;
 import ro.esolutions.cineflix.entities.MovieImageData;
 import ro.esolutions.cineflix.services.MovieImageDataService;
 
@@ -22,6 +23,7 @@ public class ImageDataController {
 
     @NonNull
     private MovieImageDataService movieImageDataService;
+    private MovieHistory movieHistory;
     private static final String CONTENT_TYPE = "image/png";
 
     @PostMapping("/images/{movieID}")

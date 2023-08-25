@@ -28,12 +28,12 @@ function Movie({
   return (
     <tr key={title}>
       <td className={classes}>
-        <div variant="small" color="blue-gray" className="font-normal">
+        <div variant="small" color="blue-gray" className="font-normal max-w-[250px]">
           {title}
         </div>
       </td>
       <td className={classes}>
-        <div variant="small" color="blue-gray" className="font-normal">
+        <div variant="small" color="blue-gray" className="font-normal max-w-[100px] break-words">
           {director}
         </div>
       </td>
@@ -78,6 +78,7 @@ function Movie({
             defaultDirector={director}
             defaultCategory={category}
             id={id}
+            isAvailable={isAvailable}
             setTriggerRefresh={setTriggerRefresh}
             triggerRefresh={triggerRefresh}
           />
@@ -86,8 +87,9 @@ function Movie({
       <td className={classes}>
         <Button
           onClick={handleDeleteOpen}
-          className="contained-button font-normal w-full"
+          className="font-normal Button"
           variant="contained"
+          disabled={!isAvailable}
         >
           Delete
         </Button>
