@@ -1,0 +1,24 @@
+.filterContainer {
+    width: 20em;
+    box-shadow: 3px 0px 3px lightgray;
+}
+
+.textSize{
+    font-size: 1rem;
+}
+
+.arrow-cell {
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    margin-top: 0.2rem;
+    gap: 4px;
+  }
+  
+
+  @media (max-width: 768px) {
+    .flex-wrap {
+      flex-wrap: nowrap;
+      color: red;
+    }
+  }

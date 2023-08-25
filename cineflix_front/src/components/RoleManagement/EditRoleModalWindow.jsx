@@ -77,6 +77,7 @@ function EditRoleModalWindow({ isModalOpen, closeModal, name, firstName, lastNam
             <DialogContent>
                 <div className='mt-5'>
                     <TextField
+                        disabled
                         id="outlined-read-only-input"
                         className="w-full"
                         label="Name"
@@ -96,6 +97,7 @@ function EditRoleModalWindow({ isModalOpen, closeModal, name, firstName, lastNam
                         className="w-full"
                         label="Email"
                         defaultValue={email}
+                        disabled
                         InputProps={{
                             readOnly: true,
                             style: { fontFamily: "Sanchez" }
