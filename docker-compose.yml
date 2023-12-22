@@ -8,5 +8,3 @@ services:
       - POSTGRES_DB=cineflix
       - POSTGRES_USER=cineflix
       - POSTGRES_PASSWORD=cineflix
-    volumes:
-      - "~/cineflix/.postgresVolume:/var/lib/postgresql/data"
