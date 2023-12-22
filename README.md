@@ -14,6 +14,11 @@
       - Sterge utilizatori si schimbat permisuni pentru utilizatori
 </pre>
 
+Preview: 
+![image](https://github.com/chelceacalin/Cineflix/assets/76866499/b4d516ba-068a-4711-812d-e28aac279b27)
+
+
+
 * How to start the app
   
 ### FRONTEND
